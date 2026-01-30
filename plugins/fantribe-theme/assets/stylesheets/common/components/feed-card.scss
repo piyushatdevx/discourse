@@ -26,12 +26,21 @@
   }
 
   &__avatar {
+    // Reset button styles
+    border: none;
+    padding: 0;
+    cursor: pointer;
+
     width: 40px;
     height: 40px;
     flex-shrink: 0;
     border-radius: var(--ft-radius-full);
     overflow: hidden;
-    background: linear-gradient(135deg, var(--ft-pastel-pink) 0%, var(--ft-pastel-lavender) 100%);
+    background: linear-gradient(
+      135deg,
+      var(--ft-pastel-pink) 0%,
+      var(--ft-pastel-lavender) 100%
+    );
     display: flex;
     align-items: center;
     justify-content: center;
