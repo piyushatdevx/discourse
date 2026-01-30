@@ -45,6 +45,7 @@ register_asset "stylesheets/common/navigation.scss"
 register_asset "stylesheets/common/overlays.scss"
 register_asset "stylesheets/common/feedback.scss"
 register_asset "stylesheets/common/layout.scss"
+register_asset "stylesheets/common/login-signup.scss"
 
 # Component styles (Phase 2.1 - Header)
 register_asset "stylesheets/common/components/header.scss"
@@ -66,3 +67,29 @@ register_asset "stylesheets/mobile/mobile.scss", :mobile
 
 # Enable serialization of first_post_id, op_liked, and op_can_like for feed card likes
 register_modifier(:serialize_topic_op_likes_data) { true }
+
+after_initialize do
+  # Override SiteIconManager to use custom favicon and OG image
+  module ::SiteIconManager
+    class << self
+      alias_method :original_favicon_url, :favicon_url
+      alias_method :original_opengraph_image_url, :opengraph_image_url
+
+      def favicon_url
+        if SiteSetting.fantribe_theme_enabled
+          "/plugins/fantribe-theme/images/favicon.png"
+        else
+          original_favicon_url
+        end
+      end
+
+      def opengraph_image_url
+        if SiteSetting.fantribe_theme_enabled
+          "/plugins/fantribe-theme/images/favicon.png"
+        else
+          original_opengraph_image_url
+        end
+      end
+    end
+  end
+end

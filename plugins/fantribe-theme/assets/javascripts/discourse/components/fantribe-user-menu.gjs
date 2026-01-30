@@ -6,6 +6,7 @@ import { service } from "@ember/service";
 import { on } from "@ember/modifier";
 import avatar from "discourse/helpers/avatar";
 import icon from "discourse/helpers/d-icon";
+import logout from "discourse/lib/logout";
 import closeOnClickOutside from "discourse/modifiers/close-on-click-outside";
 
 export default class FantribeUserMenu extends Component {
@@ -45,7 +46,9 @@ export default class FantribeUserMenu extends Component {
 
   @action
   logout() {
-    window.location.href = "/session/current?_method=DELETE";
+    this.currentUser
+      .destroySession()
+      .then((response) => logout({ redirect: response["redirect_url"] }));
   }
 
   <template>
