@@ -111,11 +111,11 @@
   color: var(--ft-white);
 
   &:hover {
-    background-color: #d32f2f;
+    background-color: #dc2626;
   }
 
   &:active {
-    background-color: #c62828;
+    background-color: #b91c1c;
   }
 }
 
@@ -192,7 +192,7 @@
   color: var(--ft-white);
 
   &:hover {
-    background-color: #1565c0;
+    background-color: #1664d9;
   }
 }
 
@@ -235,7 +235,7 @@
 
   &:hover {
     transform: scale(1.05);
-    box-shadow: 0 12px 40px rgba(255, 23, 68, 0.3);
+    box-shadow: 0 12px 40px rgba(255, 24, 68, 0.3);
   }
 
   &:active {
@@ -270,7 +270,7 @@
 
   &:hover {
     transform: scale(1.05);
-    box-shadow: 0 12px 40px rgba(255, 23, 68, 0.3);
+    box-shadow: 0 12px 40px rgba(255, 24, 68, 0.3);
   }
 
   &:active {

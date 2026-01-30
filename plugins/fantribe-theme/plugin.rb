@@ -34,6 +34,7 @@ register_svg_icon "share"
 
 # Common styles (all viewports)
 register_asset "stylesheets/common/design-tokens.scss"
+register_asset "stylesheets/common/discourse-overrides.scss"
 register_asset "stylesheets/common/typography.scss"
 register_asset "stylesheets/common/glassmorphism.scss"
 register_asset "stylesheets/common/buttons.scss"

@@ -5,18 +5,18 @@
   // =============================================
   // BRAND COLORS
   // =============================================
-  --ft-primary: #ff1744;
-  --ft-primary-hover: #e50030;
-  --ft-primary-active: #cc002b;
-  --ft-primary-light: rgba(255, 23, 68, 0.1);
-  --ft-primary-medium: rgba(255, 23, 68, 0.3);
+  --ft-primary: #ff1844;
+  --ft-primary-hover: #e01539;
+  --ft-primary-active: #c8122f;
+  --ft-primary-light: rgba(255, 24, 68, 0.1);
+  --ft-primary-medium: rgba(255, 24, 68, 0.3);
 
   --ft-dark: #1a1a1a;
   --ft-dark-hover: #2a2a2a;
   --ft-dark-light: rgba(26, 26, 26, 0.7);
 
   --ft-white: #ffffff;
-  --ft-bg: #f5f5f5;
+  --ft-bg: #fafafa;
 
   // =============================================
   // GRAY SCALE
@@ -35,14 +35,14 @@
   // =============================================
   // SEMANTIC COLORS
   // =============================================
-  --ft-success: #4caf50;
-  --ft-success-light: rgba(76, 175, 80, 0.1);
-  --ft-warning: #ff9800;
-  --ft-warning-light: rgba(255, 152, 0, 0.1);
-  --ft-error: #f44336;
-  --ft-error-light: rgba(244, 67, 54, 0.1);
-  --ft-info: #2196f3;
-  --ft-info-light: rgba(33, 150, 243, 0.1);
+  --ft-success: #10b981;
+  --ft-success-light: #d1fae5;
+  --ft-warning: #f59e0b;
+  --ft-warning-light: #fef3c7;
+  --ft-error: #ef4444;
+  --ft-error-light: #fee2e2;
+  --ft-info: #3b82f6;
+  --ft-info-light: #dbeafe;
 
   // Social provider colors
   --ft-google: #4285f4;
@@ -133,10 +133,10 @@
   // =============================================
   // SHADOWS
   // =============================================
-  --ft-shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.1);
-  --ft-shadow-md: 0 4px 16px rgba(0, 0, 0, 0.12);
-  --ft-shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.15);
-  --ft-shadow-focus: 0 0 0 3px rgba(255, 23, 68, 0.3);
+  --ft-shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.06);
+  --ft-shadow-md: 0 4px 16px rgba(0, 0, 0, 0.08);
+  --ft-shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
+  --ft-shadow-focus: 0 0 0 3px rgba(255, 24, 68, 0.3);
 
   // =============================================
   // GLASSMORPHISM
@@ -185,7 +185,7 @@
 
 @media (prefers-color-scheme: dark) {
   :root:not(.ft-light-theme) {
-    // Brand colors (softened for dark mode)
+    // Brand colors (softened for dark mode, based on #FF1844)
     --ft-primary: #ff6b8a;
     --ft-primary-hover: #ff8fa8;
     --ft-primary-active: #ff5577;
@@ -212,9 +212,9 @@
     --ft-gray-800: #c0c0d0;
     --ft-gray-900: #e8e8ec;
 
-    // Semantic colors (pastel versions for dark)
-    --ft-success: #86efac;
-    --ft-success-light: rgba(134, 239, 172, 0.15);
+    // Semantic colors (pastel versions for dark, based on spec colors)
+    --ft-success: #6ee7b7;
+    --ft-success-light: rgba(110, 231, 183, 0.15);
     --ft-warning: #fcd34d;
     --ft-warning-light: rgba(252, 211, 77, 0.15);
     --ft-error: #fca5a5;
@@ -244,7 +244,7 @@
     // Shadows (deeper for dark mode)
     --ft-shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
     --ft-shadow-md: 0 4px 16px rgba(0, 0, 0, 0.4);
-    --ft-shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.5);
+    --ft-shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.5);
     --ft-shadow-focus: 0 0 0 3px rgba(255, 107, 138, 0.4);
 
     // Glassmorphism (adjusted for dark backgrounds)
@@ -299,8 +299,8 @@ html.ft-dark-theme {
   --ft-gray-800: #c0c0d0;
   --ft-gray-900: #e8e8ec;
 
-  --ft-success: #86efac;
-  --ft-success-light: rgba(134, 239, 172, 0.15);
+  --ft-success: #6ee7b7;
+  --ft-success-light: rgba(110, 231, 183, 0.15);
   --ft-warning: #fcd34d;
   --ft-warning-light: rgba(252, 211, 77, 0.15);
   --ft-error: #fca5a5;
@@ -326,7 +326,7 @@ html.ft-dark-theme {
 
   --ft-shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
   --ft-shadow-md: 0 4px 16px rgba(0, 0, 0, 0.4);
-  --ft-shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.5);
+  --ft-shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.5);
   --ft-shadow-focus: 0 0 0 3px rgba(255, 107, 138, 0.4);
 
   --ft-glass-light-bg: rgba(255, 255, 255, 0.05);
