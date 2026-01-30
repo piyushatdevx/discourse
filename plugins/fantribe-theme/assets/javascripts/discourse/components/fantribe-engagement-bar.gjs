@@ -7,6 +7,7 @@ import icon from "discourse/helpers/d-icon";
 import { ajax } from "discourse/lib/ajax";
 import ShareTopicModal from "discourse/components/modal/share-topic";
 import Composer from "discourse/models/composer";
+import getURL from "discourse/lib/get-url";
 
 const LIKE_ACTION_TYPE_ID = 2;
 
@@ -44,6 +45,14 @@ export default class FantribeEngagementBar extends Component {
 
   get canLike() {
     return this.currentUser && this.args.firstPostId && this.args.opCanLike;
+  }
+
+  get commentIconUrl() {
+    return getURL("/plugins/fantribe-theme/images/comment.svg");
+  }
+
+  get shareIconUrl() {
+    return getURL("/plugins/fantribe-theme/images/share.svg");
   }
 
   formatCount(count) {
@@ -156,7 +165,11 @@ export default class FantribeEngagementBar extends Component {
         class="fantribe-engagement-btn fantribe-engagement-btn--comment"
         {{on "click" this.handleComment}}
       >
-        {{icon "comment"}}
+        <img
+          src={{this.commentIconUrl}}
+          alt="Comment"
+          class="fantribe-engagement-btn__icon"
+        />
         {{#if this.commentCount}}
           <span
             class="fantribe-engagement-btn__count"
@@ -169,7 +182,11 @@ export default class FantribeEngagementBar extends Component {
         class="fantribe-engagement-btn fantribe-engagement-btn--share"
         {{on "click" this.handleShare}}
       >
-        {{icon "share"}}
+        <img
+          src={{this.shareIconUrl}}
+          alt="Share"
+          class="fantribe-engagement-btn__icon"
+        />
         {{#if this.shareCount}}
           <span
             class="fantribe-engagement-btn__count"
