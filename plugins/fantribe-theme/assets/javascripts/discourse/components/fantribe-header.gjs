@@ -1,8 +1,11 @@
 import Component from "@glimmer/component";
 import { tracked } from "@glimmer/tracking";
+import { hash } from "@ember/helper";
 import { action } from "@ember/object";
 import { service } from "@ember/service";
 import { on } from "@ember/modifier";
+import icon from "discourse/helpers/d-icon";
+import closeOnClickOutside from "discourse/modifiers/close-on-click-outside";
 import FantribeNavItem from "./fantribe-nav-item";
 import FantribeSearchButton from "./fantribe-search-button";
 import FantribeNotifications from "./fantribe-notifications";
@@ -50,6 +53,23 @@ export default class FantribeHeader extends Component {
     this.mobileMenuOpen = !this.mobileMenuOpen;
   }
 
+  @action
+  closeMobileMenu() {
+    this.mobileMenuOpen = false;
+  }
+
+  @action
+  goToLogin() {
+    this.mobileMenuOpen = false;
+    this.router.transitionTo("login");
+  }
+
+  @action
+  goToSignup() {
+    this.mobileMenuOpen = false;
+    this.router.transitionTo("signup");
+  }
+
   <template>
     <header class="fantribe-header">
       <div class="fantribe-header__container">
@@ -94,8 +114,46 @@ export default class FantribeHeader extends Component {
             <FantribeNotifications />
             <FantribeUserMenu @user={{this.currentUser}} />
           {{else}}
+            {{! Desktop: show buttons }}
             <a href="/login" class="fantribe-header__login-btn">Log In</a>
             <a href="/signup" class="fantribe-header__signup-btn">Sign Up</a>
+
+            {{! Mobile: show hamburger menu }}
+            <div class="fantribe-header__mobile-menu">
+              <button
+                class="fantribe-header__hamburger"
+                type="button"
+                {{on "click" this.toggleMobileMenu}}
+              >
+                {{icon "bars"}}
+              </button>
+
+              {{#if this.mobileMenuOpen}}
+                <div
+                  class="fantribe-header__mobile-dropdown"
+                  {{closeOnClickOutside
+                    this.closeMobileMenu
+                    (hash targetSelector=".fantribe-header__hamburger")
+                  }}
+                >
+                  <div class="fantribe-header__mobile-dropdown-header">
+                    <span>Welcome to FanTribe</span>
+                  </div>
+                  <div class="fantribe-header__mobile-dropdown-actions">
+                    <button
+                      type="button"
+                      class="fantribe-header__mobile-login"
+                      {{on "click" this.goToLogin}}
+                    >Log In</button>
+                    <button
+                      type="button"
+                      class="fantribe-header__mobile-signup"
+                      {{on "click" this.goToSignup}}
+                    >Sign Up</button>
+                  </div>
+                </div>
+              {{/if}}
+            </div>
           {{/if}}
         </div>
       </div>

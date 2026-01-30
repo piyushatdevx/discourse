@@ -453,6 +453,11 @@ body.signup-page {
       position: relative;
       color: transparent !important;
 
+      // Hide the core Discourse loading icon to prevent duplicate loaders
+      .loading-icon {
+        display: none;
+      }
+
       &::after {
         content: "";
         position: absolute;

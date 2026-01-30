@@ -126,6 +126,116 @@ body.fantribe-custom-header {
       box-shadow: var(--ft-shadow-sm);
     }
   }
+
+  // Mobile menu container (only visible on mobile when logged out)
+  &__mobile-menu {
+    display: none;
+    position: relative;
+
+    @media (max-width: 767px) {
+      display: block;
+    }
+  }
+
+  // Hamburger button
+  &__hamburger {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background: transparent;
+    border: none;
+    border-radius: var(--ft-radius-full);
+    color: var(--ft-gray-600);
+    cursor: pointer;
+    transition: all var(--ft-transition-fast);
+
+    .d-icon {
+      font-size: 20px;
+    }
+
+    &:hover {
+      background: var(--ft-pastel-cream);
+      color: var(--ft-dark);
+    }
+  }
+
+  // Mobile dropdown (full-width box attached below header)
+  &__mobile-dropdown {
+    position: fixed;
+    top: calc(64px + var(--ft-space-1));
+    left: var(--ft-space-2);
+    right: var(--ft-space-2);
+    background: var(--ft-white);
+    border-radius: var(--ft-radius-lg);
+    box-shadow: var(--ft-shadow-md);
+    overflow: hidden;
+    z-index: var(--ft-z-dropdown);
+  }
+
+  &__mobile-dropdown-header {
+    padding: var(--ft-space-3);
+    background: var(--ft-pastel-cream);
+    border-bottom: 1px solid var(--ft-gray-200);
+    font-size: var(--ft-font-small);
+    font-weight: var(--ft-font-weight-semibold);
+    color: var(--ft-dark);
+    text-align: center;
+  }
+
+  &__mobile-dropdown-actions {
+    display: flex;
+    flex-direction: column;
+    gap: var(--ft-space-2);
+    padding: var(--ft-space-3);
+  }
+
+  // Mobile login button (outline style)
+  &__mobile-login {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--ft-space-2) var(--ft-space-3);
+    font-family: var(--ft-font-family);
+    font-size: var(--ft-font-small);
+    font-weight: var(--ft-font-weight-semibold);
+    text-decoration: none;
+    color: var(--ft-primary) !important;
+    background: transparent !important;
+    border: 2px solid var(--ft-primary);
+    border-radius: var(--ft-radius-lg);
+    cursor: pointer;
+    transition: all var(--ft-transition-fast);
+
+    &:hover {
+      color: #ffffff !important;
+      background: var(--ft-primary) !important;
+    }
+  }
+
+  // Mobile signup button (primary CTA)
+  &__mobile-signup {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--ft-space-2) var(--ft-space-3);
+    font-family: var(--ft-font-family);
+    font-size: var(--ft-font-small);
+    font-weight: var(--ft-font-weight-semibold);
+    text-decoration: none;
+    color: #ffffff !important;
+    background: var(--ft-primary) !important;
+    border: 2px solid var(--ft-primary);
+    border-radius: var(--ft-radius-lg);
+    cursor: pointer;
+    transition: all var(--ft-transition-fast);
+
+    &:hover {
+      background: var(--ft-primary-hover) !important;
+      border-color: var(--ft-primary-hover) !important;
+    }
+  }
 }
 
 // Navigation Item
