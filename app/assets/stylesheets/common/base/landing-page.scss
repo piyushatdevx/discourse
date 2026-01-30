@@ -1,0 +1,813 @@
+// ==============================================
+// FANTRIBE LANDING PAGE DESIGN SYSTEM
+// ==============================================
+
+// Primary Brand Colors
+$ft-vibrant-red: #ff1744;
+$ft-vibrant-red-hover: #e6143d;
+$ft-primary-red-light: #ffe5ec;
+$ft-primary-red-bg: #fff5f7;
+
+// Neutral Foundation (60%)
+$ft-warm-white: #fefcfb;
+$ft-soft-stone: #faf9f8;
+$ft-light-mist: #f5f3f2;
+$ft-pearl-gray: #e8e6e3;
+$ft-dust-gray: #d4d1cd;
+
+// Text Colors
+$ft-deep-charcoal: #1a1a1a;
+$ft-charcoal-600: #4a4a4a;
+$ft-charcoal-400: #6b6b6b;
+
+// Accent Colors
+$ft-coral: #ff6b6b;
+$ft-coral-bg: #ffe5e5;
+$ft-amber: #f59e0b;
+$ft-amber-bg: #fef3c7;
+$ft-mint: #10b981;
+$ft-mint-bg: #d1fae5;
+$ft-purple: #9333ea;
+$ft-purple-bg: #f3e8ff;
+$ft-electric-blue: #2563eb;
+$ft-indigo: #4f46e5;
+
+// Semantic Colors
+$ft-success: #059669;
+$ft-success-bg: #d1fae5;
+$ft-warning: #f59e0b;
+$ft-warning-bg: #fef3c7;
+$ft-error: #e11d48;
+$ft-error-bg: #fff1f2;
+
+// Spacing
+$ft-space-xs: 4px;
+$ft-space-sm: 8px;
+$ft-space-md: 12px;
+$ft-space-base: 16px;
+$ft-space-lg: 20px;
+$ft-space-xl: 24px;
+$ft-space-2xl: 32px;
+$ft-space-3xl: 48px;
+$ft-space-4xl: 64px;
+
+// Border Radius
+$ft-radius-sm: 8px;
+$ft-radius-md: 12px;
+$ft-radius-lg: 16px;
+$ft-radius-xl: 24px;
+$ft-radius-full: 9999px;
+
+// Shadows
+$ft-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+$ft-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+$ft-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+$ft-shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+
+// ==============================================
+// Landing Page Container
+// ==============================================
+
+.landing-page {
+  background: $ft-warm-white;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+  color: $ft-charcoal-600;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  * {
+    box-sizing: border-box;
+  }
+}
+
+// ==============================================
+// Typography
+// ==============================================
+
+.landing-page {
+  h1,
+  h2,
+  h3,
+  h4 {
+    color: $ft-deep-charcoal;
+    font-weight: 600;
+    line-height: 1.3;
+    margin: 0;
+  }
+
+  h1 {
+    font-size: 2rem;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+  }
+
+  h3 {
+    font-size: 1.25rem;
+  }
+
+  h4 {
+    font-size: 1rem;
+  }
+
+  p {
+    font-size: 0.9375rem;
+    line-height: 1.6;
+    color: $ft-charcoal-600;
+    margin: 0;
+  }
+
+  small {
+    font-size: 0.875rem;
+    color: $ft-charcoal-400;
+  }
+}
+
+// ==============================================
+// Layout Utilities
+// ==============================================
+
+.ft-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 $ft-space-base;
+
+  @media (min-width: 640px) {
+    padding: 0 $ft-space-xl;
+  }
+
+  @media (min-width: 1024px) {
+    padding: 0 $ft-space-2xl;
+  }
+}
+
+.ft-section {
+  padding: $ft-space-3xl 0;
+
+  @media (min-width: 768px) {
+    padding: $ft-space-4xl 0;
+  }
+}
+
+// ==============================================
+// Buttons
+// ==============================================
+
+.ft-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: $ft-space-sm;
+  padding: $ft-space-md $ft-space-xl;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  border-radius: $ft-radius-full;
+  cursor: pointer;
+  transition: all 200ms ease-in-out;
+  border: none;
+  text-decoration: none;
+}
+
+.ft-btn-primary {
+  background: $ft-vibrant-red;
+  color: white;
+
+  &:hover {
+    background: $ft-vibrant-red-hover;
+    box-shadow: $ft-shadow-md;
+    transform: translateY(-1px);
+  }
+}
+
+.ft-btn-secondary {
+  background: white;
+  color: $ft-charcoal-600;
+  border: 1px solid $ft-pearl-gray;
+
+  &:hover {
+    background: $ft-soft-stone;
+  }
+}
+
+.ft-btn-outline {
+  background: transparent;
+  color: white;
+  border: 2px solid rgba(255, 255, 255, 0.7);
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.1);
+  }
+}
+
+.ft-btn-ghost {
+  background: transparent;
+  color: $ft-charcoal-600;
+
+  &:hover {
+    background: $ft-soft-stone;
+  }
+}
+
+// ==============================================
+// Cards
+// ==============================================
+
+.ft-card {
+  background: white;
+  border: 1px solid $ft-pearl-gray;
+  border-radius: $ft-radius-md;
+  transition: all 200ms ease-in-out;
+
+  &:hover {
+    border-color: rgba($ft-vibrant-red, 0.4);
+    box-shadow: $ft-shadow-lg;
+    transform: translateY(-2px);
+  }
+}
+
+.ft-card-content {
+  padding: $ft-space-lg;
+}
+
+// ==============================================
+// Badges
+// ==============================================
+
+.ft-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: $ft-space-xs;
+  padding: $ft-space-xs $ft-space-md;
+  font-size: 0.75rem;
+  font-weight: 500;
+  border-radius: $ft-radius-full;
+  background: $ft-light-mist;
+  color: $ft-charcoal-600;
+}
+
+.ft-badge-primary {
+  background: $ft-primary-red-light;
+  color: $ft-vibrant-red;
+}
+
+.ft-badge-success {
+  background: $ft-mint-bg;
+  color: $ft-mint;
+}
+
+.ft-badge-warning {
+  background: $ft-amber-bg;
+  color: $ft-amber;
+}
+
+.ft-badge-live {
+  background: $ft-vibrant-red;
+  color: white;
+  font-weight: 700;
+  font-size: 0.625rem;
+  text-transform: uppercase;
+}
+
+// ==============================================
+// Avatar
+// ==============================================
+
+.ft-avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  overflow: hidden;
+  background: $ft-light-mist;
+  flex-shrink: 0;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.ft-avatar-sm {
+  width: 24px;
+  height: 24px;
+}
+
+.ft-avatar-md {
+  width: 32px;
+  height: 32px;
+}
+
+.ft-avatar-lg {
+  width: 48px;
+  height: 48px;
+}
+
+.ft-avatar-xl {
+  width: 64px;
+  height: 64px;
+}
+
+.ft-avatar-stack {
+  display: flex;
+
+  .ft-avatar {
+    border: 2px solid white;
+    margin-left: -8px;
+
+    &:first-child {
+      margin-left: 0;
+    }
+  }
+}
+
+// ==============================================
+// Online Indicator
+// ==============================================
+
+.ft-online-indicator {
+  position: relative;
+  display: inline-flex;
+  width: 8px;
+  height: 8px;
+
+  .ft-online-indicator__dot {
+    position: relative;
+    display: inline-flex;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: $ft-mint;
+  }
+
+  .ft-online-indicator__ping {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: $ft-mint;
+    animation: ft-ping 1.5s cubic-bezier(0, 0, 0.2, 1) infinite;
+  }
+}
+
+@keyframes ft-ping {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  75%,
+  100% {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
+
+// ==============================================
+// Pulse Animation (for live indicators)
+// ==============================================
+
+@keyframes ft-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.ft-animate-pulse {
+  animation: ft-pulse 2s ease-in-out infinite;
+}
+
+// ==============================================
+// Typing Indicator
+// ==============================================
+
+.ft-typing-indicator {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+
+  .ft-typing-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: $ft-indigo;
+    animation: ft-typing 1s ease-in-out infinite;
+
+    &:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+
+    &:nth-child(3) {
+      animation-delay: 0.4s;
+    }
+  }
+}
+
+@keyframes ft-typing {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.3);
+  }
+}
+
+// ==============================================
+// Progress Bar
+// ==============================================
+
+.ft-progress {
+  width: 100%;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+
+  .ft-progress__bar {
+    height: 100%;
+    background: rgba(255, 255, 255, 0.5);
+    transition: width 50ms linear;
+  }
+}
+
+// ==============================================
+// Glassmorphism
+// ==============================================
+
+.ft-glass {
+  backdrop-filter: blur(12px);
+  background: rgba(254, 252, 251, 0.7);
+  border: 1px solid rgba(232, 230, 227, 0.5);
+}
+
+.ft-glass-dark {
+  backdrop-filter: blur(12px);
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+// ==============================================
+// Gradient Backgrounds
+// ==============================================
+
+.ft-gradient-red {
+  background: linear-gradient(
+    to right,
+    $ft-vibrant-red,
+    #dc2626,
+    $ft-coral
+  );
+}
+
+.ft-gradient-hero {
+  background: linear-gradient(
+    to right,
+    rgba(0, 0, 0, 0.7),
+    rgba(0, 0, 0, 0.5),
+    rgba(0, 0, 0, 0.3)
+  );
+}
+
+// ==============================================
+// Grid System
+// ==============================================
+
+.ft-grid {
+  display: grid;
+  gap: $ft-space-lg;
+}
+
+.ft-grid-2 {
+  grid-template-columns: 1fr;
+
+  @media (min-width: 768px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.ft-grid-3 {
+  grid-template-columns: 1fr;
+
+  @media (min-width: 640px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (min-width: 1024px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.ft-grid-4 {
+  grid-template-columns: repeat(2, 1fr);
+
+  @media (min-width: 768px) {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+// ==============================================
+// Hover Effects
+// ==============================================
+
+.ft-hover-lift {
+  transition: transform 200ms ease-in-out, box-shadow 200ms ease-in-out;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: $ft-shadow-lg;
+  }
+}
+
+// ==============================================
+// Text Utilities
+// ==============================================
+
+.ft-text-center {
+  text-align: center;
+}
+
+.ft-text-white {
+  color: white;
+}
+
+.ft-text-muted {
+  color: $ft-charcoal-400;
+}
+
+.ft-text-red {
+  color: $ft-vibrant-red;
+}
+
+.ft-text-sm {
+  font-size: 0.875rem;
+}
+
+.ft-text-xs {
+  font-size: 0.75rem;
+}
+
+.ft-text-lg {
+  font-size: 1.125rem;
+}
+
+.ft-text-xl {
+  font-size: 1.25rem;
+}
+
+.ft-text-2xl {
+  font-size: 1.5rem;
+}
+
+.ft-text-3xl {
+  font-size: 1.875rem;
+}
+
+.ft-text-4xl {
+  font-size: 2.25rem;
+}
+
+.ft-font-bold {
+  font-weight: 700;
+}
+
+.ft-font-semibold {
+  font-weight: 600;
+}
+
+.ft-font-medium {
+  font-weight: 500;
+}
+
+// ==============================================
+// Spacing Utilities
+// ==============================================
+
+.ft-mb-1 {
+  margin-bottom: $ft-space-xs;
+}
+.ft-mb-2 {
+  margin-bottom: $ft-space-sm;
+}
+.ft-mb-3 {
+  margin-bottom: $ft-space-md;
+}
+.ft-mb-4 {
+  margin-bottom: $ft-space-base;
+}
+.ft-mb-6 {
+  margin-bottom: $ft-space-xl;
+}
+.ft-mb-8 {
+  margin-bottom: $ft-space-2xl;
+}
+
+.ft-mt-4 {
+  margin-top: $ft-space-base;
+}
+.ft-mt-6 {
+  margin-top: $ft-space-xl;
+}
+.ft-mt-8 {
+  margin-top: $ft-space-2xl;
+}
+
+.ft-gap-2 {
+  gap: $ft-space-sm;
+}
+.ft-gap-3 {
+  gap: $ft-space-md;
+}
+.ft-gap-4 {
+  gap: $ft-space-base;
+}
+.ft-gap-6 {
+  gap: $ft-space-xl;
+}
+
+// ==============================================
+// Flex Utilities
+// ==============================================
+
+.ft-flex {
+  display: flex;
+}
+
+.ft-flex-col {
+  flex-direction: column;
+}
+
+.ft-items-center {
+  align-items: center;
+}
+
+.ft-items-start {
+  align-items: flex-start;
+}
+
+.ft-justify-center {
+  justify-content: center;
+}
+
+.ft-justify-between {
+  justify-content: space-between;
+}
+
+.ft-flex-wrap {
+  flex-wrap: wrap;
+}
+
+.ft-flex-1 {
+  flex: 1;
+}
+
+.ft-shrink-0 {
+  flex-shrink: 0;
+}
+
+// ==============================================
+// Icon Utilities
+// ==============================================
+
+.ft-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.ft-icon-sm {
+  width: 16px;
+  height: 16px;
+}
+
+.ft-icon-md {
+  width: 20px;
+  height: 20px;
+}
+
+.ft-icon-lg {
+  width: 24px;
+  height: 24px;
+}
+
+// ==============================================
+// Responsive Utilities
+// ==============================================
+
+.ft-hidden {
+  display: none;
+}
+
+.ft-block {
+  display: block;
+}
+
+@media (min-width: 640px) {
+  .ft-sm\:block {
+    display: block;
+  }
+  .ft-sm\:hidden {
+    display: none;
+  }
+  .ft-sm\:flex {
+    display: flex;
+  }
+}
+
+@media (min-width: 768px) {
+  .ft-md\:block {
+    display: block;
+  }
+  .ft-md\:hidden {
+    display: none;
+  }
+  .ft-md\:flex {
+    display: flex;
+  }
+  .ft-md\:grid-cols-2 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .ft-lg\:block {
+    display: block;
+  }
+  .ft-lg\:hidden {
+    display: none;
+  }
+  .ft-lg\:flex {
+    display: flex;
+  }
+  .ft-lg\:grid-cols-3 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+// ==============================================
+// Star Rating
+// ==============================================
+
+.ft-star-rating {
+  display: flex;
+  gap: 2px;
+
+  .ft-star {
+    color: $ft-amber;
+    fill: $ft-amber;
+    width: 16px;
+    height: 16px;
+  }
+}
+
+// ==============================================
+// Dividers
+// ==============================================
+
+.ft-divider {
+  width: 1px;
+  background: $ft-pearl-gray;
+}
+
+.ft-divider-horizontal {
+  height: 1px;
+  width: 100%;
+  background: $ft-pearl-gray;
+}
+
+// ==============================================
+// Scrollbar
+// ==============================================
+
+.landing-page {
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: $ft-light-mist;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: $ft-dust-gray;
+    border-radius: 4px;
+
+    &:hover {
+      background: $ft-charcoal-400;
+    }
+  }
+}
+
+.ft-scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}

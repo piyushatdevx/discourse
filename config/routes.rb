@@ -592,6 +592,7 @@ Discourse::Application.routes.draw do
     get "privacy" => "static#show", :id => "privacy", :as => "privacy"
     get "tos" => "static#show", :id => "tos", :as => "tos"
     get "faq" => "static#show", :id => "faq"
+    get "landing" => "landing#show"
     %w[guidelines rules conduct].each do |guidelines_alias|
       get guidelines_alias => "static#show", :id => "guidelines", :as => guidelines_alias
     end

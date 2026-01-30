@@ -411,6 +411,8 @@ en:
       other: "links"
     faq: "FAQ"
     guidelines: "Guidelines"
+    landing:
+      title: "Welcome to FanTribe"
     privacy_policy: "Privacy Policy"
     privacy: "Privacy"
     tos: "Terms of Service"

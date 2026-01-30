@@ -202,6 +202,7 @@ export default function () {
 
   this.route("faq");
   this.route("guidelines");
+  this.route("landing");
   this.route("conduct");
   this.route("rules");
 
