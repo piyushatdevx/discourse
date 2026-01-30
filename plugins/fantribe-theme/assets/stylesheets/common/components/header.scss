@@ -85,32 +85,45 @@ body.fantribe-custom-header {
     align-items: center;
     justify-content: center;
     padding: var(--ft-space-2) var(--ft-space-4);
+    font-family: var(--ft-font-family);
     font-size: var(--ft-font-small);
     font-weight: var(--ft-font-weight-semibold);
     text-decoration: none;
-    border-radius: var(--ft-radius-md);
-    transition: all var(--ft-transition-fast);
+    border-radius: var(--ft-radius-lg);
+    border: 2px solid var(--ft-primary);
+    cursor: pointer;
+    transition:
+      background-color var(--ft-transition-fast),
+      color var(--ft-transition-fast),
+      border-color var(--ft-transition-fast),
+      box-shadow var(--ft-transition-fast);
 
     @media (max-width: 767px) {
       display: none;
     }
   }
 
+  // Login button - secondary/outline style
   &__login-btn {
-    color: var(--ft-dark);
-    background: transparent;
+    color: var(--ft-primary) !important;
+    background: transparent !important;
 
     &:hover {
-      background: var(--ft-pastel-cream);
+      color: #ffffff !important;
+      background: var(--ft-primary) !important;
+      box-shadow: var(--ft-shadow-sm);
     }
   }
 
+  // Sign Up button - primary CTA style
   &__signup-btn {
-    color: var(--ft-white);
-    background: var(--ft-primary);
+    color: #ffffff !important;
+    background: var(--ft-primary) !important;
 
     &:hover {
-      background: var(--ft-primary-hover);
+      background: var(--ft-primary-hover) !important;
+      border-color: var(--ft-primary-hover) !important;
+      box-shadow: var(--ft-shadow-sm);
     }
   }
 }
