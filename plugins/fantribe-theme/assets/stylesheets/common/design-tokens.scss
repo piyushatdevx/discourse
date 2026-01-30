@@ -1,0 +1,348 @@
+// FanTribe Design Tokens
+// Brand colors, spacing, shadows, radii, and glassmorphism variables
+
+:root {
+  // =============================================
+  // BRAND COLORS
+  // =============================================
+  --ft-primary: #ff1744;
+  --ft-primary-hover: #e50030;
+  --ft-primary-active: #cc002b;
+  --ft-primary-light: rgba(255, 23, 68, 0.1);
+  --ft-primary-medium: rgba(255, 23, 68, 0.3);
+
+  --ft-dark: #1a1a1a;
+  --ft-dark-hover: #2a2a2a;
+  --ft-dark-light: rgba(26, 26, 26, 0.7);
+
+  --ft-white: #ffffff;
+  --ft-bg: #f5f5f5;
+
+  // =============================================
+  // GRAY SCALE
+  // =============================================
+  --ft-gray-50: #fafafa;
+  --ft-gray-100: #f5f5f5;
+  --ft-gray-200: #eeeeee;
+  --ft-gray-300: #e0e0e0;
+  --ft-gray-400: #bdbdbd;
+  --ft-gray-500: #9e9e9e;
+  --ft-gray-600: #757575;
+  --ft-gray-700: #616161;
+  --ft-gray-800: #424242;
+  --ft-gray-900: #212121;
+
+  // =============================================
+  // SEMANTIC COLORS
+  // =============================================
+  --ft-success: #4caf50;
+  --ft-success-light: rgba(76, 175, 80, 0.1);
+  --ft-warning: #ff9800;
+  --ft-warning-light: rgba(255, 152, 0, 0.1);
+  --ft-error: #f44336;
+  --ft-error-light: rgba(244, 67, 54, 0.1);
+  --ft-info: #2196f3;
+  --ft-info-light: rgba(33, 150, 243, 0.1);
+
+  // Social provider colors
+  --ft-google: #4285f4;
+  --ft-facebook: #1877f2;
+
+  // Role badge colors
+  --ft-role-owner: #ffc107;
+  --ft-role-admin: #9c27b0;
+  --ft-role-moderator: #2196f3;
+
+  // =============================================
+  // PASTEL COLORS (For Soothing Experience)
+  // =============================================
+  // DESIGN GUIDELINE: When making design decisions or when specific
+  // colors are not mentioned, ALWAYS prefer pastel/soft colors for
+  // a calming, soothing user experience. Reserve primary red (#FF1744)
+  // for important CTAs and key actions only.
+  // =============================================
+
+  // Core Pastels
+  --ft-pastel-pink: #ffe4e8; // Light pink - soft backgrounds
+  --ft-pastel-red: #ffccd5; // Muted red - hover states, light accents
+  --ft-pastel-peach: #ffe5d9; // Peach - warm accents
+  --ft-pastel-lavender: #e8e0f0; // Lavender - secondary accents
+  --ft-pastel-mint: #d4f0e7; // Mint - success states, positive feedback
+  --ft-pastel-sky: #e0f2fe; // Sky blue - info states, links
+  --ft-pastel-cream: #fff8f0; // Cream - alternative backgrounds
+  --ft-pastel-gray: #f5f5f7; // Soft gray - neutral backgrounds
+
+  // Pastel Usage:
+  // - Card hover backgrounds: --ft-pastel-pink or --ft-pastel-cream
+  // - Success messages/badges: --ft-pastel-mint
+  // - Info/notification backgrounds: --ft-pastel-sky
+  // - Secondary buttons hover: --ft-pastel-red
+  // - Tag/badge backgrounds: --ft-pastel-lavender, --ft-pastel-peach
+  // - Empty states: --ft-pastel-gray
+  // - Tribe category colors: Mix of pastels for visual variety
+
+  // =============================================
+  // TYPOGRAPHY
+  // =============================================
+  --ft-font-family:
+    "Outfit", "SF Pro Display", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+
+  --ft-font-display: 3rem; // 48px
+  --ft-font-h1: 2.25rem; // 36px
+  --ft-font-h2: 1.875rem; // 30px
+  --ft-font-h3: 1.5rem; // 24px
+  --ft-font-h4: 1.25rem; // 20px
+  --ft-font-h5: 1.125rem; // 18px
+  --ft-font-h6: 1rem; // 16px
+  --ft-font-body: 1rem; // 16px
+  --ft-font-small: 0.875rem; // 14px
+  --ft-font-caption: 0.75rem; // 12px
+
+  --ft-font-weight-regular: 400;
+  --ft-font-weight-medium: 500;
+  --ft-font-weight-semibold: 600;
+  --ft-font-weight-bold: 700;
+
+  --ft-line-height-tight: 1.25;
+  --ft-line-height-normal: 1.5;
+  --ft-line-height-relaxed: 1.75;
+
+  // =============================================
+  // SPACING (4px increments)
+  // =============================================
+  --ft-space-1: 0.25rem; // 4px
+  --ft-space-2: 0.5rem; // 8px
+  --ft-space-3: 0.75rem; // 12px
+  --ft-space-4: 1rem; // 16px
+  --ft-space-5: 1.25rem; // 20px
+  --ft-space-6: 1.5rem; // 24px
+  --ft-space-8: 2rem; // 32px
+  --ft-space-12: 3rem; // 48px
+  --ft-space-16: 4rem; // 64px
+
+  // =============================================
+  // BORDER RADIUS
+  // =============================================
+  --ft-radius-sm: 4px;
+  --ft-radius-md: 8px;
+  --ft-radius-lg: 12px;
+  --ft-radius-xl: 16px;
+  --ft-radius-full: 9999px;
+
+  // =============================================
+  // SHADOWS
+  // =============================================
+  --ft-shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.1);
+  --ft-shadow-md: 0 4px 16px rgba(0, 0, 0, 0.12);
+  --ft-shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.15);
+  --ft-shadow-focus: 0 0 0 3px rgba(255, 23, 68, 0.3);
+
+  // =============================================
+  // GLASSMORPHISM
+  // =============================================
+  --ft-glass-light-bg: rgba(255, 255, 255, 0.1);
+  --ft-glass-light-blur: 10px;
+
+  --ft-glass-medium-bg: rgba(255, 255, 255, 0.15);
+  --ft-glass-medium-blur: 20px;
+
+  --ft-glass-dark-bg: rgba(26, 26, 26, 0.5);
+  --ft-glass-dark-blur: 20px;
+
+  --ft-glass-border: 1px solid rgba(255, 255, 255, 0.1);
+  --ft-glass-border-subtle: 1px solid rgba(26, 26, 26, 0.1);
+
+  // Card glass (used for most UI cards on light backgrounds)
+  --ft-glass-card-bg: rgba(255, 255, 255, 0.85);
+  --ft-glass-card-blur: 12px;
+  --ft-glass-card-border: 1px solid rgba(255, 255, 255, 0.3);
+
+  // =============================================
+  // TRANSITIONS
+  // =============================================
+  --ft-transition-fast: 150ms ease;
+  --ft-transition-normal: 250ms ease;
+  --ft-transition-slow: 350ms ease;
+
+  // =============================================
+  // Z-INDEX SCALE
+  // =============================================
+  --ft-z-dropdown: 100;
+  --ft-z-sticky: 200;
+  --ft-z-overlay: 300;
+  --ft-z-modal: 400;
+  --ft-z-toast: 500;
+}
+
+// =============================================
+// DARK MODE - SOFT DARK PASTEL THEME
+// =============================================
+// Automatically switches when system prefers dark color scheme.
+// Uses muted, desaturated colors for a soothing dark experience.
+// Does NOT apply if user has manually selected light theme (.ft-light-theme).
+// =============================================
+
+@media (prefers-color-scheme: dark) {
+  :root:not(.ft-light-theme) {
+    // Brand colors (softened for dark mode)
+    --ft-primary: #ff6b8a;
+    --ft-primary-hover: #ff8fa8;
+    --ft-primary-active: #ff5577;
+    --ft-primary-light: rgba(255, 107, 138, 0.15);
+    --ft-primary-medium: rgba(255, 107, 138, 0.3);
+
+    // Core backgrounds (inverted)
+    --ft-dark: #e8e8ec;
+    --ft-dark-hover: #d8d8dc;
+    --ft-dark-light: rgba(232, 232, 236, 0.7);
+
+    --ft-white: #1a1a2e;
+    --ft-bg: #12121f;
+
+    // Gray scale (inverted and softened)
+    --ft-gray-50: #1a1a2e;
+    --ft-gray-100: #1f1f33;
+    --ft-gray-200: #252538;
+    --ft-gray-300: #2d2d42;
+    --ft-gray-400: #404055;
+    --ft-gray-500: #5a5a70;
+    --ft-gray-600: #8080a0;
+    --ft-gray-700: #a0a0b8;
+    --ft-gray-800: #c0c0d0;
+    --ft-gray-900: #e8e8ec;
+
+    // Semantic colors (pastel versions for dark)
+    --ft-success: #86efac;
+    --ft-success-light: rgba(134, 239, 172, 0.15);
+    --ft-warning: #fcd34d;
+    --ft-warning-light: rgba(252, 211, 77, 0.15);
+    --ft-error: #fca5a5;
+    --ft-error-light: rgba(252, 165, 165, 0.15);
+    --ft-info: #93c5fd;
+    --ft-info-light: rgba(147, 197, 253, 0.15);
+
+    // Social provider colors (slightly adjusted for dark)
+    --ft-google: #5a9cf5;
+    --ft-facebook: #4a8ff5;
+
+    // Role badge colors (softened for dark backgrounds)
+    --ft-role-owner: #fcd34d;
+    --ft-role-admin: #c084fc;
+    --ft-role-moderator: #60a5fa;
+
+    // Dark pastels (muted, desaturated versions)
+    --ft-pastel-pink: #3d2d35;
+    --ft-pastel-red: #4a2d38;
+    --ft-pastel-peach: #3d3028;
+    --ft-pastel-lavender: #2d2a3d;
+    --ft-pastel-mint: #253530;
+    --ft-pastel-sky: #252d3d;
+    --ft-pastel-cream: #2d2a25;
+    --ft-pastel-gray: #252530;
+
+    // Shadows (deeper for dark mode)
+    --ft-shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+    --ft-shadow-md: 0 4px 16px rgba(0, 0, 0, 0.4);
+    --ft-shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.5);
+    --ft-shadow-focus: 0 0 0 3px rgba(255, 107, 138, 0.4);
+
+    // Glassmorphism (adjusted for dark backgrounds)
+    --ft-glass-light-bg: rgba(255, 255, 255, 0.05);
+    --ft-glass-light-blur: 10px;
+
+    --ft-glass-medium-bg: rgba(255, 255, 255, 0.08);
+    --ft-glass-medium-blur: 20px;
+
+    --ft-glass-dark-bg: rgba(0, 0, 0, 0.3);
+    --ft-glass-dark-blur: 20px;
+
+    --ft-glass-border: 1px solid rgba(255, 255, 255, 0.08);
+    --ft-glass-border-subtle: 1px solid rgba(255, 255, 255, 0.05);
+
+    --ft-glass-card-bg: rgba(30, 30, 50, 0.85);
+    --ft-glass-card-blur: 12px;
+    --ft-glass-card-border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+}
+
+// =============================================
+// MANUAL THEME OVERRIDE CLASSES
+// =============================================
+// These classes allow the theme toggle to override system preference.
+// Applied to <html> element via JavaScript.
+// =============================================
+
+// Force dark theme (overrides system preference)
+html.ft-dark-theme {
+  --ft-primary: #ff6b8a;
+  --ft-primary-hover: #ff8fa8;
+  --ft-primary-active: #ff5577;
+  --ft-primary-light: rgba(255, 107, 138, 0.15);
+  --ft-primary-medium: rgba(255, 107, 138, 0.3);
+
+  --ft-dark: #e8e8ec;
+  --ft-dark-hover: #d8d8dc;
+  --ft-dark-light: rgba(232, 232, 236, 0.7);
+
+  --ft-white: #1a1a2e;
+  --ft-bg: #12121f;
+
+  --ft-gray-50: #1a1a2e;
+  --ft-gray-100: #1f1f33;
+  --ft-gray-200: #252538;
+  --ft-gray-300: #2d2d42;
+  --ft-gray-400: #404055;
+  --ft-gray-500: #5a5a70;
+  --ft-gray-600: #8080a0;
+  --ft-gray-700: #a0a0b8;
+  --ft-gray-800: #c0c0d0;
+  --ft-gray-900: #e8e8ec;
+
+  --ft-success: #86efac;
+  --ft-success-light: rgba(134, 239, 172, 0.15);
+  --ft-warning: #fcd34d;
+  --ft-warning-light: rgba(252, 211, 77, 0.15);
+  --ft-error: #fca5a5;
+  --ft-error-light: rgba(252, 165, 165, 0.15);
+  --ft-info: #93c5fd;
+  --ft-info-light: rgba(147, 197, 253, 0.15);
+
+  --ft-google: #5a9cf5;
+  --ft-facebook: #4a8ff5;
+
+  --ft-role-owner: #fcd34d;
+  --ft-role-admin: #c084fc;
+  --ft-role-moderator: #60a5fa;
+
+  --ft-pastel-pink: #3d2d35;
+  --ft-pastel-red: #4a2d38;
+  --ft-pastel-peach: #3d3028;
+  --ft-pastel-lavender: #2d2a3d;
+  --ft-pastel-mint: #253530;
+  --ft-pastel-sky: #252d3d;
+  --ft-pastel-cream: #2d2a25;
+  --ft-pastel-gray: #252530;
+
+  --ft-shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+  --ft-shadow-md: 0 4px 16px rgba(0, 0, 0, 0.4);
+  --ft-shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.5);
+  --ft-shadow-focus: 0 0 0 3px rgba(255, 107, 138, 0.4);
+
+  --ft-glass-light-bg: rgba(255, 255, 255, 0.05);
+  --ft-glass-light-blur: 10px;
+  --ft-glass-medium-bg: rgba(255, 255, 255, 0.08);
+  --ft-glass-medium-blur: 20px;
+  --ft-glass-dark-bg: rgba(0, 0, 0, 0.3);
+  --ft-glass-dark-blur: 20px;
+  --ft-glass-border: 1px solid rgba(255, 255, 255, 0.08);
+  --ft-glass-border-subtle: 1px solid rgba(255, 255, 255, 0.05);
+  --ft-glass-card-bg: rgba(30, 30, 50, 0.85);
+  --ft-glass-card-blur: 12px;
+  --ft-glass-card-border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+// Force light theme (overrides system dark preference)
+// Note: .ft-light-theme uses default :root values, no overrides needed.
+// The class presence prevents the @media (prefers-color-scheme: dark) from applying
+// when combined with :not(.ft-light-theme) selector if needed in the future.

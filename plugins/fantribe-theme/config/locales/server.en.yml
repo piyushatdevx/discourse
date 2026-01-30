@@ -1,0 +1,7 @@
+en:
+  site_settings:
+    fantribe_theme_enabled: "Enable the FanTribe theme and styling"
+    fantribe_show_trending_tribes: "Show trending tribes in the sidebar"
+    fantribe_show_suggested_users: "Show suggested users to follow"
+    fantribe_enable_glassmorphism: "Enable glassmorphism visual effects"
+    fantribe_primary_color: "Primary brand color (hex code)"

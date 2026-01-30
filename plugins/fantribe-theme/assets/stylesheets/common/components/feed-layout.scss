@@ -1,0 +1,205 @@
+// FanTribe Feed Layout - Three-Section Responsive Grid
+// Desktop: Left sidebar (240px) | Feed (flex) | Right sidebar (300px)
+// Tablet: Left sidebar (220px) | Feed (flex)
+// Mobile: Single column with horizontal tribe chips
+
+body.fantribe-theme {
+  // Hide Discourse's default sidebar
+  .sidebar-wrapper {
+    display: none !important;
+  }
+
+  // Override Discourse core max-width
+  #main-outlet-wrapper,
+  #main-outlet,
+  .wrap {
+    max-width: 100% !important;
+    box-sizing: border-box;
+  }
+
+  // Adjust main outlet layout when sidebar is hidden
+  #main-outlet-wrapper {
+    display: block;
+    overflow: visible;
+
+    &.wrap {
+      grid-template-columns: 1fr;
+      grid-template-areas: "main";
+    }
+  }
+
+  // Hide default list controls (we use our own filtering)
+  .list-controls {
+    display: none;
+  }
+
+  // Hide welcome banner
+  .welcome-banner {
+    display: none !important;
+  }
+
+  // List container adjustments
+  .list-container {
+    max-width: 1400px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 0;
+    box-sizing: border-box;
+
+    .row.full-width {
+      margin: 0;
+      padding: 0;
+    }
+  }
+
+  // Ensure topic list takes full width
+  .topic-list,
+  #list-area {
+    width: 100%;
+    max-width: 100%;
+  }
+}
+
+// Main feed layout wrapper
+.fantribe-feed-layout {
+  display: block;
+  width: 100%;
+  margin: 0 auto;
+  padding: var(--ft-space-4) 0;
+  padding-left: 13%;
+  padding-right: 7.5%;
+  min-height: calc(100vh - 80px);
+  box-sizing: border-box;
+
+  // Left sidebar - My Tribes panel
+  &__left-sidebar {
+    position: fixed;
+    top: 64px; // FanTribe header height
+    left: 0;
+    width: 25%;
+    height: calc(100vh - 64px);
+    overflow-y: auto;
+    padding: var(--ft-space-4);
+    z-index: calc(var(--ft-z-sticky) - 1); // Just below header
+    box-sizing: border-box;
+    background: var(--ft-bg, #fff);
+
+    // Thin scrollbar
+    scrollbar-width: thin;
+    scrollbar-color: var(--ft-gray-300) transparent;
+
+    &::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: var(--ft-gray-300);
+      border-radius: var(--ft-radius-full);
+    }
+  }
+
+  // Main content area - Feed
+  &__content {
+    width: 100%;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--ft-space-4);
+    padding: 0 var(--ft-space-2);
+    box-sizing: border-box;
+  }
+
+  // Right sidebar - Trending Topics
+  &__right-sidebar {
+    position: fixed;
+    top: 64px; // FanTribe header height
+    right: 0;
+    width: 22%;
+    height: calc(100vh - 64px);
+    overflow-y: auto;
+    padding: var(--ft-space-4);
+    z-index: calc(var(--ft-z-sticky) - 1); // Just below header
+    box-sizing: border-box;
+    background: var(--ft-bg, #fff);
+
+    // Thin scrollbar
+    scrollbar-width: thin;
+    scrollbar-color: var(--ft-gray-300) transparent;
+
+    &::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: var(--ft-gray-300);
+      border-radius: var(--ft-radius-full);
+    }
+  }
+
+  // Mobile tribe chips (hidden on desktop)
+  &__mobile-chips {
+    display: none;
+  }
+}
+
+// Tablet: Hide right sidebar (768px - 1023px)
+@media (max-width: 1023px) {
+  .fantribe-feed-layout {
+    padding-left: 28%;
+    padding-right: var(--ft-space-3);
+
+    &__left-sidebar {
+      width: 28%;
+    }
+
+    &__right-sidebar {
+      display: none;
+    }
+  }
+}
+
+// Mobile: Single column with tribe chips (<768px)
+@media (max-width: 767px) {
+  .fantribe-feed-layout {
+    display: flex;
+    flex-direction: column;
+    padding: var(--ft-space-2);
+    min-height: auto;
+
+    &__mobile-chips {
+      display: block;
+      position: sticky;
+      top: var(--header-offset, 60px);
+      z-index: 10;
+      background: var(--ft-white);
+      border-bottom: 1px solid var(--ft-gray-200);
+      padding: var(--ft-space-2) 0;
+      margin: 0 calc(-1 * var(--ft-space-2));
+    }
+
+    &__left-sidebar {
+      display: none;
+      position: static;
+    }
+
+    &__content {
+      width: 100%;
+      max-width: 100%;
+      padding: 0;
+      gap: var(--ft-space-3);
+    }
+
+    &__right-sidebar {
+      display: none;
+      position: static;
+    }
+  }
+}

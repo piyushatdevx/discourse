@@ -1,0 +1,161 @@
+// FanTribe Typography
+// Headings, body text, captions, links
+
+// Import Google Font
+@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap");
+
+.ft-display {
+  font-family: var(--ft-font-family);
+  font-size: var(--ft-font-display);
+  font-weight: var(--ft-font-weight-bold);
+  line-height: var(--ft-line-height-tight);
+  color: var(--ft-dark);
+  letter-spacing: -0.02em;
+}
+
+.ft-h1 {
+  font-family: var(--ft-font-family);
+  font-size: var(--ft-font-h1);
+  font-weight: var(--ft-font-weight-bold);
+  line-height: var(--ft-line-height-tight);
+  color: var(--ft-dark);
+}
+
+.ft-h2 {
+  font-family: var(--ft-font-family);
+  font-size: var(--ft-font-h2);
+  font-weight: var(--ft-font-weight-bold);
+  line-height: var(--ft-line-height-tight);
+  color: var(--ft-dark);
+}
+
+.ft-h3 {
+  font-family: var(--ft-font-family);
+  font-size: var(--ft-font-h3);
+  font-weight: var(--ft-font-weight-semibold);
+  line-height: var(--ft-line-height-tight);
+  color: var(--ft-dark);
+}
+
+.ft-h4 {
+  font-family: var(--ft-font-family);
+  font-size: var(--ft-font-h4);
+  font-weight: var(--ft-font-weight-semibold);
+  line-height: var(--ft-line-height-normal);
+  color: var(--ft-dark);
+}
+
+.ft-h5 {
+  font-family: var(--ft-font-family);
+  font-size: var(--ft-font-h5);
+  font-weight: var(--ft-font-weight-medium);
+  line-height: var(--ft-line-height-normal);
+  color: var(--ft-dark);
+}
+
+.ft-h6 {
+  font-family: var(--ft-font-family);
+  font-size: var(--ft-font-h6);
+  font-weight: var(--ft-font-weight-medium);
+  line-height: var(--ft-line-height-normal);
+  color: var(--ft-dark);
+}
+
+.ft-body {
+  font-family: var(--ft-font-family);
+  font-size: var(--ft-font-body);
+  font-weight: var(--ft-font-weight-regular);
+  line-height: var(--ft-line-height-normal);
+  color: var(--ft-dark);
+}
+
+.ft-body-large {
+  font-family: var(--ft-font-family);
+  font-size: var(--ft-font-h5);
+  font-weight: var(--ft-font-weight-regular);
+  line-height: var(--ft-line-height-normal);
+  color: var(--ft-dark);
+}
+
+.ft-body-small {
+  font-family: var(--ft-font-family);
+  font-size: var(--ft-font-small);
+  font-weight: var(--ft-font-weight-regular);
+  line-height: var(--ft-line-height-normal);
+  color: var(--ft-gray-600);
+}
+
+.ft-caption {
+  font-family: var(--ft-font-family);
+  font-size: var(--ft-font-caption);
+  font-weight: var(--ft-font-weight-regular);
+  line-height: var(--ft-line-height-normal);
+  color: var(--ft-gray-500);
+}
+
+.ft-link {
+  color: var(--ft-primary);
+  text-decoration: none;
+  transition: color var(--ft-transition-fast);
+
+  &:hover {
+    color: var(--ft-primary-hover);
+    text-decoration: underline;
+  }
+
+  &:active {
+    color: var(--ft-primary-active);
+  }
+}
+
+.ft-username {
+  font-size: var(--ft-font-small);
+  font-weight: var(--ft-font-weight-regular);
+  color: var(--ft-gray-500);
+}
+
+.ft-hashtag {
+  color: var(--ft-primary);
+  font-weight: var(--ft-font-weight-medium);
+  cursor: pointer;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.ft-mention {
+  color: var(--ft-primary);
+  font-weight: var(--ft-font-weight-medium);
+  cursor: pointer;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.ft-timestamp {
+  font-size: var(--ft-font-caption);
+  color: var(--ft-gray-500);
+  font-weight: var(--ft-font-weight-regular);
+}
+
+.ft-truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ft-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.ft-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}

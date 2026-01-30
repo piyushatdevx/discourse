@@ -1,0 +1,166 @@
+// FanTribe Tribes Panel - Left Sidebar "My Tribes" Filter
+// Gradient buttons with online indicators
+
+.fantribe-tribes-panel {
+  background: var(--ft-white);
+  border: 1px solid var(--ft-gray-200);
+  border-radius: var(--ft-radius-xl);
+  overflow: hidden;
+
+  // Panel header
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: var(--ft-space-5) var(--ft-space-5) var(--ft-space-3);
+    border-bottom: 1px solid var(--ft-gray-100);
+  }
+
+  &__title-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--ft-space-1);
+  }
+
+  &__title {
+    display: flex;
+    align-items: center;
+    gap: var(--ft-space-2);
+    font-size: var(--ft-font-h5);
+    font-weight: var(--ft-font-weight-semibold);
+    color: var(--ft-dark);
+    margin: 0;
+
+    .d-icon {
+      color: var(--ft-primary);
+      font-size: 16px;
+    }
+  }
+
+  &__subtitle {
+    font-size: var(--ft-font-caption);
+    color: var(--ft-gray-500);
+    margin: 0;
+  }
+
+  &__clear-btn {
+    font-size: var(--ft-font-caption);
+    color: var(--ft-primary);
+    background: none;
+    border: none;
+    padding: var(--ft-space-1) var(--ft-space-2);
+    cursor: pointer;
+    transition: all var(--ft-transition-fast);
+
+    &:hover {
+      text-decoration: underline;
+    }
+
+    &:disabled {
+      color: var(--ft-gray-400);
+      cursor: not-allowed;
+
+      &:hover {
+        text-decoration: none;
+      }
+    }
+  }
+
+  // Panel content - tribe buttons container
+  &__content {
+    padding: var(--ft-space-3) var(--ft-space-4) var(--ft-space-4);
+    display: flex;
+    flex-direction: column;
+    gap: var(--ft-space-2);
+  }
+}
+
+// Individual Tribe Button
+.fantribe-tribe-button {
+  display: flex;
+  align-items: center;
+  gap: var(--ft-space-3);
+  padding: var(--ft-space-3);
+  border-radius: var(--ft-radius-xl);
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: all 200ms ease;
+  text-align: left;
+  width: 100%;
+
+  // Simple solid background
+  background: var(--ft-gray-50);
+
+  &:hover {
+    box-shadow: var(--ft-shadow-md);
+    transform: translateY(-1px);
+  }
+
+  // Active/selected state
+  &--active {
+    border-color: var(--ft-primary);
+    box-shadow: var(--ft-shadow-sm);
+  }
+
+  // Icon container
+  &__icon {
+    width: 44px;
+    height: 44px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--ft-white);
+    border-radius: var(--ft-radius-lg);
+    box-shadow: var(--ft-shadow-sm);
+
+    .d-icon {
+      font-size: 20px;
+      color: var(--ft-gray-700);
+    }
+
+    // Category color dot
+    &-dot {
+      width: 24px;
+      height: 24px;
+      border-radius: var(--ft-radius-full);
+    }
+  }
+
+  // Text content
+  &__info {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  &__name {
+    font-size: var(--ft-font-small);
+    font-weight: var(--ft-font-weight-medium);
+    color: var(--ft-dark);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &__topic-count {
+    font-size: var(--ft-font-caption);
+    color: var(--ft-gray-500);
+  }
+
+  // Favorite heart indicator
+  &__favorite {
+    flex-shrink: 0;
+    color: var(--ft-primary);
+    font-size: 14px;
+    opacity: 0.7;
+
+    &--filled {
+      opacity: 1;
+    }
+  }
+}
+
+

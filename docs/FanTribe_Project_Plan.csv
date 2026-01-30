@@ -1,0 +1,228 @@
+Task ID,Task Name,Description,Duration,Start Week,End Week,Dependencies,Assigned To,Hours,% Complete,Status,Notes,Risk Level,Mitigation,Key Dependencies,Due Date
+FT-01,Landing Page & Onboarding - Phase Setup,Design and implement complete landing page and authentication system,2 weeks,Week 1,Week 2,None,Frontend + Backend Dev,80,0%,Not Started,Foundation for user acquisition and onboarding,High,Early testing with focus groups; security audit,Design mockups; Brand assets,Week 2 End
+
+FT-01.1,Public Landing Page Design & Development,Create responsive landing page with hero section and CTAs,3 days,Week 1,Week 1,FT-01,Frontend Dev,24,0%,Not Started,Custom social-style design theme required,Medium,Use CDN for performance; A/B testing framework,Brand guidelines; Copywriting,Week 1 Day 3
+FT-01.1.1,Hero Section & Value Proposition,Design and implement hero section with tagline and primary CTA,1 day,Week 1,Week 1,FT-01.1,Frontend Dev,8,0%,Not Started,Above-fold content optimization for conversions,Low,Mobile-first design approach,Marketing copy approved,Week 1 Day 1
+FT-01.1.2,Featured Tribes Section,Build dynamic featured/trending tribes showcase (top 6),0.5 days,Week 1,Week 1,FT-01.1.1,Frontend Dev,4,0%,Not Started,Real-time member count display,Low,Fallback to placeholder if no tribes,Backend API for tribe data,Week 1 Day 1
+FT-01.1.3,Social Proof Section,Implement testimonials and statistics display,0.5 days,Week 1,Week 1,FT-01.1.2,Frontend Dev,4,0%,Not Started,Build trust with potential users,Low,Use real user testimonials,Marketing team for content,Week 1 Day 2
+FT-01.1.4,Footer & Legal Links,Create footer with Terms Privacy Contact links,0.5 days,Week 1,Week 1,FT-01.1.3,Frontend Dev,4,0%,Not Started,Compliance requirement,Low,Legal team review,Legal documents prepared,Week 1 Day 2
+FT-01.1.5,Performance Optimization,Implement lazy loading CDN caching analytics,0.5 days,Week 1,Week 1,FT-01.1.4,Frontend Dev,4,0%,Not Started,Must load within 3 seconds on 3G,High,Progressive image loading; minification,CDN service configured,Week 1 Day 3
+
+FT-01.2,Email Registration System,Build email-based registration with verification,1 day,Week 1,Week 1,FT-01.1,Backend Dev,8,0%,Not Started,RFC 5322 compliant email validation,Medium,Rate limiting; disposable email blocking,Email service provider setup,Week 1 End
+FT-01.2.1,Registration Form & Validation,Create registration form with real-time validation,0.5 days,Week 1,Week 1,FT-01.2,Backend + Frontend Dev,4,0%,Not Started,Password requirements: 8+ chars 1 upper 1 lower 1 number,Low,Clear error messaging; UX testing,None,Week 1 Day 4
+FT-01.2.2,Email Verification System,Implement verification email sending and link handling,0.5 days,Week 1,Week 1,FT-01.2.1,Backend Dev,4,0%,Not Started,24-hour link expiry; resend after 60 seconds,Medium,Queue system for email delivery,Email templates designed,Week 1 End
+
+FT-01.3,Social OAuth Integration,Implement Google and Facebook OAuth login,2 days,Week 1,Week 1,FT-01.2,Backend Dev,16,0%,Not Started,Secure token storage; CSRF protection,High,Fallback to email if OAuth fails,OAuth credentials from providers,Week 1 End
+FT-01.3.1,Google OAuth Setup,Configure and implement Google OAuth flow,1 day,Week 1,Week 1,FT-01.3,Backend Dev,8,0%,Not Started,Import profile picture and display name,Medium,Handle email conflicts; account linking,Google OAuth Client ID & Secret,Week 1 Day 5
+FT-01.3.2,Facebook OAuth Setup,Configure and implement Facebook OAuth flow,1 day,Week 1,Week 1,FT-01.3.1,Backend Dev,8,0%,Not Started,Handle phone-only accounts (no email),Medium,Prompt for email if not provided,Facebook App ID & Secret,Week 1 End
+
+FT-01.4,Login System,Build secure login with remember me and password reset,2 days,Week 2,Week 2,FT-01.3,Backend Dev,16,0%,Not Started,Brute force protection; session management,High,Rate limiting; exponential backoff,Security requirements defined,Week 2 Day 2
+FT-01.4.1,Login Form & Authentication,Create login form with email/password and show/hide toggle,0.5 days,Week 2,Week 2,FT-01.4,Frontend + Backend Dev,4,0%,Not Started,Remember me: 30-day session; Lock after 5 failures,High,Secure HTTP-only cookies; SameSite=Strict,Session management system,Week 2 Day 1
+FT-01.4.2,Password Reset Flow,Implement forgot password and reset functionality,1 day,Week 2,Week 2,FT-01.4.1,Backend Dev,8,0%,Not Started,1-hour reset link expiry; prevent enumeration,Medium,Generic success messages; invalidate old sessions,Email templates,Week 2 Day 2
+FT-01.4.3,Account Verification Check,Add verification and suspension checks to login,0.5 days,Week 2,Week 2,FT-01.4.2,Backend Dev,4,0%,Not Started,Block unverified and suspended accounts,Low,Clear messaging; resend verification option,None,Week 2 Day 2
+
+FT-01.5,Multi-language Support,Implement i18n framework with auto-detection,2 days,Week 2,Week 2,FT-01.4,Frontend + Backend Dev,16,0%,Not Started,Browser language detection; RTL support,Medium,Fallback to English; translation management system,Translation framework selected,Week 2 End
+FT-01.5.1,i18n Framework Integration,Setup translation framework and file structure,1 day,Week 2,Week 2,FT-01.5,Frontend Dev,8,0%,Not Started,Easy translation updates; version control,Low,Choose established framework (i18next/react-intl),None,Week 2 Day 3
+FT-01.5.2,Language Selector & Persistence,Build language selector and preference storage,0.5 days,Week 2,Week 2,FT-01.5.1,Frontend Dev,4,0%,Not Started,Cookie for guests; profile for registered users,Low,Test with multiple languages,User profile system,Week 2 Day 4
+FT-01.5.3,Custom FanTribe Translations,Create translations for FanTribe-specific terms,0.5 days,Week 2,Week 2,FT-01.5.2,Content Team + Dev,4,0%,Not Started,Tribe terminology and platform-specific UI,Low,Native speaker review,Translation list prepared,Week 2 End
+
+FT-02,User Profiles - Complete System,Build comprehensive user profile creation viewing and editing,1 week,Week 3,Week 3,FT-01,Frontend + Backend Dev,40,0%,Not Started,Social-style profile layout with privacy controls,Medium,Progressive disclosure; performance optimization,Design system established,Week 3 End
+
+FT-02.1,Profile Creation Wizard,Design and implement post-registration profile setup,2 days,Week 3,Week 3,FT-02,Frontend + Backend Dev,16,0%,Not Started,Username display name avatar bio collection,Medium,Skip option for later completion,Image processing library,Week 3 Day 2
+FT-02.1.1,Username & Display Name Input,Create form fields with real-time validation,0.5 days,Week 3,Week 3,FT-02.1,Frontend Dev,4,0%,Not Started,3-20 chars alphanumeric+underscores; uniqueness check,Low,Suggest alternatives for taken usernames,Validation API endpoint,Week 3 Day 1
+FT-02.1.2,Avatar Upload & Processing,Implement image upload with crop/resize tool,1 day,Week 3,Week 3,FT-02.1.1,Frontend + Backend Dev,8,0%,Not Started,5MB max JPG/PNG/GIF; 200x200px minimum,Medium,Auto-compress; generate default from initials,Image processing service,Week 3 Day 2
+FT-02.1.3,Bio & Additional Fields,Add bio textarea and optional fields (location website),0.5 days,Week 3,Week 3,FT-02.1.2,Frontend Dev,4,0%,Not Started,300 char bio limit; URL validation for website,Low,Character counter; format validation,None,Week 3 Day 2
+
+FT-02.2,Profile Display Page,Build social-style profile page with activity feed,3 days,Week 3,Week 3,FT-02.1,Frontend + Backend Dev,24,0%,Not Started,Custom social layout theme (client dependent),High,Lazy loading for activity feed,Design mockups approved,Week 3 End
+FT-02.2.1,Profile Layout & Header,Create profile header with cover photo and avatar,1 day,Week 3,Week 3,FT-02.2,Frontend Dev,8,0%,Not Started,Responsive design for all devices,Low,Test on various screen sizes,CSS framework,Week 3 Day 3
+FT-02.2.2,Stats & Tribe Memberships,Display post count followers following and tribes,1 day,Week 3,Week 3,FT-02.2.1,Frontend + Backend Dev,8,0%,Not Started,Real-time stat updates,Low,Efficient queries for counts,Backend API ready,Week 3 Day 4
+FT-02.2.3,Activity Feed Integration,Show recent posts on profile with pagination,1 day,Week 3,Week 3,FT-02.2.2,Frontend + Backend Dev,8,0%,Not Started,Lazy load older posts,Medium,Infinite scroll implementation,Posts API ready,Week 3 End
+
+FT-02.3,Profile Editing System,Implement inline editing for profile fields,2 days,Week 3,Week 3,FT-02.2,Frontend + Backend Dev,16,0%,Not Started,Username change limited to once per 30 days,Medium,Unsaved changes warning; draft preservation,None,Week 3 End
+FT-02.3.1,Inline Edit Interface,Create edit mode for profile fields,1 day,Week 3,Week 3,FT-02.3,Frontend Dev,8,0%,Not Started,Pre-populate current values; preview before save,Low,Save/cancel buttons; validation feedback,None,Week 3 Day 6
+FT-02.3.2,Cover Photo Management,Add cover photo upload and change functionality,0.5 days,Week 3,Week 3,FT-02.3.1,Frontend + Backend Dev,4,0%,Not Started,Same limits as avatar (5MB max),Low,Crop tool for proper dimensions,Image service,Week 3 Day 6
+FT-02.3.3,Username Change Restriction,Implement 30-day limit on username changes,0.5 days,Week 3,Week 3,FT-02.3.2,Backend Dev,4,0%,Not Started,Countdown timer display,Low,Database tracking of change history,None,Week 3 End
+
+FT-02.4,Privacy Settings System,Build comprehensive privacy controls for profile,2 days,Week 3,Week 3,FT-02.3,Backend + Frontend Dev,16,0%,Not Started,Profile visibility activity DM permissions (client dependent),High,Default to public; clear explanations,Privacy framework design,Week 3 End
+FT-02.4.1,Privacy Settings Interface,Create settings page with toggles for each option,1 day,Week 3,Week 3,FT-02.4,Frontend Dev,8,0%,Not Started,Clear categorization; save confirmation,Low,Test all permission combinations,UI design,Week 3 Day 7
+FT-02.4.2,Privacy Enforcement Logic,Implement backend logic to respect all privacy settings,1 day,Week 3,Week 3,FT-02.4.1,Backend Dev,8,0%,Not Started,Apply to profile views feed posts search results,High,Comprehensive testing; security review,Authorization framework,Week 3 End
+
+FT-02.7,Username Validation Rules,Implement comprehensive username validation system,1 day,Week 3,Week 3,FT-02.4,Backend Dev,8,0%,Not Started,Case-insensitive uniqueness; reserved words; profanity filter,Medium,Admin configurability for rules,Profanity filter list,Week 3 End
+FT-02.7.1,Validation Rule Engine,Build configurable validation engine,0.5 days,Week 3,Week 3,FT-02.7,Backend Dev,4,0%,Not Started,3-20 chars; alphanumeric _ .; no consecutive special chars,Low,Clear error messages for each rule,None,Week 3 Day 7
+FT-02.7.2,Reserved & Blocked Words,Implement reserved and profanity filtering,0.5 days,Week 3,Week 3,FT-02.7.1,Backend Dev,4,0%,Not Started,admin support fantribe reserved; profanity blocked,Medium,Regularly update blocked list,Word lists prepared,Week 3 End
+
+FT-03,Feed & Content System,Build complete social feed with posts likes comments,3 weeks,Week 4,Week 6,FT-02,Full Stack Team,120,0%,Not Started,Core engagement features; custom social UI (client dependent),High,Performance optimization; real-time updates,Design system finalized,Week 6 End
+
+FT-03.1,Post Creation Composer,Build rich text post composer with media upload,3 days,Week 4,Week 4,FT-03,Frontend + Backend Dev,24,0%,Not Started,Custom social-style composer UI; 5000 char limit,High,Auto-save drafts every 30 seconds,Rich text editor library,Week 4 Day 3
+FT-03.1.1,Rich Text Editor Integration,Implement text editor with formatting options,1 day,Week 4,Week 4,FT-03.1,Frontend Dev,8,0%,Not Started,Bold italic lists links; character counter,Medium,Choose stable editor (TipTap/Draft.js),None,Week 4 Day 1
+FT-03.1.2,Image Upload Interface,Add image upload with drag-and-drop (max 4 images),1 day,Week 4,Week 4,FT-03.1.1,Frontend + Backend Dev,8,0%,Not Started,10MB per image; JPG/PNG/GIF/WEBP,Medium,Compression before upload; progress indicators,Image storage service,Week 4 Day 2
+FT-03.1.3,Hashtag & Mention Autocomplete,Implement # and @ autocomplete functionality,1 day,Week 4,Week 4,FT-03.1.2,Frontend + Backend Dev,8,0%,Not Started,Real-time search; max 10 hashtags 20 mentions,Medium,Debounced search; keyboard navigation,Search API,Week 4 Day 3
+
+FT-03.2,Feed Algorithm & Display,Build personalized feed with custom ranking algorithm,5 days,Week 4,Week 4,FT-03.1,Backend + Frontend Dev,40,0%,Not Started,Custom algorithm from scratch (client dependent),High,A/B testing framework; performance monitoring,Algorithm design document,Week 4 End
+FT-03.2.1,Feed Algorithm Development,Develop ranking algorithm based on engagement and recency,2 days,Week 4,Week 4,FT-03.2,Backend Dev,16,0%,Not Started,Factor in follows tribes engagement recency diversity,High,Iterative tuning; analytics integration,Algorithm parameters defined,Week 4 Day 5
+FT-03.2.2,Feed API & Caching,Build API endpoint with caching layer,1 day,Week 4,Week 4,FT-03.2.1,Backend Dev,8,0%,Not Started,Sub-2-second load time; min 10 posts per page,High,Redis caching; efficient queries,Caching infrastructure,Week 4 Day 6
+FT-03.2.3,Feed UI & Infinite Scroll,Create feed interface with infinite scroll,1 day,Week 4,Week 4,FT-03.2.2,Frontend Dev,8,0%,Not Started,Virtualized list for performance; pull-to-refresh,Medium,Skeleton loaders; optimistic updates,UI components library,Week 4 Day 7
+FT-03.2.4,Real-time Feed Updates,Implement WebSocket for new post indicators,1 day,Week 4,Week 4,FT-03.2.3,Backend + Frontend Dev,8,0%,Not Started,New posts indicator without disrupting reading,Medium,WebSocket connection management,WebSocket service,Week 4 End
+
+FT-03.3,Post Display Cards,Design and implement social-style post cards,2 days,Week 5,Week 5,FT-03.2,Frontend Dev,16,0%,Not Started,Card-based social UI theme (client dependent),High,Lazy loading images; responsive design,Design mockups,Week 5 Day 2
+FT-03.3.1,Post Card Component,Build reusable post card component,1 day,Week 5,Week 5,FT-03.3,Frontend Dev,8,0%,Not Started,Author info content engagement bar timestamp,Medium,Proper formatting; XSS prevention,Component library,Week 5 Day 1
+FT-03.3.2,Image Gallery & Lightbox,Implement multi-image gallery with lightbox view,0.5 days,Week 5,Week 5,FT-03.3.1,Frontend Dev,4,0%,Not Started,2x2 grid for 4 images; swipe navigation,Low,Lazy loading; aspect ratio preservation,Lightbox library,Week 5 Day 2
+FT-03.3.3,Post Actions Menu,Add more options menu (report mute edit delete),0.5 days,Week 5,Week 5,FT-03.3.2,Frontend Dev,4,0%,Not Started,Context-aware options based on ownership,Low,Permission checks; confirmation dialogs,None,Week 5 Day 2
+
+FT-03.4,Likes System,Implement like functionality with notifications,2 days,Week 5,Week 5,FT-03.3,Backend + Frontend Dev,16,0%,Not Started,Configurable icon style; optimistic UI updates,Medium,Prevent double-clicks; rate limiting (100/hr),None,Week 5 Day 4
+FT-03.4.1,Like Button & Animation,Create like button with configurable animation,0.5 days,Week 5,Week 5,FT-03.4,Frontend Dev,4,0%,Not Started,Heart or thumbs up icon; bounce/scale animation,Low,Debounce rapid clicks,None,Week 5 Day 3
+FT-03.4.2,Like API & Storage,Build like tracking and count updates,0.5 days,Week 5,Week 5,FT-03.4.1,Backend Dev,4,0%,Not Started,Real-time count updates; prevent self-likes,Low,Efficient queries; caching,Database indexed,Week 5 Day 3
+FT-03.4.3,Like Notifications,Send notifications to post authors on likes,0.5 days,Week 5,Week 5,FT-03.4.2,Backend Dev,4,0%,Not Started,Aggregate multiple likes; configurable preferences,Low,Batch notifications; respect preferences,Notification system,Week 5 Day 4
+FT-03.4.4,Likes List Modal,Show list of users who liked a post,0.5 days,Week 5,Week 5,FT-03.4.3,Frontend + Backend Dev,4,0%,Not Started,Clickable usernames; pagination for many likes,Low,Lazy loading,None,Week 5 Day 4
+
+FT-03.5,Comments System,Build threaded commenting with replies,2 days,Week 5,Week 5,FT-03.4,Backend + Frontend Dev,16,0%,Not Started,3-level threading; like comments; edit/delete,Medium,Pagination for long threads; spam detection,None,Week 5 End
+FT-03.5.1,Comment Input & Submission,Create comment input with submission,0.5 days,Week 5,Week 5,FT-03.5,Frontend + Backend Dev,4,0%,Not Started,2000 char limit; rate limit 30/hr,Low,Character counter; validation,None,Week 5 Day 5
+FT-03.5.2,Threaded Replies Display,Implement threaded reply structure (max 3 levels),1 day,Week 5,Week 5,FT-03.5.1,Frontend + Backend Dev,8,0%,Not Started,Show/hide replies toggle; visual indentation,Medium,Collapse deep threads; lazy load,Tree structure query,Week 5 Day 6
+FT-03.5.3,Comment Actions,Add like edit delete for comments,0.5 days,Week 5,Week 5,FT-03.5.2,Frontend + Backend Dev,4,0%,Not Started,Own comment controls; deleted placeholder,Low,Permission checks,None,Week 5 End
+
+FT-03.6,Post Editing,Allow post editing with history tracking,1 day,Week 5,Week 5,FT-03.5,Backend + Frontend Dev,8,0%,Not Started,24-hour edit window (configurable); edited indicator,Low,Optional edit history viewing,None,Week 5 End
+FT-03.6.1,Edit Interface,Create inline editing UI,0.5 days,Week 5,Week 5,FT-03.6,Frontend Dev,4,0%,Not Started,Pre-populate content; same validation as creation,Low,Unsaved changes warning,None,Week 5 Day 7
+FT-03.6.2,Edit History Tracking,Store edit history and timestamps,0.5 days,Week 5,Week 5,FT-03.6.1,Backend Dev,4,0%,Not Started,Configurable: show history or just indicator,Low,Limit stored revisions; admin view,Database schema,Week 5 End
+
+FT-03.7,Post Deletion,Implement soft delete with restoration,0.5 days,Week 6,Week 6,FT-03.6,Backend Dev,4,0%,Not Started,Confirmation required; 30-day soft delete retention,Low,Preserve replies as orphaned,None,Week 6 Day 1
+
+FT-03.8,Repost/Share Feature,Build repost with quote and external sharing,3 days,Week 6,Week 6,FT-03.7,Frontend + Backend Dev,24,0%,Not Started,Custom feature from scratch (client dependent),High,Proper attribution; shareable URLs with meta tags,Social sharing API,Week 6 Day 4
+FT-03.8.1,Repost Functionality,Implement repost and quote repost,1.5 days,Week 6,Week 6,FT-03.8,Backend + Frontend Dev,12,0%,Not Started,Show original embedded; can't repost own; 20/hr limit,Medium,Handle deleted originals; prevent spam,None,Week 6 Day 2
+FT-03.8.2,External Sharing,Add copy link and social platform sharing,1 day,Week 6,Week 6,FT-03.8.1,Frontend + Backend Dev,8,0%,Not Started,Twitter Facebook sharing; Open Graph meta tags,Low,Generate shareable URLs,Meta tag service,Week 6 Day 3
+FT-03.8.3,Repost Notifications,Notify original author of reposts,0.5 days,Week 6,Week 6,FT-03.8.2,Backend Dev,4,0%,Not Started,Repost count on original; notification to author,Low,Aggregate multiple reposts,Notification system ready,Week 6 Day 4
+
+FT-03.9,Hashtags & Mentions Enhancement,Complete hashtag and mention functionality,2 days,Week 6,Week 6,FT-03.8,Frontend + Backend Dev,16,0%,Not Started,Client dependent 1 day; styling search trending,Medium,Banned hashtag filtering,None,Week 6 End
+FT-03.9.1,Hashtag System,Implement hashtag creation search and trending,1 day,Week 6,Week 6,FT-03.9,Backend + Frontend Dev,8,0%,Not Started,2-30 chars alphanumeric; max 10 per post,Low,Trending algorithm; search page,Search infrastructure,Week 6 Day 5
+FT-03.9.2,Mention System Enhancement,Complete mention notifications and deleted users,1 day,Week 6,Week 6,FT-03.9.1,Backend + Frontend Dev,8,0%,Not Started,Max 20 mentions; block notification if blocked,Low,Handle deleted users gracefully,Notification system,Week 6 End
+
+FT-03.10,Image Posts Enhancement,Add alt text and NSFW detection,2 days,Week 6,Week 6,FT-03.9,Backend + Frontend Dev,16,0%,Not Started,Tentative 2 days client dependent,Medium,Optional NSFW detection; accessibility,Image processing,Week 6 End
+FT-03.10.1,Alt Text for Accessibility,Add alt text input for all images,0.5 days,Week 6,Week 6,FT-03.10,Frontend Dev,4,0%,Not Started,Prompt users to add descriptions,Low,Encourage accessibility best practices,None,Week 6 Day 7
+FT-03.10.2,Image Compression,Implement auto-compression for large images,1 day,Week 6,Week 6,FT-03.10.1,Backend Dev,8,0%,Not Started,Threshold at 5MB; maintain quality,Medium,Offer compression or rejection,Image library,Week 6 Day 8
+FT-03.10.3,NSFW Detection (Optional),Add optional NSFW content detection,0.5 days,Week 6,Week 6,FT-03.10.2,Backend Dev,4,0%,Not Started,Flag for review; configurable,Low,Use ML service if enabled,ML API access,Week 6 End
+
+FT-03.11,Audio Posts,Implement audio upload and playback,3 days,Week 6,Week 6,FT-03.10,Frontend + Backend Dev,24,0%,Not Started,Tentative 3 days client dependent,Medium,Custom audio player; waveform visualization,Audio processing library,Week 6 End
+FT-03.11.1,Audio Upload,Add audio file upload with validation,1 day,Week 6,Week 6,FT-03.11,Backend Dev,8,0%,Not Started,MP3 WAV AAC M4A; 50MB max; 10min max,Low,Server-side conversion if needed,Audio storage,Week 6 Day 9
+FT-03.11.2,Audio Player UI,Build custom audio player interface,1.5 days,Week 6,Week 6,FT-03.11.1,Frontend Dev,12,0%,Not Started,Play/pause seek volume; duration display,Medium,Respect browser autoplay policies,Audio player library,Week 6 Day 10
+FT-03.11.3,Waveform Visualization (Optional),Add optional waveform display,0.5 days,Week 6,Week 6,FT-03.11.2,Frontend Dev,4,0%,Not Started,Visual representation of audio,Low,Configurable feature,Waveform library,Week 6 End
+
+FT-04,Tribes (Groups) System,Build complete tribe/group functionality,2 weeks,Week 7,Week 8,FT-03,Full Stack Team,80,0%,Not Started,Rename Category to Tribe throughout; custom UI (client dependent),High,Beta test with early users; performance tuning,Tribes concept finalized,Week 8 End
+
+FT-04.1,Tribe Creation,Implement tribe creation with owner assignment,2 days,Week 7,Week 7,FT-04,Frontend + Backend Dev,16,0%,Not Started,Tentative 2 days client dependent,Medium,Rate limit 5 tribes per day,None,Week 7 Day 2
+FT-04.1.1,Creation Form,Build tribe creation form interface,1 day,Week 7,Week 7,FT-04.1,Frontend Dev,8,0%,Not Started,Name description icon banner privacy category rules,Low,Form validation; image uploads,None,Week 7 Day 1
+FT-04.1.2,Tribe Validation & Storage,Implement validation and database storage,1 day,Week 7,Week 7,FT-04.1.1,Backend Dev,8,0%,Not Started,3-50 char name unique; 500 char description,Medium,Auto-generate slug from name; suggest alternatives,Database schema,Week 7 Day 2
+
+FT-04.2,Tribe Display Page,Create social-style tribe page with feed,3 days,Week 7,Week 7,FT-04.1,Frontend + Backend Dev,24,0%,Not Started,Tentative 3 days; theme category page (client dependent),High,Lazy loading feed; responsive design,Page design mockups,Week 7 End
+FT-04.2.1,Tribe Header & Info,Build tribe header with banner and details,1 day,Week 7,Week 7,FT-04.2,Frontend Dev,8,0%,Not Started,Banner icon name member count description,Low,Responsive layout,None,Week 7 Day 3
+FT-04.2.2,Tribe Feed Display,Implement tribe-specific feed view,1 day,Week 7,Week 7,FT-04.2.1,Frontend + Backend Dev,8,0%,Not Started,Social-style feed not forum topic list,Medium,Filter by tribe; pinned posts,Feed system ready,Week 7 Day 4
+FT-04.2.3,Members & About Tabs,Add tabbed navigation for members and about,1 day,Week 7,Week 7,FT-04.2.2,Frontend + Backend Dev,8,0%,Not Started,Member list with pagination; full rules display,Low,Search members; role badges,None,Week 7 End
+
+FT-04.3,Joining Tribes,Implement join request and approval flow,1 day,Week 7,Week 7,FT-04.2,Backend + Frontend Dev,8,0%,Not Started,Public instant join; private requires approval,Low,Welcome message optional; real-time count update,None,Week 7 End
+FT-04.3.1,Join Button & Logic,Create join button with different flows,0.5 days,Week 7,Week 7,FT-04.3,Frontend + Backend Dev,4,0%,Not Started,Public/Private/Invite-only handling,Low,Check bans and member limits,None,Week 7 Day 6
+FT-04.3.2,Approval Workflow,Build request approval for private tribes,0.5 days,Week 7,Week 7,FT-04.3.1,Backend Dev,4,0%,Not Started,Pending status display; approval notifications,Low,7-day re-request cooldown,Notification system,Week 7 End
+
+FT-04.4,Leaving Tribes,Implement leave functionality with safeguards,1 day,Week 7,Week 7,FT-04.3,Backend + Frontend Dev,8,0%,Not Started,Confirmation required; can't leave as sole owner,Low,Keep or delete posts configurable,None,Week 7 End
+
+FT-04.5,Tribe Posting,Enable posting within tribe context,1 day,Week 8,Week 8,FT-04.4,Backend + Frontend Dev,8,0%,Not Started,Auto-select tribe from tribe page; tribe-specific rules,Low,Post approval queue optional,Post system ready,Week 8 Day 1
+
+FT-04.6,Tribe Feed Customization,Build tribe-specific feed with filters,2 days,Week 8,Week 8,FT-04.5,Frontend + Backend Dev,16,0%,Not Started,Chronological or algorithm sort; pinned posts,Medium,Filter options: All Popular Recent Media,Feed algorithm,Week 8 Day 3
+
+FT-04.7,Roles & Permissions,Implement tribe role hierarchy and permissions,2 days,Week 8,Week 8,FT-04.6,Backend + Frontend Dev,16,0%,Not Started,Tentative 2 days client dependent; Owner Admin Mod Member,High,Permission matrix; audit log for changes,Authorization framework,Week 8 End
+FT-04.7.1,Role System Design,Build role assignment and permission checking,1 day,Week 8,Week 8,FT-04.7,Backend Dev,8,0%,Not Started,Hierarchical roles with specific permissions,High,Prevent last owner demotion,None,Week 8 Day 4
+FT-04.7.2,Role Management UI,Create interface for assigning roles,1 day,Week 8,Week 8,FT-04.7.1,Frontend Dev,8,0%,Not Started,Role badges on posts; management from member list,Medium,Clear permission explanations,None,Week 8 End
+
+FT-04.8,Tribe Administration Panel,Build admin panel for tribe management,2 days,Week 8,Week 8,FT-04.7,Frontend + Backend Dev,16,0%,Not Started,Tentative 2 days; customize admin labels (client dependent),Medium,Edit settings manage members review requests ban users,Admin UI design,Week 8 End
+FT-04.8.1,Admin Settings Interface,Create tribe settings management page,1 day,Week 8,Week 8,FT-04.8,Frontend + Backend Dev,8,0%,Not Started,Edit info privacy member management moderation,Low,Destructive actions require confirmation,None,Week 8 Day 6
+FT-04.8.2,Member Management,Build member list and management tools,1 day,Week 8,Week 8,FT-04.8.1,Frontend + Backend Dev,8,0%,Not Started,View all members assign roles ban/remove review requests,Medium,Bulk actions; search/filter,None,Week 8 End
+
+FT-04.9,Tribe Discovery,Build browse and search interface for tribes,3 days,Week 8,Week 8,FT-04.8,Frontend + Backend Dev,24,0%,Not Started,Client dependent; build from scratch,High,Category filters search recommendations trending,Search infrastructure,Week 8 End
+FT-04.9.1,Browse Interface,Create explore/discover page for tribes,1 day,Week 8,Week 8,FT-04.9,Frontend Dev,8,0%,Not Started,Category filters sort options tribe cards,Medium,Empty state messaging,UI design,Week 8 Day 8
+FT-04.9.2,Tribe Search,Implement search functionality,1 day,Week 8,Week 8,FT-04.9.1,Backend + Frontend Dev,8,0%,Not Started,Search by name and description; rank by relevance,Medium,Exclude hidden tribes; respect blocks,Search service,Week 8 Day 9
+FT-04.9.3,Recommendations Engine,Build tribe recommendation system,1 day,Week 8,Week 8,FT-04.9.2,Backend Dev,8,0%,Not Started,Based on user interests activity and joins,High,Algorithm for personalization,User data,Week 8 End
+
+FT-04.10,Tribe Notifications,Implement per-tribe notification preferences,2 days,Week 8,Week 8,FT-04.9,Backend + Frontend Dev,16,0%,Not Started,Tentative 2 days client dependent,Medium,All activity mentions only or none; digest option,Notification framework,Week 8 End
+FT-04.10.1,Notification Preferences UI,Build per-tribe notification settings,1 day,Week 8,Week 8,FT-04.10,Frontend Dev,8,0%,Not Started,Toggle for each tribe; global defaults,Low,Accessible from tribe page and settings,None,Week 8 Day 10
+FT-04.10.2,Notification Logic,Implement notification filtering per tribe,1 day,Week 8,Week 8,FT-04.10.1,Backend Dev,8,0%,Not Started,Respect per-tribe preferences; aggregate high activity,Medium,Daily/weekly digest option,Notification system,Week 8 End
+
+FT-04.11,Tribe Analytics Dashboard,Build analytics for tribe admins,1 week,Week 8,Week 8,FT-04.10,Backend + Frontend Dev,40,0%,Not Started,Tentative 1 week client dependent; build from scratch,High,Member growth post activity engagement top contributors,Analytics infrastructure,Week 8 End
+FT-04.11.1,Analytics Data Collection,Implement data aggregation for tribe metrics,2 days,Week 8,Week 8,FT-04.11,Backend Dev,16,0%,Not Started,Track members posts engagement over time,High,Efficient queries; scheduled jobs,Database design,Week 8 Day 12
+FT-04.11.2,Analytics Dashboard UI,Create visual dashboard with charts,2 days,Week 8,Week 8,FT-04.11.1,Frontend Dev,16,0%,Not Started,Charts for trends; date range selector; export CSV,Medium,Choose chart library (Chart.js/Recharts),None,Week 8 Day 14
+FT-04.11.3,Key Metrics Display,Show critical tribe health metrics,1 day,Week 8,Week 8,FT-04.11.2,Frontend + Backend Dev,8,0%,Not Started,Total members new members churn posts engagement active members,Low,Real-time vs cached data indicator,None,Week 8 End
+
+FT-05,Chat & Messaging System,Build complete direct messaging functionality,1 week,Week 9,Week 9,FT-04,Backend + Frontend Dev,40,0%,Not Started,Real-time WebSocket-based messaging with file sharing,High,WebSocket reliability; message queuing; offline support,Chat design finalized,Week 9 End
+
+FT-05.1,Messaging Access Control,Implement DM permission settings,1 day,Week 9,Week 9,FT-05,Backend Dev,8,0%,Not Started,Everyone Followers or No one; message requests optional,Low,Check permissions before sending,Privacy system ready,Week 9 Day 1
+
+FT-05.2,Conversation List,Build conversation list interface,1 day,Week 9,Week 9,FT-05.1,Frontend + Backend Dev,8,0%,Not Started,Show all conversations with preview and unread badges,Medium,Real-time updates; search conversations,WebSocket setup,Week 9 Day 2
+
+FT-05.3,Conversation Thread,Create chat-style message thread UI,1 day,Week 9,Week 9,FT-05.2,Frontend + Backend Dev,8,0%,Not Started,Chronological messages; own messages right-aligned,Medium,Virtualized list; load older on scroll up,Chat UI components,Week 9 Day 3
+
+FT-05.4,Sending Messages,Implement message sending with optimistic UI,0.5 days,Week 9,Week 9,FT-05.3,Frontend + Backend Dev,4,0%,Not Started,2000 char max; 60 messages per minute limit; emoji picker,Low,Retry on failure; queue when offline,None,Week 9 Day 4
+
+FT-05.5,Message Actions,Add edit delete and copy message actions,0.5 days,Week 9,Week 9,FT-05.4,Frontend + Backend Dev,4,0%,Not Started,15-min edit window; 24-hour delete window; edited indicator,Low,Context menu; confirmations,None,Week 9 Day 4
+
+FT-05.6,Typing Indicators,Implement real-time typing indicators,0.5 days,Week 9,Week 9,FT-05.5,Frontend + Backend Dev,4,0%,Not Started,Show [User] is typing with animation; hide after 5 sec,Low,Debounce to 2-second intervals; WebSocket events,WebSocket ready,Week 9 Day 5
+
+FT-05.7,File Sharing,Add file attachment and download in messages,1 day,Week 9,Week 9,FT-05.6,Backend + Frontend Dev,8,0%,Not Started,20MB max; images docs videos; up to 5 files per message,Medium,Virus scan optional; progress indicators,File storage service,Week 9 Day 6
+
+FT-05.8,Chat Notifications,Implement message notifications,0.5 days,Week 9,Week 9,FT-05.7,Backend Dev,4,0%,Not Started,In-app and push; show sender and preview; per-conversation mute,Low,Don't notify if in active conversation; aggregate,Notification system,Week 9 Day 6
+
+FT-05.9,Online Status,Add online/offline status indicators,0.5 days,Week 9,Week 9,FT-05.8,Backend + Frontend Dev,4,0%,Not Started,Green dot for online; last active timestamp; hide status option,Low,Update within 1 minute; away after 5 min idle,Presence tracking,Week 9 Day 7
+
+FT-05.10,Blocking in Messages,Implement block functionality for DMs,0.5 days,Week 9,Week 9,FT-05.9,Backend Dev,4,0%,Not Started,Hide conversation from both parties; prevent new messages,Low,Unblock restores access,Block system ready,Week 9 End
+
+FT-06,Notifications System,Build comprehensive notification infrastructure,1 week,Week 10,Week 10,FT-05,Backend + Frontend Dev,40,0%,Not Started,In-app push and email notifications with preferences,High,Reliable delivery; real-time updates; aggregation,Notification design,Week 10 End
+
+FT-06.1,Notification Types & Icons,Define all notification types with icons,2 days,Week 10,Week 10,FT-06,Backend + Frontend Dev,16,0%,Not Started,Like comment mention follow tribe DM repost types,Low,Custom icons for FanTribe features,Icon assets,Week 10 Day 2
+
+FT-06.2,Notification Center,Build notification dropdown and history page,1 day,Week 10,Week 10,FT-06.1,Frontend + Backend Dev,8,0%,Not Started,Dropdown with 20 recent; mark all read; link to content,Medium,Real-time WebSocket updates; group similar,WebSocket ready,Week 10 Day 3
+
+FT-06.3,Unread Badge,Implement unread notification count badge,0.5 days,Week 10,Week 10,FT-06.2,Frontend Dev,4,0%,Not Started,Red badge with count; 99+ for large counts,Low,Clear on view; real-time updates,None,Week 10 Day 4
+
+FT-06.4,In-App Toast Notifications,Create toast notifications for new activity,0.5 days,Week 10,Week 10,FT-06.3,Frontend Dev,4,0%,Not Started,Auto-dismiss after 5 seconds; stack max 3; click to navigate,Low,Don't show toast for current page content,None,Week 10 Day 4
+
+FT-06.5,Push Notifications,Implement web and mobile push notifications,1 day,Week 10,Week 10,FT-06.4,Backend + Frontend Dev,8,0%,Not Started,Opt-in prompt; deliver to closed app; action buttons,High,Configure FCM/APNs; deep linking,Push service setup,Week 10 Day 5
+
+FT-06.6,Notification Preferences,Build comprehensive preference controls,1 day,Week 10,Week 10,FT-06.5,Frontend + Backend Dev,8,0%,Not Started,Per-type toggles; channel options; quiet hours; per-tribe,Medium,Save preferences; apply immediately,None,Week 10 Day 6
+
+FT-06.7,Notification Retention & History,Implement storage and cleanup,1 day,Week 10,Week 10,FT-06.6,Backend Dev,8,0%,Not Started,90-day retention; 1000 max per user; auto-cleanup; filter by type,Low,Efficient queries; batch cleanup jobs,Database indexed,Week 10 End
+
+FT-07,Admin & Moderation System,Build complete admin panel and moderation tools,2 weeks,Week 11,Week 12,FT-06,Backend + Frontend Dev,80,0%,Not Started,Comprehensive platform management and content moderation,High,Security audit; role-based access; activity logging,Admin requirements,Week 12 End
+
+FT-07.1,Admin Access & Security,Implement secure admin authentication,1 day,Week 11,Week 11,FT-07,Backend Dev,8,0%,Not Started,2FA required; session timeout; IP whitelist optional; role hierarchy,High,Recovery process; session management,2FA library,Week 11 Day 1
+
+FT-07.2,Dashboard Overview,Build admin dashboard with key metrics,2 days,Week 11,Week 11,FT-07.1,Frontend + Backend Dev,16,0%,Not Started,User growth DAU/WAU/MAU content metrics moderation queue system health,Medium,Customizable widgets; real-time data; FanTribe-specific,Analytics data,Week 11 Day 3
+
+FT-07.3,Content Reporting System,Implement user reporting functionality,1 day,Week 11,Week 11,FT-07.2,Frontend + Backend Dev,8,0%,Not Started,Report button on all content; reason selection; 10 reports/day limit,Medium,Prevent abuse; track reporters; consolidate duplicates,None,Week 11 Day 4
+
+FT-07.4,Report Review Queue,Build moderation queue for admins,1 day,Week 11,Week 11,FT-07.3,Frontend + Backend Dev,8,0%,Not Started,List pending reports; content preview; action buttons; bulk actions,High,Lock during review; SLA warnings,Queue design,Week 11 Day 5
+
+FT-07.5,User Management,Create user management interface for admins,1 day,Week 11,Week 11,FT-07.4,Frontend + Backend Dev,8,0%,Not Started,Search users; view profiles; suspend/ban; edit fields; delete account,High,Suspension durations; appeal process,None,Week 11 Day 6
+
+FT-07.6,Announcements System,Build platform-wide announcement tool,0.5 days,Week 11,Week 11,FT-07.5,Frontend + Backend Dev,4,0%,Not Started,Banner at top; rich text; schedule start/end; priority levels; dismiss,Low,Target specific groups; remember dismissal,None,Week 11 Day 6
+
+FT-07.7,Audit Logs,Implement comprehensive activity logging,0.5 days,Week 11,Week 11,FT-07.6,Backend Dev,4,0%,Not Started,Log all admin actions; filter by type/user/date; export CSV; tamper-proof,High,1-year retention; mask sensitive data,Logging infrastructure,Week 11 End
+
+FT-07.8,Platform Analytics,Build enhanced analytics dashboard,1 week,Week 12,Week 12,FT-07.7,Backend + Frontend Dev,40,0%,Not Started,User content tribe engagement traffic metrics; date ranges; export,High,Data aggregation; caching; visualization library,Analytics design,Week 12 End
+FT-07.8.1,Data Collection & Aggregation,Build analytics data pipeline,2 days,Week 12,Week 12,FT-07.8,Backend Dev,16,0%,Not Started,Scheduled jobs for aggregation; efficient queries; caching,High,Real-time vs batch; data warehouse,Database design,Week 12 Day 2
+FT-07.8.2,Analytics Dashboard UI,Create visual analytics interface,2 days,Week 12,Week 12,FT-07.8.1,Frontend Dev,16,0%,Not Started,Interactive charts; comparison periods; multiple metrics,Medium,Chart library integration; responsive,Chart.js/D3,Week 12 Day 4
+FT-07.8.3,Report Generation,Add export and scheduled report functionality,1 day,Week 12,Week 12,FT-07.8.2,Backend Dev,8,0%,Not Started,CSV/PDF export; scheduled email reports; custom date ranges,Low,Background jobs for large exports,Report templates,Week 12 Day 5
+
+FT-08,Testing Quality Assurance & Launch Prep,Comprehensive testing and optimization before launch,2 weeks,Week 13,Week 14,FT-07,QA + DevOps + Full Team,80,0%,Not Started,End-to-end testing performance optimization security audit documentation,Critical,Thorough testing; staged rollout; rollback plan,Test environment ready,Week 14 End
+
+FT-08.1,Unit & Integration Testing,Write and execute comprehensive test suite,3 days,Week 13,Week 13,FT-08,Backend + Frontend Dev,24,0%,Not Started,Unit tests for all components; integration tests for APIs; >80% coverage,High,Automated test runs; CI/CD pipeline,Testing framework,Week 13 Day 3
+
+FT-08.2,End-to-End Testing,Conduct user flow testing across all features,2 days,Week 13,Week 13,FT-08.1,QA Team,16,0%,Not Started,Test all user journeys; cross-browser; mobile responsive; edge cases,High,Use Playwright/Cypress; document bugs,Test scenarios defined,Week 13 End
+
+FT-08.3,Performance Optimization,Optimize application performance,2 days,Week 13,Week 13,FT-08.2,Backend + Frontend Dev,16,0%,Not Started,Page load times; database queries; image optimization; caching,High,Target metrics: <3s load <2s API response,Performance tools,Week 13 End
+
+FT-08.4,Security Audit,Conduct security testing and fixes,2 days,Week 14,Week 14,FT-08.3,Security Team + Backend Dev,16,0%,Not Started,Penetration testing; XSS/CSRF prevention; rate limiting; encryption audit,Critical,Fix all critical and high-severity issues,Security checklist,Week 14 Day 2
+
+FT-08.5,Accessibility Testing,Ensure WCAG compliance,1 day,Week 14,Week 14,FT-08.4,Frontend Dev + QA,8,0%,Not Started,Screen reader testing; keyboard navigation; color contrast; ARIA labels,Medium,Target WCAG 2.1 Level AA,Accessibility tools,Week 14 Day 3
+
+FT-08.6,Documentation,Create user and technical documentation,2 days,Week 14,Week 14,FT-08.5,Technical Writer + Team,16,0%,Not Started,User guide; admin manual; API docs; deployment guide; architecture docs,Medium,Clear comprehensive searchable,Documentation plan,Week 14 End
+
+FT-08.7,Beta Testing,Conduct closed beta with selected users,1 week,Week 14,Week 14,FT-08.6,Community Manager + QA,8,0%,Not Started,50-100 beta users; feedback collection; bug reporting; feature validation,High,Diverse user group; iterative fixes,Beta user list,Week 14 End
+
+FT-08.8,Launch Preparation,Prepare infrastructure and marketing for launch,1 week,Week 14,Week 14,FT-08.7,DevOps + Marketing + Full Team,8,0%,Not Started,Production deployment; monitoring setup; marketing campaign; support readiness,Critical,Staged rollout plan; rollback procedures; 24/7 support,Launch checklist,Week 14 End
+
+FT-09,Post-Launch Support & Iteration,Ongoing monitoring optimization and feature iteration,Ongoing,Week 15,Ongoing,FT-08,Full Team,Ongoing,0%,Not Started,Monitor performance; gather feedback; fix bugs; iterate on features,High,Incident response plan; feedback loops; regular updates,Production monitoring,Ongoing

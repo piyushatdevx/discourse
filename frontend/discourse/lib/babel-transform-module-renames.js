@@ -1,5 +1,5 @@
 // https://astexplorer.net/#/gist/14696755417f9d41c8c2bd72c187b0da/41a903d14d860270fa4eefab69c8ae8934971cdc
-export default function ({ types: t }) {
+module.exports = function ({ types: t }) {
   return {
     visitor: {
       ImportDeclaration(path) {
@@ -13,4 +13,4 @@ export default function ({ types: t }) {
       },
     },
   };
-}
+};

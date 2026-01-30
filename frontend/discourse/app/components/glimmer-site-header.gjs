@@ -67,7 +67,7 @@ export default class GlimmerSiteHeader extends Component {
     this._itsatrap = null;
 
     window.removeEventListener("scroll", this.debouncedRecalculateHeaderOffset);
-    this._resizeObserver.disconnect();
+    this._resizeObserver?.disconnect();
     cancel(this.recalculationTimer);
   }
 
@@ -102,6 +102,10 @@ export default class GlimmerSiteHeader extends Component {
 
   recalculateHeaderOffset() {
     if (this.isDestroying || this.isDestroyed) {
+      return;
+    }
+
+    if (!this._headerWrap || !this._mainOutletWrapper) {
       return;
     }
 

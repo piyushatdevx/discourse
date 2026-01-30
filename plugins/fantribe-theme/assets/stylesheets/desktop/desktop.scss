@@ -1,0 +1,93 @@
+// FanTribe Desktop-Specific Styles
+// Layouts, sidebar visibility, hover states for desktop viewports
+
+// Three-column layout visible on desktop
+.ft-layout__sidebar-left,
+.ft-layout__sidebar-right {
+  display: block;
+}
+
+// Desktop feed width constraint
+.ft-layout__main {
+  max-width: 680px;
+}
+
+// Wider modal on desktop
+.ft-modal--lg {
+  max-width: 900px;
+}
+
+// Grid columns for desktop
+.ft-grid--3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.ft-grid--4 {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+// Desktop chat split view
+.ft-chat-layout {
+  display: flex;
+  height: calc(100vh - 56px);
+
+  .ft-chat-layout__list {
+    width: 320px;
+    flex-shrink: 0;
+    border-right: 1px solid var(--ft-gray-200);
+    overflow-y: auto;
+  }
+
+  .ft-chat-layout__conversation {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+// Desktop navbar center links visible
+.ft-navbar__center {
+  display: flex;
+}
+
+// Toast position on desktop
+.ft-toast {
+  top: var(--ft-space-4);
+  right: var(--ft-space-4);
+}
+
+// Hover-only interactions (desktop-friendly)
+.ft-hover-reveal {
+  opacity: 0;
+  transition: opacity var(--ft-transition-fast);
+}
+
+.ft-hover-parent:hover .ft-hover-reveal {
+  opacity: 1;
+}
+
+// Cover photo size on desktop
+.ft-cover--profile {
+  height: 280px;
+}
+
+.ft-cover--tribe {
+  height: 220px;
+}
+
+// Admin layout
+.ft-admin-layout {
+  display: flex;
+  min-height: 100vh;
+
+  .ft-admin-layout__sidebar {
+    width: 260px;
+    flex-shrink: 0;
+  }
+
+  .ft-admin-layout__main {
+    flex: 1;
+    padding: var(--ft-space-6);
+    background-color: var(--ft-bg);
+  }
+}

@@ -1,0 +1,166 @@
+// FanTribe Compose Box - Post Creation Component
+// Avatar + input + media buttons + share button
+
+.fantribe-compose-box {
+  background: var(--ft-white);
+  border: 1px solid var(--ft-gray-200);
+  border-radius: var(--ft-radius-xl);
+  overflow: hidden;
+  cursor: pointer;
+  transition: all var(--ft-transition-fast);
+
+  &:hover {
+    border-color: var(--ft-gray-300);
+    box-shadow: var(--ft-shadow-sm);
+  }
+
+  &:focus {
+    outline: 2px solid var(--ft-primary);
+    outline-offset: 2px;
+  }
+
+  // Main input area
+  &__input-area {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--ft-space-3);
+    padding: var(--ft-space-4) var(--ft-space-5);
+  }
+
+  // User avatar
+  &__avatar {
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+    border-radius: var(--ft-radius-full);
+    overflow: hidden;
+    background: linear-gradient(
+      135deg,
+      var(--ft-primary-light) 0%,
+      var(--ft-pastel-lavender) 100%
+    );
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    // Initials fallback
+    &-initials {
+      font-size: var(--ft-font-small);
+      font-weight: var(--ft-font-weight-semibold);
+      color: var(--ft-primary);
+    }
+  }
+
+  // Text input container
+  &__input-wrapper {
+    flex: 1;
+    min-width: 0;
+  }
+
+  &__input-placeholder {
+    min-height: 44px;
+    padding: var(--ft-space-2) 0;
+    font-size: var(--ft-font-body);
+    color: var(--ft-gray-500);
+    line-height: var(--ft-line-height-normal);
+    display: flex;
+    align-items: center;
+    pointer-events: none;
+  }
+
+  // Action bar with media buttons and share
+  &__actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--ft-space-3) var(--ft-space-5);
+    border-top: 1px solid var(--ft-gray-100);
+    background: var(--ft-gray-50);
+  }
+
+  // Media buttons group
+  &__media-buttons {
+    display: flex;
+    align-items: center;
+    gap: var(--ft-space-1);
+  }
+
+  &__media-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    background: transparent;
+    border: none;
+    border-radius: var(--ft-radius-full);
+    color: var(--ft-gray-600);
+    pointer-events: none;
+
+    .d-icon {
+      font-size: 18px;
+    }
+  }
+
+  // Share button (decorative, whole box is clickable)
+  &__share-btn {
+    display: flex;
+    align-items: center;
+    gap: var(--ft-space-2);
+    padding: var(--ft-space-2) var(--ft-space-5);
+    background: var(--ft-primary);
+    color: var(--ft-white);
+    border: none;
+    border-radius: var(--ft-radius-full);
+    font-size: var(--ft-font-small);
+    font-weight: var(--ft-font-weight-semibold);
+    pointer-events: none;
+
+    .d-icon {
+      font-size: 14px;
+    }
+  }
+}
+
+// Mobile adjustments
+@media (max-width: 767px) {
+  .fantribe-compose-box {
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+
+    &__input-area {
+      padding: var(--ft-space-3) var(--ft-space-4);
+    }
+
+    &__avatar {
+      width: 36px;
+      height: 36px;
+    }
+
+    &__actions {
+      padding: var(--ft-space-2) var(--ft-space-4);
+    }
+
+    &__media-btn {
+      width: 32px;
+      height: 32px;
+
+      .d-icon {
+        font-size: 16px;
+      }
+    }
+
+    &__share-btn {
+      padding: var(--ft-space-2) var(--ft-space-4);
+      font-size: var(--ft-font-caption);
+    }
+  }
+}

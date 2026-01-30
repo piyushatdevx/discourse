@@ -1,0 +1,104 @@
+// FanTribe Glassmorphism Utilities
+// Frosted glass effects, blur, transparency
+
+.ft-glass-light {
+  background: var(--ft-glass-light-bg);
+  backdrop-filter: blur(var(--ft-glass-light-blur));
+  -webkit-backdrop-filter: blur(var(--ft-glass-light-blur));
+  border: var(--ft-glass-border);
+}
+
+.ft-glass-medium {
+  background: var(--ft-glass-medium-bg);
+  backdrop-filter: blur(var(--ft-glass-medium-blur));
+  -webkit-backdrop-filter: blur(var(--ft-glass-medium-blur));
+  border: var(--ft-glass-border);
+}
+
+.ft-glass-dark {
+  background: var(--ft-glass-dark-bg);
+  backdrop-filter: blur(var(--ft-glass-dark-blur));
+  -webkit-backdrop-filter: blur(var(--ft-glass-dark-blur));
+  border: var(--ft-glass-border);
+}
+
+.ft-glass-card {
+  background: var(--ft-glass-card-bg);
+  backdrop-filter: blur(var(--ft-glass-card-blur));
+  -webkit-backdrop-filter: blur(var(--ft-glass-card-blur));
+  border: var(--ft-glass-card-border);
+  border-radius: var(--ft-radius-lg);
+  box-shadow: var(--ft-shadow-sm);
+}
+
+// Glass card with hover lift effect
+.ft-glass-card-hover {
+  @extend .ft-glass-card;
+  transition:
+    transform var(--ft-transition-normal),
+    box-shadow var(--ft-transition-normal);
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--ft-shadow-md);
+  }
+}
+
+// Frosted header/navbar effect
+.ft-glass-header {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border-bottom: 1px solid rgba(26, 26, 26, 0.08);
+}
+
+// Dropdown/popover glass effect
+.ft-glass-dropdown {
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(26, 26, 26, 0.08);
+  border-radius: var(--ft-radius-lg);
+  box-shadow: var(--ft-shadow-lg);
+}
+
+// Modal backdrop glass
+.ft-glass-modal-backdrop {
+  background: rgba(26, 26, 26, 0.5);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+// Glass surface on dark backgrounds (for landing page, hero sections)
+.ft-glass-on-dark {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--ft-radius-lg);
+}
+
+// Gradient overlay for cover photos
+.ft-gradient-overlay {
+  position: relative;
+
+  &::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 50%;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.6), transparent);
+    pointer-events: none;
+  }
+}
+
+// Hero gradient background (landing page)
+.ft-gradient-hero {
+  background: linear-gradient(
+    135deg,
+    var(--ft-primary) 0%,
+    var(--ft-dark) 100%
+  );
+}

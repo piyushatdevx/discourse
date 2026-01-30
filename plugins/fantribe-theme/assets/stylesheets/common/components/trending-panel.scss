@@ -1,0 +1,143 @@
+// FanTribe Trending Panel - Right Sidebar Widget
+// Shows trending topics with hashtags and indicators
+
+.fantribe-trending-panel {
+  background: var(--ft-white);
+  border: 1px solid var(--ft-gray-200);
+  border-radius: var(--ft-radius-xl);
+  overflow: hidden;
+
+  // Panel header
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--ft-space-5) var(--ft-space-5) var(--ft-space-3);
+    border-bottom: 1px solid var(--ft-gray-100);
+  }
+
+  &__title {
+    display: flex;
+    align-items: center;
+    gap: var(--ft-space-2);
+    font-size: var(--ft-font-h5);
+    font-weight: var(--ft-font-weight-semibold);
+    color: var(--ft-dark);
+    margin: 0;
+
+    .d-icon {
+      color: var(--ft-primary);
+      font-size: 16px;
+    }
+  }
+
+  // Panel content - trending items
+  &__content {
+    padding: var(--ft-space-2);
+  }
+
+  // Footer with "View all" link
+  &__footer {
+    padding: var(--ft-space-3) var(--ft-space-5);
+    border-top: 1px solid var(--ft-gray-100);
+    text-align: center;
+  }
+
+  &__view-all {
+    font-size: var(--ft-font-small);
+    font-weight: var(--ft-font-weight-medium);
+    color: var(--ft-primary);
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: all var(--ft-transition-fast);
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+// Individual trending topic item
+.fantribe-trending-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: var(--ft-space-3);
+  background: transparent;
+  border: none;
+  border-radius: var(--ft-radius-lg);
+  cursor: pointer;
+  text-align: left;
+  transition: background var(--ft-transition-fast);
+
+  &:hover {
+    background: var(--ft-gray-50);
+  }
+
+  &__info {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  &__title {
+    font-size: var(--ft-font-small);
+    font-weight: var(--ft-font-weight-medium);
+    color: var(--ft-dark);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    // Hashtag prefix
+    &::before {
+      content: "#";
+      color: var(--ft-gray-500);
+      margin-right: 2px;
+    }
+  }
+
+  &__count {
+    font-size: var(--ft-font-caption);
+    color: var(--ft-gray-500);
+  }
+
+  // Trending indicator (up arrow)
+  &__indicator {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    color: var(--ft-primary);
+
+    .d-icon {
+      font-size: 14px;
+    }
+  }
+
+  // Hot/trending badge
+  &--hot {
+    .fantribe-trending-item__indicator {
+      background: var(--ft-error-light);
+      border-radius: var(--ft-radius-full);
+
+      .d-icon {
+        color: var(--ft-error);
+      }
+    }
+  }
+}
+
+// Category color stripe
+.fantribe-trending-item__category-stripe {
+  width: 4px;
+  height: 32px;
+  border-radius: var(--ft-radius-full);
+  margin-right: var(--ft-space-3);
+  flex-shrink: 0;
+}

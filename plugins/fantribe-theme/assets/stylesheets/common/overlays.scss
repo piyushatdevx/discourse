@@ -1,0 +1,285 @@
+// FanTribe Overlay Styles
+// Modals, drawers, dropdowns, popovers, tooltips
+
+// Modal backdrop
+.ft-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(26, 26, 26, 0.5);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: var(--ft-z-modal);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--ft-space-4);
+}
+
+// Modal container
+.ft-modal {
+  background: var(--ft-white);
+  border-radius: var(--ft-radius-xl);
+  box-shadow: var(--ft-shadow-lg);
+  max-height: 90vh;
+  overflow: auto;
+  position: relative;
+
+  &.ft-modal--sm {
+    width: 100%;
+    max-width: 420px;
+  }
+
+  &.ft-modal--md {
+    width: 100%;
+    max-width: 600px;
+  }
+
+  &.ft-modal--lg {
+    width: 100%;
+    max-width: 800px;
+  }
+
+  .ft-modal__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--ft-space-4) var(--ft-space-6);
+    border-bottom: 1px solid var(--ft-gray-200);
+  }
+
+  .ft-modal__title {
+    font-size: var(--ft-font-h5);
+    font-weight: var(--ft-font-weight-semibold);
+    color: var(--ft-dark);
+  }
+
+  .ft-modal__close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border: none;
+    background: none;
+    color: var(--ft-gray-500);
+    cursor: pointer;
+    border-radius: var(--ft-radius-full);
+
+    &:hover {
+      background-color: var(--ft-gray-100);
+      color: var(--ft-gray-700);
+    }
+  }
+
+  .ft-modal__body {
+    padding: var(--ft-space-6);
+  }
+
+  .ft-modal__footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: var(--ft-space-3);
+    padding: var(--ft-space-4) var(--ft-space-6);
+    border-top: 1px solid var(--ft-gray-200);
+  }
+}
+
+// Glassmorphic modal variant (for auth forms)
+.ft-modal--glass {
+  background: var(--ft-glass-card-bg);
+  backdrop-filter: blur(var(--ft-glass-card-blur));
+  -webkit-backdrop-filter: blur(var(--ft-glass-card-blur));
+  border: var(--ft-glass-card-border);
+}
+
+// Drawer (side panel)
+.ft-drawer-backdrop {
+  @extend .ft-modal-backdrop;
+  justify-content: flex-end;
+  padding: 0;
+}
+
+.ft-drawer {
+  background: var(--ft-white);
+  width: 100%;
+  max-width: 400px;
+  height: 100%;
+  overflow: auto;
+  box-shadow: var(--ft-shadow-lg);
+
+  .ft-drawer__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--ft-space-4);
+    border-bottom: 1px solid var(--ft-gray-200);
+  }
+
+  .ft-drawer__title {
+    font-size: var(--ft-font-h5);
+    font-weight: var(--ft-font-weight-semibold);
+    color: var(--ft-dark);
+  }
+
+  .ft-drawer__body {
+    padding: var(--ft-space-4);
+  }
+}
+
+// Dropdown menu
+.ft-dropdown {
+  position: absolute;
+  z-index: var(--ft-z-dropdown);
+  min-width: 180px;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(26, 26, 26, 0.08);
+  border-radius: var(--ft-radius-lg);
+  box-shadow: var(--ft-shadow-lg);
+  padding: var(--ft-space-1);
+  overflow: hidden;
+
+  .ft-dropdown__item {
+    display: flex;
+    align-items: center;
+    gap: var(--ft-space-2);
+    width: 100%;
+    padding: var(--ft-space-2) var(--ft-space-3);
+    border: none;
+    background: none;
+    color: var(--ft-dark);
+    font-size: var(--ft-font-small);
+    text-align: left;
+    cursor: pointer;
+    border-radius: var(--ft-radius-md);
+    transition: background-color var(--ft-transition-fast);
+
+    &:hover {
+      background-color: var(--ft-gray-100);
+    }
+
+    &.ft-dropdown__item--danger {
+      color: var(--ft-error);
+
+      &:hover {
+        background-color: var(--ft-error-light);
+      }
+    }
+
+    &.ft-dropdown__item--active {
+      color: var(--ft-primary);
+      background-color: var(--ft-primary-light);
+    }
+  }
+
+  .ft-dropdown__divider {
+    height: 1px;
+    background-color: var(--ft-gray-200);
+    margin: var(--ft-space-1) 0;
+  }
+
+  .ft-dropdown__label {
+    padding: var(--ft-space-2) var(--ft-space-3);
+    font-size: var(--ft-font-caption);
+    font-weight: var(--ft-font-weight-semibold);
+    color: var(--ft-gray-500);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+}
+
+// Popover
+.ft-popover {
+  @extend .ft-dropdown;
+  padding: var(--ft-space-3);
+}
+
+// Tooltip
+.ft-tooltip {
+  position: absolute;
+  z-index: var(--ft-z-toast);
+  padding: var(--ft-space-1) var(--ft-space-2);
+  background-color: var(--ft-dark);
+  color: var(--ft-white);
+  font-size: var(--ft-font-caption);
+  border-radius: var(--ft-radius-sm);
+  white-space: nowrap;
+  pointer-events: none;
+  box-shadow: var(--ft-shadow-md);
+}
+
+// Lightbox (full-screen image viewer)
+.ft-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: var(--ft-z-modal);
+  background-color: rgba(0, 0, 0, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .ft-lightbox__image {
+    max-width: 90vw;
+    max-height: 90vh;
+    object-fit: contain;
+  }
+
+  .ft-lightbox__close {
+    position: absolute;
+    top: var(--ft-space-4);
+    right: var(--ft-space-4);
+    width: 40px;
+    height: 40px;
+    border: none;
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--ft-white);
+    border-radius: var(--ft-radius-full);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+  }
+
+  .ft-lightbox__nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 48px;
+    height: 48px;
+    border: none;
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--ft-white);
+    border-radius: var(--ft-radius-full);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    &.ft-lightbox__nav--prev {
+      left: var(--ft-space-4);
+    }
+
+    &.ft-lightbox__nav--next {
+      right: var(--ft-space-4);
+    }
+  }
+
+  .ft-lightbox__counter {
+    position: absolute;
+    bottom: var(--ft-space-4);
+    left: 50%;
+    transform: translateX(-50%);
+    color: var(--ft-white);
+    font-size: var(--ft-font-small);
+  }
+}

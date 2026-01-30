@@ -1,0 +1,264 @@
+// FanTribe Mobile-Specific Styles
+// Bottom nav, single column layout, touch-friendly sizing
+
+// Hide sidebars on mobile
+.ft-layout__sidebar-left,
+.ft-layout__sidebar-right {
+  display: none;
+}
+
+// Full width main content on mobile
+.ft-layout__main {
+  max-width: 100%;
+  padding: var(--ft-space-2);
+}
+
+// Hide desktop center nav links on mobile
+.ft-navbar__center {
+  display: none;
+}
+
+// Mobile bottom navigation
+.ft-bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: var(--ft-z-sticky);
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  height: 56px;
+  background: var(--ft-glass-card-bg);
+  backdrop-filter: blur(var(--ft-glass-card-blur));
+  -webkit-backdrop-filter: blur(var(--ft-glass-card-blur));
+  border-top: var(--ft-glass-border-subtle);
+  padding-bottom: env(safe-area-inset-bottom, 0);
+
+  .ft-bottom-nav__item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    flex: 1;
+    height: 100%;
+    border: none;
+    background: none;
+    color: var(--ft-gray-500);
+    font-size: 10px;
+    text-decoration: none;
+    cursor: pointer;
+    transition: color var(--ft-transition-fast);
+    position: relative;
+
+    &:hover,
+    &.ft-bottom-nav__item--active {
+      color: var(--ft-primary);
+    }
+
+    .ft-badge {
+      position: absolute;
+      top: 4px;
+      right: calc(50% - 18px);
+    }
+  }
+
+  .ft-bottom-nav__icon {
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .ft-bottom-nav__label {
+    font-weight: var(--ft-font-weight-medium);
+  }
+}
+
+// Add bottom padding for fixed bottom nav
+body {
+  padding-bottom: calc(56px + env(safe-area-inset-bottom, 0));
+}
+
+// FAB positioning above bottom nav
+.ft-fab {
+  bottom: calc(56px + var(--ft-space-4) + env(safe-area-inset-bottom, 0));
+}
+
+// Mobile grids collapse to fewer columns
+.ft-grid--3,
+.ft-grid--4 {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+// Single column for mobile cards
+.ft-grid--2 {
+  grid-template-columns: 1fr;
+}
+
+// Mobile modal full width
+.ft-modal {
+  border-radius: var(--ft-radius-lg) var(--ft-radius-lg) 0 0;
+  max-height: 90vh;
+  width: 100%;
+
+  &.ft-modal--sm,
+  &.ft-modal--md,
+  &.ft-modal--lg {
+    max-width: 100%;
+  }
+}
+
+.ft-modal-backdrop {
+  align-items: flex-end;
+  padding: 0;
+}
+
+// Mobile drawer full width
+.ft-drawer {
+  max-width: 100%;
+}
+
+// Mobile cover photo shorter
+.ft-cover--profile {
+  height: 160px;
+}
+
+.ft-cover--tribe {
+  height: 140px;
+}
+
+// Mobile toast centered top
+.ft-toast {
+  top: var(--ft-space-2);
+  right: var(--ft-space-2);
+  left: var(--ft-space-2);
+
+  .ft-toast__item {
+    min-width: auto;
+    max-width: 100%;
+  }
+}
+
+// Touch-friendly tap targets
+.ft-engagement__btn {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+// Mobile tabs scroll
+.ft-tabs {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  white-space: nowrap;
+  flex-wrap: nowrap;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+// Mobile chat full screen views
+.ft-chat-layout {
+  flex-direction: column;
+
+  .ft-chat-layout__list {
+    width: 100%;
+    border-right: none;
+    height: 100%;
+  }
+
+  .ft-chat-layout__conversation {
+    position: fixed;
+    inset: 0;
+    z-index: var(--ft-z-overlay);
+    background: var(--ft-white);
+  }
+}
+
+// Pull to refresh indicator
+.ft-pull-refresh {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--ft-space-3);
+  color: var(--ft-gray-400);
+}
+
+// Mobile media grid smaller images
+.ft-media-grid {
+  &.ft-media-grid--3 img,
+  &.ft-media-grid--4 img {
+    height: 140px;
+  }
+}
+
+// Period chooser (date selector) mobile overrides
+body.fantribe-theme {
+  .period-chooser {
+    .period-chooser-header {
+      padding: var(--ft-space-2) var(--ft-space-3);
+      min-width: auto;
+      background: var(--ft-glass-card-bg);
+      border: var(--ft-glass-border-subtle);
+      border-radius: var(--ft-radius-md);
+
+      h2.selected-name {
+        font-size: var(--ft-font-small);
+        margin: 0;
+
+        .date-section {
+          color: var(--ft-dark);
+        }
+
+        .top-date-string {
+          font-size: var(--ft-font-caption);
+          color: var(--ft-gray-600);
+        }
+      }
+
+      .d-icon {
+        font-size: 14px;
+        color: var(--ft-gray-600);
+      }
+    }
+
+    // Dropdown body styling
+    .select-kit-body {
+      background: var(--ft-white);
+      border-radius: var(--ft-radius-lg);
+      box-shadow: var(--ft-shadow-lg);
+      border: var(--ft-glass-border-subtle);
+      max-width: calc(100vw - var(--ft-space-8));
+      overflow: hidden;
+
+      .period-chooser-row {
+        padding: var(--ft-space-3) var(--ft-space-4);
+        font-size: var(--ft-font-small);
+
+        &:hover {
+          background: var(--ft-pastel-cream);
+        }
+
+        &.is-selected {
+          background: var(--ft-pastel-pink);
+          color: var(--ft-primary);
+        }
+      }
+    }
+  }
+
+  // Top date range controls on trending page
+  .top-lists {
+    padding: var(--ft-space-2) 0;
+    margin-bottom: var(--ft-space-3);
+
+    .select-kit {
+      width: auto;
+      min-width: 120px;
+    }
+  }
+}

@@ -1,0 +1,165 @@
+// FanTribe Avatar & Media Styles
+// Avatars (multiple sizes), online status dots, role badges
+
+// Avatar sizes
+.ft-avatar {
+  border-radius: var(--ft-radius-full);
+  object-fit: cover;
+  flex-shrink: 0;
+
+  &.ft-avatar--xs {
+    width: 24px;
+    height: 24px;
+  }
+
+  &.ft-avatar--sm {
+    width: 32px;
+    height: 32px;
+  }
+
+  &.ft-avatar--md {
+    width: 48px;
+    height: 48px;
+  }
+
+  &.ft-avatar--lg {
+    width: 64px;
+    height: 64px;
+  }
+
+  &.ft-avatar--xl {
+    width: 120px;
+    height: 120px;
+  }
+
+  &.ft-avatar--profile {
+    width: 120px;
+    height: 120px;
+    border: 4px solid var(--ft-white);
+    box-shadow: var(--ft-shadow-md);
+  }
+
+  &.ft-avatar--tribe {
+    border-radius: var(--ft-radius-lg);
+  }
+}
+
+// Avatar with online status wrapper
+.ft-avatar-wrap {
+  position: relative;
+  display: inline-flex;
+  flex-shrink: 0;
+
+  .ft-avatar-wrap__status {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 12px;
+    height: 12px;
+    border-radius: var(--ft-radius-full);
+    border: 2px solid var(--ft-white);
+
+    &.ft-avatar-wrap__status--online {
+      background-color: var(--ft-success);
+    }
+
+    &.ft-avatar-wrap__status--offline {
+      background-color: var(--ft-gray-400);
+    }
+
+    &.ft-avatar-wrap__status--away {
+      background-color: var(--ft-warning);
+    }
+  }
+
+  // Larger status dot for bigger avatars
+  &.ft-avatar-wrap--lg .ft-avatar-wrap__status,
+  &.ft-avatar-wrap--xl .ft-avatar-wrap__status {
+    width: 16px;
+    height: 16px;
+    border-width: 3px;
+  }
+}
+
+// Default avatar (initials-based)
+.ft-avatar-default {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--ft-radius-full);
+  background: linear-gradient(135deg, var(--ft-primary), #ff6b6b);
+  color: var(--ft-white);
+  font-weight: var(--ft-font-weight-semibold);
+  text-transform: uppercase;
+
+  &.ft-avatar--xs {
+    font-size: 10px;
+  }
+
+  &.ft-avatar--sm {
+    font-size: var(--ft-font-caption);
+  }
+
+  &.ft-avatar--md {
+    font-size: var(--ft-font-body);
+  }
+
+  &.ft-avatar--lg {
+    font-size: var(--ft-font-h4);
+  }
+
+  &.ft-avatar--xl {
+    font-size: var(--ft-font-h1);
+  }
+}
+
+// Stacked avatars (for grouped notifications)
+.ft-avatar-stack {
+  display: flex;
+
+  .ft-avatar-stack__item {
+    margin-left: -8px;
+    border: 2px solid var(--ft-white);
+    border-radius: var(--ft-radius-full);
+
+    &:first-child {
+      margin-left: 0;
+    }
+  }
+
+  .ft-avatar-stack__overflow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: -8px;
+    width: 32px;
+    height: 32px;
+    border-radius: var(--ft-radius-full);
+    background-color: var(--ft-gray-200);
+    border: 2px solid var(--ft-white);
+    font-size: var(--ft-font-caption);
+    font-weight: var(--ft-font-weight-semibold);
+    color: var(--ft-gray-600);
+  }
+}
+
+// Avatar edit overlay (hover state for profile)
+.ft-avatar-edit {
+  position: relative;
+  cursor: pointer;
+
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: var(--ft-radius-full);
+    background-color: rgba(0, 0, 0, 0.4);
+    opacity: 0;
+    transition: opacity var(--ft-transition-fast);
+    pointer-events: none;
+  }
+
+  &:hover::after {
+    opacity: 1;
+  }
+}

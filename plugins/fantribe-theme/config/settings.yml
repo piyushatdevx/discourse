@@ -1,0 +1,17 @@
+plugins:
+  fantribe_theme_enabled:
+    default: true
+    client: true
+  fantribe_show_trending_tribes:
+    default: true
+    client: true
+  fantribe_show_suggested_users:
+    default: true
+    client: true
+  fantribe_enable_glassmorphism:
+    default: true
+    client: true
+  fantribe_primary_color:
+    default: "#FF1744"
+    type: string
+    client: true

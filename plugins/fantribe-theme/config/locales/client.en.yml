@@ -1,0 +1,32 @@
+en:
+  admin_js:
+    admin:
+      site_settings:
+        categories:
+          fantribe_theme: "FanTribe Theme"
+  js:
+    # Empty state customization
+    topics:
+      none:
+        generic: "No posts yet in this tribe. Be the first to share something amazing!"
+        new: "No new posts at the moment. Check back soon for fresh content!"
+        unread: "You're all caught up! No unread posts."
+    fantribe:
+      # Terminology overrides (Categories -> Tribes, Topics -> Posts, etc.)
+      # These will be expanded in Phase 3
+      tribes: "Tribes"
+      tribe: "Tribe"
+      posts: "Posts"
+      post: "Post"
+      comments: "Comments"
+      comment: "Comment"
+      members: "Members"
+      member: "Member"
+      followers: "Followers"
+      following: "Following"
+      join_tribe: "Join Tribe"
+      leave_tribe: "Leave Tribe"
+      create_post: "Create Post"
+      trending: "Trending"
+      discover: "Discover"
+      for_you: "For You"

@@ -1,0 +1,107 @@
+// FanTribe Mobile Tribe Chips - Horizontal Scrollable Filter
+// Shown on mobile only (<768px)
+
+.fantribe-mobile-chips {
+  display: flex;
+  align-items: center;
+  gap: var(--ft-space-2);
+  padding: 0 var(--ft-space-3);
+  overflow-x: auto;
+  overflow-y: hidden;
+
+  // Hide scrollbar but keep functionality
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  // Fade edges effect
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    black 12px,
+    black calc(100% - 12px),
+    transparent
+  );
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent,
+    black 12px,
+    black calc(100% - 12px),
+    transparent
+  );
+}
+
+// Individual chip button
+.fantribe-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ft-space-1);
+  padding: var(--ft-space-2) var(--ft-space-3);
+  background: var(--ft-white);
+  border: 1px solid var(--ft-gray-200);
+  border-radius: var(--ft-radius-full);
+  font-size: var(--ft-font-caption);
+  font-weight: var(--ft-font-weight-medium);
+  color: var(--ft-gray-700);
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all var(--ft-transition-fast);
+  flex-shrink: 0;
+
+  &:hover {
+    background: var(--ft-gray-50);
+    border-color: var(--ft-gray-300);
+  }
+
+  // Active/selected state
+  &--active {
+    background: var(--ft-primary);
+    border-color: var(--ft-primary);
+    color: var(--ft-white);
+
+    &:hover {
+      background: var(--ft-primary-hover);
+      border-color: var(--ft-primary-hover);
+    }
+  }
+
+  // Category color indicator
+  &__color {
+    width: 12px;
+    height: 12px;
+    border-radius: var(--ft-radius-full);
+    flex-shrink: 0;
+  }
+
+  // Topic count
+  &__topic-count {
+    font-size: 10px;
+    opacity: 0.7;
+  }
+
+  // Favorite indicator
+  &__favorite {
+    color: var(--ft-primary);
+    font-size: 10px;
+    margin-left: 2px;
+  }
+
+  &--active &__favorite {
+    color: var(--ft-white);
+  }
+}
+
+// "All" chip special styling
+.fantribe-chip--all {
+  background: var(--ft-gray-100);
+  border-color: var(--ft-gray-300);
+
+  &.fantribe-chip--active {
+    background: var(--ft-dark);
+    border-color: var(--ft-dark);
+    color: var(--ft-white);
+  }
+}

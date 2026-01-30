@@ -1,6 +1,6 @@
 const pluginName = "CustomizeChunkUrlPlugin";
 
-export class CustomizeChunkUrlPlugin {
+class CustomizeChunkUrlPlugin {
   apply(compiler) {
     compiler.hooks.thisCompilation.tap(pluginName, (compilation) => {
       const { mainTemplate } = compilation;
@@ -38,3 +38,5 @@ export class CustomizeChunkUrlPlugin {
     });
   }
 }
+
+module.exports = { CustomizeChunkUrlPlugin };

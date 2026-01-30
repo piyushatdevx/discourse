@@ -1,0 +1,298 @@
+// FanTribe Navigation Styles
+// Top navbar, sidebar, tab bars, breadcrumbs, pagination
+
+// Top navigation bar
+.ft-navbar {
+  position: sticky;
+  top: 0;
+  z-index: var(--ft-z-sticky);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 var(--ft-space-4);
+  height: 56px;
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border-bottom: 1px solid rgba(26, 26, 26, 0.08);
+
+  .ft-navbar__logo {
+    display: flex;
+    align-items: center;
+    gap: var(--ft-space-2);
+    text-decoration: none;
+  }
+
+  .ft-navbar__logo-text {
+    font-size: var(--ft-font-h5);
+    font-weight: var(--ft-font-weight-bold);
+    color: var(--ft-dark);
+  }
+
+  .ft-navbar__center {
+    display: flex;
+    align-items: center;
+    gap: var(--ft-space-6);
+  }
+
+  .ft-navbar__link {
+    font-size: var(--ft-font-small);
+    font-weight: var(--ft-font-weight-medium);
+    color: var(--ft-gray-600);
+    text-decoration: none;
+    padding: var(--ft-space-2) 0;
+    border-bottom: 2px solid transparent;
+    transition:
+      color var(--ft-transition-fast),
+      border-color var(--ft-transition-fast);
+
+    &:hover {
+      color: var(--ft-dark);
+    }
+
+    &.ft-navbar__link--active {
+      color: var(--ft-primary);
+      border-bottom-color: var(--ft-primary);
+    }
+  }
+
+  .ft-navbar__right {
+    display: flex;
+    align-items: center;
+    gap: var(--ft-space-3);
+  }
+
+  .ft-navbar__icon-btn {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border: none;
+    background: none;
+    color: var(--ft-gray-600);
+    border-radius: var(--ft-radius-full);
+    cursor: pointer;
+    transition: background-color var(--ft-transition-fast);
+
+    &:hover {
+      background-color: var(--ft-gray-100);
+    }
+
+    .ft-badge {
+      position: absolute;
+      top: 2px;
+      right: 2px;
+    }
+  }
+}
+
+// Sidebar navigation
+.ft-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ft-space-1);
+
+  .ft-sidebar__section {
+    margin-bottom: var(--ft-space-4);
+  }
+
+  .ft-sidebar__title {
+    font-size: var(--ft-font-caption);
+    font-weight: var(--ft-font-weight-semibold);
+    color: var(--ft-gray-500);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: var(--ft-space-2) var(--ft-space-3);
+  }
+
+  .ft-sidebar__item {
+    display: flex;
+    align-items: center;
+    gap: var(--ft-space-3);
+    padding: var(--ft-space-2) var(--ft-space-3);
+    border-radius: var(--ft-radius-md);
+    color: var(--ft-gray-700);
+    text-decoration: none;
+    font-size: var(--ft-font-small);
+    font-weight: var(--ft-font-weight-medium);
+    transition:
+      background-color var(--ft-transition-fast),
+      color var(--ft-transition-fast);
+
+    &:hover {
+      background-color: var(--ft-gray-100);
+      color: var(--ft-dark);
+    }
+
+    &.ft-sidebar__item--active {
+      background-color: var(--ft-primary-light);
+      color: var(--ft-primary);
+    }
+  }
+
+  .ft-sidebar__icon {
+    flex-shrink: 0;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .ft-sidebar__badge {
+    margin-left: auto;
+  }
+}
+
+// Admin sidebar (dark)
+.ft-sidebar--admin {
+  background-color: var(--ft-dark);
+  padding: var(--ft-space-4) 0;
+  min-height: 100vh;
+
+  .ft-sidebar__title {
+    color: var(--ft-gray-500);
+  }
+
+  .ft-sidebar__item {
+    color: var(--ft-gray-300);
+
+    &:hover {
+      background-color: var(--ft-dark-hover);
+      color: var(--ft-white);
+    }
+
+    &.ft-sidebar__item--active {
+      background-color: rgba(255, 23, 68, 0.2);
+      color: var(--ft-primary);
+    }
+  }
+}
+
+// Tab navigation
+.ft-tabs {
+  display: flex;
+  border-bottom: 1px solid var(--ft-gray-200);
+  gap: var(--ft-space-6);
+
+  .ft-tabs__item {
+    display: flex;
+    align-items: center;
+    gap: var(--ft-space-1);
+    padding: var(--ft-space-3) 0;
+    font-size: var(--ft-font-small);
+    font-weight: var(--ft-font-weight-medium);
+    color: var(--ft-gray-600);
+    text-decoration: none;
+    border-bottom: 2px solid transparent;
+    cursor: pointer;
+    background: none;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    transition:
+      color var(--ft-transition-fast),
+      border-color var(--ft-transition-fast);
+
+    &:hover {
+      color: var(--ft-dark);
+    }
+
+    &.ft-tabs__item--active {
+      color: var(--ft-primary);
+      border-bottom-color: var(--ft-primary);
+    }
+  }
+}
+
+// Breadcrumbs
+.ft-breadcrumbs {
+  display: flex;
+  align-items: center;
+  gap: var(--ft-space-1);
+  font-size: var(--ft-font-small);
+
+  .ft-breadcrumbs__item {
+    color: var(--ft-gray-500);
+    text-decoration: none;
+
+    &:hover {
+      color: var(--ft-primary);
+    }
+
+    &.ft-breadcrumbs__item--current {
+      color: var(--ft-dark);
+      font-weight: var(--ft-font-weight-medium);
+    }
+  }
+
+  .ft-breadcrumbs__separator {
+    color: var(--ft-gray-400);
+  }
+}
+
+// Pagination
+.ft-pagination {
+  display: flex;
+  align-items: center;
+  gap: var(--ft-space-1);
+
+  .ft-pagination__btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 36px;
+    height: 36px;
+    padding: 0 var(--ft-space-2);
+    border: none;
+    background: none;
+    color: var(--ft-gray-600);
+    font-size: var(--ft-font-small);
+    border-radius: var(--ft-radius-md);
+    cursor: pointer;
+    transition:
+      background-color var(--ft-transition-fast),
+      color var(--ft-transition-fast);
+
+    &:hover {
+      background-color: var(--ft-gray-100);
+      color: var(--ft-dark);
+    }
+
+    &.ft-pagination__btn--active {
+      background-color: var(--ft-primary);
+      color: var(--ft-white);
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+}
+
+// New posts pill
+.ft-new-posts-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ft-space-1);
+  padding: var(--ft-space-2) var(--ft-space-4);
+  background-color: var(--ft-primary);
+  color: var(--ft-white);
+  border-radius: var(--ft-radius-full);
+  font-size: var(--ft-font-small);
+  font-weight: var(--ft-font-weight-medium);
+  cursor: pointer;
+  box-shadow: var(--ft-shadow-md);
+  border: none;
+  transition:
+    background-color var(--ft-transition-fast),
+    transform var(--ft-transition-fast);
+
+  &:hover {
+    background-color: var(--ft-primary-hover);
+    transform: translateY(-1px);
+  }
+}
