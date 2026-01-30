@@ -57,7 +57,19 @@ export default class FantribeFeedCard extends Component {
   }
 
   get likeCount() {
-    return this.topic?.like_count || 0;
+    return this.topic?.op_like_count || this.topic?.like_count || 0;
+  }
+
+  get firstPostId() {
+    return this.topic?.first_post_id;
+  }
+
+  get opLiked() {
+    return this.topic?.op_liked || false;
+  }
+
+  get opCanLike() {
+    return this.topic?.op_can_like ?? true;
   }
 
   get replyCount() {
@@ -84,11 +96,13 @@ export default class FantribeFeedCard extends Component {
   }
 
   <template>
+    {{! template-lint-disable no-invalid-interactive }}
     <article class="fantribe-feed-card" {{on "click" this.navigateToTopic}}>
       <div class="fantribe-feed-card__content">
         {{! Post Header }}
         <header class="fantribe-feed-card__header">
-          <div
+          <button
+            type="button"
             class="fantribe-feed-card__avatar"
             {{on "click" this.navigateToUser}}
           >
@@ -99,7 +113,7 @@ export default class FantribeFeedCard extends Component {
                 {{this.posterInitials}}
               </span>
             {{/if}}
-          </div>
+          </button>
 
           <div class="fantribe-feed-card__meta">
             <a
@@ -145,10 +159,14 @@ export default class FantribeFeedCard extends Component {
 
         {{! Engagement Bar }}
         <FantribeEngagementBar
+          @topic={{@topic}}
           @likeCount={{this.likeCount}}
           @commentCount={{this.replyCount}}
           @shareCount={{this.viewCount}}
           @topicId={{@topic.id}}
+          @firstPostId={{this.firstPostId}}
+          @opLiked={{this.opLiked}}
+          @opCanLike={{this.opCanLike}}
         />
       </div>
     </article>

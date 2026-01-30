@@ -63,3 +63,6 @@ register_asset "stylesheets/desktop/desktop.scss", :desktop
 
 # Mobile-specific styles
 register_asset "stylesheets/mobile/mobile.scss", :mobile
+
+# Enable serialization of first_post_id, op_liked, and op_can_like for feed card likes
+register_modifier(:serialize_topic_op_likes_data) { true }

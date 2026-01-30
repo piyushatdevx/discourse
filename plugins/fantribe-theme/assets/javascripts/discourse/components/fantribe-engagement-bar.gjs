@@ -4,14 +4,30 @@ import { action } from "@ember/object";
 import { service } from "@ember/service";
 import { on } from "@ember/modifier";
 import icon from "discourse/helpers/d-icon";
+import { ajax } from "discourse/lib/ajax";
+import ShareTopicModal from "discourse/components/modal/share-topic";
+import Composer from "discourse/models/composer";
+
+const LIKE_ACTION_TYPE_ID = 2;
 
 export default class FantribeEngagementBar extends Component {
   @service currentUser;
+  @service composer;
+  @service modal;
 
-  @tracked isLiked = false;
+  @tracked _isLiked = null;
+  @tracked _likeCountOffset = 0;
+  @tracked isLoading = false;
+
+  get isLiked() {
+    if (this._isLiked !== null) {
+      return this._isLiked;
+    }
+    return this.args.opLiked || false;
+  }
 
   get likeCount() {
-    return this.args.likeCount || 0;
+    return (this.args.likeCount || 0) + this._likeCountOffset;
   }
 
   get commentCount() {
@@ -23,7 +39,11 @@ export default class FantribeEngagementBar extends Component {
   }
 
   get displayLikeCount() {
-    return this.isLiked ? this.likeCount + 1 : this.likeCount;
+    return this.likeCount;
+  }
+
+  get canLike() {
+    return this.currentUser && this.args.firstPostId && this.args.opCanLike;
   }
 
   formatCount(count) {
@@ -37,29 +57,78 @@ export default class FantribeEngagementBar extends Component {
   }
 
   @action
-  handleLike(event) {
+  async handleLike(event) {
     event.stopPropagation();
-    if (!this.currentUser) return;
-    this.isLiked = !this.isLiked;
-    // In production, this would call the Discourse API to like the topic
+
+    if (!this.currentUser || !this.args.firstPostId || this.isLoading) {
+      return;
+    }
+
+    this.isLoading = true;
+    const wasLiked = this.isLiked;
+
+    // Optimistic UI update
+    this._isLiked = !wasLiked;
+    this._likeCountOffset += wasLiked ? -1 : 1;
+
+    try {
+      if (wasLiked) {
+        // Unlike: DELETE /post_actions/:post_id
+        await ajax(`/post_actions/${this.args.firstPostId}`, {
+          type: "DELETE",
+          data: { post_action_type_id: LIKE_ACTION_TYPE_ID },
+        });
+      } else {
+        // Like: POST /post_actions
+        await ajax("/post_actions", {
+          type: "POST",
+          data: {
+            id: this.args.firstPostId,
+            post_action_type_id: LIKE_ACTION_TYPE_ID,
+          },
+        });
+      }
+    } catch {
+      // Revert optimistic update on error
+      this._isLiked = wasLiked;
+      this._likeCountOffset += wasLiked ? 1 : -1;
+    } finally {
+      this.isLoading = false;
+    }
   }
 
   @action
   handleComment(event) {
     event.stopPropagation();
-    // Navigate to topic and focus on reply
+
+    const topic = this.args.topic;
+    if (!topic) {
+      return;
+    }
+
+    this.composer.open({
+      action: Composer.REPLY,
+      draftKey: topic.draft_key || `topic_${topic.id}`,
+      draftSequence: topic.draft_sequence ?? 0,
+      topic,
+    });
   }
 
   @action
   handleShare(event) {
     event.stopPropagation();
-    // Open share dialog
-    if (navigator.share && this.args.topicId) {
-      navigator.share({
-        title: "Check out this post",
-        url: `/t/-/${this.args.topicId}`,
-      });
+
+    const topic = this.args.topic;
+    if (!topic) {
+      return;
     }
+
+    this.modal.show(ShareTopicModal, {
+      model: {
+        topic,
+        category: topic.category,
+      },
+    });
   }
 
   <template>
