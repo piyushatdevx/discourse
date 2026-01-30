@@ -8,10 +8,12 @@
   overflow: hidden;
   cursor: pointer;
   transition: all var(--ft-transition-fast);
+  box-shadow: var(--ft-shadow-sm);
+  margin-bottom: var(--ft-space-6);
 
   &:hover {
-    border-color: var(--ft-gray-300);
-    box-shadow: var(--ft-shadow-sm);
+    border-color: var(--ft-primary);
+    box-shadow: var(--ft-shadow-md);
   }
 
   &:focus {

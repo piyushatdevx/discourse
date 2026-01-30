@@ -4,27 +4,33 @@
 // Mobile: Single column with horizontal tribe chips
 
 body.fantribe-theme {
+  // Set consistent background across the entire page
+  background-color: var(--ft-bg) !important;
+
   // Hide Discourse's default sidebar
   .sidebar-wrapper {
     display: none !important;
   }
 
-  // Override Discourse core max-width
+  // Override Discourse core max-width and remove any white/pinkish backgrounds
   #main-outlet-wrapper,
   #main-outlet,
   .wrap {
     max-width: 100% !important;
     box-sizing: border-box;
+    background: transparent !important;
   }
 
   // Adjust main outlet layout when sidebar is hidden
   #main-outlet-wrapper {
     display: block;
     overflow: visible;
+    background: transparent !important;
 
     &.wrap {
       grid-template-columns: 1fr;
       grid-template-areas: "main";
+      background: transparent !important;
     }
   }
 
@@ -70,6 +76,7 @@ body.fantribe-theme {
   padding-right: 7.5%;
   min-height: calc(100vh - 80px);
   box-sizing: border-box;
+  background: #f5f5f5 !important;
 
   // Left sidebar - My Tribes panel
   &__left-sidebar {
@@ -111,6 +118,7 @@ body.fantribe-theme {
     gap: var(--ft-space-4);
     padding: 0 var(--ft-space-2);
     box-sizing: border-box;
+    background: #f5f5f5;
   }
 
   // Right sidebar - Trending Topics
@@ -171,7 +179,7 @@ body.fantribe-theme {
   .fantribe-feed-layout {
     display: flex;
     flex-direction: column;
-    padding: var(--ft-space-2);
+    padding: 0;
     min-height: auto;
 
     &__mobile-chips {
@@ -179,7 +187,7 @@ body.fantribe-theme {
       position: sticky;
       top: var(--header-offset, 60px);
       z-index: 10;
-      background: var(--ft-white);
+      // background: var(--ft-white);
       border-bottom: 1px solid var(--ft-gray-200);
       padding: var(--ft-space-2) 0;
       margin: 0 calc(-1 * var(--ft-space-2));

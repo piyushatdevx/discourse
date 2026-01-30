@@ -1,6 +1,61 @@
 // FanTribe Feed Card - Post Card Component
 // Includes header, content, media types, and engagement bar
 
+// Feed Section wrapper with header
+.fantribe-feed-section {
+  display: flex;
+  flex-direction: column;
+
+  &__header {
+    display: flex;
+    align-items: center;
+    gap: var(--ft-space-3);
+    margin-bottom: var(--ft-space-4);
+  }
+
+  &__label {
+    font-size: var(--ft-font-small);
+    font-weight: var(--ft-font-weight-semibold);
+    color: var(--ft-gray-600);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+  }
+
+  &__divider {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(to right, var(--ft-gray-300), transparent);
+  }
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--ft-space-4);
+  }
+}
+
+// Empty state when no posts to show
+.fantribe-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--ft-space-12) var(--ft-space-4);
+  text-align: center;
+  background: var(--ft-white);
+  border: 1px dashed var(--ft-gray-300);
+  border-radius: var(--ft-radius-xl);
+
+  p {
+    font-size: var(--ft-font-body);
+    color: var(--ft-gray-500);
+    margin: 0;
+    max-width: 300px;
+    line-height: var(--ft-line-height-relaxed);
+  }
+}
+
 .fantribe-feed-card {
   background: var(--ft-white);
   border: 1px solid var(--ft-gray-200);
@@ -477,5 +532,16 @@
   .fantribe-comment__avatar {
     width: 24px;
     height: 24px;
+  }
+
+  .fantribe-feed-section {
+    &__header {
+      margin-bottom: var(--ft-space-3);
+      padding: 0 var(--ft-space-2);
+    }
+
+    &__list {
+      gap: 0;
+    }
   }
 }
