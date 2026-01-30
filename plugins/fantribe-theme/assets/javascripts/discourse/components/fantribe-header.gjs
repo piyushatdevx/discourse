@@ -66,30 +66,31 @@ export default class FantribeHeader extends Component {
           />
         </button>
 
-        {{! Desktop Navigation }}
-        <nav class="fantribe-header__nav fantribe-header__nav--desktop">
-          <FantribeNavItem
-            @route="discovery.latest"
-            @label="Feed"
-            @icon="house"
-          />
-          <FantribeNavItem
-            @route="discovery.categories"
-            @label="Tribes"
-            @icon="users"
-          />
-          <FantribeNavItem
-            @route="discovery.top"
-            @label="Trending"
-            @icon="fire"
-          />
-        </nav>
+        {{! Desktop Navigation - only show when logged in }}
+        {{#if this.isLoggedIn}}
+          <nav class="fantribe-header__nav fantribe-header__nav--desktop">
+            <FantribeNavItem
+              @route="discovery.latest"
+              @label="Feed"
+              @icon="house"
+            />
+            <FantribeNavItem
+              @route="discovery.categories"
+              @label="Tribes"
+              @icon="users"
+            />
+            <FantribeNavItem
+              @route="discovery.top"
+              @label="Trending"
+              @icon="fire"
+            />
+          </nav>
+        {{/if}}
 
         {{! Right Side Actions }}
         <div class="fantribe-header__actions">
-          <FantribeSearchButton />
-
           {{#if this.isLoggedIn}}
+            <FantribeSearchButton />
             <FantribeNotifications />
             <FantribeUserMenu @user={{this.currentUser}} />
           {{else}}

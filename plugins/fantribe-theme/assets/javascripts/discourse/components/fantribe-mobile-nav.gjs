@@ -34,6 +34,10 @@ export default class FantribeMobileNav extends Component {
     return this.currentPath?.startsWith("user.");
   }
 
+  get isLoggedIn() {
+    return !!this.currentUser;
+  }
+
   @action
   goToFeed() {
     this.router.transitionTo("discovery.latest");
@@ -73,51 +77,53 @@ export default class FantribeMobileNav extends Component {
   }
 
   <template>
-    <nav class="fantribe-mobile-nav">
-      <button
-        class="fantribe-mobile-nav__item {{if this.isFeedActive 'active'}}"
-        type="button"
-        {{on "click" this.goToFeed}}
-      >
-        {{icon "house"}}
-        <span>Feed</span>
-      </button>
+    {{#if this.isLoggedIn}}
+      <nav class="fantribe-mobile-nav">
+        <button
+          class="fantribe-mobile-nav__item {{if this.isFeedActive 'active'}}"
+          type="button"
+          {{on "click" this.goToFeed}}
+        >
+          {{icon "house"}}
+          <span>Feed</span>
+        </button>
 
-      <button
-        class="fantribe-mobile-nav__item {{if this.isSearchActive 'active'}}"
-        type="button"
-        {{on "click" this.goToSearch}}
-      >
-        {{icon "magnifying-glass"}}
-        <span>Search</span>
-      </button>
+        <button
+          class="fantribe-mobile-nav__item {{if this.isSearchActive 'active'}}"
+          type="button"
+          {{on "click" this.goToSearch}}
+        >
+          {{icon "magnifying-glass"}}
+          <span>Search</span>
+        </button>
 
-      <button
-        class="fantribe-mobile-nav__item fantribe-mobile-nav__item--create"
-        type="button"
-        {{on "click" this.createPost}}
-      >
-        {{icon "plus"}}
-      </button>
+        <button
+          class="fantribe-mobile-nav__item fantribe-mobile-nav__item--create"
+          type="button"
+          {{on "click" this.createPost}}
+        >
+          {{icon "plus"}}
+        </button>
 
-      <button
-        class="fantribe-mobile-nav__item
-          {{if this.isNotificationsActive 'active'}}"
-        type="button"
-        {{on "click" this.goToNotifications}}
-      >
-        {{icon "bell"}}
-        <span>Alerts</span>
-      </button>
+        <button
+          class="fantribe-mobile-nav__item
+            {{if this.isNotificationsActive 'active'}}"
+          type="button"
+          {{on "click" this.goToNotifications}}
+        >
+          {{icon "bell"}}
+          <span>Alerts</span>
+        </button>
 
-      <button
-        class="fantribe-mobile-nav__item {{if this.isProfileActive 'active'}}"
-        type="button"
-        {{on "click" this.goToProfile}}
-      >
-        {{icon "user"}}
-        <span>Profile</span>
-      </button>
-    </nav>
+        <button
+          class="fantribe-mobile-nav__item {{if this.isProfileActive 'active'}}"
+          type="button"
+          {{on "click" this.goToProfile}}
+        >
+          {{icon "user"}}
+          <span>Profile</span>
+        </button>
+      </nav>
+    {{/if}}
   </template>
 }
