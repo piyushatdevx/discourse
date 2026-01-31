@@ -47,9 +47,23 @@ export default class FantribeFeedCard extends Component {
     return this.topic?.excerpt || "";
   }
 
+  get images() {
+    const urls = this.topic?.image_urls || [];
+    if (urls.length > 0) {
+      return urls.map((url) => ({ url }));
+    }
+    if (this.imageUrl) {
+      return [{ url: this.imageUrl }];
+    }
+    return [];
+  }
+
   get hasImages() {
-    // Check if topic has image uploads
-    return this.topic?.image_url || this.topic?.thumbnails?.length > 0;
+    return this.images.length > 0;
+  }
+
+  get hasMultipleImages() {
+    return this.images.length > 1;
   }
 
   get imageUrl() {
@@ -153,7 +167,11 @@ export default class FantribeFeedCard extends Component {
         {{! Media Section }}
         {{#if this.hasImages}}
           <div class="fantribe-feed-card__media">
-            <FantribeMediaSingleImage @imageUrl={{this.imageUrl}} />
+            {{#if this.hasMultipleImages}}
+              <FantribeMediaPhotoGrid @images={{this.images}} />
+            {{else}}
+              <FantribeMediaSingleImage @imageUrl={{this.imageUrl}} />
+            {{/if}}
           </div>
         {{/if}}
 

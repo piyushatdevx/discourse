@@ -38,6 +38,10 @@ export default class FantribeMediaPhotoGrid extends Component {
     // Open lightbox/gallery view
   }
 
+  blurStyle(url) {
+    return `background-image: url('${url}');`;
+  }
+
   <template>
     {{#if this.images.length}}
       <div class={{this.gridClass}}>
@@ -54,6 +58,10 @@ export default class FantribeMediaPhotoGrid extends Component {
             }}
             {{on "click" (fn this.handleImageClick index)}}
           >
+            <div
+              class="fantribe-media-grid__blur-bg"
+              style={{this.blurStyle image.url}}
+            ></div>
             <img src={{image.url}} alt="Gallery image" loading="lazy" />
           </div>
         {{/each}}

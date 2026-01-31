@@ -68,7 +68,37 @@ register_asset "stylesheets/mobile/mobile.scss", :mobile
 # Enable serialization of first_post_id, op_liked, and op_can_like for feed card likes
 register_modifier(:serialize_topic_op_likes_data) { true }
 
+# Preload first_post uploads to avoid N+1 queries when serializing image_urls
+register_topic_preloader_associations({ first_post: :uploads }) do
+  SiteSetting.fantribe_theme_enabled
+end
+
 after_initialize do
+  # Enable topic excerpts for feed cards
+  module ::FantribeTheme
+    module ListableTopicSerializerExtension
+      def include_excerpt?
+        return true if SiteSetting.fantribe_theme_enabled
+        super
+      end
+    end
+  end
+
+  reloadable_patch do
+    ListableTopicSerializer.prepend(FantribeTheme::ListableTopicSerializerExtension)
+  end
+
+  # Add image_urls to topic list serializer for multi-image support in feed cards
+  add_to_serializer(:topic_list_item, :image_urls) do
+    next [] unless object.first_post
+
+    object
+      .first_post
+      .uploads
+      .select { |u| FileHelper.is_supported_image?(u.original_filename) }
+      .reject { |u| u.extension&.downcase == "svg" }
+      .map(&:url)
+  end
   # Override SiteIconManager to use custom favicon and OG image
   module ::SiteIconManager
     class << self
