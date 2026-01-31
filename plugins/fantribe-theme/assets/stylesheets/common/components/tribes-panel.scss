@@ -75,30 +75,28 @@
   }
 }
 
-// Individual Tribe Button
+// Individual Tribe Button (Figma: border border-gray-200 bg-white hover:bg-gray-50 hover:border-gray-300)
 .fantribe-tribe-button {
   display: flex;
   align-items: center;
   gap: var(--ft-space-3);
   padding: var(--ft-space-3);
   border-radius: var(--ft-radius-xl);
-  border: 2px solid transparent;
+  border: 1px solid #e5e7eb;
   cursor: pointer;
   transition: all 200ms ease;
   text-align: left;
   width: 100%;
-
-  // Simple solid background
-  background: var(--ft-gray-50);
+  background: var(--ft-white);
 
   &:hover {
-    box-shadow: var(--ft-shadow-md);
-    transform: translateY(-1px);
+    background: #f9f9f9;
+    border-color: #d1d5db;
   }
 
-  // Active/selected state
+  // Active/selected state - light red border (not bold)
   &--active {
-    border-color: var(--ft-primary);
+    border: 1px solid rgba(224, 59, 58, 0.5);
     box-shadow: var(--ft-shadow-sm);
   }
 

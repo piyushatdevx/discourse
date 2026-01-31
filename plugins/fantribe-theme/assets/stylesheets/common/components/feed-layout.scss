@@ -95,7 +95,11 @@ body.fantribe-theme {
   gap: var(--ft-space-4) var(--ft-space-6);
 
   &__left-sidebar {
+    position: sticky;
+    top: 72px;
+    align-self: start;
     min-width: 0;
+    max-height: calc(100vh - 80px);
     overflow-y: auto;
     padding: 0 0 var(--ft-space-4); // no top padding so card aligns with middle column
     box-sizing: border-box;
@@ -133,9 +137,13 @@ body.fantribe-theme {
     }
   }
 
-  // Right sidebar - Trending Topics (lg:col-span-3)
+  // Right sidebar - Trending Topics (lg:col-span-3), sticky when middle scrolls
   &__right-sidebar {
+    position: sticky;
+    top: 72px;
+    align-self: start;
     min-width: 0;
+    max-height: calc(100vh - 80px);
     overflow-y: auto;
     padding: 0 0 var(--ft-space-4); // no top padding so card aligns with middle column
     box-sizing: border-box;

@@ -8,19 +8,19 @@
   overflow: hidden;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
 
-  // Panel header - red trend icon + bold title, light grey separator
+  // Panel header - red trend icon + bold title, light grey separator (Figma: ~20-24px padding)
   &__header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: var(--ft-space-4) var(--ft-space-5) var(--ft-space-4);
+    padding: 20px 24px 16px;
     border-bottom: 1px solid #eee;
   }
 
   &__title {
     display: flex;
     align-items: center;
-    gap: var(--ft-space-2);
+    gap: 10px;
     font-size: 1.125rem;
     font-weight: 600;
     color: var(--ft-dark);
@@ -32,17 +32,17 @@
     }
   }
 
-  // Panel content - generous padding, spacing between items
+  // Panel content - generous padding, more space below each topic
   &__content {
-    padding: var(--ft-space-3) var(--ft-space-5);
+    padding: 20px 24px;
     display: flex;
     flex-direction: column;
-    gap: var(--ft-space-1);
+    gap: 40px;
   }
 
-  // Footer - "View all" centered, red, substantial spacing
+  // Footer - "View all" centered, red, substantial spacing (Figma: ~24-30px above, ~20-24px below)
   &__footer {
-    padding: var(--ft-space-4) var(--ft-space-5) var(--ft-space-5);
+    padding: 28px 24px 24px;
     text-align: center;
   }
 
@@ -61,23 +61,28 @@
   }
 }
 
-// Individual trending topic item - no vertical line, bold hashtag, red arrow right
+// Individual trending topic item - w-full text-left p-3 rounded-lg hover:bg-gray-50 (Figma)
 .fantribe-trending-item {
   display: flex;
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  padding: var(--ft-space-3) 0;
+  padding: 0.75rem;
   background: transparent;
   border: none;
-  border-radius: var(--ft-radius-lg);
+  border-radius: 0.5rem;
   cursor: pointer;
   text-align: left;
-  transition: background var(--ft-transition-fast);
+  transition: background-color var(--ft-transition-fast), color var(--ft-transition-fast);
   gap: var(--ft-space-3);
 
   &:hover {
-    background: var(--ft-gray-50);
+    background-color: #f9f9f9;
+
+    .fantribe-trending-item__title,
+    .fantribe-trending-item__title::before {
+      color: var(--ft-primary);
+    }
   }
 
   &__info {
@@ -85,18 +90,18 @@
     min-width: 0;
     display: flex;
     flex-direction: column;
-    gap: 2px;
+    gap: 4px;
   }
 
   &__title {
     font-size: 1rem;
-    font-weight: 600;
+    font-weight: 400;
     color: var(--ft-dark);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 
-    // Hashtag prefix - dark to match title (Figma)
+    // Hashtag prefix - black
     &::before {
       content: "#";
       color: var(--ft-dark);
@@ -106,7 +111,7 @@
 
   &__count {
     font-size: 0.8125rem;
-    color: #666;
+    color: var(--ft-dark);
   }
 
   // Trending indicator - red upward arrow (Figma)
