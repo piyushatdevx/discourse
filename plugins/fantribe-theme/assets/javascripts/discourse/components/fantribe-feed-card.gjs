@@ -4,10 +4,12 @@ import { action } from "@ember/object";
 import { service } from "@ember/service";
 import { on } from "@ember/modifier";
 import { concat, fn } from "@ember/helper";
+import { htmlSafe } from "@ember/template";
 import icon from "discourse/helpers/d-icon";
 import avatar from "discourse/helpers/avatar";
 import formatDate from "discourse/helpers/format-date";
 import discourseTags from "discourse/helpers/discourse-tags";
+import replaceEmoji from "discourse/helpers/replace-emoji";
 import FantribeEngagementBar from "./fantribe-engagement-bar";
 import FantribeMediaSingleImage from "./fantribe-media-single-image";
 import FantribeMediaVideo from "./fantribe-media-video";
@@ -169,9 +171,9 @@ export default class FantribeFeedCard extends Component {
 
         {{! Post Title and Excerpt }}
         <div class="fantribe-feed-card__text">
-          <p><strong>{{@topic.title}}</strong></p>
+          <p><strong>{{htmlSafe @topic.fancyTitle}}</strong></p>
           {{#if this.excerpt}}
-            <p>{{this.excerpt}}</p>
+            <p>{{replaceEmoji this.excerpt}}</p>
           {{/if}}
         </div>
 

@@ -3,7 +3,10 @@ import { service } from "@ember/service";
 import { action } from "@ember/object";
 import { on } from "@ember/modifier";
 import { concat, fn } from "@ember/helper";
+import { htmlSafe } from "@ember/template";
 import icon from "discourse/helpers/d-icon";
+import { emojiUnescape } from "discourse/lib/text";
+import { escapeExpression } from "discourse/lib/utilities";
 
 export default class FantribeTrendingPanel extends Component {
   @service router;
@@ -27,9 +30,10 @@ export default class FantribeTrendingPanel extends Component {
   formatTitle(title) {
     // Remove common prefixes and clean up title for hashtag display
     if (!title) return "";
-    return title
+    const cleaned = title
       .replace(/^(Discussion:|Question:|Help:|Announcement:)\s*/i, "")
       .substring(0, 30);
+    return htmlSafe(emojiUnescape(escapeExpression(cleaned)));
   }
 
   formatCount(count) {
