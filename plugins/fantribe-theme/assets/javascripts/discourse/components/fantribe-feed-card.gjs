@@ -7,6 +7,7 @@ import { concat, fn } from "@ember/helper";
 import icon from "discourse/helpers/d-icon";
 import avatar from "discourse/helpers/avatar";
 import formatDate from "discourse/helpers/format-date";
+import discourseTags from "discourse/helpers/discourse-tags";
 import FantribeEngagementBar from "./fantribe-engagement-bar";
 import FantribeMediaSingleImage from "./fantribe-media-single-image";
 import FantribeMediaVideo from "./fantribe-media-video";
@@ -36,6 +37,10 @@ export default class FantribeFeedCard extends Component {
 
   get category() {
     return this.topic?.category;
+  }
+
+  get hasTags() {
+    return this.topic?.tags?.length > 0;
   }
 
   get categoryBadgeStyle() {
@@ -151,6 +156,12 @@ export default class FantribeFeedCard extends Component {
                 >
                   {{this.category.name}}
                 </span>
+              {{/if}}
+              {{#if this.hasTags}}
+                <span class="fantribe-feed-card__separator">&middot;</span>
+                <div class="fantribe-feed-card__tags">
+                  {{discourseTags @topic mode="list"}}
+                </div>
               {{/if}}
             </div>
           </div>

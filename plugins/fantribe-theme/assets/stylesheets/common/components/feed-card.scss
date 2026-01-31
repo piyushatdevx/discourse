@@ -158,6 +158,41 @@
     }
   }
 
+  &__tags {
+    display: inline-flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--ft-space-1);
+
+    .discourse-tags {
+      display: inline-flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: var(--ft-space-1);
+    }
+
+    .discourse-tags__tag-separator {
+      display: none;
+    }
+
+    .discourse-tag {
+      display: inline-flex;
+      align-items: center;
+      padding: 2px var(--ft-space-2);
+      background: var(--ft-gray-100);
+      color: var(--ft-gray-600);
+      border-radius: var(--ft-radius-full);
+      font-size: 10px;
+      font-weight: var(--ft-font-weight-medium);
+      text-decoration: none;
+
+      &:hover {
+        background: var(--ft-gray-200);
+        color: var(--ft-gray-700);
+      }
+    }
+  }
+
   // Post text content
   &__text {
     font-size: var(--ft-font-body);
