@@ -89,12 +89,12 @@
   width: 100%;
   background: var(--ft-white);
 
-  &:hover {
+  &:hover:not(&--active) {
     background: #f9f9f9;
     border-color: #d1d5db;
   }
 
-  // Active/selected state - light red border (not bold)
+  // Active/selected state - light red border (no hover on selected)
   &--active {
     border: 1px solid rgba(224, 59, 58, 0.5);
     box-shadow: var(--ft-shadow-sm);

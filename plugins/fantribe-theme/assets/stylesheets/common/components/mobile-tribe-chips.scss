@@ -1,11 +1,33 @@
-// FanTribe Mobile Tribe Chips - Horizontal scrollable filter
+// FanTribe Mobile Tribe Chips - My Tribes title + horizontal scrollable filter (mobile: below logo, above category)
 // Shown on mobile only (<768px)
 
 .fantribe-mobile-chips {
   display: flex;
-  align-items: center;
+  flex-direction: column;
   gap: var(--ft-space-2);
   padding: 0 var(--ft-space-3);
+}
+
+.fantribe-mobile-chips__title {
+  display: flex;
+  align-items: center;
+  gap: var(--ft-space-2);
+  font-size: var(--ft-font-small);
+  font-weight: var(--ft-font-weight-semibold);
+  color: var(--ft-dark);
+  margin: 0;
+  flex-shrink: 0;
+
+  .d-icon {
+    color: var(--ft-primary);
+    font-size: 16px;
+  }
+}
+
+.fantribe-mobile-chips__row {
+  display: flex;
+  align-items: center;
+  gap: var(--ft-space-2);
   overflow-x: auto;
   overflow-y: hidden;
 

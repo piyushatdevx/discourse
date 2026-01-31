@@ -184,20 +184,21 @@ body.fantribe-theme {
   }
 }
 
-// Mobile: Single column with tribe chips (<768px)
+// Mobile: Single column with tribe chips (<768px), chips touch menu (no top space)
 @media (max-width: 767px) {
   .fantribe-feed-layout {
     display: flex;
     flex-direction: column;
-    padding: var(--ft-space-3) 0; // no horizontal padding so cards are full width
+    padding: 0 0 var(--ft-space-3); // no top padding so mobile chips touch header
     min-height: auto;
     max-width: 100%;
 
     &__mobile-chips {
       display: block;
-      position: sticky;
+      // position: sticky;
       top: var(--header-offset, 60px);
       z-index: 10;
+      background: var(--ft-white);
       border-bottom: 1px solid var(--ft-gray-200);
       padding: var(--ft-space-2) var(--ft-space-3);
       margin: 0;

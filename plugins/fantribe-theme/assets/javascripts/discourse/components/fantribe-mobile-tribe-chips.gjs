@@ -40,38 +40,43 @@ export default class FantribeMobileTribeChips extends Component {
 
   <template>
     <div class="fantribe-mobile-chips">
-      <button
-        type="button"
-        class="fantribe-chip fantribe-chip--all
-          {{if (not this.hasFilters) 'fantribe-chip--active'}}"
-        {{on "click" this.selectAll}}
-      >
-        {{icon "globe"}}
-        <span>All</span>
-      </button>
-
-      {{#each this.categories as |category|}}
+      <h3 class="fantribe-mobile-chips__title">
+        {{icon "filter"}}
+        <span>My Tribes</span>
+      </h3>
+      <div class="fantribe-mobile-chips__row">
         <button
           type="button"
-          class="fantribe-chip
-            {{if (this.isCategorySelected category) 'fantribe-chip--active'}}"
-          {{on "click" (fn this.toggleCategory category)}}
+          class="fantribe-chip fantribe-chip--all
+            {{if (not this.hasFilters) 'fantribe-chip--active'}}"
+          {{on "click" this.selectAll}}
         >
-          <span
-            class="fantribe-chip__color"
-            style={{concat "background-color: #" category.color}}
-          ></span>
-          <span>{{category.name}}</span>
-          <span class="fantribe-chip__topic-count">
-            ({{this.getTopicCount category}})
-          </span>
-          {{#if category.is_favorite}}
-            <span class="fantribe-chip__favorite">
-              {{icon "heart"}}
-            </span>
-          {{/if}}
+          <span>All Tribes (3)</span>
         </button>
-      {{/each}}
+
+        {{#each this.categories as |category|}}
+          <button
+            type="button"
+            class="fantribe-chip
+              {{if (this.isCategorySelected category) 'fantribe-chip--active'}}"
+            {{on "click" (fn this.toggleCategory category)}}
+          >
+            <span
+              class="fantribe-chip__color"
+              style={{concat "background-color: #" category.color}}
+            ></span>
+            <span>{{category.name}}</span>
+            <span class="fantribe-chip__topic-count">
+              ({{this.getTopicCount category}})
+            </span>
+            {{#if category.is_favorite}}
+              <span class="fantribe-chip__favorite">
+                {{icon "heart"}}
+              </span>
+            {{/if}}
+          </button>
+        {{/each}}
+      </div>
     </div>
   </template>
 }
