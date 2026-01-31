@@ -289,3 +289,23 @@
     transform: rotate(360deg);
   }
 }
+
+// Override Discourse composer Create Topic button to use Fantribe red
+body.fantribe-theme {
+  .btn-primary.create {
+    background-color: var(--ft-primary) !important;
+    color: var(--ft-white) !important;
+    border-color: var(--ft-primary) !important;
+
+    &:hover:not(.disabled) {
+      background-color: var(--ft-primary-hover) !important;
+      border-color: var(--ft-primary-hover) !important;
+      color: var(--ft-white) !important;
+    }
+
+    &:active:not(.disabled) {
+      background-color: var(--ft-primary-active) !important;
+      border-color: var(--ft-primary-active) !important;
+    }
+  }
+}

@@ -62,17 +62,9 @@ export default class FantribeTrendingPanel extends Component {
         {{#each this.trendingTopics as |topic|}}
           <button
             type="button"
-            class="fantribe-trending-item
-              {{if topic.isHot 'fantribe-trending-item--hot'}}"
+            class="fantribe-trending-item"
             {{on "click" (fn this.navigateToTopic topic)}}
           >
-            {{#if topic.category}}
-              <span
-                class="fantribe-trending-item__category-stripe"
-                style={{concat "background-color: #" topic.category.color}}
-              ></span>
-            {{/if}}
-
             <div class="fantribe-trending-item__info">
               <span class="fantribe-trending-item__title">{{topic.title}}</span>
               <span class="fantribe-trending-item__count">
@@ -80,15 +72,9 @@ export default class FantribeTrendingPanel extends Component {
               </span>
             </div>
 
-            {{#if topic.isHot}}
-              <span class="fantribe-trending-item__indicator">
-                {{icon "fire"}}
-              </span>
-            {{else}}
-              <span class="fantribe-trending-item__indicator">
-                {{icon "arrow-up"}}
-              </span>
-            {{/if}}
+            <span class="fantribe-trending-item__indicator">
+              {{icon "arrow-trend-up"}}
+            </span>
           </button>
         {{else}}
           <div class="fantribe-trending-panel__empty">
@@ -103,7 +89,7 @@ export default class FantribeTrendingPanel extends Component {
           class="fantribe-trending-panel__view-all"
           {{on "click" this.viewAll}}
         >
-          View all trending
+          View all
         </button>
       </div>
     </div>

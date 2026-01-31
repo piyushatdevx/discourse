@@ -56,6 +56,104 @@
   }
 }
 
+// Conversation Feed - single card wrapping all posts (Figma: Compose separate, all posts in one card)
+.fantribe-conversation-feed {
+  background: var(--ft-white);
+  border: 1px solid var(--ft-gray-200);
+  border-radius: var(--ft-radius-xl);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+
+  &__header {
+    padding: var(--ft-space-4);
+    background: linear-gradient(
+      to right,
+      rgba(255, 251, 235, 0.3),
+      rgba(255, 247, 237, 0.2)
+    );
+
+    @media (min-width: 768px) {
+      padding: var(--ft-space-4) var(--ft-space-6);
+    }
+  }
+
+  &__title {
+    display: flex;
+    align-items: center;
+    gap: var(--ft-space-2);
+    font-size: var(--ft-font-body);
+    font-weight: var(--ft-font-weight-medium);
+    color: var(--ft-dark);
+    margin: 0;
+
+    @media (min-width: 768px) {
+      font-size: var(--ft-font-large);
+    }
+  }
+
+  &__icon {
+    color: #ea580c; // orange-600
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__subtitle {
+    font-size: var(--ft-font-small);
+    color: var(--ft-gray-600);
+    margin: var(--ft-space-1) 0 0;
+    line-height: var(--ft-line-height-relaxed);
+
+    @media (min-width: 768px) {
+      font-size: var(--ft-font-body);
+    }
+  }
+
+  &__content {
+    padding: 0;
+  }
+
+  // Posts inside: rows with bold divider between posts (image: thick medium-grey line at post end)
+  &__content .fantribe-feed-card {
+    border: none;
+    border-radius: 0;
+    border-bottom: 1px solid var(--ft-gray-300);
+    box-shadow: none;
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    &:hover {
+      background: var(--ft-gray-50);
+    }
+  }
+
+  &__empty {
+    padding: var(--ft-space-12);
+    text-align: center;
+  }
+
+  &__empty-title {
+    font-size: var(--ft-font-body);
+    color: var(--ft-gray-500);
+    margin: 0 0 var(--ft-space-2);
+  }
+
+  &__empty-text {
+    font-size: var(--ft-font-small);
+    color: var(--ft-gray-400);
+    margin: 0;
+  }
+
+  // Mobile: full width, no left/right borders (Figma mobile: edge-to-edge)
+  @media (max-width: 767px) {
+    border: none;
+    border-radius: 0;
+  }
+}
+
 .fantribe-feed-card {
   background: var(--ft-white);
   border: 1px solid var(--ft-gray-200);
@@ -117,30 +215,37 @@
     flex: 1;
     min-width: 0;
     display: flex;
-    flex-direction: column;
-    gap: 2px;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--ft-space-1) var(--ft-space-2);
+
+    @media (min-width: 768px) {
+      gap: var(--ft-space-2) var(--ft-space-2);
+    }
   }
 
   &__username {
-    font-size: var(--ft-font-body);
+    font-size: var(--ft-font-small);
     font-weight: var(--ft-font-weight-medium);
     color: var(--ft-dark);
+
+    @media (min-width: 768px) {
+      font-size: var(--ft-font-body);
+    }
 
     &:hover {
       color: var(--ft-primary);
     }
   }
 
-  &__timestamp-row {
-    display: flex;
-    align-items: center;
-    gap: var(--ft-space-2);
+  &__timestamp {
     font-size: var(--ft-font-caption);
     color: var(--ft-gray-500);
   }
 
   &__separator {
-    color: var(--ft-gray-400);
+    font-size: var(--ft-font-small);
+    color: var(--ft-gray-500);
   }
 
   &__category-badge {
@@ -357,9 +462,10 @@
   display: flex;
   align-items: center;
   gap: var(--ft-space-4);
-  padding-top: var(--ft-space-3);
-  border-top: 1px solid var(--ft-gray-100);
+  padding: var(--ft-space-3) 0 0;
   margin-top: var(--ft-space-3);
+  border-top: 1px solid var(--ft-gray-200);
+  background: transparent;
 }
 
 .fantribe-engagement-btn {

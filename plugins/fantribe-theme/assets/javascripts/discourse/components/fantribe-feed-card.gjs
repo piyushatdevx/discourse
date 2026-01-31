@@ -141,18 +141,17 @@ export default class FantribeFeedCard extends Component {
                 Unknown
               {{/if}}
             </a>
-            <div class="fantribe-feed-card__timestamp-row">
-              <span>{{formatDate @topic.created_at format="tiny"}}</span>
-              {{#if this.category}}
-                <span class="fantribe-feed-card__separator">&middot;</span>
-                <span
-                  class="fantribe-feed-card__category-badge"
-                  style={{this.categoryBadgeStyle}}
-                >
-                  {{this.category.name}}
-                </span>
-              {{/if}}
-            </div>
+            <span class="fantribe-feed-card__separator">&middot;</span>
+            <span class="fantribe-feed-card__timestamp">{{formatDate @topic.created_at format="tiny"}}</span>
+            {{#if this.category}}
+              <span class="fantribe-feed-card__separator">&middot;</span>
+              <span
+                class="fantribe-feed-card__category-badge"
+                style={{this.categoryBadgeStyle}}
+              >
+                {{this.category.name}}
+              </span>
+            {{/if}}
           </div>
         </header>
 

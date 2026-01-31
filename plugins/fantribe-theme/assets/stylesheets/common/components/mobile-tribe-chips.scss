@@ -1,4 +1,4 @@
-// FanTribe Mobile Tribe Chips - Horizontal Scrollable Filter
+// FanTribe Mobile Tribe Chips - Horizontal scrollable filter
 // Shown on mobile only (<768px)
 
 .fantribe-mobile-chips {
@@ -9,29 +9,12 @@
   overflow-x: auto;
   overflow-y: hidden;
 
-  // Hide scrollbar but keep functionality
   scrollbar-width: none;
   -ms-overflow-style: none;
 
   &::-webkit-scrollbar {
     display: none;
   }
-
-  // Fade edges effect
-  mask-image: linear-gradient(
-    to right,
-    transparent,
-    black 12px,
-    black calc(100% - 12px),
-    transparent
-  );
-  -webkit-mask-image: linear-gradient(
-    to right,
-    transparent,
-    black 12px,
-    black calc(100% - 12px),
-    transparent
-  );
 }
 
 // Individual chip button
@@ -94,14 +77,19 @@
   }
 }
 
-// "All" chip special styling
+// "All" chip - unselected same as others; selected uses red (primary) like other categories
 .fantribe-chip--all {
   background: var(--ft-gray-100);
   border-color: var(--ft-gray-300);
 
   &.fantribe-chip--active {
-    background: var(--ft-dark);
-    border-color: var(--ft-dark);
+    background: var(--ft-primary);
+    border-color: var(--ft-primary);
     color: var(--ft-white);
+
+    &:hover {
+      background: var(--ft-primary-hover);
+      border-color: var(--ft-primary-hover);
+    }
   }
 }

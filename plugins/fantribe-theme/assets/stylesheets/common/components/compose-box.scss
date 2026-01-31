@@ -1,19 +1,18 @@
-// FanTribe Compose Box - Post Creation Component
+// FanTribe Compose Box - Post Creation Component (Figma: light gray card, white input, dark avatar, red Share)
 // Avatar + input + media buttons + share button
 
 .fantribe-compose-box {
-  background: var(--ft-white);
+  background: #f8f8f8;
   border: 1px solid var(--ft-gray-200);
-  border-radius: var(--ft-radius-xl);
+  border-radius: 12px;
   overflow: hidden;
   cursor: pointer;
   transition: all var(--ft-transition-fast);
-  box-shadow: var(--ft-shadow-sm);
-  margin-bottom: var(--ft-space-6);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
 
   &:hover {
-    border-color: var(--ft-primary);
-    box-shadow: var(--ft-shadow-md);
+    border-color: var(--ft-gray-300);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
   }
 
   &:focus {
@@ -21,26 +20,23 @@
     outline-offset: 2px;
   }
 
-  // Main input area
+  // Main input area - white inner content
   &__input-area {
     display: flex;
     align-items: flex-start;
     gap: var(--ft-space-3);
     padding: var(--ft-space-4) var(--ft-space-5);
+    background: var(--ft-white);
   }
 
-  // User avatar
+  // User avatar - dark gray/blue (Figma: #607d8b)
   &__avatar {
     width: 40px;
     height: 40px;
     flex-shrink: 0;
     border-radius: var(--ft-radius-full);
     overflow: hidden;
-    background: linear-gradient(
-      135deg,
-      var(--ft-primary-light) 0%,
-      var(--ft-pastel-lavender) 100%
-    );
+    background: #607d8b;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -51,11 +47,11 @@
       object-fit: cover;
     }
 
-    // Initials fallback
+    // Initials fallback - white text on dark bg
     &-initials {
       font-size: var(--ft-font-small);
       font-weight: var(--ft-font-weight-semibold);
-      color: var(--ft-primary);
+      color: var(--ft-white);
     }
   }
 
@@ -65,64 +61,68 @@
     min-width: 0;
   }
 
+  // Input area - very light gray bg, rounded corners, subtle border (Figma: taller for multi-line)
   &__input-placeholder {
-    min-height: 44px;
-    padding: var(--ft-space-2) 0;
+    min-height: 70px;
+    padding: var(--ft-space-2) var(--ft-space-3);
     font-size: var(--ft-font-body);
-    color: var(--ft-gray-500);
+    color: #888888;
     line-height: var(--ft-line-height-normal);
     display: flex;
     align-items: center;
     pointer-events: none;
+    background: #f8f8f8;
+    border: 1px solid #e8e8e8;
+    border-radius: 8px;
   }
 
-  // Action bar with media buttons and share
+  // Action bar - white to match inner content (no border above icons)
   &__actions {
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: var(--ft-space-3) var(--ft-space-5);
-    border-top: 1px solid var(--ft-gray-100);
-    background: var(--ft-gray-50);
+    background: var(--ft-white);
   }
 
   // Media buttons group
   &__media-buttons {
     display: flex;
     align-items: center;
-    gap: var(--ft-space-1);
+    gap: var(--ft-space-2);
   }
 
   &__media-btn {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 36px;
-    height: 36px;
-    padding: 0;
+    padding: 6px 8px;
     background: transparent;
     border: none;
     border-radius: var(--ft-radius-full);
     color: var(--ft-gray-600);
-    pointer-events: none;
+    font-size: 1.125rem;
+    line-height: 1;
+    cursor: pointer;
+    transition: background-color var(--ft-transition-fast), color var(--ft-transition-fast);
 
-    .d-icon {
-      font-size: 18px;
+    &:hover {
+      background: var(--ft-gray-100);
     }
   }
 
-  // Share button (decorative, whole box is clickable)
+  // Share button - pill-shaped, bright red (Figma)
   &__share-btn {
     display: flex;
     align-items: center;
-    gap: var(--ft-space-2);
+    justify-content: center;
     padding: var(--ft-space-2) var(--ft-space-5);
     background: var(--ft-primary);
     color: var(--ft-white);
     border: none;
     border-radius: var(--ft-radius-full);
     font-size: var(--ft-font-small);
-    font-weight: var(--ft-font-weight-semibold);
+    font-weight: var(--ft-font-weight-bold);
     pointer-events: none;
 
     .d-icon {
@@ -131,12 +131,19 @@
   }
 }
 
-// Mobile adjustments
+// md: p-2 (8px) for media buttons
+@media (min-width: 768px) {
+  .fantribe-compose-box__media-btn {
+    padding: 8px; // md:p-2
+  }
+}
+
+// Mobile: full width, no borders (Figma mobile: card edge-to-edge, no left/right border)
 @media (max-width: 767px) {
   .fantribe-compose-box {
+    border: none;
     border-radius: 0;
-    border-left: none;
-    border-right: none;
+    box-shadow: none;
 
     &__input-area {
       padding: var(--ft-space-3) var(--ft-space-4);
@@ -152,12 +159,8 @@
     }
 
     &__media-btn {
-      width: 32px;
-      height: 32px;
-
-      .d-icon {
-        font-size: 16px;
-      }
+      padding: 6px 8px;
+      font-size: 1.125rem;
     }
 
     &__share-btn {

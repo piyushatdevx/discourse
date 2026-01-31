@@ -246,7 +246,7 @@ body.fantribe-custom-header {
   padding: var(--ft-space-2) var(--ft-space-4);
   background: transparent;
   border: none;
-  border-radius: var(--ft-radius-md);
+  border-radius: var(--ft-radius-full);
   font-size: var(--ft-font-small);
   font-weight: var(--ft-font-weight-medium);
   color: var(--ft-gray-600);
@@ -257,17 +257,17 @@ body.fantribe-custom-header {
     font-size: 18px;
   }
 
-  &:hover {
+  &:hover:not(.fantribe-nav-item--active) {
     background: var(--ft-pastel-cream);
     color: var(--ft-dark);
   }
 
   &--active {
-    background: var(--ft-pastel-pink);
-    color: var(--ft-primary);
+    background: var(--ft-primary);
+    color: var(--ft-white);
 
     .d-icon {
-      color: var(--ft-primary);
+      color: var(--ft-white);
     }
   }
 

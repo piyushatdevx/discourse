@@ -1,5 +1,6 @@
 import Component from "@glimmer/component";
 import { service } from "@ember/service";
+import icon from "discourse/helpers/d-icon";
 import FantribeTribesPanel from "./fantribe-tribes-panel";
 import FantribeMobileTribeChips from "./fantribe-mobile-tribe-chips";
 import FantribeComposeBox from "./fantribe-compose-box";
@@ -57,21 +58,35 @@ export default class FantribeFeedLayout extends Component {
 
       {{! Main content - Feed }}
       <main class="fantribe-feed-layout__content">
-        {{! Compose box }}
+        {{! Compose box - separate card }}
         {{#if this.currentUser}}
           <FantribeComposeBox />
         {{/if}}
 
-        {{! Feed cards }}
-        {{#if this.hasTopics}}
-          {{#each this.filteredTopics as |topic|}}
-            <FantribeFeedCard @topic={{topic}} />
-          {{/each}}
-        {{else}}
-          <div class="fantribe-empty-state">
-            <p>No posts to show. Try adjusting your filters or check back later.</p>
+        {{! Conversation Feed - single card containing all posts }}
+        <div class="fantribe-conversation-feed">
+          <header class="fantribe-conversation-feed__header">
+            <h3 class="fantribe-conversation-feed__title">
+              <span class="fantribe-conversation-feed__icon">{{icon "comment"}}</span>
+              Conversations Happening Now
+            </h3>
+            <p class="fantribe-conversation-feed__subtitle">
+              Real people, real feelings, right now
+            </p>
+          </header>
+          <div class="fantribe-conversation-feed__content">
+            {{#if this.hasTopics}}
+              {{#each this.filteredTopics as |topic|}}
+                <FantribeFeedCard @topic={{topic}} />
+              {{/each}}
+            {{else}}
+              <div class="fantribe-conversation-feed__empty">
+                <p class="fantribe-conversation-feed__empty-title">No conversations found</p>
+                <p class="fantribe-conversation-feed__empty-text">Try adjusting your search terms</p>
+              </div>
+            {{/if}}
           </div>
-        {{/if}}
+        </div>
       </main>
 
       {{! Right sidebar - Trending }}

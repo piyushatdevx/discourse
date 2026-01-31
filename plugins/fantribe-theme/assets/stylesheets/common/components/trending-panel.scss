@@ -1,52 +1,55 @@
-// FanTribe Trending Panel - Right Sidebar Widget
-// Shows trending topics with hashtags and indicators
+// FanTribe Trending Panel - Right Sidebar Widget (Figma: white card, red icons, no vertical line)
+// Shows trending topics with hashtags and red trend icon
 
 .fantribe-trending-panel {
   background: var(--ft-white);
-  border: 1px solid var(--ft-gray-200);
-  border-radius: var(--ft-radius-xl);
+  border: none;
+  border-radius: 12px;
   overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
 
-  // Panel header
+  // Panel header - red trend icon + bold title, light grey separator
   &__header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: var(--ft-space-5) var(--ft-space-5) var(--ft-space-3);
-    border-bottom: 1px solid var(--ft-gray-100);
+    padding: var(--ft-space-4) var(--ft-space-5) var(--ft-space-4);
+    border-bottom: 1px solid #eee;
   }
 
   &__title {
     display: flex;
     align-items: center;
     gap: var(--ft-space-2);
-    font-size: var(--ft-font-h5);
-    font-weight: var(--ft-font-weight-semibold);
+    font-size: 1.125rem;
+    font-weight: 600;
     color: var(--ft-dark);
     margin: 0;
 
     .d-icon {
-      color: var(--ft-primary);
-      font-size: 16px;
+      color: #e03b3a;
+      font-size: 18px;
     }
   }
 
-  // Panel content - trending items
+  // Panel content - generous padding, spacing between items
   &__content {
-    padding: var(--ft-space-2);
+    padding: var(--ft-space-3) var(--ft-space-5);
+    display: flex;
+    flex-direction: column;
+    gap: var(--ft-space-1);
   }
 
-  // Footer with "View all" link
+  // Footer - "View all" centered, red, substantial spacing
   &__footer {
-    padding: var(--ft-space-3) var(--ft-space-5);
-    border-top: 1px solid var(--ft-gray-100);
+    padding: var(--ft-space-4) var(--ft-space-5) var(--ft-space-5);
     text-align: center;
   }
 
   &__view-all {
     font-size: var(--ft-font-small);
     font-weight: var(--ft-font-weight-medium);
-    color: var(--ft-primary);
+    color: #e03b3a;
     background: none;
     border: none;
     cursor: pointer;
@@ -58,19 +61,20 @@
   }
 }
 
-// Individual trending topic item
+// Individual trending topic item - no vertical line, bold hashtag, red arrow right
 .fantribe-trending-item {
   display: flex;
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  padding: var(--ft-space-3);
+  padding: var(--ft-space-3) 0;
   background: transparent;
   border: none;
   border-radius: var(--ft-radius-lg);
   cursor: pointer;
   text-align: left;
   transition: background var(--ft-transition-fast);
+  gap: var(--ft-space-3);
 
   &:hover {
     background: var(--ft-gray-50);
@@ -85,27 +89,27 @@
   }
 
   &__title {
-    font-size: var(--ft-font-small);
-    font-weight: var(--ft-font-weight-medium);
+    font-size: 1rem;
+    font-weight: 600;
     color: var(--ft-dark);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 
-    // Hashtag prefix
+    // Hashtag prefix - dark to match title (Figma)
     &::before {
       content: "#";
-      color: var(--ft-gray-500);
+      color: var(--ft-dark);
       margin-right: 2px;
     }
   }
 
   &__count {
-    font-size: var(--ft-font-caption);
-    color: var(--ft-gray-500);
+    font-size: 0.8125rem;
+    color: #666;
   }
 
-  // Trending indicator (up arrow)
+  // Trending indicator - red upward arrow (Figma)
   &__indicator {
     flex-shrink: 0;
     display: flex;
@@ -113,31 +117,10 @@
     justify-content: center;
     width: 24px;
     height: 24px;
-    color: var(--ft-primary);
+    color: #e03b3a;
 
     .d-icon {
-      font-size: 14px;
+      font-size: 16px;
     }
   }
-
-  // Hot/trending badge
-  &--hot {
-    .fantribe-trending-item__indicator {
-      background: var(--ft-error-light);
-      border-radius: var(--ft-radius-full);
-
-      .d-icon {
-        color: var(--ft-error);
-      }
-    }
-  }
-}
-
-// Category color stripe
-.fantribe-trending-item__category-stripe {
-  width: 4px;
-  height: 32px;
-  border-radius: var(--ft-radius-full);
-  margin-right: var(--ft-space-3);
-  flex-shrink: 0;
 }
