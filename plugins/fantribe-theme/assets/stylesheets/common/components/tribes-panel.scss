@@ -14,6 +14,7 @@
     align-items: flex-start;
     padding: var(--ft-space-5) var(--ft-space-5) var(--ft-space-3);
     border-bottom: 1px solid var(--ft-gray-100);
+    margin-bottom: var(--ft-space-4);
   }
 
   &__title-group {
@@ -37,13 +38,21 @@
     }
   }
 
+  &__filter-icon {
+    flex-shrink: 0;
+    color: var(--ft-primary);
+    fill: none;
+    stroke: currentColor;
+  }
+
   &__subtitle {
     font-size: var(--ft-font-caption);
     color: var(--ft-gray-500);
     margin: 0;
   }
 
-  &__clear-btn {
+  &__clear-btn,
+  &__all-btn {
     font-size: var(--ft-font-caption);
     color: var(--ft-primary);
     background: none;
@@ -55,23 +64,14 @@
     &:hover {
       text-decoration: underline;
     }
-
-    &:disabled {
-      color: var(--ft-gray-400);
-      cursor: not-allowed;
-
-      &:hover {
-        text-decoration: none;
-      }
-    }
   }
 
   // Panel content - tribe buttons container
   &__content {
-    padding: var(--ft-space-3) var(--ft-space-4) var(--ft-space-4);
+    padding: var(--ft-space-5) var(--ft-space-6) var(--ft-space-5);
     display: flex;
     flex-direction: column;
-    gap: var(--ft-space-2);
+    gap: var(--ft-space-4);
   }
 }
 
@@ -96,7 +96,13 @@
 
   // Active/selected state - light red border (no hover on selected)
   &--active {
-    border: 1px solid rgba(224, 59, 58, 0.5);
+    border: 1px solid #e04f5e;
+    background: linear-gradient(
+      to right,
+      #f8f4fa 0%,
+      #fdeff0 50%,
+      #fff0f5 100%
+    );
     box-shadow: var(--ft-shadow-sm);
   }
 

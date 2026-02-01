@@ -19,6 +19,10 @@ export default class FantribeComposeBox extends Component {
     });
   }
 
+  get placeholderName() {
+    return this.currentUser?.username ?? "User";
+  }
+
   @action
   handleKeydown(event) {
     if (event.key === "Enter" || event.key === " ") {
@@ -44,40 +48,42 @@ export default class FantribeComposeBox extends Component {
           {{/if}}
         </div>
 
-        <div class="fantribe-compose-box__input-wrapper">
-          <div class="fantribe-compose-box__input-placeholder">What's on your mind, Jamie? Share what you're feeling...
+        <div class="fantribe-compose-box__content">
+          <div class="fantribe-compose-box__input-wrapper">
+            <div class="fantribe-compose-box__input-placeholder">What's on your mind, {{this.placeholderName}}? Share what you're feeling...
+              </div>
+          </div>
+
+          <div class="fantribe-compose-box__actions">
+            <div class="fantribe-compose-box__media-buttons">
+              <button
+                type="button"
+                class="fantribe-compose-box__media-btn fantribe-compose-box__media-btn--image"
+                title="Add image"
+              >
+                📷
+              </button>
+              <button
+                type="button"
+                class="fantribe-compose-box__media-btn fantribe-compose-box__media-btn--video"
+                title="Add video"
+              >
+                🎵
+              </button>
+              <button
+                type="button"
+                class="fantribe-compose-box__media-btn fantribe-compose-box__media-btn--emoji"
+                title="Add emoji"
+              >
+                😊
+              </button>
             </div>
-        </div>
-      </div>
 
-      <div class="fantribe-compose-box__actions">
-        <div class="fantribe-compose-box__media-buttons">
-          <button
-            type="button"
-            class="fantribe-compose-box__media-btn fantribe-compose-box__media-btn--image"
-            title="Add image"
-          >
-            📷
-          </button>
-          <button
-            type="button"
-            class="fantribe-compose-box__media-btn fantribe-compose-box__media-btn--video"
-            title="Add video"
-          >
-            🎵
-          </button>
-          <button
-            type="button"
-            class="fantribe-compose-box__media-btn fantribe-compose-box__media-btn--emoji"
-            title="Add emoji"
-          >
-            😊
-          </button>
+            <span class="fantribe-compose-box__share-btn">
+              Share
+            </span>
+          </div>
         </div>
-
-        <span class="fantribe-compose-box__share-btn">
-          Share
-        </span>
       </div>
     </div>
   </template>

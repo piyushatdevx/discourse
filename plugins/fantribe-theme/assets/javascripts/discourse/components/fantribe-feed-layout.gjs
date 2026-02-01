@@ -1,6 +1,7 @@
 import Component from "@glimmer/component";
+import { action } from "@ember/object";
 import { service } from "@ember/service";
-import icon from "discourse/helpers/d-icon";
+import didInsert from "@ember/render-modifiers/modifiers/did-insert";
 import FantribeTribesPanel from "./fantribe-tribes-panel";
 import FantribeMobileTribeChips from "./fantribe-mobile-tribe-chips";
 import FantribeComposeBox from "./fantribe-compose-box";
@@ -11,6 +12,12 @@ export default class FantribeFeedLayout extends Component {
   @service fantribeFilter;
   @service currentUser;
   @service site;
+
+  get categories() {
+    return (this.site.categories || [])
+      .filter((c) => !c.isUncategorized && c.permission !== null)
+      .sort((a, b) => (a.position || 0) - (b.position || 0));
+  }
 
   get topics() {
     return this.args.topics || [];
@@ -44,8 +51,13 @@ export default class FantribeFeedLayout extends Component {
     return this.filteredTopics.length > 0;
   }
 
+  @action
+  initializeFilters() {
+    this.fantribeFilter.initializeWithAllIfEmpty(this.categories);
+  }
+
   <template>
-    <div class="fantribe-feed-layout">
+    <div class="fantribe-feed-layout" {{didInsert this.initializeFilters}}>
       {{! Mobile tribe chips }}
       <div class="fantribe-feed-layout__mobile-chips">
         <FantribeMobileTribeChips />
@@ -67,7 +79,11 @@ export default class FantribeFeedLayout extends Component {
         <div class="fantribe-conversation-feed">
           <header class="fantribe-conversation-feed__header">
             <h3 class="fantribe-conversation-feed__title">
-              <span class="fantribe-conversation-feed__icon">{{icon "comment"}}</span>
+              <span class="fantribe-conversation-feed__icon" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z" />
+                </svg>
+              </span>
               Conversations Happening Now
             </h3>
             <p class="fantribe-conversation-feed__subtitle">

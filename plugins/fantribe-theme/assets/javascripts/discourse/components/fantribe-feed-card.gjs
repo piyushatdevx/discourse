@@ -4,6 +4,7 @@ import { action } from "@ember/object";
 import { service } from "@ember/service";
 import { on } from "@ember/modifier";
 import { concat, fn } from "@ember/helper";
+import { gt } from "discourse/truth-helpers";
 import icon from "discourse/helpers/d-icon";
 import avatar from "discourse/helpers/avatar";
 import formatDate from "discourse/helpers/format-date";
@@ -36,6 +37,10 @@ export default class FantribeFeedCard extends Component {
 
   get category() {
     return this.topic?.category;
+  }
+
+  get tags() {
+    return this.topic?.tags || [];
   }
 
   get categoryBadgeStyle() {
@@ -152,39 +157,49 @@ export default class FantribeFeedCard extends Component {
                 {{this.category.name}}
               </span>
             {{/if}}
+            {{#if this.tags.length}}
+              <span class="fantribe-feed-card__separator">&middot;</span>
+              <span class="fantribe-feed-card__tags">
+                {{#each this.tags as |tag index|}}
+                  {{#if (gt index 0)}}
+                    <span class="fantribe-feed-card__separator">&middot;</span>
+                  {{/if}}
+                  <span class="fantribe-feed-card__tag-badge">{{tag}}</span>
+                {{/each}}
+              </span>
+            {{/if}}
           </div>
         </header>
 
-        {{! Post Title and Excerpt }}
-        <div class="fantribe-feed-card__text">
-          <p><strong>{{@topic.title}}</strong></p>
-          {{#if this.excerpt}}
-            <p>{{this.excerpt}}</p>
-          {{/if}}
-        </div>
-
-        {{! Media Section }}
-        {{#if this.hasImages}}
-          <div class="fantribe-feed-card__media">
-            {{#if this.hasMultipleImages}}
-              <FantribeMediaPhotoGrid @images={{this.images}} />
-            {{else}}
-              <FantribeMediaSingleImage @imageUrl={{this.imageUrl}} />
+        <div class="fantribe-feed-card__body">
+          <div class="fantribe-feed-card__text">
+            <p><strong>{{@topic.title}}</strong></p>
+            {{#if this.excerpt}}
+              <p>{{this.excerpt}}</p>
             {{/if}}
           </div>
-        {{/if}}
 
-        {{! Engagement Bar }}
-        <FantribeEngagementBar
-          @topic={{@topic}}
-          @likeCount={{this.likeCount}}
-          @commentCount={{this.replyCount}}
-          @shareCount={{this.viewCount}}
-          @topicId={{@topic.id}}
-          @firstPostId={{this.firstPostId}}
-          @opLiked={{this.opLiked}}
-          @opCanLike={{this.opCanLike}}
-        />
+          {{#if this.hasImages}}
+            <div class="fantribe-feed-card__media">
+              {{#if this.hasMultipleImages}}
+                <FantribeMediaPhotoGrid @images={{this.images}} />
+              {{else}}
+                <FantribeMediaSingleImage @imageUrl={{this.imageUrl}} />
+              {{/if}}
+            </div>
+          {{/if}}
+
+          <FantribeEngagementBar
+            @topic={{@topic}}
+            @likeCount={{this.likeCount}}
+            @commentCount={{this.replyCount}}
+            @shareCount={{this.viewCount}}
+            @topicId={{@topic.id}}
+            @firstPostId={{this.firstPostId}}
+            @opLiked={{this.opLiked}}
+            @opCanLike={{this.opCanLike}}
+          />
+        </div>
       </div>
     </article>
   </template>

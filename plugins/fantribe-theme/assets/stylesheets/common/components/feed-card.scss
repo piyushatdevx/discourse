@@ -224,6 +224,11 @@
     }
   }
 
+  // Body: title, excerpt, media, engagement — aligned with poster name (Figma)
+  &__body {
+    margin-left: calc(40px + var(--ft-space-3));
+  }
+
   &__username {
     font-size: var(--ft-font-small);
     font-weight: var(--ft-font-weight-medium);
@@ -261,6 +266,24 @@
       background: var(--ft-pastel-lavender);
       color: var(--ft-gray-700);
     }
+  }
+
+  &__tags {
+    display: inline-flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0 var(--ft-space-1);
+  }
+
+  &__tag-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 2px var(--ft-space-2);
+    border-radius: var(--ft-radius-full);
+    font-size: 10px;
+    font-weight: var(--ft-font-weight-medium);
+    background: var(--ft-gray-200);
+    color: var(--ft-dark);
   }
 
   // Post text content
@@ -462,9 +485,10 @@
   display: flex;
   align-items: center;
   gap: var(--ft-space-4);
-  padding: var(--ft-space-3) 0 0;
+  padding: var(--ft-space-2) 0;
   margin-top: var(--ft-space-3);
   border-top: 1px solid var(--ft-gray-200);
+  border-bottom: 1px solid var(--ft-gray-200);
   background: transparent;
 }
 
@@ -497,10 +521,26 @@
 
   // Like button
   &--like {
-    &:hover,
-    &--active {
+    // Liked state: red icon and count only, no background
+    &.fantribe-engagement-btn--active:not(.fantribe-engagement-btn--disabled) {
       color: var(--ft-error);
-      background: var(--ft-error-light);
+      background: transparent;
+    }
+
+    &:hover:not(.fantribe-engagement-btn--disabled):not(.fantribe-engagement-btn--active) {
+      color: var(--ft-gray-600);
+      background: var(--ft-gray-100);
+    }
+
+    &:hover:not(.fantribe-engagement-btn--disabled).fantribe-engagement-btn--active {
+      color: var(--ft-error);
+      background: transparent;
+    }
+
+    &.fantribe-engagement-btn--disabled {
+      cursor: not-allowed;
+      opacity: 0.6;
+      pointer-events: none;
     }
   }
 
@@ -599,6 +639,10 @@
     &__avatar {
       width: 36px;
       height: 36px;
+    }
+
+    &__body {
+      margin-left: calc(36px + var(--ft-space-3));
     }
 
     &__username {

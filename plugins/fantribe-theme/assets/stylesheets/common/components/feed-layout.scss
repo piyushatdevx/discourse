@@ -64,6 +64,9 @@ body.fantribe-theme {
     width: 100%;
     max-width: 100%;
   }
+  #main-outlet {
+    padding: 0 !important;
+  }
 
   // Mobile: full width like menu — remove left/right padding from main wrap and list container
   @media (max-width: 767px) {

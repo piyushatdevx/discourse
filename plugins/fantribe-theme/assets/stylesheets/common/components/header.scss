@@ -52,7 +52,7 @@ body.fantribe-custom-header {
     }
 
     &-img {
-      height: 36px;
+      height: 20px;
       width: auto;
       object-fit: contain;
     }
@@ -334,15 +334,9 @@ body.fantribe-custom-header {
     position: absolute;
     top: 4px;
     right: 4px;
-    min-width: 18px;
-    height: 18px;
-    padding: 0 5px;
+    width: 10px;
+    height: 10px;
     background: var(--ft-primary);
-    color: var(--ft-white);
-    font-size: 11px;
-    font-weight: var(--ft-font-weight-bold);
-    line-height: 18px;
-    text-align: center;
     border-radius: var(--ft-radius-full);
   }
 
@@ -359,9 +353,9 @@ body.fantribe-custom-header {
 
     @media (max-width: 767px) {
       position: fixed;
-      top: 64px;
-      left: var(--ft-space-2);
-      right: var(--ft-space-2);
+      top: 65px;
+      left: var(--ft-space-16);
+      right: var(--ft-space-4);
       width: auto;
     }
   }
@@ -376,7 +370,7 @@ body.fantribe-custom-header {
     color: var(--ft-dark);
   }
 
-  &__see-all {
+  &__mark-read {
     background: none;
     border: none;
     color: var(--ft-primary);
@@ -458,8 +452,8 @@ body.fantribe-custom-header {
 
     &-label {
       font-size: var(--ft-font-small);
-      font-weight: var(--ft-font-weight-semibold);
-      color: var(--ft-dark);
+      font-weight: var(--ft-font-weight-normal);
+      color: var(--ft-gray-600);
     }
 
     &-description {
@@ -472,6 +466,7 @@ body.fantribe-custom-header {
 
     &-time {
       flex-shrink: 0;
+      align-self: center;
       font-size: 11px;
       color: var(--ft-gray-500);
     }
@@ -480,6 +475,24 @@ body.fantribe-custom-header {
   &__footer {
     padding: var(--ft-space-3) var(--ft-space-4);
     border-top: 1px solid var(--ft-gray-200);
+    background: var(--ft-white);
+    text-align: center;
+  }
+
+  &__view-all {
+    display: block;
+    width: 100%;
+    background: none;
+    border: none;
+    color: var(--ft-primary);
+    font-size: var(--ft-font-small);
+    font-weight: var(--ft-font-weight-medium);
+    cursor: pointer;
+    padding: 0;
+
+    &:hover {
+      text-decoration: underline;
+    }
   }
 
   &__empty {

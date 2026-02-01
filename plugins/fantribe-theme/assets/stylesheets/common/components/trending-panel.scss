@@ -10,6 +10,7 @@
 
   // Panel header - red trend icon + bold title, light grey separator (Figma: ~20-24px padding)
   &__header {
+    margin-bottom: 15px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -37,12 +38,12 @@
     padding: 20px 24px;
     display: flex;
     flex-direction: column;
-    gap: 40px;
+    gap: 20px;
   }
 
   // Footer - "View all" centered, red, substantial spacing (Figma: ~24-30px above, ~20-24px below)
   &__footer {
-    padding: 28px 24px 24px;
+    padding: 15px 24px 24px;
     text-align: center;
   }
 
@@ -111,7 +112,7 @@
 
   &__count {
     font-size: 0.8125rem;
-    color: var(--ft-dark);
+    color: var(--ft-gray-500);
   }
 
   // Trending indicator - red upward arrow (Figma)

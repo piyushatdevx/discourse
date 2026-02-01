@@ -307,5 +307,10 @@ body.fantribe-theme {
       background-color: var(--ft-primary-active) !important;
       border-color: var(--ft-primary-active) !important;
     }
+
+    // Saving/loading spinner on Create Topic button – white on red (was blue)
+    &.is-loading .loading-icon {
+      color: var(--ft-white) !important;
+    }
   }
 }

@@ -5,7 +5,7 @@
   display: flex;
   flex-direction: column;
   gap: var(--ft-space-2);
-  padding: 0 var(--ft-space-3);
+  padding: 5px var(--ft-space-3);
 }
 
 .fantribe-mobile-chips__title {
@@ -21,6 +21,14 @@
   .d-icon {
     color: var(--ft-primary);
     font-size: 16px;
+  }
+
+  // Lucide funnel icon: red stroke, white/transparent fill (matches Figma)
+  &__filter-icon {
+    flex-shrink: 0;
+    color: var(--ft-primary);
+    fill: none;
+    stroke: currentColor;
   }
 }
 

@@ -3,7 +3,6 @@ import { service } from "@ember/service";
 import { action } from "@ember/object";
 import { on } from "@ember/modifier";
 import { fn, concat } from "@ember/helper";
-import { not } from "discourse/truth-helpers";
 import icon from "discourse/helpers/d-icon";
 
 export default class FantribeMobileTribeChips extends Component {
@@ -20,6 +19,16 @@ export default class FantribeMobileTribeChips extends Component {
     return this.fantribeFilter.hasFilters;
   }
 
+  get allCategoriesSelected() {
+    const { categories } = this;
+    return (
+      categories.length > 0 &&
+      categories.every((c) =>
+        this.fantribeFilter.selectedCategoryIds.includes(c.id)
+      )
+    );
+  }
+
   isCategorySelected = (category) => {
     return this.fantribeFilter.isCategorySelected(category);
   };
@@ -28,9 +37,20 @@ export default class FantribeMobileTribeChips extends Component {
     return category?.topic_count || 0;
   }
 
+  get totalTopicCount() {
+    return (this.categories || []).reduce(
+      (sum, category) => sum + this.getTopicCount(category),
+      0
+    );
+  }
+
   @action
   selectAll() {
-    this.fantribeFilter.clearFilters();
+    if (this.allCategoriesSelected) {
+      this.fantribeFilter.clearFilters();
+    } else {
+      this.fantribeFilter.setFilters(this.categories.map((c) => c.id));
+    }
   }
 
   @action
@@ -41,17 +61,29 @@ export default class FantribeMobileTribeChips extends Component {
   <template>
     <div class="fantribe-mobile-chips">
       <h3 class="fantribe-mobile-chips__title">
-        {{icon "filter"}}
+        <svg
+          class="fantribe-mobile-chips__filter-icon"
+          xmlns="http://www.w3.org/2000/svg"
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="red"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        ><path d="M10 20a1 1 0 0 0 .553.895l2 1A1 1 0 0 0 14 21v-7a2 2 0 0 1 .517-1.341L21.74 4.67A1 1 0 0 0 21 3H3a1 1 0 0 0-.742 1.67l7.225 7.989A2 2 0 0 1 10 14z"></path></svg>
         <span>My Tribes</span>
       </h3>
       <div class="fantribe-mobile-chips__row">
         <button
           type="button"
           class="fantribe-chip fantribe-chip--all
-            {{if (not this.hasFilters) 'fantribe-chip--active'}}"
+            {{if this.allCategoriesSelected 'fantribe-chip--active'}}"
           {{on "click" this.selectAll}}
         >
-          <span>All Tribes (3)</span>
+          <span>All Tribes ({{this.totalTopicCount}})</span>
         </button>
 
         {{#each this.categories as |category|}}
