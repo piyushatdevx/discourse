@@ -22,7 +22,7 @@ const tribes = [
     icon: "zap",
     description:
       "Shape the future of electric strings and submit your custom pedal ideas.",
-    badges: ["Co-Creation"],
+    badges: ["Music"],
     gradient: "purple-pink",
     leader: {
       name: "Jake M.",
@@ -67,7 +67,7 @@ const tribes = [
     icon: "mic",
     description:
       "Experiment with new vocal processing chains and share your presets.",
-    badges: ["Co-Creation", "Community"],
+    badges: ["Community"],
     gradient: "rose-pink",
     leader: {
       name: "Chris T.",

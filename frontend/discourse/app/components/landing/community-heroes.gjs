@@ -405,7 +405,7 @@ export default class CommunityHeroes extends Component {
         font-weight: 700;
         color: #111827;
         text-align: center;
-        margin: 0 0 32px;
+        margin: 0 0 32px !important;
       }
 
       .heroes__stories {
