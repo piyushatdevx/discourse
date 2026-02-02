@@ -99,6 +99,21 @@ after_initialize do
       .reject { |u| u.extension&.downcase == "svg" }
       .map(&:url)
   end
+
+  # Add first onebox HTML to topic list serializer for link preview in feed cards
+  add_to_serializer(:topic_list_item, :first_onebox_html) do
+    next nil unless SiteSetting.fantribe_theme_enabled
+    next nil if object.first_post&.cooked.blank?
+
+    doc = Nokogiri::HTML5.fragment(object.first_post.cooked)
+    # Match standard oneboxes, YouTube embeds, and other video oneboxes
+    onebox = doc.at_css("aside.onebox, div.youtube-onebox, div.onebox, div.lazy-video-container")
+
+    next nil unless onebox
+
+    onebox.to_html
+  end
+
   # Override SiteIconManager to use custom favicon and OG image
   module ::SiteIconManager
     class << self

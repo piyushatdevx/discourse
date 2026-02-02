@@ -136,3 +136,11 @@ frontend/discourse-types/declarations
 # AI customization
 /.claude
 /.cursor
+
+# Deployment credentials (NEVER commit these!)
+deployment/credentials.env
+deployment/app.yml
+deployment/aws-credentials.txt
+deployment/fantribe-key.pem
+*.pem
+*.key

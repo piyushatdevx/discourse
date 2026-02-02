@@ -527,12 +527,16 @@
       background: transparent;
     }
 
-    &:hover:not(.fantribe-engagement-btn--disabled):not(.fantribe-engagement-btn--active) {
+    &:hover:not(.fantribe-engagement-btn--disabled):not(
+        .fantribe-engagement-btn--active
+      ) {
       color: var(--ft-gray-600);
       background: var(--ft-gray-100);
     }
 
-    &:hover:not(.fantribe-engagement-btn--disabled).fantribe-engagement-btn--active {
+    &:hover:not(
+        .fantribe-engagement-btn--disabled
+      ).fantribe-engagement-btn--active {
       color: var(--ft-error);
       background: transparent;
     }
@@ -708,6 +712,78 @@
 
     &__list {
       gap: 0;
+    }
+  }
+}
+
+// Onebox in Feed Card
+.fantribe-feed-card__onebox {
+  margin-top: var(--ft-space-2);
+
+  aside.onebox {
+    margin: 0;
+    padding: var(--ft-space-3);
+    border-radius: var(--ft-radius-lg);
+    background: var(--ft-gray-50);
+    border: 1px solid var(--ft-gray-200);
+    box-shadow: none;
+    font-size: var(--ft-font-small);
+
+    header.source {
+      margin-bottom: var(--ft-space-2);
+      font-size: var(--ft-font-caption);
+
+      .site-icon {
+        width: 14px;
+        height: 14px;
+      }
+
+      a {
+        color: var(--ft-gray-500);
+      }
+    }
+
+    .onebox-body {
+      h3,
+      h4 {
+        font-size: var(--ft-font-body);
+        margin: 0 0 var(--ft-space-1);
+        line-height: var(--ft-line-height-normal);
+      }
+
+      p {
+        font-size: var(--ft-font-small);
+        color: var(--ft-gray-600);
+        margin: 0;
+        line-height: var(--ft-line-height-relaxed);
+      }
+
+      img:not(.site-icon):not(.emoji) {
+        max-width: 120px;
+        max-height: 100px;
+        border-radius: var(--ft-radius-md);
+        float: left;
+        margin-right: var(--ft-space-3);
+      }
+    }
+
+    .onebox-metadata {
+      font-size: var(--ft-font-caption);
+      color: var(--ft-gray-500);
+      margin-top: var(--ft-space-2);
+      clear: both;
+    }
+  }
+}
+
+// Mobile adjustments for onebox
+@media (max-width: 767px) {
+  .fantribe-feed-card__onebox aside.onebox {
+    padding: var(--ft-space-2);
+
+    .onebox-body img:not(.site-icon):not(.emoji) {
+      max-width: 80px;
+      max-height: 80px;
     }
   }
 }
