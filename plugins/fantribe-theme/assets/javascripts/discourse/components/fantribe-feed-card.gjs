@@ -5,7 +5,7 @@ import { service } from "@ember/service";
 import { on } from "@ember/modifier";
 import { concat, fn } from "@ember/helper";
 import { htmlSafe } from "@ember/template";
-import { gt } from "discourse/truth-helpers";
+import { gt, not, and } from "discourse/truth-helpers";
 import { i18n } from "discourse-i18n";
 import { ajax } from "discourse/lib/ajax";
 import icon from "discourse/helpers/d-icon";
@@ -173,7 +173,8 @@ export default class FantribeFeedCard extends Component {
   <template>
     {{! template-lint-disable no-invalid-interactive }}
     <article
-      class="fantribe-feed-card {{if this.expanded 'fantribe-feed-card--expanded'}}"
+      class="fantribe-feed-card
+        {{if this.expanded 'fantribe-feed-card--expanded'}}"
       {{on "click" this.navigateToTopic}}
     >
       <div class="fantribe-feed-card__content">
@@ -265,7 +266,8 @@ export default class FantribeFeedCard extends Component {
                       {{#if this.loadingExpanded}}
                         {{i18n "loading"}}
                       {{else}}
-                        {{i18n "read_more"}} ..
+                        {{i18n "read_more"}}
+                        ..
                       {{/if}}
                     </button>
                   {{/if}}
@@ -274,7 +276,7 @@ export default class FantribeFeedCard extends Component {
             {{/if}}
           </div>
 
-          {{#if this.hasImages}}
+          {{#if (and this.hasImages (not this.hasOnebox))}}
             <div class="fantribe-feed-card__media">
               {{#if this.hasMultipleImages}}
                 <FantribeMediaPhotoGrid @images={{this.images}} />
