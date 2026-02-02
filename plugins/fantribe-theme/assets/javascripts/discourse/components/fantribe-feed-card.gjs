@@ -6,6 +6,8 @@ import { on } from "@ember/modifier";
 import { concat, fn } from "@ember/helper";
 import { htmlSafe } from "@ember/template";
 import { gt } from "discourse/truth-helpers";
+import { i18n } from "discourse-i18n";
+import { ajax } from "discourse/lib/ajax";
 import icon from "discourse/helpers/d-icon";
 import avatar from "discourse/helpers/avatar";
 import formatDate from "discourse/helpers/format-date";
@@ -17,6 +19,10 @@ import FantribeMediaPhotoGrid from "./fantribe-media-photo-grid";
 
 export default class FantribeFeedCard extends Component {
   @service router;
+
+  @tracked expanded = false;
+  @tracked expandedContent = null;
+  @tracked loadingExpanded = false;
 
   get topic() {
     return this.args.topic;
@@ -53,6 +59,23 @@ export default class FantribeFeedCard extends Component {
 
   get excerpt() {
     return this.topic?.excerpt || "";
+  }
+
+  get excerptTruncated() {
+    return this.topic?.excerptTruncated ?? false;
+  }
+
+  get displayExcerpt() {
+    const excerpt = this.excerpt;
+    if (!excerpt) return "";
+    if (this.excerptTruncated && excerpt.slice(-8) === "&hellip;") {
+      return excerpt.slice(0, -8).trim();
+    }
+    return excerpt;
+  }
+
+  get expandedContentHtml() {
+    return this.expandedContent ? htmlSafe(this.expandedContent) : null;
   }
 
   get firstOneboxHtml() {
@@ -126,9 +149,33 @@ export default class FantribeFeedCard extends Component {
     }
   }
 
+  @action
+  async toggleExpandContent(event) {
+    event?.stopPropagation?.();
+    if (this.loadingExpanded) return;
+    if (this.expanded) {
+      this.expanded = false;
+      this.expandedContent = null;
+      return;
+    }
+    const postId = this.firstPostId;
+    if (!postId) return;
+    this.loadingExpanded = true;
+    try {
+      const result = await ajax(`/posts/${postId}/cooked.json`);
+      this.expandedContent = result?.cooked ?? "";
+      this.expanded = true;
+    } finally {
+      this.loadingExpanded = false;
+    }
+  }
+
   <template>
     {{! template-lint-disable no-invalid-interactive }}
-    <article class="fantribe-feed-card" {{on "click" this.navigateToTopic}}>
+    <article
+      class="fantribe-feed-card {{if this.expanded 'fantribe-feed-card--expanded'}}"
+      {{on "click" this.navigateToTopic}}
+    >
       <div class="fantribe-feed-card__content">
         {{! Post Header }}
         <header class="fantribe-feed-card__header">
@@ -194,7 +241,36 @@ export default class FantribeFeedCard extends Component {
                 <DecoratedHtml @html={{this.firstOneboxHtml}} />
               </div>
             {{else if this.excerpt}}
-              <p>{{this.excerpt}}</p>
+              {{#if this.expanded}}
+                <div class="fantribe-feed-card__expanded-body">
+                  <DecoratedHtml @html={{this.expandedContentHtml}} />
+                  <button
+                    type="button"
+                    class="fantribe-feed-card__show-less"
+                    {{on "click" this.toggleExpandContent}}
+                  >
+                    {{i18n "review.show_less"}}
+                  </button>
+                </div>
+              {{else}}
+                <p>
+                  {{this.displayExcerpt}}
+                  {{#if this.excerptTruncated}}
+                    <button
+                      type="button"
+                      class="fantribe-feed-card__read-more"
+                      {{on "click" this.toggleExpandContent}}
+                      disabled={{this.loadingExpanded}}
+                    >
+                      {{#if this.loadingExpanded}}
+                        {{i18n "loading"}}
+                      {{else}}
+                        {{i18n "read_more"}} ..
+                      {{/if}}
+                    </button>
+                  {{/if}}
+                </p>
+              {{/if}}
             {{/if}}
           </div>
 

@@ -165,6 +165,10 @@
     background: var(--ft-gray-50);
   }
 
+  &--expanded {
+    overflow: visible;
+  }
+
   // Card content padding
   &__content {
     padding: var(--ft-space-5);
@@ -300,6 +304,52 @@
       &:last-child {
         margin-bottom: 0;
       }
+    }
+  }
+
+  &__read-more {
+    border: none;
+    padding: 0;
+    background: none;
+    font: inherit;
+    font-weight: var(--ft-font-weight-medium);
+    color: var(--ft-primary);
+    margin-left: var(--ft-space-1);
+    cursor: pointer;
+
+    &:hover:not(:disabled) {
+      text-decoration: underline;
+    }
+
+    &:disabled {
+      cursor: default;
+      opacity: 0.8;
+    }
+  }
+
+  &__expanded-body {
+    margin-top: var(--ft-space-2);
+
+    .cooked {
+      font-size: var(--ft-font-body);
+      line-height: var(--ft-line-height-relaxed);
+      color: var(--ft-gray-700);
+    }
+  }
+
+  &__show-less {
+    display: inline-block;
+    margin-top: var(--ft-space-2);
+    border: none;
+    padding: 0;
+    background: none;
+    font: inherit;
+    font-weight: var(--ft-font-weight-medium);
+    color: var(--ft-primary);
+    cursor: pointer;
+
+    &:hover {
+      text-decoration: underline;
     }
   }
 
