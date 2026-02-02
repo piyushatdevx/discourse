@@ -13,6 +13,7 @@
 }
 
 .topic-body {
+  margin-left: 10px;
   width: calc(var(--topic-body-width) + (var(--topic-body-width-padding) * 2));
   float: left;
   min-width: 0; // prevents some elements, like <pre>, from blowing out the width
