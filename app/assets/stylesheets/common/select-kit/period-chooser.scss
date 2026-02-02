@@ -9,6 +9,8 @@
       }
 
       .period-chooser-header {
+        font-size: small;
+        margin-left: 20px;
         display: inline-block; // safari 14 has issues with summary elements and flexbox
         background: transparent;
         border-color: transparent;
@@ -70,5 +72,11 @@
         }
       }
     }
+  }
+}
+
+@media (max-width: 768px) {
+  .select-kit-body {
+      margin-left: 20px;
   }
 }

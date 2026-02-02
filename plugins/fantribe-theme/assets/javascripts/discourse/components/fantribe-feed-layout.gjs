@@ -2,6 +2,8 @@ import Component from "@glimmer/component";
 import { action } from "@ember/object";
 import { service } from "@ember/service";
 import didInsert from "@ember/render-modifiers/modifiers/did-insert";
+import { filterTypeForMode } from "discourse/lib/filter-mode";
+import PeriodChooser from "discourse/select-kit/components/period-chooser";
 import FantribeTribesPanel from "./fantribe-tribes-panel";
 import FantribeMobileTribeChips from "./fantribe-mobile-tribe-chips";
 import FantribeComposeBox from "./fantribe-compose-box";
@@ -12,6 +14,7 @@ export default class FantribeFeedLayout extends Component {
   @service fantribeFilter;
   @service currentUser;
   @service site;
+  @service router;
 
   get categories() {
     return (this.site.categories || [])
@@ -51,6 +54,22 @@ export default class FantribeFeedLayout extends Component {
     return this.filteredTopics.length > 0;
   }
 
+  get showPeriodChooser() {
+    const list = this.args.model?.list ?? this.args.model;
+    const filter = list?.filter ?? list?.get?.("filter");
+    return filterTypeForMode(filter) === "top";
+  }
+
+  get period() {
+    const list = this.args.model?.list ?? this.args.model;
+    return list?.for_period ?? list?.get?.("for_period");
+  }
+
+  @action
+  changePeriod(newPeriod) {
+    this.router.transitionTo({ queryParams: { period: newPeriod } });
+  }
+
   @action
   initializeFilters() {
     this.fantribeFilter.initializeWithAllIfEmpty(this.categories);
@@ -73,6 +92,16 @@ export default class FantribeFeedLayout extends Component {
         {{! Compose box - separate card }}
         {{#if this.currentUser}}
           <FantribeComposeBox />
+        {{/if}}
+
+        {{#if this.showPeriodChooser}}
+          <div class="fantribe-feed-layout__period-chooser top-lists">
+            <PeriodChooser
+              @period={{this.period}}
+              @action={{this.changePeriod}}
+              @fullDay={{false}}
+            />
+          </div>
         {{/if}}
 
         {{! Conversation Feed - single card containing all posts }}

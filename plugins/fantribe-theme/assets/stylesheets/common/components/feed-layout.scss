@@ -140,6 +140,16 @@ body.fantribe-theme {
     }
   }
 
+  // Period chooser (daily/weekly/monthly) on trending page
+  &__period-chooser {
+    margin-bottom: var(--ft-space-2);
+
+    &.top-lists .select-kit {
+      width: auto;
+      min-width: 100px;
+    }
+  }
+
   // Right sidebar - Trending Topics (lg:col-span-3), sticky when middle scrolls
   &__right-sidebar {
     position: sticky;
