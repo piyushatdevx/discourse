@@ -79,6 +79,7 @@
   a.title:not(.badge-notification) {
     color: var(--title-color--read);
     font-weight: var(--topic-title-font-weight--visited);
+    font-size: var(--font-down-1);
   }
 }
 

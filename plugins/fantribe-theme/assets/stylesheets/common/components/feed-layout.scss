@@ -68,6 +68,26 @@ body.fantribe-theme {
     padding: 0 !important;
   }
 
+  // Topic page: center main content so both sides have equal space (fix left-shifted content / extra right space)
+  #main-outlet .container.posts {
+    max-width: calc(var(--d-max-width, 1110px) + 280px); // content + timeline
+    margin-left: auto;
+    margin-right: auto;
+
+  }
+
+  // Topic navigation (settings icon, timeline): take only the width of its content
+  #main-outlet .container.posts .topic-navigation {
+    width: max-content;
+  }
+
+  // Center the topic post body (div.regular) when it's a direct child of #main-outlet (e.g. some theme layouts)
+  #main-outlet > .regular {
+    max-width: var(--d-max-width, 1110px);
+    margin-left: auto;
+    margin-right: auto;
+  }
+
   // Mobile: full width like menu — remove left/right padding from main wrap and list container
   @media (max-width: 767px) {
     .wrap {
@@ -80,6 +100,36 @@ body.fantribe-theme {
       padding-right: 0 !important;
       padding-inline: 0 !important;
     }
+
+    // Topic page mobile: center content and add left/right space (title-wrapper stays centered; topic-post gets padding)
+    #main-outlet .container.posts {
+      width: 100%;
+      max-width: 100%;
+      padding-left: var(--ft-space-4);
+      padding-right: var(--ft-space-4);
+      box-sizing: border-box;
+    }
+
+    #main-outlet .container.posts .topic-post {
+      padding-left: 0;
+      padding-right: 0;
+      max-width: 100%;
+    }
+
+    // Topic title area: same horizontal padding so title aligns with post content
+    #topic-title.container {
+      padding-left: var(--ft-space-4);
+      padding-right: var(--ft-space-4);
+      box-sizing: border-box;
+    }
+
+    // Suggested topics ("New & Unread Topics", "Want to read more?"): same left/right spacing as topic content
+    // .more-topics__container {
+    //   margin-left: var(--ft-space-4);
+    //   margin-right: var(--ft-space-4);
+    //   box-sizing: border-box;
+    // }
+
   }
 }
 
