@@ -240,7 +240,6 @@ export default class LandingHero extends Component {
               </span>
               <span class="landing-hero__live-text">
                 <strong>Live now:</strong>
-                3 co-creation sessions
               </span>
             </div>
           </div>

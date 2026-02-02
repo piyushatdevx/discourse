@@ -656,7 +656,7 @@ export const topContributors = [
     avatar:
       "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&h=200&fit=crop",
     contributions: 247,
-    impact: "Led 12 co-creation sessions",
+    impact: "Led 12 Topics",
     badge: "Top Contributor",
     gradient: "from-red-500 to-coral-500",
   },
