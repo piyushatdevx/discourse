@@ -4,10 +4,12 @@ import { action } from "@ember/object";
 import { service } from "@ember/service";
 import { on } from "@ember/modifier";
 import { concat, fn } from "@ember/helper";
+import { htmlSafe } from "@ember/template";
 import { gt } from "discourse/truth-helpers";
 import icon from "discourse/helpers/d-icon";
 import avatar from "discourse/helpers/avatar";
 import formatDate from "discourse/helpers/format-date";
+import DecoratedHtml from "discourse/components/decorated-html";
 import FantribeEngagementBar from "./fantribe-engagement-bar";
 import FantribeMediaSingleImage from "./fantribe-media-single-image";
 import FantribeMediaVideo from "./fantribe-media-video";
@@ -40,7 +42,8 @@ export default class FantribeFeedCard extends Component {
   }
 
   get tags() {
-    return this.topic?.tags || [];
+    const tags = this.topic?.tags || [];
+    return tags.map((tag) => (typeof tag === "string" ? tag : tag.name));
   }
 
   get categoryBadgeStyle() {
@@ -50,6 +53,15 @@ export default class FantribeFeedCard extends Component {
 
   get excerpt() {
     return this.topic?.excerpt || "";
+  }
+
+  get firstOneboxHtml() {
+    const html = this.topic?.first_onebox_html;
+    return html ? htmlSafe(html) : null;
+  }
+
+  get hasOnebox() {
+    return !!this.topic?.first_onebox_html;
   }
 
   get images() {
@@ -147,7 +159,10 @@ export default class FantribeFeedCard extends Component {
               {{/if}}
             </a>
             <span class="fantribe-feed-card__separator">&middot;</span>
-            <span class="fantribe-feed-card__timestamp">{{formatDate @topic.created_at format="tiny"}}</span>
+            <span class="fantribe-feed-card__timestamp">{{formatDate
+                @topic.created_at
+                format="tiny"
+              }}</span>
             {{#if this.category}}
               <span class="fantribe-feed-card__separator">&middot;</span>
               <span
@@ -174,7 +189,11 @@ export default class FantribeFeedCard extends Component {
         <div class="fantribe-feed-card__body">
           <div class="fantribe-feed-card__text">
             <p><strong>{{@topic.title}}</strong></p>
-            {{#if this.excerpt}}
+            {{#if this.hasOnebox}}
+              <div class="fantribe-feed-card__onebox">
+                <DecoratedHtml @html={{this.firstOneboxHtml}} />
+              </div>
+            {{else if this.excerpt}}
               <p>{{this.excerpt}}</p>
             {{/if}}
           </div>
