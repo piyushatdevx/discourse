@@ -5,7 +5,7 @@ import { service } from "@ember/service";
 import { on } from "@ember/modifier";
 import { concat, fn } from "@ember/helper";
 import { htmlSafe } from "@ember/template";
-import { gt, not, and } from "discourse/truth-helpers";
+import { gt, not, and, or } from "discourse/truth-helpers";
 import { i18n } from "discourse-i18n";
 import { ajax } from "discourse/lib/ajax";
 import icon from "discourse/helpers/d-icon";
@@ -150,6 +150,11 @@ export default class FantribeFeedCard extends Component {
   }
 
   @action
+  stopPropagation(event) {
+    event.stopPropagation();
+  }
+
+  @action
   async toggleExpandContent(event) {
     event?.stopPropagation?.();
     if (this.loadingExpanded) return;
@@ -237,11 +242,7 @@ export default class FantribeFeedCard extends Component {
         <div class="fantribe-feed-card__body">
           <div class="fantribe-feed-card__text">
             <p><strong>{{@topic.title}}</strong></p>
-            {{#if this.hasOnebox}}
-              <div class="fantribe-feed-card__onebox">
-                <DecoratedHtml @html={{this.firstOneboxHtml}} />
-              </div>
-            {{else if this.excerpt}}
+            {{#if this.excerpt}}
               {{#if this.expanded}}
                 <div class="fantribe-feed-card__expanded-body">
                   <DecoratedHtml @html={{this.expandedContentHtml}} />
@@ -276,9 +277,16 @@ export default class FantribeFeedCard extends Component {
             {{/if}}
           </div>
 
-          {{#if (and this.hasImages (not this.hasOnebox))}}
-            <div class="fantribe-feed-card__media">
-              {{#if this.hasMultipleImages}}
+          {{#if (or this.hasOnebox this.hasImages)}}
+            <div
+              class="fantribe-feed-card__media"
+              {{on "click" this.stopPropagation}}
+            >
+              {{#if this.hasOnebox}}
+                <div class="fantribe-feed-card__onebox fantribe-feed-card__onebox--in-media">
+                  <DecoratedHtml @html={{this.firstOneboxHtml}} />
+                </div>
+              {{else if this.hasMultipleImages}}
                 <FantribeMediaPhotoGrid @images={{this.images}} />
               {{else}}
                 <FantribeMediaSingleImage @imageUrl={{this.imageUrl}} />

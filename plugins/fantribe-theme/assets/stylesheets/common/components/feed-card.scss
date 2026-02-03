@@ -330,6 +330,19 @@
   &__expanded-body {
     margin-top: var(--ft-space-2);
 
+    // Hide onebox and video container here so media is only shown once in the card media section
+    aside.onebox,
+    .onebox,
+    .lazy-video-container,
+    .lazy-video-wrapper,
+    .youtube-onebox {
+      display: none !important;
+    }
+
+    // .lazy-video-wrapper {
+    //   margin-right: var(--ft-space-6);
+    // }
+
     .cooked {
       font-size: var(--ft-font-body);
       line-height: var(--ft-line-height-relaxed);
@@ -355,7 +368,9 @@
 
   // Media container
   &__media {
-    margin: var(--ft-space-3) calc(-1 * var(--ft-space-5));
+    margin: var(--ft-space-3) calc(-1 * var(--ft-space-1));
+    border-radius: var(--ft-radius-xl);
+    overflow: hidden;
   }
 }
 
@@ -364,6 +379,7 @@
   position: relative;
   background: var(--ft-gray-100);
   overflow: hidden;
+  border-radius: var(--ft-radius-xl);
 
   // Blurred background layer
   &__blur-bg {
@@ -396,6 +412,7 @@
   position: relative;
   background: var(--ft-dark);
   overflow: hidden;
+  border-radius: var(--ft-radius-xl);
 
   &__thumbnail {
     width: 100%;
@@ -459,6 +476,8 @@
   grid-template-columns: repeat(2, 1fr);
   padding: 0 8px;
   gap: 2px;
+  border-radius: var(--ft-radius-xl);
+  overflow: hidden;
 
   &__blur-bg {
     position: absolute;
@@ -477,6 +496,7 @@
     overflow: hidden;
     cursor: pointer;
     background: var(--ft-gray-100);
+    border-radius: var(--ft-radius-xl);
 
     img {
       position: relative;
@@ -709,7 +729,7 @@
     }
 
     &__media {
-      margin: var(--ft-space-3) calc(-1 * var(--ft-space-4));
+      margin: var(--ft-space-3) calc(-1 * var(--ft-space-1));
     }
   }
 
@@ -770,6 +790,54 @@
 // Onebox in Feed Card
 .fantribe-feed-card__onebox {
   margin-top: var(--ft-space-2);
+
+  // Onebox in media section: video/link preview with player
+  &--in-media {
+    margin-top: 0;
+    width: 100%;
+    border-radius: var(--ft-radius-xl);
+    overflow: hidden;
+
+    aside.onebox,
+    .youtube-onebox,
+    .lazy-video-container,
+    .onebox {
+      width: 100%;
+      max-width: 100%;
+    }
+
+    iframe {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      max-height: 360px;
+      border: none;
+      border-radius: var(--ft-radius-lg);
+    }
+
+    .lazy-video-container,
+    .lazy-video-wrapper {
+      border-radius: var(--ft-radius-lg);
+      overflow: hidden;
+      margin-right: var(--ft-space-3);
+    }
+
+    .lazy-video-container {
+      position: relative;
+      aspect-ratio: 16 / 9;
+      background: var(--ft-dark);
+
+      iframe {
+        position: absolute;
+        inset: 0;
+        height: 100%;
+        max-height: none;
+      }
+    }
+
+    .youtube-onebox iframe {
+      display: block;
+    }
+  }
 
   aside.onebox {
     margin: 0;
