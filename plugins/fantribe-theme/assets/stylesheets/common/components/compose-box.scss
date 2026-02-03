@@ -8,7 +8,7 @@
   overflow: hidden;
   cursor: pointer;
   transition: all var(--ft-transition-fast);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  // box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
 
   &:hover {
     border-color: var(--ft-gray-300);
@@ -66,6 +66,7 @@
   // Text input container
   &__input-wrapper {
     min-width: 0;
+    font-weight: 300;
   }
 
   // Input area - very light gray bg, rounded corners, subtle border (Figma: taller for multi-line)
@@ -129,7 +130,7 @@
     border: none;
     border-radius: var(--ft-radius-full);
     font-size: var(--ft-font-small);
-    font-weight: var(--ft-font-weight-bold);
+    font-weight: var(--ft-font-weight-small);
     pointer-events: none;
 
     .d-icon {

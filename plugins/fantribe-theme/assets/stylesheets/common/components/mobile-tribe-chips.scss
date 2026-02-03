@@ -13,7 +13,7 @@
   align-items: center;
   gap: var(--ft-space-2);
   font-size: var(--ft-font-small);
-  font-weight: var(--ft-font-weight-semibold);
+  font-weight: var(--ft-font-weight-small);;
   color: var(--ft-dark);
   margin: 0;
   flex-shrink: 0;
@@ -52,12 +52,12 @@
   display: inline-flex;
   align-items: center;
   gap: var(--ft-space-1);
-  padding: var(--ft-space-2) var(--ft-space-3);
+  padding: var(--ft-space-1) var(--ft-space-3);
   background: var(--ft-white);
   border: 1px solid var(--ft-gray-200);
   border-radius: var(--ft-radius-full);
   font-size: var(--ft-font-caption);
-  font-weight: var(--ft-font-weight-medium);
+  font-weight: var(--ft-font-weight-small);
   color: var(--ft-gray-700);
   white-space: nowrap;
   cursor: pointer;

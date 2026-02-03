@@ -140,7 +140,7 @@ body.fantribe-theme {
   padding: var(--ft-space-4) var(--ft-space-4); // gap-3 md:gap-6 equivalent vertical; modest horizontal
   min-height: calc(100vh - 80px);
   box-sizing: border-box;
-  background: var(--ft-bg, #f5f5f5);
+  background: oklch(.985 .002 247.839);
 
   // Desktop lg: 12-col grid → 3 + 6 + 3 (25% + 50% + 25%)
   display: grid;

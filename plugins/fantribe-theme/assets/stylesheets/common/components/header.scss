@@ -248,13 +248,19 @@ body.fantribe-custom-header {
   border: none;
   border-radius: var(--ft-radius-full);
   font-size: var(--ft-font-small);
-  font-weight: var(--ft-font-weight-medium);
+  font-weight: var(--ft-font-weight-small);
   color: var(--ft-gray-600);
   cursor: pointer;
   transition: all var(--ft-transition-fast);
 
   .d-icon {
     font-size: 18px;
+  }
+
+  &__icon {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
   }
 
   &:hover:not(.fantribe-nav-item--active) {
@@ -266,7 +272,8 @@ body.fantribe-custom-header {
     background: var(--ft-primary);
     color: var(--ft-white);
 
-    .d-icon {
+    .d-icon,
+    .fantribe-nav-item__icon {
       color: var(--ft-white);
     }
   }
@@ -292,13 +299,20 @@ body.fantribe-custom-header {
   cursor: pointer;
   transition: all var(--ft-transition-fast);
 
-  .d-icon {
-    font-size: 18px;
+  &__icon {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+    color: var(--ft-gray-700);
   }
 
   &:hover {
     background: var(--ft-pastel-cream);
     color: var(--ft-dark);
+
+    .fantribe-search-btn__icon {
+      color: var(--ft-dark);
+    }
   }
 }
 
@@ -320,13 +334,20 @@ body.fantribe-custom-header {
     cursor: pointer;
     transition: all var(--ft-transition-fast);
 
-    .d-icon {
-      font-size: 18px;
+    .fantribe-notifications__icon {
+      width: 20px;
+      height: 20px;
+      flex-shrink: 0;
+      color: var(--ft-gray-700);
     }
 
     &:hover {
       background: var(--ft-pastel-cream);
       color: var(--ft-dark);
+
+      .fantribe-notifications__icon {
+        color: var(--ft-dark);
+      }
     }
   }
 
@@ -338,6 +359,9 @@ body.fantribe-custom-header {
     height: 10px;
     background: var(--ft-primary);
     border-radius: var(--ft-radius-full);
+    z-index: 1;
+    border: 2px solid var(--ft-white);
+    box-sizing: border-box;
   }
 
   &__dropdown {
@@ -346,8 +370,9 @@ body.fantribe-custom-header {
     right: 0;
     width: 320px;
     background: var(--ft-white);
+    border: 1px solid var(--ft-gray-200);
     border-radius: var(--ft-radius-lg);
-    box-shadow: var(--ft-shadow-lg);
+    box-shadow: var(--ft-shadow-md);
     overflow: hidden;
     z-index: var(--ft-z-dropdown);
 
@@ -558,7 +583,6 @@ body.fantribe-custom-header {
     align-items: center;
     gap: var(--ft-space-3);
     padding: var(--ft-space-4);
-    background: var(--ft-pastel-cream);
     border-bottom: 1px solid var(--ft-gray-200);
 
     img {
@@ -601,13 +625,21 @@ body.fantribe-custom-header {
       border: none;
       border-radius: var(--ft-radius-md);
       font-size: var(--ft-font-small);
-      font-weight: var(--ft-font-weight-medium);
+      font-weight: var(--ft-font-weight-small);
       color: var(--ft-dark);
       cursor: pointer;
       transition: background-color var(--ft-transition-fast);
 
       .d-icon {
         width: 18px;
+        color: var(--ft-gray-600);
+      }
+
+      .fantribe-user-menu__profile-icon,
+      .fantribe-user-menu__settings-icon {
+        width: 18px;
+        height: 18px;
+        flex-shrink: 0;
         color: var(--ft-gray-600);
       }
 
@@ -626,7 +658,11 @@ body.fantribe-custom-header {
   &__logout {
     color: var(--ft-error) !important;
 
-    .d-icon {
+    .d-icon,
+    &-icon {
+      width: 18px;
+      height: 18px;
+      flex-shrink: 0;
       color: var(--ft-error) !important;
     }
 

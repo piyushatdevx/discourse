@@ -81,15 +81,45 @@ export default class FantribeUserMenu extends Component {
 
           <nav class="fantribe-user-menu__nav">
             <button type="button" {{on "click" this.goToProfile}}>
-              {{icon "user"}}
-              Profile
+              <svg
+                class="fantribe-user-menu__profile-icon"
+                xmlns="http://www.w3.org/2000/svg"
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
+                <circle cx="12" cy="7" r="4"></circle>
+              </svg>
+              View Profile
             </button>
             <button type="button" {{on "click" this.goToMessages}}>
               {{icon "envelope"}}
               Messages
             </button>
             <button type="button" {{on "click" this.goToSettings}}>
-              {{icon "gear"}}
+              <svg
+                class="fantribe-user-menu__settings-icon"
+                xmlns="http://www.w3.org/2000/svg"
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915"></path>
+                <circle cx="12" cy="12" r="3"></circle>
+              </svg>
               Settings
             </button>
             <hr class="fantribe-user-menu__divider" />
@@ -98,8 +128,24 @@ export default class FantribeUserMenu extends Component {
               class="fantribe-user-menu__logout"
               {{on "click" this.logout}}
             >
-              {{icon "right-from-bracket"}}
-              Log Out
+              <svg
+                class="fantribe-user-menu__logout-icon"
+                xmlns="http://www.w3.org/2000/svg"
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <path d="m16 17 5-5-5-5"></path>
+                <path d="M21 12H9"></path>
+                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+              </svg>
+              Sign Out
             </button>
           </nav>
         </div>
