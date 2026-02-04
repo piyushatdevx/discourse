@@ -608,7 +608,14 @@ module ApplicationHelper
     @user_dark_scheme_id = scheme_id if scheme_id && ColorScheme.find_by_id(scheme_id)
   end
 
+  # When true, only the light color scheme is ever loaded (no dark stylesheet).
+  # Set via Fantribe theme or other plugins so the site never uses dark at root.
+  def force_light_color_scheme?
+    SiteSetting.respond_to?(:fantribe_theme_enabled) && SiteSetting.fantribe_theme_enabled
+  end
+
   def dark_scheme_id
+    return -1 if force_light_color_scheme?
     user_dark_scheme_id ||
       (theme_id ? Theme.find_by_id(theme_id) : Theme.find_default)&.dark_color_scheme_id || -1
   end
