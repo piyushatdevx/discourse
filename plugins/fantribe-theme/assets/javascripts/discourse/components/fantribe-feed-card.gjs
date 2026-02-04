@@ -1,21 +1,18 @@
 import Component from "@glimmer/component";
 import { tracked } from "@glimmer/tracking";
+import { on } from "@ember/modifier";
 import { action } from "@ember/object";
 import { service } from "@ember/service";
-import { on } from "@ember/modifier";
-import { concat, fn } from "@ember/helper";
 import { htmlSafe } from "@ember/template";
-import { gt, not, and, or } from "discourse/truth-helpers";
-import { i18n } from "discourse-i18n";
-import { ajax } from "discourse/lib/ajax";
-import icon from "discourse/helpers/d-icon";
+import DecoratedHtml from "discourse/components/decorated-html";
 import avatar from "discourse/helpers/avatar";
 import formatDate from "discourse/helpers/format-date";
-import DecoratedHtml from "discourse/components/decorated-html";
+import { ajax } from "discourse/lib/ajax";
+import { gt, or } from "discourse/truth-helpers";
+import { i18n } from "discourse-i18n";
 import FantribeEngagementBar from "./fantribe-engagement-bar";
-import FantribeMediaSingleImage from "./fantribe-media-single-image";
-import FantribeMediaVideo from "./fantribe-media-video";
 import FantribeMediaPhotoGrid from "./fantribe-media-photo-grid";
+import FantribeMediaSingleImage from "./fantribe-media-single-image";
 
 export default class FantribeFeedCard extends Component {
   @service router;
@@ -33,7 +30,9 @@ export default class FantribeFeedCard extends Component {
   }
 
   get posterInitials() {
-    if (!this.poster) return "?";
+    if (!this.poster) {
+      return "?";
+    }
     const name = this.poster.name || this.poster.username || "";
     return name
       .split(" ")
@@ -53,7 +52,9 @@ export default class FantribeFeedCard extends Component {
   }
 
   get categoryBadgeStyle() {
-    if (!this.category?.color) return "";
+    if (!this.category?.color) {
+      return "";
+    }
     return `background-color: #${this.category.color}20; color: #${this.category.color};`;
   }
 
@@ -67,7 +68,9 @@ export default class FantribeFeedCard extends Component {
 
   get displayExcerpt() {
     const excerpt = this.excerpt;
-    if (!excerpt) return "";
+    if (!excerpt) {
+      return "";
+    }
     if (this.excerptTruncated && excerpt.slice(-8) === "&hellip;") {
       return excerpt.slice(0, -8).trim();
     }
@@ -157,14 +160,18 @@ export default class FantribeFeedCard extends Component {
   @action
   async toggleExpandContent(event) {
     event?.stopPropagation?.();
-    if (this.loadingExpanded) return;
+    if (this.loadingExpanded) {
+      return;
+    }
     if (this.expanded) {
       this.expanded = false;
       this.expandedContent = null;
       return;
     }
     const postId = this.firstPostId;
-    if (!postId) return;
+    if (!postId) {
+      return;
+    }
     this.loadingExpanded = true;
     try {
       const result = await ajax(`/posts/${postId}/cooked.json`);

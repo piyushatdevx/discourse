@@ -1,13 +1,18 @@
 import Component from "@glimmer/component";
-import { service } from "@ember/service";
-import { action } from "@ember/object";
+import { fn } from "@ember/helper";
 import { on } from "@ember/modifier";
-import { fn, concat } from "@ember/helper";
+import { action } from "@ember/object";
+import { service } from "@ember/service";
+import { htmlSafe } from "@ember/template";
 import icon from "discourse/helpers/d-icon";
 
 export default class FantribeMobileTribeChips extends Component {
   @service fantribeFilter;
   @service site;
+
+  isCategorySelected = (category) => {
+    return this.fantribeFilter.isCategorySelected(category);
+  };
 
   get categories() {
     return (this.site.categories || [])
@@ -29,12 +34,12 @@ export default class FantribeMobileTribeChips extends Component {
     );
   }
 
-  isCategorySelected = (category) => {
-    return this.fantribeFilter.isCategorySelected(category);
-  };
-
   getTopicCount(category) {
     return category?.topic_count || 0;
+  }
+
+  getCategoryColorStyle(category) {
+    return htmlSafe(`background-color: #${category.color}`);
   }
 
   get totalTopicCount() {
@@ -73,7 +78,9 @@ export default class FantribeMobileTribeChips extends Component {
           stroke-linecap="round"
           stroke-linejoin="round"
           aria-hidden="true"
-        ><path d="M10 20a1 1 0 0 0 .553.895l2 1A1 1 0 0 0 14 21v-7a2 2 0 0 1 .517-1.341L21.74 4.67A1 1 0 0 0 21 3H3a1 1 0 0 0-.742 1.67l7.225 7.989A2 2 0 0 1 10 14z"></path></svg>
+        ><path
+            d="M10 20a1 1 0 0 0 .553.895l2 1A1 1 0 0 0 14 21v-7a2 2 0 0 1 .517-1.341L21.74 4.67A1 1 0 0 0 21 3H3a1 1 0 0 0-.742 1.67l7.225 7.989A2 2 0 0 1 10 14z"
+          ></path></svg>
         <span>My Tribes</span>
       </h3>
       <div class="fantribe-mobile-chips__row">
@@ -95,7 +102,7 @@ export default class FantribeMobileTribeChips extends Component {
           >
             <span
               class="fantribe-chip__color"
-              style={{concat "background-color: #" category.color}}
+              style={{this.getCategoryColorStyle category}}
             ></span>
             <span>{{category.name}}</span>
             <span class="fantribe-chip__topic-count">

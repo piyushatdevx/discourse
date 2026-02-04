@@ -1,5 +1,4 @@
 import Component from "@glimmer/component";
-import { concat } from "@ember/helper";
 
 export default class FantribeMediaSingleImage extends Component {
   get imageUrl() {

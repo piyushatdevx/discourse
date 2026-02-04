@@ -1,14 +1,14 @@
 import Component from "@glimmer/component";
 import { tracked } from "@glimmer/tracking";
+import { on } from "@ember/modifier";
 import { action } from "@ember/object";
 import { service } from "@ember/service";
-import { on } from "@ember/modifier";
-import { not } from "discourse/truth-helpers";
+import ShareTopicModal from "discourse/components/modal/share-topic";
 import icon from "discourse/helpers/d-icon";
 import { ajax } from "discourse/lib/ajax";
-import ShareTopicModal from "discourse/components/modal/share-topic";
-import Composer from "discourse/models/composer";
 import getURL from "discourse/lib/get-url";
+import Composer from "discourse/models/composer";
+import { not } from "discourse/truth-helpers";
 
 const LIKE_ACTION_TYPE_ID = 2;
 
@@ -17,9 +17,9 @@ export default class FantribeEngagementBar extends Component {
   @service composer;
   @service modal;
 
+  @tracked isLoading = false;
   @tracked _isLiked = null;
   @tracked _likeCountOffset = 0;
-  @tracked isLoading = false;
 
   get isLiked() {
     if (this._isLiked !== null) {
@@ -50,7 +50,9 @@ export default class FantribeEngagementBar extends Component {
   }
 
   get isOwnPost() {
-    if (!this.currentUser || !this.topicAuthor) return false;
+    if (!this.currentUser || !this.topicAuthor) {
+      return false;
+    }
     const author = this.topicAuthor;
     return (
       this.currentUser.id === author.id ||
@@ -89,7 +91,12 @@ export default class FantribeEngagementBar extends Component {
   async handleLike(event) {
     event.stopPropagation();
 
-    if (!this.canLike || !this.currentUser || !this.args.firstPostId || this.isLoading) {
+    if (
+      !this.canLike ||
+      !this.currentUser ||
+      !this.args.firstPostId ||
+      this.isLoading
+    ) {
       return;
     }
 
@@ -166,7 +173,7 @@ export default class FantribeEngagementBar extends Component {
         type="button"
         class="fantribe-engagement-btn fantribe-engagement-btn--like
           {{if this.isLiked 'fantribe-engagement-btn--active'}}
-          {{if (not this.canLike) 'fantribe-engagement-btn--disabled'}}"
+          {{unless this.canLike 'fantribe-engagement-btn--disabled'}}"
         disabled={{not this.canLike}}
         {{on "click" this.handleLike}}
       >

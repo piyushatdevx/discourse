@@ -4,7 +4,7 @@ export default {
   name: "fantribe-hide-native-header",
 
   initialize() {
-    withPluginApi("1.14.0", (api) => {
+    withPluginApi((api) => {
       const siteSettings = api.container.lookup("service:site-settings");
 
       if (!siteSettings.fantribe_theme_enabled) {

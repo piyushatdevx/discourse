@@ -1,8 +1,8 @@
 import Component from "@glimmer/component";
 import { service } from "@ember/service";
+import FantribeFab from "../../components/fantribe-fab";
 import FantribeHeader from "../../components/fantribe-header";
 import FantribeMobileNav from "../../components/fantribe-mobile-nav";
-import FantribeFab from "../../components/fantribe-fab";
 
 export default class FantribeHeaderConnector extends Component {
   @service siteSettings;

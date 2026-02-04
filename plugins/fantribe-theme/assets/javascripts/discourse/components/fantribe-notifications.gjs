@@ -1,15 +1,15 @@
 import Component from "@glimmer/component";
 import { tracked } from "@glimmer/tracking";
 import { hash } from "@ember/helper";
+import { on } from "@ember/modifier";
 import { action } from "@ember/object";
 import { service } from "@ember/service";
-import { on } from "@ember/modifier";
 import icon from "discourse/helpers/d-icon";
 import formatDate from "discourse/helpers/format-date";
-import closeOnClickOutside from "discourse/modifiers/close-on-click-outside";
 import { ajax } from "discourse/lib/ajax";
 import { getRenderDirector } from "discourse/lib/notification-types-manager";
 import Notification from "discourse/models/notification";
+import closeOnClickOutside from "discourse/modifiers/close-on-click-outside";
 
 export default class FantribeNotifications extends Component {
   @service currentUser;
@@ -52,7 +52,9 @@ export default class FantribeNotifications extends Component {
   }
 
   async loadNotifications() {
-    if (!this.currentUser) return;
+    if (!this.currentUser) {
+      return;
+    }
     try {
       const data = await ajax("/notifications", {
         data: { limit: 15, recent: true },
@@ -68,7 +70,9 @@ export default class FantribeNotifications extends Component {
 
   #buildNotificationRows(list) {
     const lookup = this.site?.notificationLookup;
-    if (!lookup || !list?.length) return [];
+    if (!lookup || !list?.length) {
+      return [];
+    }
     return list.map((notification) => {
       const typeName = lookup[notification.notification_type];
       const director = typeName
@@ -133,10 +137,15 @@ export default class FantribeNotifications extends Component {
           aria-hidden="true"
         >
           <path d="M10.268 21a2 2 0 0 0 3.464 0"></path>
-          <path d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326"></path>
+          <path
+            d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326"
+          ></path>
         </svg>
         {{#if this.hasUnread}}
-          <span class="fantribe-notifications__badge" aria-label="Unread notifications"></span>
+          <span
+            class="fantribe-notifications__badge"
+            aria-label="Unread notifications"
+          ></span>
         {{/if}}
       </button>
 
@@ -174,13 +183,19 @@ export default class FantribeNotifications extends Component {
                             {{row.label}}
                           </span>
                           {{#if row.description}}
-                            <span class="fantribe-notifications__item-description">
+                            <span
+                              class="fantribe-notifications__item-description"
+                            >
                               {{row.description}}
                             </span>
                           {{/if}}
                         </div>
                         <span class="fantribe-notifications__item-time">
-                          {{formatDate row.notification.created_at format="tiny" leaveAgo="true"}}
+                          {{formatDate
+                            row.notification.created_at
+                            format="tiny"
+                            leaveAgo="true"
+                          }}
                         </span>
                       </a>
                     {{else}}
@@ -193,13 +208,19 @@ export default class FantribeNotifications extends Component {
                             {{row.label}}
                           </span>
                           {{#if row.description}}
-                            <span class="fantribe-notifications__item-description">
+                            <span
+                              class="fantribe-notifications__item-description"
+                            >
                               {{row.description}}
                             </span>
                           {{/if}}
                         </div>
                         <span class="fantribe-notifications__item-time">
-                          {{formatDate row.notification.created_at format="tiny" leaveAgo="true"}}
+                          {{formatDate
+                            row.notification.created_at
+                            format="tiny"
+                            leaveAgo="true"
+                          }}
                         </span>
                       </div>
                     {{/if}}

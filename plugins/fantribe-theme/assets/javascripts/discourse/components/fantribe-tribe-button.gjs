@@ -1,8 +1,8 @@
 import Component from "@glimmer/component";
 import { on } from "@ember/modifier";
+import { htmlSafe } from "@ember/template";
 import icon from "discourse/helpers/d-icon";
 import replaceEmoji from "discourse/helpers/replace-emoji";
-import { concat } from "@ember/helper";
 import { eq } from "discourse/truth-helpers";
 
 export default class FantribeTribeButton extends Component {
@@ -26,6 +26,10 @@ export default class FantribeTribeButton extends Component {
     return `:${this.args.category.emoji}:`;
   }
 
+  get categoryColorStyle() {
+    return htmlSafe(`background-color: #${this.args.category.color}`);
+  }
+
   <template>
     <button type="button" class={{this.buttonClasses}} {{on "click" @onToggle}}>
       <div class="fantribe-tribe-button__icon">
@@ -46,7 +50,7 @@ export default class FantribeTribeButton extends Component {
         {{else}}
           <span
             class="fantribe-tribe-button__icon-dot"
-            style={{concat "background-color: #" @category.color}}
+            style={{this.categoryColorStyle}}
           ></span>
         {{/if}}
       </div>

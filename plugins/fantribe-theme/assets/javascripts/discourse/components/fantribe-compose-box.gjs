@@ -1,7 +1,7 @@
 import Component from "@glimmer/component";
+import { on } from "@ember/modifier";
 import { action } from "@ember/object";
 import { service } from "@ember/service";
-import { on } from "@ember/modifier";
 import avatar from "discourse/helpers/avatar";
 
 export default class FantribeComposeBox extends Component {
@@ -32,13 +32,8 @@ export default class FantribeComposeBox extends Component {
   }
 
   <template>
-    <div
-      class="fantribe-compose-box"
-      role="button"
-      tabindex="0"
-      {{on "click" this.openComposer}}
-      {{on "keydown" this.handleKeydown}}
-    >
+    {{! template-lint-disable no-invalid-interactive }}
+    <div class="fantribe-compose-box" {{on "click" this.openComposer}}>
       <div class="fantribe-compose-box__input-area">
         <div class="fantribe-compose-box__avatar">
           {{#if this.currentUser}}
@@ -50,8 +45,10 @@ export default class FantribeComposeBox extends Component {
 
         <div class="fantribe-compose-box__content">
           <div class="fantribe-compose-box__input-wrapper">
-            <div class="fantribe-compose-box__input-placeholder">What's on your mind, {{this.placeholderName}}? Share what you're feeling...
-              </div>
+            <div class="fantribe-compose-box__input-placeholder">What's on your
+              mind,
+              {{this.placeholderName}}? Share what you're feeling...
+            </div>
           </div>
 
           <div class="fantribe-compose-box__actions">

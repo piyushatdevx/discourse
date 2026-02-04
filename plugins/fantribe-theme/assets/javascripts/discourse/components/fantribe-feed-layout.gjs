@@ -1,14 +1,14 @@
 import Component from "@glimmer/component";
 import { action } from "@ember/object";
-import { service } from "@ember/service";
 import didInsert from "@ember/render-modifiers/modifiers/did-insert";
+import { service } from "@ember/service";
 import { filterTypeForMode } from "discourse/lib/filter-mode";
 import PeriodChooser from "discourse/select-kit/components/period-chooser";
-import FantribeTribesPanel from "./fantribe-tribes-panel";
-import FantribeMobileTribeChips from "./fantribe-mobile-tribe-chips";
 import FantribeComposeBox from "./fantribe-compose-box";
 import FantribeFeedCard from "./fantribe-feed-card";
+import FantribeMobileTribeChips from "./fantribe-mobile-tribe-chips";
 import FantribeTrendingPanel from "./fantribe-trending-panel";
+import FantribeTribesPanel from "./fantribe-tribes-panel";
 
 export default class FantribeFeedLayout extends Component {
   @service fantribeFilter;
@@ -109,8 +109,20 @@ export default class FantribeFeedLayout extends Component {
           <header class="fantribe-conversation-feed__header">
             <h3 class="fantribe-conversation-feed__title">
               <span class="fantribe-conversation-feed__icon" aria-hidden="true">
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z" />
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path
+                    d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"
+                  />
                 </svg>
               </span>
               Conversations Happening Now
@@ -126,8 +138,10 @@ export default class FantribeFeedLayout extends Component {
               {{/each}}
             {{else}}
               <div class="fantribe-conversation-feed__empty">
-                <p class="fantribe-conversation-feed__empty-title">No conversations found</p>
-                <p class="fantribe-conversation-feed__empty-text">Try adjusting your search terms</p>
+                <p class="fantribe-conversation-feed__empty-title">No
+                  conversations found</p>
+                <p class="fantribe-conversation-feed__empty-text">Try adjusting
+                  your search terms</p>
               </div>
             {{/if}}
           </div>

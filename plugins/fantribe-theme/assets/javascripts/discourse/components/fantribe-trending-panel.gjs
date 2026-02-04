@@ -1,8 +1,8 @@
 import Component from "@glimmer/component";
-import { service } from "@ember/service";
-import { action } from "@ember/object";
+import { fn } from "@ember/helper";
 import { on } from "@ember/modifier";
-import { concat, fn } from "@ember/helper";
+import { action } from "@ember/object";
+import { service } from "@ember/service";
 import { htmlSafe } from "@ember/template";
 import icon from "discourse/helpers/d-icon";
 import { emojiUnescape } from "discourse/lib/text";
@@ -10,8 +10,6 @@ import { escapeExpression } from "discourse/lib/utilities";
 
 export default class FantribeTrendingPanel extends Component {
   @service router;
-  @service store;
-  @service site;
 
   get trendingTopics() {
     // Get hot/top topics from the store
@@ -29,7 +27,9 @@ export default class FantribeTrendingPanel extends Component {
 
   formatTitle(title) {
     // Remove common prefixes and clean up title for hashtag display
-    if (!title) return "";
+    if (!title) {
+      return "";
+    }
     const cleaned = title
       .replace(/^(Discussion:|Question:|Help:|Announcement:)\s*/i, "")
       .substring(0, 30);

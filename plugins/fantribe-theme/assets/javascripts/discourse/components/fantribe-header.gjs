@@ -1,21 +1,20 @@
 import Component from "@glimmer/component";
 import { tracked } from "@glimmer/tracking";
 import { hash } from "@ember/helper";
+import { on } from "@ember/modifier";
 import { action } from "@ember/object";
 import { service } from "@ember/service";
-import { on } from "@ember/modifier";
 import icon from "discourse/helpers/d-icon";
 import closeOnClickOutside from "discourse/modifiers/close-on-click-outside";
 import FantribeNavItem from "./fantribe-nav-item";
-import FantribeSearchButton from "./fantribe-search-button";
 import FantribeNotifications from "./fantribe-notifications";
+import FantribeSearchButton from "./fantribe-search-button";
 import FantribeUserMenu from "./fantribe-user-menu";
 
 export default class FantribeHeader extends Component {
   @service router;
   @service currentUser;
   @service siteSettings;
-  @service site;
 
   @tracked mobileMenuOpen = false;
 
