@@ -3,6 +3,7 @@ import { tracked } from "@glimmer/tracking";
 import { action } from "@ember/object";
 import { service } from "@ember/service";
 import { on } from "@ember/modifier";
+import { not } from "discourse/truth-helpers";
 import icon from "discourse/helpers/d-icon";
 import { ajax } from "discourse/lib/ajax";
 import ShareTopicModal from "discourse/components/modal/share-topic";
@@ -43,8 +44,27 @@ export default class FantribeEngagementBar extends Component {
     return this.likeCount;
   }
 
+  get topicAuthor() {
+    const topic = this.args.topic;
+    return topic?.posters?.[0]?.user ?? topic?.creator ?? null;
+  }
+
+  get isOwnPost() {
+    if (!this.currentUser || !this.topicAuthor) return false;
+    const author = this.topicAuthor;
+    return (
+      this.currentUser.id === author.id ||
+      this.currentUser.username === author.username
+    );
+  }
+
   get canLike() {
-    return this.currentUser && this.args.firstPostId && this.args.opCanLike;
+    return (
+      this.currentUser &&
+      this.args.firstPostId &&
+      this.args.opCanLike &&
+      !this.isOwnPost
+    );
   }
 
   get commentIconUrl() {
@@ -69,7 +89,7 @@ export default class FantribeEngagementBar extends Component {
   async handleLike(event) {
     event.stopPropagation();
 
-    if (!this.currentUser || !this.args.firstPostId || this.isLoading) {
+    if (!this.canLike || !this.currentUser || !this.args.firstPostId || this.isLoading) {
       return;
     }
 
@@ -145,7 +165,9 @@ export default class FantribeEngagementBar extends Component {
       <button
         type="button"
         class="fantribe-engagement-btn fantribe-engagement-btn--like
-          {{if this.isLiked 'fantribe-engagement-btn--active'}}"
+          {{if this.isLiked 'fantribe-engagement-btn--active'}}
+          {{if (not this.canLike) 'fantribe-engagement-btn--disabled'}}"
+        disabled={{not this.canLike}}
         {{on "click" this.handleLike}}
       >
         {{#if this.isLiked}}

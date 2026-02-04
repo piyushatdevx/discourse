@@ -183,6 +183,7 @@
 
 #topic-title {
   z-index: z("base");
+  margin-top: 2em;
   margin-bottom: 1em;
 
   .title-wrapper {
@@ -238,7 +239,8 @@
     z-index: z("base");
 
     @include viewport.until(sm) {
-      font-size: var(--font-up-3);
+      padding: 10px;
+      font-size: var(--font-up-1);
     }
 
     a {

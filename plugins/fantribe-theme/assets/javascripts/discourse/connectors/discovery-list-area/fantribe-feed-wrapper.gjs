@@ -61,9 +61,13 @@ export default class FantribeFeedWrapper extends Component {
     return Array.isArray(topicsList) ? topicsList : [];
   }
 
+  get model() {
+    return this.args.outletArgs?.model;
+  }
+
   <template>
     {{#if this.shouldShowFeedLayout}}
-      <FantribeFeedLayout @topics={{this.topics}} />
+      <FantribeFeedLayout @topics={{this.topics}} @model={{this.model}} />
     {{else}}
       {{yield}}
     {{/if}}

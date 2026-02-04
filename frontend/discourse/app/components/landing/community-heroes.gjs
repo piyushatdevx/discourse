@@ -8,7 +8,7 @@ const topContributors = [
     avatar:
       "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&h=200&fit=crop",
     contributions: 247,
-    impact: "Led 12 co-creation sessions",
+    impact: "Led 12 Topics",
     badge: "Top Contributor",
     gradient: "red-coral",
   },
@@ -405,7 +405,7 @@ export default class CommunityHeroes extends Component {
         font-weight: 700;
         color: #111827;
         text-align: center;
-        margin: 0 0 32px;
+        margin: 0 0 32px !important;
       }
 
       .heroes__stories {

@@ -79,6 +79,7 @@
   a.title:not(.badge-notification) {
     color: var(--title-color--read);
     font-weight: var(--topic-title-font-weight--visited);
+    font-size: var(--font-down-1);
   }
 }
 
@@ -367,7 +368,7 @@
 
 #list-area {
   background: var(--d-content-background);
-  margin-bottom: 100px;
+  margin-bottom: 20px;
 
   .empty-topic-list {
     padding: 10px;

@@ -4,6 +4,7 @@ import { action } from "@ember/object";
 
 export default class FantribeFilterService extends Service {
   @tracked selectedCategoryIds = [];
+  _hasBeenInitialized = false;
 
   get hasFilters() {
     return this.selectedCategoryIds.length > 0;
@@ -55,5 +56,16 @@ export default class FantribeFilterService extends Service {
 
   isCategorySelected(category) {
     return this.selectedCategoryIds.includes(category.id);
+  }
+
+  initializeWithAllIfEmpty(categories) {
+    if (
+      !this._hasBeenInitialized &&
+      categories?.length > 0 &&
+      this.selectedCategoryIds.length === 0
+    ) {
+      this.selectedCategoryIds = categories.map((c) => c.id);
+      this._hasBeenInitialized = true;
+    }
   }
 }

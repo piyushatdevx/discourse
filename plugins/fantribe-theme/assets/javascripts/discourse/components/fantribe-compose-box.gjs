@@ -2,7 +2,6 @@ import Component from "@glimmer/component";
 import { action } from "@ember/object";
 import { service } from "@ember/service";
 import { on } from "@ember/modifier";
-import icon from "discourse/helpers/d-icon";
 import avatar from "discourse/helpers/avatar";
 
 export default class FantribeComposeBox extends Component {
@@ -18,6 +17,10 @@ export default class FantribeComposeBox extends Component {
       title: "",
       body: "",
     });
+  }
+
+  get placeholderName() {
+    return this.currentUser?.username ?? "User";
   }
 
   @action
@@ -45,38 +48,42 @@ export default class FantribeComposeBox extends Component {
           {{/if}}
         </div>
 
-        <div class="fantribe-compose-box__input-wrapper">
-          <div class="fantribe-compose-box__input-placeholder">What's on your
-            mind?</div>
-        </div>
-      </div>
+        <div class="fantribe-compose-box__content">
+          <div class="fantribe-compose-box__input-wrapper">
+            <div class="fantribe-compose-box__input-placeholder">What's on your mind, {{this.placeholderName}}? Share what you're feeling...
+              </div>
+          </div>
 
-      <div class="fantribe-compose-box__actions">
-        <div class="fantribe-compose-box__media-buttons">
-          <span
-            class="fantribe-compose-box__media-btn fantribe-compose-box__media-btn--image"
-            title="Add image"
-          >
-            {{icon "image"}}
-          </span>
-          <span
-            class="fantribe-compose-box__media-btn fantribe-compose-box__media-btn--video"
-            title="Add video"
-          >
-            {{icon "video"}}
-          </span>
-          <span
-            class="fantribe-compose-box__media-btn fantribe-compose-box__media-btn--emoji"
-            title="Add emoji"
-          >
-            {{icon "face-smile"}}
-          </span>
-        </div>
+          <div class="fantribe-compose-box__actions">
+            <div class="fantribe-compose-box__media-buttons">
+              <button
+                type="button"
+                class="fantribe-compose-box__media-btn fantribe-compose-box__media-btn--image"
+                title="Add image"
+              >
+                📷
+              </button>
+              <button
+                type="button"
+                class="fantribe-compose-box__media-btn fantribe-compose-box__media-btn--video"
+                title="Add video"
+              >
+                🎵
+              </button>
+              <button
+                type="button"
+                class="fantribe-compose-box__media-btn fantribe-compose-box__media-btn--emoji"
+                title="Add emoji"
+              >
+                😊
+              </button>
+            </div>
 
-        <span class="fantribe-compose-box__share-btn">
-          {{icon "paper-plane"}}
-          Share
-        </span>
+            <span class="fantribe-compose-box__share-btn">
+              Share
+            </span>
+          </div>
+        </div>
       </div>
     </div>
   </template>

@@ -1,0 +1,165 @@
+## FanTribe Discourse Docker Configuration
+## Copy this file to /var/discourse/containers/app.yml on your server
+## Replace all <PLACEHOLDER> values with your actual credentials
+
+templates:
+  - "templates/postgres.template.yml"
+  - "templates/redis.template.yml"
+  - "templates/web.template.yml"
+  - "templates/web.ratelimited.template.yml"
+  ## Uncomment for socket-based nginx proxy (recommended for production)
+  # - "templates/web.socketed.template.yml"
+
+expose:
+  - "80:80"
+  - "443:443"
+
+params:
+  db_default_text_search_config: "pg_catalog.english"
+  ## Uncomment to increase database connections for high traffic
+  # db_shared_buffers: "256MB"
+
+env:
+  LC_ALL: en_US.UTF-8
+  LANG: en_US.UTF-8
+  LANGUAGE: en_US.UTF-8
+
+  ## ============================================
+  ## REQUIRED: Domain Configuration
+  ## ============================================
+  DISCOURSE_HOSTNAME: '<YOUR_DOMAIN>'
+  # Example: fantribe.example.com
+
+  ## ============================================
+  ## REQUIRED: Developer Email
+  ## ============================================
+  DISCOURSE_DEVELOPER_EMAILS: '<YOUR_EMAIL>'
+  # Example: admin@example.com
+  # This email will receive the initial admin activation link
+
+  ## ============================================
+  ## REQUIRED: Email Configuration (AWS SES)
+  ## ============================================
+  DISCOURSE_SMTP_ADDRESS: email-smtp.<REGION>.amazonaws.com
+  # Example: email-smtp.us-east-1.amazonaws.com
+
+  DISCOURSE_SMTP_PORT: 587
+  DISCOURSE_SMTP_USER_NAME: '<SES_SMTP_USERNAME>'
+  DISCOURSE_SMTP_PASSWORD: '<SES_SMTP_PASSWORD>'
+  DISCOURSE_SMTP_ENABLE_START_TLS: true
+  DISCOURSE_SMTP_AUTHENTICATION: login
+  DISCOURSE_NOTIFICATION_EMAIL: 'noreply@<YOUR_DOMAIN>'
+  # Example: noreply@fantribe.example.com
+
+  ## ============================================
+  ## REQUIRED: S3 Storage Configuration
+  ## ============================================
+  DISCOURSE_USE_S3: true
+  DISCOURSE_S3_REGION: '<AWS_REGION>'
+  # Example: us-east-1
+
+  DISCOURSE_S3_ACCESS_KEY_ID: '<AWS_ACCESS_KEY_ID>'
+  DISCOURSE_S3_SECRET_ACCESS_KEY: '<AWS_SECRET_ACCESS_KEY>'
+  DISCOURSE_S3_BUCKET: '<S3_BUCKET_NAME>'
+  # Example: fantribe-uploads-prod
+
+  ## Optional: S3 CDN URL for faster media delivery
+  # DISCOURSE_S3_CDN_URL: 'https://<BUCKET>.s3.<REGION>.amazonaws.com'
+
+  ## Optional: CloudFront CDN URL (recommended for production)
+  # DISCOURSE_S3_CDN_URL: 'https://<CLOUDFRONT_DISTRIBUTION_ID>.cloudfront.net'
+
+  ## ============================================
+  ## RECOMMENDED: S3 Backup Configuration
+  ## ============================================
+  DISCOURSE_S3_BACKUP_BUCKET: '<S3_BACKUP_BUCKET_NAME>'
+  # Example: fantribe-backups-prod
+
+  ## ============================================
+  ## REQUIRED: Security Settings
+  ## ============================================
+  DISCOURSE_FORCE_HTTPS: true
+
+  ## ============================================
+  ## OPTIONAL: Performance Tuning
+  ## ============================================
+  # UNICORN_WORKERS: 4
+  # UNICORN_SIDEKIQS: 1
+  # DISCOURSE_MAX_REQS_PER_IP_PER_MINUTE: 200
+  # DISCOURSE_MAX_REQS_PER_IP_PER_10_SECONDS: 50
+
+volumes:
+  - volume:
+      host: /var/discourse/shared/standalone
+      guest: /shared
+  - volume:
+      host: /var/discourse/shared/standalone/log/var-log
+      guest: /var/log
+
+hooks:
+  after_code:
+    - exec:
+        cd: $home/plugins
+        cmd:
+          ## Docker Manager (required for web-based updates)
+          - git clone https://github.com/discourse/docker_manager.git
+
+          ## ============================================
+          ## FanTribe Custom Plugin
+          ## ============================================
+          ## Option 1: Clone from GitHub (recommended)
+          ## First, push your plugin to a GitHub repo, then:
+          # - git clone https://github.com/<YOUR_ORG>/fantribe-theme.git
+
+          ## Option 2: If plugin is already on server at /tmp/fantribe-theme
+          - cp -r /tmp/fantribe-theme $home/plugins/fantribe-theme
+
+          ## ============================================
+          ## Standard Discourse Plugins
+          ## ============================================
+
+          ## Engagement & Social
+          - git clone https://github.com/discourse/discourse-reactions.git
+          - git clone https://github.com/discourse/discourse-post-voting.git
+          - git clone https://github.com/discourse/discourse-solved.git
+          - git clone https://github.com/discourse/discourse-presence.git
+
+          ## Content Management
+          - git clone https://github.com/discourse/discourse-calendar.git
+          - git clone https://github.com/discourse/discourse-data-explorer.git
+          - git clone https://github.com/discourse/discourse-templates.git
+          - git clone https://github.com/discourse/discourse-local-dates.git
+
+          ## Community Features
+          - git clone https://github.com/discourse/discourse-gamification.git
+          - git clone https://github.com/discourse/discourse-cakeday.git
+          - git clone https://github.com/discourse/discourse-assign.git
+          - git clone https://github.com/discourse/discourse-user-notes.git
+
+          ## Authentication (uncomment as needed)
+          # - git clone https://github.com/discourse/discourse-apple-auth.git
+          # - git clone https://github.com/discourse/discourse-microsoft-auth.git
+          # - git clone https://github.com/discourse/discourse-oauth2-basic.git
+          # - git clone https://github.com/discourse/discourse-openid-connect.git
+
+          ## Integrations (uncomment as needed)
+          - git clone https://github.com/discourse/discourse-chat-integration.git
+          # - git clone https://github.com/discourse/discourse-patreon.git
+          # - git clone https://github.com/discourse/discourse-subscriptions.git
+          # - git clone https://github.com/discourse/discourse-zendesk-plugin.git
+          # - git clone https://github.com/discourse/discourse-github.git
+
+          ## Content Enhancement
+          - git clone https://github.com/discourse/discourse-lazy-videos.git
+          # - git clone https://github.com/discourse/discourse-ai.git
+          # - git clone https://github.com/discourse/discourse-graphviz.git
+          # - git clone https://github.com/discourse/discourse-math.git
+
+          ## Moderation
+          - git clone https://github.com/discourse/discourse-policy.git
+          # - git clone https://github.com/discourse/discourse-narrative-bot.git
+
+run:
+  - exec: echo "Beginning of custom commands"
+  ## Add any custom setup commands here
+  - exec: echo "End of custom commands"

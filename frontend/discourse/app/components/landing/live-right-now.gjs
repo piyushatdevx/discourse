@@ -199,22 +199,6 @@ export default class LiveRightNow extends Component {
                     </div>
                   </div>
 
-                  <div class="lrn__user-activity">
-                    <svg
-                      class="lrn__activity-icon"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                    >
-                      <circle cx="12" cy="12" r="2" />
-                      <path
-                        d="M16.24 7.76a6 6 0 0 1 0 8.49m-8.48-.01a6 6 0 0 1 0-8.49m11.31-2.82a10 10 0 0 1 0 14.14m-14.14 0a10 10 0 0 1 0-14.14"
-                      />
-                    </svg>
-                    <span>{{user.activity}}</span>
-                  </div>
-
                   {{#if user.available}}
                     <button
                       type="button"
@@ -818,7 +802,6 @@ export default class LiveRightNow extends Component {
 
       .lrn__convo-live-dot {
         position: absolute;
-        bottom: -4px;
         right: -4px;
         width: 14px;
         height: 14px;

@@ -2,6 +2,15 @@
 // so we can generate transformed colors from color schemes in JS
 // currently only generates primary-low and tertiary-low
 
+// validate hex color format
+export function isValidHex(hex) {
+  if (!hex || typeof hex !== "string") {
+    return false;
+  }
+  const cleanHex = hex.replace("#", "");
+  return /^[0-9A-Fa-f]{3}$|^[0-9A-Fa-f]{6}$/.test(cleanHex);
+}
+
 // normalize hex color to 6 digits
 function normalizeHex(hex) {
   hex = hex.replace("#", "");

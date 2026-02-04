@@ -244,3 +244,28 @@
   border-top: 1px solid var(--ft-gray-200);
   padding: var(--ft-space-3) var(--ft-space-4);
 }
+
+// Composer saving bar – red background, white text and loader (was blue)
+body.fantribe-theme {
+  #reply-control.saving {
+    background: var(--ft-primary) !important;
+    color: var(--ft-white) !important;
+
+    .composer-controls .d-icon {
+      color: var(--ft-white) !important;
+    }
+  }
+
+  #reply-control.saving .saving-text {
+    color: var(--ft-white) !important;
+
+    .spinner {
+      border-color: var(--ft-white) !important;
+      border-right-color: transparent !important;
+    }
+
+    .d-icon {
+      color: var(--ft-white) !important;
+    }
+  }
+}

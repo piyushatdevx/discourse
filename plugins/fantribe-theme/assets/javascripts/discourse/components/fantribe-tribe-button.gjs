@@ -1,7 +1,9 @@
 import Component from "@glimmer/component";
 import { on } from "@ember/modifier";
 import icon from "discourse/helpers/d-icon";
+import replaceEmoji from "discourse/helpers/replace-emoji";
 import { concat } from "@ember/helper";
+import { eq } from "discourse/truth-helpers";
 
 export default class FantribeTribeButton extends Component {
   get buttonClasses() {
@@ -20,6 +22,10 @@ export default class FantribeTribeButton extends Component {
     return this.topicCount === 1 ? "topic" : "topics";
   }
 
+  get emojiCode() {
+    return `:${this.args.category.emoji}:`;
+  }
+
   <template>
     <button type="button" class={{this.buttonClasses}} {{on "click" @onToggle}}>
       <div class="fantribe-tribe-button__icon">
@@ -29,6 +35,14 @@ export default class FantribeTribeButton extends Component {
             alt={{@category.name}}
             class="fantribe-tribe-button__icon-img"
           />
+        {{else if (eq @category.styleType "emoji")}}
+          <span class="fantribe-tribe-button__icon-emoji">
+            {{replaceEmoji this.emojiCode}}
+          </span>
+        {{else if (eq @category.styleType "icon")}}
+          <span class="fantribe-tribe-button__icon-fa">
+            {{icon @category.icon}}
+          </span>
         {{else}}
           <span
             class="fantribe-tribe-button__icon-dot"

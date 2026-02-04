@@ -738,7 +738,7 @@ export default class RealStories extends Component {
         font-size: 1rem;
         color: #374151;
         line-height: 1.6;
-        margin: 0 0 24px;
+        margin: 0 0 24px !important;
       }
 
       .stories__testimonial-author {

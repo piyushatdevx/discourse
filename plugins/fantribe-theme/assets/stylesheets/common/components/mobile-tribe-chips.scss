@@ -1,37 +1,50 @@
-// FanTribe Mobile Tribe Chips - Horizontal Scrollable Filter
+// FanTribe Mobile Tribe Chips - My Tribes title + horizontal scrollable filter (mobile: below logo, above category)
 // Shown on mobile only (<768px)
 
 .fantribe-mobile-chips {
   display: flex;
+  flex-direction: column;
+  gap: var(--ft-space-2);
+  padding: 5px var(--ft-space-3);
+}
+
+.fantribe-mobile-chips__title {
+  display: flex;
   align-items: center;
   gap: var(--ft-space-2);
-  padding: 0 var(--ft-space-3);
+  font-size: var(--ft-font-small);
+  font-weight: var(--ft-font-weight-small);;
+  color: var(--ft-dark);
+  margin: 0;
+  flex-shrink: 0;
+
+  .d-icon {
+    color: var(--ft-primary);
+    font-size: 16px;
+  }
+
+  // Lucide funnel icon: red stroke, white/transparent fill (matches Figma)
+  &__filter-icon {
+    flex-shrink: 0;
+    color: var(--ft-primary);
+    fill: none;
+    stroke: currentColor;
+  }
+}
+
+.fantribe-mobile-chips__row {
+  display: flex;
+  align-items: center;
+  gap: var(--ft-space-2);
   overflow-x: auto;
   overflow-y: hidden;
 
-  // Hide scrollbar but keep functionality
   scrollbar-width: none;
   -ms-overflow-style: none;
 
   &::-webkit-scrollbar {
     display: none;
   }
-
-  // Fade edges effect
-  mask-image: linear-gradient(
-    to right,
-    transparent,
-    black 12px,
-    black calc(100% - 12px),
-    transparent
-  );
-  -webkit-mask-image: linear-gradient(
-    to right,
-    transparent,
-    black 12px,
-    black calc(100% - 12px),
-    transparent
-  );
 }
 
 // Individual chip button
@@ -39,12 +52,12 @@
   display: inline-flex;
   align-items: center;
   gap: var(--ft-space-1);
-  padding: var(--ft-space-2) var(--ft-space-3);
+  padding: var(--ft-space-1) var(--ft-space-3);
   background: var(--ft-white);
   border: 1px solid var(--ft-gray-200);
   border-radius: var(--ft-radius-full);
   font-size: var(--ft-font-caption);
-  font-weight: var(--ft-font-weight-medium);
+  font-weight: var(--ft-font-weight-small);
   color: var(--ft-gray-700);
   white-space: nowrap;
   cursor: pointer;
@@ -94,14 +107,19 @@
   }
 }
 
-// "All" chip special styling
+// "All" chip - unselected same as others; selected uses red (primary) like other categories
 .fantribe-chip--all {
   background: var(--ft-gray-100);
   border-color: var(--ft-gray-300);
 
   &.fantribe-chip--active {
-    background: var(--ft-dark);
-    border-color: var(--ft-dark);
+    background: var(--ft-primary);
+    border-color: var(--ft-primary);
     color: var(--ft-white);
+
+    &:hover {
+      background: var(--ft-primary-hover);
+      border-color: var(--ft-primary-hover);
+    }
   }
 }
