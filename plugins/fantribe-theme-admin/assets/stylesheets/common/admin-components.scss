@@ -14,6 +14,41 @@
   height: 2.8em;
 }
 
+// Groups
+.groups-header .groups-header-new {
+  background-color: #ff1744 !important;
+  color: white !important;
+}
+
+.groups-header .groups-header-new svg {
+  color: white !important;
+}
+
+.admin-container .container.groups-index {
+  background-color: white !important;
+}
+
+#main-outlet section h1 {
+  text-align: center;
+}
+
+// Group Creation Form - Fix broken layout
+.groups-form {
+  max-width: 700px !important;
+  margin: 0 auto !important;
+
+  .control-label {
+    display: block !important;
+    width: auto !important;
+    text-align: left !important;
+  }
+
+  .control-group {
+    display: block !important;
+    margin-bottom: 1.5rem;
+  }
+}
+
 // ════════════════════════════════════════════════════════════════════
 // FT STAT CARD
 // ════════════════════════════════════════════════════════════════════
