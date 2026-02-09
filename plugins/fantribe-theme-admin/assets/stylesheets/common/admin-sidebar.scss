@@ -1,0 +1,102 @@
+// FanTribe Admin — Sidebar Visual Restyling
+// Pure CSS overrides. No logic changes, no JS.
+
+// ── Sidebar panel background & border ───────────────────────────────
+.admin-area .sidebar-wrapper {
+  .admin-panel {
+    background-color: var(--d-sidebar-admin-background);
+  }
+
+  .sidebar-container {
+    border-right-color: var(--ft-gray-200, #e8e6e3);
+  }
+}
+
+// ── Section headers ─────────────────────────────────────────────────
+.admin-area .sidebar-wrapper .sidebar-section-header-text {
+  font-size: var(--ft-font-caption, 0.75rem);
+  font-weight: var(--ft-font-weight-semibold, 600);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--ft-gray-500, #9e9e9e);
+}
+
+// ── Section link rows ───────────────────────────────────────────────
+.admin-area .sidebar-section-link-wrapper {
+  .sidebar-section-link {
+    border-radius: var(--ft-radius-md, 8px);
+    font-size: var(--ft-font-small, 0.875rem);
+    font-weight: var(--ft-font-weight-medium, 500);
+    color: var(--ft-gray-700, #364153);
+    transition:
+      background var(--ft-transition-fast, 150ms ease),
+      color var(--ft-transition-fast, 150ms ease);
+
+    // Hover state
+    &:hover,
+    &:focus-visible {
+      background: var(--ft-pastel-pink, #ffe4e8);
+      color: var(--ft-gray-900, #212121);
+    }
+
+    // Active / current link
+    &--active,
+    &.active,
+    &.exact-url-match {
+      background: var(--ft-primary-light, rgb(255, 23, 68, 0.1));
+      color: var(--ft-primary, #ff1744);
+      font-weight: var(--ft-font-weight-semibold, 600);
+      box-shadow: inset 3px 0 0 0 var(--ft-primary, #ff1744);
+
+      .sidebar-section-link-prefix.icon {
+        color: var(--ft-primary, #ff1744);
+      }
+    }
+  }
+
+  // Icon colour default
+  .sidebar-section-link-prefix.icon {
+    color: var(--ft-gray-500, #9e9e9e);
+    transition: color var(--ft-transition-fast, 150ms ease);
+  }
+
+  // Icon colour on hover
+  &.--hovering .sidebar-section-link-prefix.icon {
+    color: var(--ft-gray-700, #364153);
+  }
+}
+
+// ── Badge counts (review queue, etc.) ───────────────────────────────
+.admin-area .sidebar-section-link .sidebar-section-link-content-badge {
+  background: var(--ft-primary-light, rgb(255, 23, 68, 0.1));
+  color: var(--ft-primary, #ff1744);
+  font-weight: var(--ft-font-weight-semibold, 600);
+  border-radius: var(--ft-radius-full, 9999px);
+  padding: 0 var(--ft-space-2, 0.5rem);
+  font-size: var(--ft-font-caption, 0.75rem);
+  line-height: 1.6;
+}
+
+// ── Back-to-forum link ──────────────────────────────────────────────
+.admin-area .sidebar-sections__back-to-forum {
+  color: var(--ft-gray-600, #757575);
+  font-size: var(--ft-font-small, 0.875rem);
+  transition: color var(--ft-transition-fast, 150ms ease);
+
+  &:hover {
+    color: var(--ft-primary, #ff1744);
+  }
+
+  svg {
+    color: inherit;
+  }
+}
+
+// ── Admin content area polish ───────────────────────────────────────
+.admin-area .admin-content {
+  background: var(--ft-bg, #f5f5f5);
+}
+
+.admin-area .admin-contents {
+  padding: var(--ft-space-6, 1.5rem) var(--ft-space-8, 2rem);
+}

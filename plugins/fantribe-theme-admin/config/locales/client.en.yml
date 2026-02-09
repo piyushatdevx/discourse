@@ -3,7 +3,16 @@ en:
     admin:
       site_settings:
         categories:
-          TODO_plugin_name: "Plugin Name"
+          fantribe_theme_admin: "FanTribe Admin Theme"
   js:
-    discourse_plugin_name:
-      placeholder: placeholder
+    fantribe_admin:
+      attention_panel:
+        title: "Attention Needed"
+        flagged_posts: "Flagged Posts"
+        pending_users: "Pending Users"
+        pending_reviewables: "Pending Reviews"
+        all_clear: "All clear — nothing needs your attention."
+        view_all: "View All"
+      stat_card:
+        vs_last_period: "vs last period"
+        no_change: "No change"
