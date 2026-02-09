@@ -1,8 +1,8 @@
 // FanTribe Admin — Component Styles
 // Styles for FtAdminStatCard and Attention Panel
 
-// overrides in main UI
-.fantribe-nav-item {
+// overrides in main UI - Only hide fantribe-nav in admin pages
+.admin-interface .fantribe-nav-item {
   display: none !important;
 }
 
