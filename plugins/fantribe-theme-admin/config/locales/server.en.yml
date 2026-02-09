@@ -1,6 +1,3 @@
 en:
   site_settings:
-    fantribe_theme_admin_enabled: "Enable Fantribe Theme Admin"
-
-  fantribe_theme_admin:
-    hello: "Hello from plugin"
+    fantribe_theme_admin_enabled: "Enable the FanTribe admin theme."

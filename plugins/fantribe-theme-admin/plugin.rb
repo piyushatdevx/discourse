@@ -1,20 +1,14 @@
 # frozen_string_literal: true
 
 # name: fantribe-theme-admin
-# about: Fantribe Admin Theme
-# version: 0.0.1
+# about: FanTribe Admin Theme — modernizes the Discourse admin UI with FanTribe design language.
+# version: 0.1.0
 # authors: Fantribe
 # url: https://github.com/fantribe/discourse
 # required_version: 2.7.0
 
-enabled_site_setting :plugin_name_enabled
+enabled_site_setting :fantribe_theme_admin_enabled
 
-module ::MyPluginModule
-  PLUGIN_NAME = "discourse-plugin-name"
-end
-
-require_relative "lib/my_plugin_module/engine"
-
-after_initialize do
-  # Code which should run after Rails has finished booting
-end
+register_asset "stylesheets/common/admin-tokens.scss"
+register_asset "stylesheets/common/admin-sidebar.scss"
+register_asset "stylesheets/common/admin-components.scss"

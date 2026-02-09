@@ -1,0 +1,200 @@
+// FanTribe Admin — Component Styles
+// Styles for FtAdminStatCard and Attention Panel
+
+// ════════════════════════════════════════════════════════════════════
+// FT STAT CARD
+// ════════════════════════════════════════════════════════════════════
+.ft-stat-card {
+  background: var(--ft-glass-card-bg, rgb(255, 255, 255, 0.85));
+  backdrop-filter: blur(var(--ft-glass-card-blur, 12px));
+  border: var(--ft-glass-card-border, 1px solid rgb(255, 255, 255, 0.3));
+  border-radius: var(--ft-radius-lg, 12px);
+  padding: var(--ft-space-5, 1.25rem);
+  display: flex;
+  flex-direction: column;
+  gap: var(--ft-space-2, 0.5rem);
+  box-shadow: var(--ft-shadow-sm, 0 2px 8px rgb(0, 0, 0, 0.1));
+  transition: box-shadow var(--ft-transition-normal, 250ms ease);
+  min-width: 0;
+
+  &:hover {
+    box-shadow: var(--ft-shadow-md, 0 4px 16px rgb(0, 0, 0, 0.12));
+  }
+
+  // Header
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--ft-space-2, 0.5rem);
+  }
+
+  &__title {
+    font-size: var(--ft-font-caption, 0.75rem);
+    font-weight: var(--ft-font-weight-semibold, 600);
+    color: var(--ft-gray-600, #757575);
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+
+  &__icon {
+    color: var(--ft-gray-400, #bdbdbd);
+    font-size: var(--ft-font-small, 0.875rem);
+  }
+
+  // Big number
+  &__value {
+    font-size: var(--ft-font-h2, 1.875rem);
+    font-weight: var(--ft-font-weight-bold, 700);
+    color: var(--ft-gray-900, #212121);
+    line-height: var(--ft-line-height-tight, 1.25);
+  }
+
+  // Sparkline
+  &__sparkline {
+    width: 100%;
+    height: 32px;
+    color: var(--ft-primary, #ff1744);
+    opacity: 0.6;
+  }
+
+  // Trend line
+  &__trend {
+    display: flex;
+    align-items: center;
+    gap: var(--ft-space-1, 0.25rem);
+    font-size: var(--ft-font-caption, 0.75rem);
+    font-weight: var(--ft-font-weight-medium, 500);
+
+    .d-icon {
+      font-size: 0.625rem;
+    }
+
+    &--positive {
+      color: var(--ft-success, #4caf50);
+    }
+
+    &--negative {
+      color: var(--ft-error, #f44336);
+    }
+
+    &--neutral {
+      color: var(--ft-gray-500, #9e9e9e);
+    }
+  }
+
+  // Optional subtitle
+  &__subtitle {
+    font-size: var(--ft-font-caption, 0.75rem);
+    color: var(--ft-gray-500, #9e9e9e);
+  }
+}
+
+// ════════════════════════════════════════════════════════════════════
+// ATTENTION PANEL
+// ════════════════════════════════════════════════════════════════════
+.ft-attention-panel {
+  margin-bottom: var(--ft-space-6, 1.5rem);
+
+  &__header {
+    display: flex;
+    align-items: center;
+    gap: var(--ft-space-2, 0.5rem);
+    font-size: var(--ft-font-small, 0.875rem);
+    font-weight: var(--ft-font-weight-semibold, 600);
+    color: var(--ft-gray-800, #424242);
+    margin-bottom: var(--ft-space-3, 0.75rem);
+
+    .d-icon {
+      color: var(--ft-warning, #ff9800);
+    }
+  }
+
+  &__cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: var(--ft-space-4, 1rem);
+  }
+
+  &__card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: var(--ft-space-5, 1.25rem) var(--ft-space-4, 1rem);
+    border-radius: var(--ft-radius-lg, 12px);
+    text-decoration: none;
+    transition:
+      transform var(--ft-transition-fast, 150ms ease),
+      box-shadow var(--ft-transition-fast, 150ms ease);
+    cursor: pointer;
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--ft-shadow-md, 0 4px 16px rgb(0, 0, 0, 0.12));
+      text-decoration: none;
+    }
+
+    &--warning {
+      background: var(--ft-warning-light, rgb(255, 152, 0, 0.1));
+      border: 1px solid rgb(255, 152, 0, 0.2);
+    }
+
+    &--danger {
+      background: var(--ft-error-light, rgb(244, 67, 54, 0.1));
+      border: 1px solid rgb(244, 67, 54, 0.2);
+    }
+
+    &--info {
+      background: var(--ft-info-light, rgb(33, 150, 243, 0.1));
+      border: 1px solid rgb(33, 150, 243, 0.2);
+    }
+  }
+
+  &__card-count {
+    font-size: var(--ft-font-h2, 1.875rem);
+    font-weight: var(--ft-font-weight-bold, 700);
+    line-height: 1;
+    margin-bottom: var(--ft-space-1, 0.25rem);
+
+    .ft-attention-panel__card--warning & {
+      color: var(--ft-warning, #ff9800);
+    }
+
+    .ft-attention-panel__card--danger & {
+      color: var(--ft-error, #f44336);
+    }
+
+    .ft-attention-panel__card--info & {
+      color: var(--ft-info, #2196f3);
+    }
+  }
+
+  &__card-label {
+    font-size: var(--ft-font-caption, 0.75rem);
+    font-weight: var(--ft-font-weight-medium, 500);
+    color: var(--ft-gray-700, #364153);
+    text-align: center;
+  }
+
+  // All-clear state
+  &--clear {
+    margin-bottom: var(--ft-space-6, 1.5rem);
+  }
+
+  &__clear-message {
+    display: flex;
+    align-items: center;
+    gap: var(--ft-space-2, 0.5rem);
+    padding: var(--ft-space-4, 1rem) var(--ft-space-5, 1.25rem);
+    background: var(--ft-pastel-mint, #d4f0e7);
+    border-radius: var(--ft-radius-lg, 12px);
+    font-size: var(--ft-font-small, 0.875rem);
+    font-weight: var(--ft-font-weight-medium, 500);
+    color: var(--ft-gray-800, #424242);
+
+    .d-icon {
+      color: var(--ft-success, #4caf50);
+    }
+  }
+}
