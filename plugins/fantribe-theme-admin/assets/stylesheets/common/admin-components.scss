@@ -1,6 +1,19 @@
 // FanTribe Admin — Component Styles
 // Styles for FtAdminStatCard and Attention Panel
 
+// overrides in main UI
+.fantribe-nav-item {
+  display: none !important;
+}
+
+.admin-contents {
+  background-color: white !important;
+}
+
+.sidebar-row {
+  height: 2.8em;
+}
+
 // ════════════════════════════════════════════════════════════════════
 // FT STAT CARD
 // ════════════════════════════════════════════════════════════════════
