@@ -1,0 +1,25 @@
+// FanTribe Topic Page
+// Post stream and topic content restyling.
+
+// Softer post separator
+.topic-post {
+  border-bottom-color: var(--primary-very-low);
+}
+
+// Quote blocks: brand accent left border
+.topic-post .cooked blockquote {
+  border-left: 3px solid var(--ft-primary);
+  background-color: var(--ft-primary-light);
+  border-radius: 0 var(--ft-radius-sm) var(--ft-radius-sm) 0;
+  padding: var(--ft-space-3) var(--ft-space-4);
+}
+
+// Inline code
+.topic-post .cooked code {
+  border-radius: var(--ft-radius-sm);
+}
+
+// Like button active state
+.topic-post .actions .like-button.has-like .d-icon {
+  color: var(--ft-primary);
+}

@@ -1,0 +1,5 @@
+en:
+  theme_metadata:
+    description: "FanTribe design system — brand colors, typography, spacing, and UI refinements for a modern creator-platform aesthetic."
+    settings:
+      content_max_width: "Maximum content width (px)"

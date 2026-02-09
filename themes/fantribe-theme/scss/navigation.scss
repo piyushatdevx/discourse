@@ -1,0 +1,18 @@
+// FanTribe Navigation
+// Nav pills, sidebar, and breadcrumb restyling.
+:root {
+  --d-nav-pill-border-radius: var(--ft-radius-full);
+}
+
+// Nav pill active state: brand underline instead of background fill
+.nav-pills > li > a.active {
+  font-weight: var(--ft-weight-semibold);
+}
+
+// Sidebar section headers
+.sidebar-wrapper .sidebar-section-header-text {
+  font-weight: var(--ft-weight-semibold);
+  font-size: var(--ft-font-caption);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}

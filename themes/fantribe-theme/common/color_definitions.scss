@@ -1,0 +1,103 @@
+// FanTribe Color Definitions
+// Overrides Discourse's computed intermediate variables for a refined aesthetic.
+// Uses oklch() and light-dark() following the Horizon theme pattern.
+html {
+  // Accent mapping
+  --accent-color: #{$tertiary};
+  --accent-text-color: #fff;
+
+  // Background: subtle warm/pink tint derived from brand color
+  --background-color: light-dark(
+    oklch(from #{$tertiary} 97% calc(c * 0.06) h),
+    oklch(from #{$tertiary} 10% 0.015 h)
+  );
+  --d-content-background: light-dark(
+    oklch(from #{$secondary} calc(2 * l) c h),
+    oklch(from #{$secondary} l c h)
+  );
+
+  // Header: brand-tinted icon states
+  --header_primary-low-mid: light-dark(
+    oklch(from #{$tertiary} 70% calc(c * 0.4) h),
+    oklch(from #{$tertiary} l calc(c * 0.2) h)
+  );
+  --header_primary-medium: light-dark(
+    oklch(from #{$tertiary} 55% calc(c * 0.4) h),
+    oklch(from #{$tertiary} calc(l * 1.3) calc(c * 0.2) h)
+  );
+
+  // Sidebar
+  --d-sidebar-border-color: light-dark(
+    oklch(from #{$tertiary} 90% calc(c * 0.15) h),
+    oklch(from #{$tertiary} calc(l * 0.6) calc(c * 0.15) h)
+  );
+  --d-sidebar-link-color: light-dark(
+    oklch(from #{$tertiary} calc(l * 0.85) calc(c * 0.2) h),
+    oklch(from #{$tertiary} calc(l * 1.4) calc(c * 0.2) h)
+  );
+  --d-sidebar-active-color: #{$primary};
+  --d-sidebar-suffix-color: light-dark(
+    oklch(from #{$tertiary} l calc(c * 0.8) h),
+    oklch(from #{$tertiary} l calc(c * 0.8) h)
+  );
+
+  // Selection & hover
+  --d-selected: light-dark(
+    oklch(from #{$tertiary} 93% calc(c * 0.4) h),
+    oklch(from #{$tertiary} calc(l * 0.65) calc(c * 0.2) h)
+  );
+  --d-hover: oklch(from var(--d-selected) l c h / 0.7);
+
+  // Navigation active/hover
+  --d-nav-color--active: light-dark(
+    oklch(from #{$tertiary} l c h),
+    oklch(from #{$tertiary} calc(l * 1.15) c h)
+  );
+  --d-nav-color--hover: light-dark(
+    oklch(from #{$tertiary} l c h),
+    oklch(from #{$tertiary} calc(l * 1.15) c h)
+  );
+
+  // Links
+  --link-color: light-dark(
+    oklch(from #{$tertiary} l c h),
+    oklch(from #{$tertiary} calc(l * 0.95) c h)
+  );
+  --link-color-hover: light-dark(
+    oklch(from #{$tertiary} calc(l * 0.85) c h),
+    oklch(from #{$tertiary} calc(l * 1.3) calc(c * 1.5) h)
+  );
+  --tertiary-hover: #{$tertiary};
+
+  // Button shadows
+  --button-box-shadow: light-dark(
+    oklch(from #{$tertiary} calc(l * 1.4) calc(c * 0.3) h),
+    oklch(from #{$tertiary} calc(l * 0.7) calc(c * 0.4) h)
+  );
+
+  // Sidebar extended variables
+  --d-sidebar-highlight-hover-icon: var(--d-sidebar-link-color);
+  --d-sidebar-highlight-hover-background: var(--d-selected);
+  --d-sidebar-link-icon-color: var(--d-sidebar-link-color);
+  --d-sidebar-header-color: var(--d-sidebar-link-color);
+  --d-sidebar-header-icon-color: var(--d-sidebar-link-color);
+  --d-sidebar-active-suffix-color: var(--d-sidebar-suffix-color);
+  --d-sidebar-background: var(--background-color);
+  --d-sidebar-footer-fade: var(--background-color);
+  --d-sidebar-prefix-background: var(--d-selected);
+  --d-sidebar-active-prefix-background: light-dark(
+    oklch(from var(--d-selected) calc(l * 0.88) c h),
+    oklch(from var(--d-selected) calc(l * 0.75) c h)
+  );
+  --d-sidebar-highlight-prefix-background: light-dark(
+    oklch(from var(--d-selected) calc(l * 0.88) c h),
+    oklch(from var(--d-selected) calc(l * 0.75) c h)
+  );
+  --d-sidebar-highlight-suffix-color: var(--d-sidebar-active-suffix-color);
+  --d-sidebar-highlight-color: var(--primary);
+  --d-sidebar-highlight-background: var(--d-selected);
+  --d-sidebar-section-link-icon-size: 1em;
+
+  // Input background
+  --d-input-bg-color: var(--d-content-background);
+}

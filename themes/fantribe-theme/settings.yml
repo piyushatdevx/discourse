@@ -1,0 +1,5 @@
+content_max_width:
+  type: integer
+  default: 1100
+  min: 800
+  max: 1400

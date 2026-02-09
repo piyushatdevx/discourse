@@ -1,0 +1,39 @@
+// FanTribe Typography
+// Applies the design system font scale to Discourse's UI elements.
+html {
+  font-family: var(--ft-font-family);
+}
+
+// Headings
+.d-header .title a,
+.topic-title .fancy-title,
+.category-heading p.category-name {
+  font-weight: var(--ft-weight-semibold);
+  letter-spacing: -0.01em;
+}
+
+// Topic title on topic page
+#topic-title .fancy-title {
+  font-size: var(--ft-font-h1);
+  line-height: var(--ft-line-height-tight);
+}
+
+// Topic excerpts
+.topic-excerpt {
+  font-size: var(--ft-font-small);
+  line-height: var(--ft-line-height-normal);
+}
+
+// Post body
+.topic-post .cooked {
+  font-size: var(--ft-font-body);
+  line-height: var(--ft-line-height-relaxed);
+}
+
+// Metadata text (dates, usernames in lists, counters)
+.topic-meta-data,
+.post-info,
+.relative-date {
+  font-size: var(--ft-font-caption);
+  font-weight: var(--ft-weight-medium);
+}

@@ -1,0 +1,13 @@
+// FanTribe Desktop
+// Desktop-specific overrides and spacing adjustments.
+
+// Wider sidebar section links for comfortable clicking
+.sidebar-wrapper .sidebar-section-link {
+  padding: var(--ft-space-2) var(--ft-space-3);
+}
+
+// Topic list: relaxed row padding
+.topic-list .topic-list-item td {
+  padding-top: var(--ft-space-3);
+  padding-bottom: var(--ft-space-3);
+}
