@@ -2,12 +2,11 @@
 // Desktop: Left sidebar (240px) | Feed (flex) | Right sidebar (300px)
 // Tablet: Left sidebar (220px) | Feed (flex)
 // Mobile: Single column with horizontal tribe chips
-
-body.fantribe-theme {
+body.fantribe-theme:not(.admin-interface) {
   // Set consistent background across the entire page
   background-color: var(--ft-bg) !important;
 
-  // Hide Discourse's default sidebar
+  // Hide Discourse's default sidebar (only on public pages, not admin)
   .sidebar-wrapper {
     display: none !important;
   }
@@ -64,6 +63,7 @@ body.fantribe-theme {
     width: 100%;
     max-width: 100%;
   }
+
   #main-outlet {
     padding: 0 !important;
   }
@@ -73,7 +73,6 @@ body.fantribe-theme {
     max-width: calc(var(--d-max-width, 1110px) + 280px); // content + timeline
     margin-left: auto;
     margin-right: auto;
-
   }
 
   // Topic navigation (settings icon, timeline): take only the width of its content
@@ -89,7 +88,7 @@ body.fantribe-theme {
   }
 
   // Mobile: full width like menu — remove left/right padding from main wrap and list container
-  @media (max-width: 767px) {
+  @media (width <= 767px) {
     .wrap {
       padding-left: 0 !important;
       padding-right: 0 !important;
@@ -129,7 +128,6 @@ body.fantribe-theme {
     //   margin-right: var(--ft-space-4);
     //   box-sizing: border-box;
     // }
-
   }
 }
 
@@ -140,7 +138,7 @@ body.fantribe-theme {
   padding: var(--ft-space-4) var(--ft-space-4); // gap-3 md:gap-6 equivalent vertical; modest horizontal
   min-height: calc(100vh - 80px);
   box-sizing: border-box;
-  background: oklch(.985 .002 247.839);
+  background: oklch(98.5% 0.002 247.839deg);
 
   // Desktop lg: 12-col grid → 3 + 6 + 3 (25% + 50% + 25%)
   display: grid;
@@ -157,7 +155,6 @@ body.fantribe-theme {
     padding: 0 0 var(--ft-space-4); // no top padding so card aligns with middle column
     box-sizing: border-box;
     background: transparent;
-
     scrollbar-width: thin;
     scrollbar-color: var(--ft-gray-300) transparent;
 
@@ -185,7 +182,7 @@ body.fantribe-theme {
     box-sizing: border-box;
     background: transparent;
 
-    @media (min-width: 768px) {
+    @media (width >= 768px) {
       gap: var(--ft-space-4);
     }
   }
@@ -211,7 +208,6 @@ body.fantribe-theme {
     padding: 0 0 var(--ft-space-4); // no top padding so card aligns with middle column
     box-sizing: border-box;
     background: transparent;
-
     scrollbar-width: thin;
     scrollbar-color: var(--ft-gray-300) transparent;
 
@@ -235,9 +231,8 @@ body.fantribe-theme {
   }
 }
 
-
 // Tablet: 2 columns - left sidebar + main feed (right sidebar hidden), same container padding
-@media (max-width: 1023px) {
+@media (width <= 1023px) {
   .fantribe-feed-layout {
     grid-template-columns: 1fr 2fr; // ~33% + ~67%
 
@@ -248,7 +243,7 @@ body.fantribe-theme {
 }
 
 // Mobile: Single column with tribe chips (<768px), chips touch menu (no top space)
-@media (max-width: 767px) {
+@media (width <= 767px) {
   .fantribe-feed-layout {
     display: flex;
     flex-direction: column;
@@ -258,6 +253,7 @@ body.fantribe-theme {
 
     &__mobile-chips {
       display: block;
+
       // position: sticky;
       top: var(--header-offset, 60px);
       z-index: 10;
