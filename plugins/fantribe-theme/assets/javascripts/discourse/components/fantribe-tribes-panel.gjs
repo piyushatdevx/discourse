@@ -1,4 +1,5 @@
 import Component from "@glimmer/component";
+import { tracked } from "@glimmer/tracking";
 import { fn } from "@ember/helper";
 import { on } from "@ember/modifier";
 import { action } from "@ember/object";
@@ -39,6 +40,10 @@ const NAV_ITEMS = [
 export default class FantribeTribesPanel extends Component {
   @service router;
   @service currentUser;
+
+  @tracked isCollapsed = document.body.classList.contains(
+    "fantribe-sidebar-collapsed"
+  );
 
   isActive = (item) => {
     const route = this.router.currentRouteName || "";
@@ -90,6 +95,7 @@ export default class FantribeTribesPanel extends Component {
   @action
   toggleCollapse() {
     document.body.classList.toggle("fantribe-sidebar-collapsed");
+    this.isCollapsed = !this.isCollapsed;
   }
 
   <template>
@@ -122,7 +128,7 @@ export default class FantribeTribesPanel extends Component {
         class="fantribe-sidebar-nav__collapse"
         {{on "click" this.toggleCollapse}}
       >
-        {{icon "chevron-left"}}
+        {{icon (if this.isCollapsed "chevron-right" "chevron-left")}}
       </button>
 
       {{! User profile at bottom }}
