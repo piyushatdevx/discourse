@@ -6,7 +6,6 @@ import { service } from "@ember/service";
 import ShareTopicModal from "discourse/components/modal/share-topic";
 import icon from "discourse/helpers/d-icon";
 import { ajax } from "discourse/lib/ajax";
-import getURL from "discourse/lib/get-url";
 import Composer from "discourse/models/composer";
 import { not } from "discourse/truth-helpers";
 
@@ -20,6 +19,7 @@ export default class FantribeEngagementBar extends Component {
   @tracked isLoading = false;
   @tracked _isLiked = null;
   @tracked _likeCountOffset = 0;
+  @tracked _isBookmarked = false;
 
   get isLiked() {
     if (this._isLiked !== null) {
@@ -38,10 +38,6 @@ export default class FantribeEngagementBar extends Component {
 
   get shareCount() {
     return this.args.shareCount || 0;
-  }
-
-  get displayLikeCount() {
-    return this.likeCount;
   }
 
   get topicAuthor() {
@@ -69,22 +65,8 @@ export default class FantribeEngagementBar extends Component {
     );
   }
 
-  get commentIconUrl() {
-    return getURL("/plugins/fantribe-theme/images/comment.svg");
-  }
-
-  get shareIconUrl() {
-    return getURL("/plugins/fantribe-theme/images/share.svg");
-  }
-
-  formatCount(count) {
-    if (count >= 1000000) {
-      return (count / 1000000).toFixed(1) + "M";
-    }
-    if (count >= 1000) {
-      return (count / 1000).toFixed(1) + "K";
-    }
-    return count.toString();
+  get isBookmarked() {
+    return this._isBookmarked || this.args.topic?.bookmarked || false;
   }
 
   @action
@@ -103,19 +85,16 @@ export default class FantribeEngagementBar extends Component {
     this.isLoading = true;
     const wasLiked = this.isLiked;
 
-    // Optimistic UI update
     this._isLiked = !wasLiked;
     this._likeCountOffset += wasLiked ? -1 : 1;
 
     try {
       if (wasLiked) {
-        // Unlike: DELETE /post_actions/:post_id
         await ajax(`/post_actions/${this.args.firstPostId}`, {
           type: "DELETE",
           data: { post_action_type_id: LIKE_ACTION_TYPE_ID },
         });
       } else {
-        // Like: POST /post_actions
         await ajax("/post_actions", {
           type: "POST",
           data: {
@@ -125,7 +104,6 @@ export default class FantribeEngagementBar extends Component {
         });
       }
     } catch {
-      // Revert optimistic update on error
       this._isLiked = wasLiked;
       this._likeCountOffset += wasLiked ? 1 : -1;
     } finally {
@@ -167,6 +145,12 @@ export default class FantribeEngagementBar extends Component {
     });
   }
 
+  @action
+  handleBookmark(event) {
+    event.stopPropagation();
+    this._isBookmarked = !this.isBookmarked;
+  }
+
   <template>
     <div class="fantribe-engagement-bar">
       <button
@@ -182,10 +166,8 @@ export default class FantribeEngagementBar extends Component {
         {{else}}
           {{icon "far-heart"}}
         {{/if}}
-        {{#if this.displayLikeCount}}
-          <span
-            class="fantribe-engagement-btn__count"
-          >{{this.displayLikeCount}}</span>
+        {{#if this.likeCount}}
+          <span class="fantribe-engagement-btn__count">{{this.likeCount}}</span>
         {{/if}}
       </button>
 
@@ -194,11 +176,7 @@ export default class FantribeEngagementBar extends Component {
         class="fantribe-engagement-btn fantribe-engagement-btn--comment"
         {{on "click" this.handleComment}}
       >
-        <img
-          src={{this.commentIconUrl}}
-          alt="Comment"
-          class="fantribe-engagement-btn__icon"
-        />
+        {{icon "comment"}}
         {{#if this.commentCount}}
           <span
             class="fantribe-engagement-btn__count"
@@ -211,15 +189,24 @@ export default class FantribeEngagementBar extends Component {
         class="fantribe-engagement-btn fantribe-engagement-btn--share"
         {{on "click" this.handleShare}}
       >
-        <img
-          src={{this.shareIconUrl}}
-          alt="Share"
-          class="fantribe-engagement-btn__icon"
-        />
+        {{icon "share"}}
         {{#if this.shareCount}}
           <span
             class="fantribe-engagement-btn__count"
           >{{this.shareCount}}</span>
+        {{/if}}
+      </button>
+
+      <button
+        type="button"
+        class="fantribe-engagement-btn fantribe-engagement-btn--bookmark
+          {{if this.isBookmarked 'fantribe-engagement-btn--active'}}"
+        {{on "click" this.handleBookmark}}
+      >
+        {{#if this.isBookmarked}}
+          {{icon "bookmark"}}
+        {{else}}
+          {{icon "far-bookmark"}}
         {{/if}}
       </button>
     </div>

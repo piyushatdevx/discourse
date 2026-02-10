@@ -1,0 +1,166 @@
+// FanTribe App Layout — Persistent sidebar + main content grid
+// Applied globally on public routes via body.fantribe-theme
+// Admin UI excluded via :not(.admin-interface)
+body.fantribe-theme:not(.admin-interface) {
+  background-color: var(--ft-bg) !important;
+
+  // Hide Discourse's built-in sidebar (we use our own)
+  .sidebar-wrapper {
+    display: none !important;
+  }
+
+  // Remove Discourse core max-width constraints and backgrounds
+  #main-outlet-wrapper,
+  #main-outlet {
+    box-sizing: border-box;
+    background: transparent !important;
+  }
+
+  // Layout grid: persistent left sidebar + main content
+  // Area names match Discourse core ("sidebar content") so we don't fight
+  // core's #main-outlet-wrapper #main-outlet { grid-area: content } (0,2,0,0 specificity)
+  #main-outlet-wrapper {
+    display: grid;
+    grid-template-columns: 240px minmax(0, 1fr);
+    grid-template-rows: 1fr auto;
+    grid-template-areas:
+      "sidebar content"
+      "sidebar below-content";
+    max-width: 1400px !important;
+    margin: 0 auto;
+    gap: 0 var(--ft-space-4);
+  }
+
+  // Persistent left sidebar (injected via before-main-outlet connector)
+  .fantribe-left-sidebar {
+    grid-area: sidebar;
+    position: sticky;
+    top: 72px; // header height (64px) + spacing
+    align-self: start;
+    min-width: 0;
+    max-height: calc(100vh - 80px);
+    overflow-y: auto;
+    padding: 0 0 var(--ft-space-4);
+    box-sizing: border-box;
+    scrollbar-width: thin;
+    scrollbar-color: var(--ft-gray-300) transparent;
+
+    &::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: var(--ft-gray-300);
+      border-radius: var(--ft-radius-full);
+    }
+  }
+
+  // Main content area — no grid-area override needed, core sets "content" which
+  // matches our grid-template-areas above
+  #main-outlet {
+    min-width: 0;
+    overflow-x: hidden;
+    padding: 0 !important;
+  }
+
+  // Hide welcome banner (custom feed has its own)
+  .welcome-banner {
+    display: none !important;
+  }
+
+  // Hide default list controls (we use our own filtering)
+  .list-controls {
+    display: none;
+  }
+
+  // Topic page: respect grid column bounds
+  #main-outlet .container.posts {
+    max-width: 100%;
+    box-sizing: border-box;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  #main-outlet .container.posts .topic-navigation {
+    width: max-content;
+  }
+
+  #main-outlet > .regular {
+    max-width: var(--d-max-width, 1110px);
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+// Collapsed sidebar: icon-only column
+body.fantribe-sidebar-collapsed.fantribe-theme:not(.admin-interface) {
+  #main-outlet-wrapper {
+    grid-template-columns: 72px minmax(0, 1fr);
+  }
+}
+
+// Tablet: narrower sidebar
+@media (width <= 1023px) {
+  body.fantribe-theme:not(.admin-interface) {
+    #main-outlet-wrapper {
+      grid-template-columns: 200px minmax(0, 1fr);
+    }
+  }
+}
+
+// Mobile: single column, no sidebar
+@media (width <= 767px) {
+  body.fantribe-theme:not(.admin-interface) {
+    #main-outlet-wrapper {
+      display: block;
+      padding-top: 0;
+    }
+
+    .fantribe-left-sidebar {
+      display: none;
+    }
+
+    .wrap {
+      padding-left: 0 !important;
+      padding-right: 0 !important;
+    }
+
+    .container.list-container {
+      padding-left: 0 !important;
+      padding-right: 0 !important;
+      padding-inline: 0 !important;
+    }
+
+    // Topic page mobile spacing
+    #main-outlet .container.posts {
+      width: 100%;
+      max-width: 100%;
+      padding-left: var(--ft-space-4);
+      padding-right: var(--ft-space-4);
+      box-sizing: border-box;
+    }
+
+    #main-outlet .container.posts .topic-post {
+      padding-left: 0;
+      padding-right: 0;
+      max-width: 100%;
+    }
+
+    #topic-title.container {
+      padding-left: var(--ft-space-4);
+      padding-right: var(--ft-space-4);
+      box-sizing: border-box;
+    }
+  }
+}
+
+// Chat full-page: ensure proper height with fantribe's 64px fixed header
+body.fantribe-theme.has-full-page-chat:not(.admin-interface) {
+  .full-page-chat {
+    height: calc(100vh - 64px);
+  }
+}

@@ -27,6 +27,7 @@ input[type="url"],
 input[type="search"],
 textarea,
 .d-editor-input {
+  padding: 0 35px;
   transition:
     border-color var(--ft-transition-fast),
     box-shadow var(--ft-transition-fast);

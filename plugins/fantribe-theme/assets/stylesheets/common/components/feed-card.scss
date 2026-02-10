@@ -1,168 +1,13 @@
-// FanTribe Feed Card - Post Card Component
-// Includes header, content, media types, and engagement bar
-
-// Feed Section wrapper with header
-.fantribe-feed-section {
-  display: flex;
-  flex-direction: column;
-
-  &__header {
-    display: flex;
-    align-items: center;
-    gap: var(--ft-space-3);
-    margin-bottom: var(--ft-space-4);
-  }
-
-  &__label {
-    font-size: var(--ft-font-small);
-    font-weight: var(--ft-font-weight-semibold);
-    color: var(--ft-gray-600);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    white-space: nowrap;
-  }
-
-  &__divider {
-    flex: 1;
-    height: 1px;
-    background: linear-gradient(to right, var(--ft-gray-300), transparent);
-  }
-
-  &__list {
-    display: flex;
-    flex-direction: column;
-    gap: var(--ft-space-4);
-  }
-}
-
-// Empty state when no posts to show
-.fantribe-empty-state {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: var(--ft-space-12) var(--ft-space-4);
-  text-align: center;
-  background: var(--ft-white);
-  border: 1px dashed var(--ft-gray-300);
-  border-radius: var(--ft-radius-xl);
-
-  p {
-    font-size: var(--ft-font-body);
-    color: var(--ft-gray-500);
-    margin: 0;
-    max-width: 300px;
-    line-height: var(--ft-line-height-relaxed);
-  }
-}
-
-// Conversation Feed - single card wrapping all posts (Figma: Compose separate, all posts in one card)
-.fantribe-conversation-feed {
-  background: var(--ft-white);
-  border: 1px solid var(--ft-gray-200);
-  border-radius: var(--ft-radius-xl);
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-
-  &__header {
-    padding: var(--ft-space-4);
-    background: linear-gradient(
-      to right,
-      rgba(255, 251, 235, 0.3),
-      rgba(255, 247, 237, 0.2)
-    );
-
-    @media (min-width: 768px) {
-      padding: var(--ft-space-4) var(--ft-space-6);
-    }
-  }
-
-  &__title {
-    display: flex;
-    align-items: center;
-    gap: var(--ft-space-2);
-    font-size: var(--ft-font-body);
-    font-weight: var(--ft-font-weight-medium);
-    color: var(--ft-dark);
-    margin: 0;
-
-    @media (min-width: 768px) {
-      font-size: var(--ft-font-large);
-    }
-  }
-
-  &__icon {
-    color: #ea580c; // orange-600
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  &__subtitle {
-    font-size: var(--ft-font-small);
-    color: var(--ft-gray-600);
-    margin: var(--ft-space-1) 0 0;
-    line-height: var(--ft-line-height-relaxed);
-
-    @media (min-width: 768px) {
-      font-size: var(--ft-font-body);
-    }
-  }
-
-  &__content {
-    padding: 0;
-  }
-
-  // Posts inside: rows with bold divider between posts (image: thick medium-grey line at post end)
-  &__content .fantribe-feed-card {
-    border: none;
-    border-radius: 0;
-    border-bottom: 1px solid var(--ft-gray-300);
-    box-shadow: none;
-
-    &:last-child {
-      border-bottom: none;
-    }
-
-    &:hover {
-      background: var(--ft-gray-50);
-    }
-  }
-
-  &__empty {
-    padding: var(--ft-space-12);
-    text-align: center;
-  }
-
-  &__empty-title {
-    font-size: var(--ft-font-body);
-    color: var(--ft-gray-500);
-    margin: 0 0 var(--ft-space-2);
-  }
-
-  &__empty-text {
-    font-size: var(--ft-font-small);
-    color: var(--ft-gray-400);
-    margin: 0;
-  }
-
-  // Mobile: full width, no left/right borders (Figma mobile: edge-to-edge)
-  @media (max-width: 767px) {
-    border: none;
-    border-radius: 0;
-  }
-}
-
+// FanTribe Feed Card — Post card with header, content, media, engagement
 .fantribe-feed-card {
   background: var(--ft-white);
   border: 1px solid var(--ft-gray-200);
-  border-radius: var(--ft-radius-xl);
+  border-radius: 10px;
   overflow: hidden;
-  transition: background var(--ft-transition-fast);
+  transition: border-color 0.1s ease;
 
   &:hover {
-    background: var(--ft-gray-50);
+    border-color: var(--ft-gray-300);
   }
 
   &--expanded {
@@ -171,33 +16,27 @@
 
   // Card content padding
   &__content {
-    padding: var(--ft-space-5);
+    padding: 12px 16px;
   }
 
-  // Post header with avatar, username, timestamp
+  // Post header: avatar + meta + ... button
   &__header {
     display: flex;
     align-items: center;
-    gap: var(--ft-space-3);
-    margin-bottom: var(--ft-space-3);
+    gap: 10px;
+    margin-bottom: 12px;
   }
 
   &__avatar {
-    // Reset button styles
     border: none;
     padding: 0;
     cursor: pointer;
-
-    width: 40px;
-    height: 40px;
+    width: 36px;
+    height: 36px;
     flex-shrink: 0;
     border-radius: var(--ft-radius-full);
     overflow: hidden;
-    background: linear-gradient(
-      135deg,
-      var(--ft-pastel-pink) 0%,
-      var(--ft-pastel-lavender) 100%
-    );
+    background: var(--ft-gray-200);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -207,99 +46,90 @@
       height: 100%;
       object-fit: cover;
     }
-
-    &-initials {
-      font-size: var(--ft-font-small);
-      font-weight: var(--ft-font-weight-semibold);
-      color: var(--ft-primary);
-    }
   }
 
   &__meta {
     flex: 1;
     min-width: 0;
     display: flex;
-    align-items: center;
+    align-items: baseline;
     flex-wrap: wrap;
-    gap: var(--ft-space-1) var(--ft-space-2);
-
-    @media (min-width: 768px) {
-      gap: var(--ft-space-2) var(--ft-space-2);
-    }
+    gap: 6px;
   }
 
-  // Body: title, excerpt, media, engagement — aligned with poster name (Figma)
-  &__body {
-    margin-left: calc(40px + var(--ft-space-3));
-  }
-
-  &__username {
-    font-size: var(--ft-font-small);
-    font-weight: var(--ft-font-weight-medium);
+  // Bold display name
+  &__display-name {
+    font-size: 14px;
+    font-weight: 600;
     color: var(--ft-dark);
-
-    @media (min-width: 768px) {
-      font-size: var(--ft-font-body);
-    }
-
-    &:hover {
-      color: var(--ft-primary);
-    }
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
-  &__timestamp {
-    font-size: var(--ft-font-caption);
+  // Lighter @username
+  &__username-handle {
+    font-size: 13px;
+    font-weight: 400;
     color: var(--ft-gray-500);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   &__separator {
-    font-size: var(--ft-font-small);
+    font-size: 12px;
+    color: var(--ft-gray-300);
+  }
+
+  &__timestamp {
+    font-size: 13px;
+    font-weight: 400;
     color: var(--ft-gray-500);
   }
 
-  &__category-badge {
-    display: inline-flex;
+  // "..." more button
+  &__more-btn {
+    flex-shrink: 0;
+    display: flex;
     align-items: center;
-    padding: 2px var(--ft-space-2);
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border: none;
     border-radius: var(--ft-radius-full);
-    font-size: 10px;
-    font-weight: var(--ft-font-weight-medium);
+    background: transparent;
+    color: var(--ft-gray-400);
+    cursor: pointer;
+    transition:
+      background 0.1s ease,
+      color 0.1s ease;
 
-    // Dynamic background based on category color
-    &--default {
-      background: var(--ft-pastel-lavender);
-      color: var(--ft-gray-700);
+    .d-icon {
+      font-size: 14px;
+    }
+
+    &:hover {
+      background: var(--ft-gray-100);
+      color: var(--ft-gray-600);
     }
   }
 
-  &__tags {
-    display: inline-flex;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 0 var(--ft-space-1);
-  }
-
-  &__tag-badge {
-    display: inline-flex;
-    align-items: center;
-    padding: 2px var(--ft-space-2);
-    border-radius: var(--ft-radius-full);
-    font-size: 10px;
-    font-weight: var(--ft-font-weight-medium);
-    background: var(--ft-gray-200);
-    color: var(--ft-dark);
+  // Body: title, excerpt, media, engagement — aligned with poster name
+  &__body {
+    margin-left: calc(36px + 10px);
   }
 
   // Post text content
   &__text {
-    font-weight: 300;
-    font-size: var(--ft-font-body);
+    font-weight: 400;
+    font-size: 14px;
     color: var(--ft-gray-700);
-    line-height: var(--ft-line-height-relaxed);
-    margin-bottom: var(--ft-space-3);
+    line-height: 1.45;
+    margin-bottom: 10px;
 
     p {
-      margin: 0 0 var(--ft-space-2);
+      margin: 0 0 8px;
 
       &:last-child {
         margin-bottom: 0;
@@ -330,7 +160,6 @@
   &__expanded-body {
     margin-top: var(--ft-space-2);
 
-    // Hide onebox and video container here so media is only shown once in the card media section
     aside.onebox,
     .onebox,
     .lazy-video-container,
@@ -338,10 +167,6 @@
     .youtube-onebox {
       display: none !important;
     }
-
-    // .lazy-video-wrapper {
-    //   margin-right: var(--ft-space-6);
-    // }
 
     .cooked {
       font-size: var(--ft-font-body);
@@ -381,7 +206,6 @@
   overflow: hidden;
   border-radius: var(--ft-radius-xl);
 
-  // Blurred background layer
   &__blur-bg {
     position: absolute;
     inset: 0;
@@ -423,7 +247,7 @@
   &__overlay {
     position: absolute;
     inset: 0;
-    background: rgba(0, 0, 0, 0.3);
+    background: rgb(0 0 0 / 30%);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -431,7 +255,7 @@
     cursor: pointer;
 
     &:hover {
-      background: rgba(0, 0, 0, 0.4);
+      background: rgb(0 0 0 / 40%);
 
       .fantribe-media-video__play-btn {
         transform: scale(1.1);
@@ -453,7 +277,7 @@
     .d-icon {
       font-size: 24px;
       color: var(--ft-dark);
-      margin-left: 4px; // Visual centering for play icon
+      margin-left: 4px;
     }
   }
 
@@ -462,7 +286,7 @@
     bottom: var(--ft-space-3);
     right: var(--ft-space-3);
     padding: var(--ft-space-1) var(--ft-space-2);
-    background: rgba(0, 0, 0, 0.8);
+    background: rgb(0 0 0 / 80%);
     color: var(--ft-white);
     font-size: var(--ft-font-caption);
     font-weight: var(--ft-font-weight-medium);
@@ -511,13 +335,12 @@
       transform: scale(1.05);
     }
 
-    // "More" overlay for additional images
     &--more {
       &::after {
         content: attr(data-more-count);
         position: absolute;
         inset: 0;
-        background: rgba(0, 0, 0, 0.6);
+        background: rgb(0 0 0 / 60%);
         color: var(--ft-white);
         font-size: var(--ft-font-h2);
         font-weight: var(--ft-font-weight-bold);
@@ -528,18 +351,13 @@
     }
   }
 
-  // Grid layouts based on image count
-  &--2 {
-    .fantribe-media-grid__item {
-      height: 200px;
-    }
+  &--2 .fantribe-media-grid__item {
+    height: 200px;
   }
 
-  &--3 {
-    .fantribe-media-grid__item:first-child {
-      grid-row: span 2;
-      height: 100%;
-    }
+  &--3 .fantribe-media-grid__item:first-child {
+    grid-row: span 2;
+    height: 100%;
   }
 
   &--4,
@@ -555,35 +373,37 @@
 .fantribe-engagement-bar {
   display: flex;
   align-items: center;
-  gap: var(--ft-space-4);
-  padding: var(--ft-space-2) 0;
-  margin-top: var(--ft-space-3);
+  gap: 4px;
+  padding: 10px 0 0;
+  margin-top: 10px;
   border-top: 1px solid var(--ft-gray-200);
-  border-bottom: 1px solid var(--ft-gray-200);
   background: transparent;
 }
 
 .fantribe-engagement-btn {
   display: flex;
   align-items: center;
-  gap: var(--ft-space-1);
-  padding: var(--ft-space-1) var(--ft-space-2);
+  gap: 4px;
+  padding: 6px 10px;
   background: transparent;
   border: none;
-  border-radius: var(--ft-radius-md);
+  border-radius: 6px;
   color: var(--ft-gray-600);
-  font-size: var(--ft-font-small);
+  font-size: 13px;
+  font-weight: 500;
   cursor: pointer;
-  transition: all var(--ft-transition-fast);
+  transition:
+    background 0.1s ease,
+    color 0.1s ease;
 
   .d-icon {
-    font-size: 18px;
+    font-size: 17px;
     stroke-width: 2;
   }
 
   &__icon {
-    width: 18px;
-    height: 18px;
+    width: 17px;
+    height: 17px;
   }
 
   &:hover {
@@ -592,13 +412,13 @@
 
   // Like button
   &--like {
-    // Liked state: red icon and count only, no background
     &.fantribe-engagement-btn--active:not(.fantribe-engagement-btn--disabled) {
       color: var(--ft-error);
       background: transparent;
     }
 
-    &:hover:not(.fantribe-engagement-btn--disabled):not(
+    &:hover:not(
+        .fantribe-engagement-btn--disabled,
         .fantribe-engagement-btn--active
       ) {
       color: var(--ft-gray-600);
@@ -620,18 +440,28 @@
   }
 
   // Comment button
-  &--comment {
-    &:hover {
-      color: var(--ft-info);
-      background: var(--ft-info-light);
-    }
+  &--comment:hover {
+    color: var(--ft-info);
+    background: var(--ft-info-light);
   }
 
   // Share button
-  &--share {
+  &--share:hover {
+    color: var(--ft-success);
+    background: var(--ft-success-light);
+  }
+
+  // Bookmark button
+  &--bookmark {
+    margin-left: auto;
+
     &:hover {
-      color: var(--ft-success);
-      background: var(--ft-success-light);
+      color: var(--ft-warning, #f59e0b);
+      background: rgb(245 158 11 / 10%);
+    }
+
+    &.fantribe-engagement-btn--active {
+      color: var(--ft-warning, #f59e0b);
     }
   }
 
@@ -640,66 +470,8 @@
   }
 }
 
-// Comment Thread
-.fantribe-comment-thread {
-  padding-left: var(--ft-space-4);
-  border-left: 2px solid var(--ft-gray-200);
-  margin-top: var(--ft-space-4);
-  display: flex;
-  flex-direction: column;
-  gap: var(--ft-space-3);
-}
-
-.fantribe-comment {
-  display: flex;
-  gap: var(--ft-space-2);
-
-  &__avatar {
-    width: 28px;
-    height: 28px;
-    flex-shrink: 0;
-    border-radius: var(--ft-radius-full);
-    overflow: hidden;
-
-    img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-  }
-
-  &__content {
-    flex: 1;
-    min-width: 0;
-  }
-
-  &__header {
-    display: flex;
-    align-items: baseline;
-    gap: var(--ft-space-2);
-    margin-bottom: 2px;
-  }
-
-  &__username {
-    font-size: var(--ft-font-caption);
-    font-weight: var(--ft-font-weight-medium);
-    color: var(--ft-dark);
-  }
-
-  &__timestamp {
-    font-size: 11px;
-    color: var(--ft-gray-500);
-  }
-
-  &__text {
-    font-size: var(--ft-font-caption);
-    color: var(--ft-gray-700);
-    line-height: var(--ft-line-height-normal);
-  }
-}
-
 // Mobile adjustments
-@media (max-width: 767px) {
+@media (width <= 767px) {
   .fantribe-feed-card {
     border-radius: 0;
     border-left: none;
@@ -720,7 +492,7 @@
       margin-left: calc(36px + var(--ft-space-3));
     }
 
-    &__username {
+    &__display-name {
       font-size: var(--ft-font-small);
     }
 
@@ -764,34 +536,12 @@
       font-size: 20px;
     }
   }
-
-  .fantribe-comment-thread {
-    padding-left: var(--ft-space-2);
-    gap: var(--ft-space-2);
-  }
-
-  .fantribe-comment__avatar {
-    width: 24px;
-    height: 24px;
-  }
-
-  .fantribe-feed-section {
-    &__header {
-      margin-bottom: var(--ft-space-3);
-      padding: 0 var(--ft-space-2);
-    }
-
-    &__list {
-      gap: 0;
-    }
-  }
 }
 
 // Onebox in Feed Card
 .fantribe-feed-card__onebox {
   margin-top: var(--ft-space-2);
 
-  // Onebox in media section: video/link preview with player
   &--in-media {
     margin-top: 0;
     width: 100%;
@@ -877,7 +627,7 @@
         line-height: var(--ft-line-height-relaxed);
       }
 
-      img:not(.site-icon):not(.emoji) {
+      img:not(.site-icon, .emoji) {
         max-width: 120px;
         max-height: 100px;
         border-radius: var(--ft-radius-md);
@@ -895,12 +645,12 @@
   }
 }
 
-// Mobile adjustments for onebox
-@media (max-width: 767px) {
+// Mobile onebox
+@media (width <= 767px) {
   .fantribe-feed-card__onebox aside.onebox {
     padding: var(--ft-space-2);
 
-    .onebox-body img:not(.site-icon):not(.emoji) {
+    .onebox-body img:not(.site-icon, .emoji) {
       max-width: 80px;
       max-height: 80px;
     }

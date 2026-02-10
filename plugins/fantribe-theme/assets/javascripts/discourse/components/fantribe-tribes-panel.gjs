@@ -3,104 +3,151 @@ import { fn } from "@ember/helper";
 import { on } from "@ember/modifier";
 import { action } from "@ember/object";
 import { service } from "@ember/service";
-import FantribeTribeButton from "./fantribe-tribe-button";
+import avatar from "discourse/helpers/avatar";
+import icon from "discourse/helpers/d-icon";
+
+const NAV_ITEMS = [
+  {
+    id: "home-feed",
+    label: "Home Feed",
+    icon: "house",
+    route: "discovery.latest",
+  },
+  {
+    id: "explore-tribes",
+    label: "Explore Tribes",
+    icon: "compass",
+    route: "discovery.categories",
+  },
+  { id: "marketplace", label: "Marketplace", icon: "store" },
+  { id: "co-create", label: "Co-Create", icon: "people-group" },
+  { id: "live-events", label: "Live Events", icon: "tower-broadcast" },
+  { id: "chat", label: "Chat", icon: "comments", route: "chat.index" },
+  { id: "dashboard", label: "Dashboard", icon: "table-columns" },
+  { id: "content-studio", label: "Content Studio", icon: "tv" },
+  {
+    id: "product-discovery",
+    label: "Product Discovery",
+    icon: "wand-magic-sparkles",
+  },
+  { id: "fan-crm", label: "Fan CRM", icon: "address-book" },
+  { id: "rewards", label: "Rewards", icon: "gift" },
+  { id: "revenue", label: "Revenue", icon: "dollar-sign" },
+  { id: "partnerships", label: "Partnerships", icon: "handshake" },
+];
 
 export default class FantribeTribesPanel extends Component {
-  @service fantribeFilter;
-  @service site;
+  @service router;
+  @service currentUser;
 
-  isCategorySelected = (category) => {
-    return this.fantribeFilter.isCategorySelected(category);
+  isActive = (item) => {
+    const route = this.router.currentRouteName || "";
+    if (!item.route) {
+      return false;
+    }
+    if (item.route === "discovery.latest") {
+      return (
+        route === "discovery.latest" ||
+        route === "discovery.top" ||
+        route === "discovery.new" ||
+        route === "discovery.unread" ||
+        route === "discovery.hot" ||
+        route === "index"
+      );
+    }
+    if (item.route === "discovery.categories") {
+      return route === "discovery.categories";
+    }
+    if (item.route === "chat.index") {
+      return route.startsWith("chat");
+    }
+    return route === item.route;
   };
 
-  get categories() {
-    return (this.site.categories || [])
-      .filter((c) => !c.isUncategorized && c.permission !== null)
-      .sort((a, b) => (a.position || 0) - (b.position || 0));
-  }
-
-  get hasFilters() {
-    return this.fantribeFilter.hasFilters;
-  }
-
-  get allCategoriesSelected() {
-    const { categories } = this;
-    return (
-      categories.length > 0 &&
-      categories.every((c) =>
-        this.fantribeFilter.selectedCategoryIds.includes(c.id)
-      )
-    );
+  get navItems() {
+    return NAV_ITEMS;
   }
 
   @action
-  clearFilters() {
-    this.fantribeFilter.clearFilters();
+  navigateTo(item) {
+    if (!item.route) {
+      return;
+    }
+    try {
+      this.router.transitionTo(item.route);
+    } catch {
+      // Route may not exist (e.g., chat not enabled)
+    }
   }
 
   @action
-  selectAllCategories() {
-    this.fantribeFilter.setFilters(this.categories.map((c) => c.id));
+  navigateToProfile() {
+    if (this.currentUser) {
+      this.router.transitionTo("user", this.currentUser.username);
+    }
   }
 
   @action
-  toggleCategory(category) {
-    this.fantribeFilter.toggleCategory(category);
+  toggleCollapse() {
+    document.body.classList.toggle("fantribe-sidebar-collapsed");
   }
 
   <template>
-    <div class="fantribe-tribes-panel">
-      <div class="fantribe-tribes-panel__header">
-        <div class="fantribe-tribes-panel__title-group">
-          <h3 class="fantribe-tribes-panel__title">
-            <svg
-              class="fantribe-tribes-panel__filter-icon"
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="red"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              aria-hidden="true"
-            ><path
-                d="M10 20a1 1 0 0 0 .553.895l2 1A1 1 0 0 0 14 21v-7a2 2 0 0 1 .517-1.341L21.74 4.67A1 1 0 0 0 21 3H3a1 1 0 0 0-.742 1.67l7.225 7.989A2 2 0 0 1 10 14z"
-              ></path></svg>
-            My Tribes
-          </h3>
-          <p class="fantribe-tribes-panel__subtitle">Filter your content</p>
-        </div>
-        {{#if this.allCategoriesSelected}}
+    <nav class="fantribe-sidebar-nav">
+      <div class="fantribe-sidebar-nav__items">
+        {{#each this.navItems as |item|}}
           <button
             type="button"
-            class="fantribe-tribes-panel__clear-btn"
-            {{on "click" this.clearFilters}}
+            class="fantribe-sidebar-nav__item
+              {{if (this.isActive item) 'fantribe-sidebar-nav__item--active'}}"
+            {{on "click" (fn this.navigateTo item)}}
           >
-            Clear
+            <span class="fantribe-sidebar-nav__item-icon">
+              {{icon item.icon}}
+            </span>
+            <span class="fantribe-sidebar-nav__item-label">{{item.label}}</span>
+            {{#if (this.isActive item)}}
+              <span class="fantribe-sidebar-nav__item-chevron">
+                {{icon "chevron-right"}}
+              </span>
+            {{/if}}
+            <span class="fantribe-sidebar-nav__item-dot"></span>
           </button>
-        {{else}}
-          <button
-            type="button"
-            class="fantribe-tribes-panel__all-btn"
-            {{on "click" this.selectAllCategories}}
-          >
-            All Tribes
-          </button>
-        {{/if}}
-      </div>
-
-      <div class="fantribe-tribes-panel__content">
-        {{#each this.categories as |category index|}}
-          <FantribeTribeButton
-            @category={{category}}
-            @isSelected={{this.isCategorySelected category}}
-            @onToggle={{fn this.toggleCategory category}}
-            @gradientIndex={{index}}
-          />
         {{/each}}
       </div>
-    </div>
+
+      {{! Collapse toggle }}
+      <button
+        type="button"
+        class="fantribe-sidebar-nav__collapse"
+        {{on "click" this.toggleCollapse}}
+      >
+        {{icon "chevron-left"}}
+      </button>
+
+      {{! User profile at bottom }}
+      {{#if this.currentUser}}
+        <button
+          type="button"
+          class="fantribe-sidebar-nav__user"
+          {{on "click" this.navigateToProfile}}
+        >
+          <span class="fantribe-sidebar-nav__user-avatar">
+            {{avatar this.currentUser imageSize="medium"}}
+          </span>
+          <span class="fantribe-sidebar-nav__user-info">
+            <span class="fantribe-sidebar-nav__user-name">
+              {{this.currentUser.name}}
+            </span>
+            <span class="fantribe-sidebar-nav__user-username">
+              @{{this.currentUser.username}}
+            </span>
+          </span>
+          <span class="fantribe-sidebar-nav__user-chevron">
+            {{icon "chevron-right"}}
+          </span>
+        </button>
+      {{/if}}
+    </nav>
   </template>
 }

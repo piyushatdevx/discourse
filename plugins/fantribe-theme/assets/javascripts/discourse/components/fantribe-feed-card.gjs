@@ -6,9 +6,10 @@ import { service } from "@ember/service";
 import { htmlSafe } from "@ember/template";
 import DecoratedHtml from "discourse/components/decorated-html";
 import avatar from "discourse/helpers/avatar";
+import icon from "discourse/helpers/d-icon";
 import formatDate from "discourse/helpers/format-date";
 import { ajax } from "discourse/lib/ajax";
-import { gt, or } from "discourse/truth-helpers";
+import { or } from "discourse/truth-helpers";
 import { i18n } from "discourse-i18n";
 import FantribeEngagementBar from "./fantribe-engagement-bar";
 import FantribeMediaPhotoGrid from "./fantribe-media-photo-grid";
@@ -29,33 +30,15 @@ export default class FantribeFeedCard extends Component {
     return this.topic?.posters?.[0]?.user || this.topic?.creator;
   }
 
-  get posterInitials() {
+  get displayName() {
     if (!this.poster) {
-      return "?";
+      return "Unknown";
     }
-    const name = this.poster.name || this.poster.username || "";
-    return name
-      .split(" ")
-      .map((n) => n[0])
-      .join("")
-      .substring(0, 2)
-      .toUpperCase();
+    return this.poster.name || this.poster.username || "Unknown";
   }
 
-  get category() {
-    return this.topic?.category;
-  }
-
-  get tags() {
-    const tags = this.topic?.tags || [];
-    return tags.map((tag) => (typeof tag === "string" ? tag : tag.name));
-  }
-
-  get categoryBadgeStyle() {
-    if (!this.category?.color) {
-      return "";
-    }
-    return `background-color: #${this.category.color}20; color: #${this.category.color};`;
+  get posterUsername() {
+    return this.poster?.username || "unknown";
   }
 
   get excerpt() {
@@ -199,51 +182,30 @@ export default class FantribeFeedCard extends Component {
           >
             {{#if this.poster}}
               {{avatar this.poster imageSize="medium"}}
-            {{else}}
-              <span class="fantribe-feed-card__avatar-initials">
-                {{this.posterInitials}}
-              </span>
             {{/if}}
           </button>
 
           <div class="fantribe-feed-card__meta">
-            <a
-              class="fantribe-feed-card__username"
-              href="#"
-              {{on "click" this.navigateToUser}}
-            >
-              {{#if this.poster}}
-                {{this.poster.username}}
-              {{else}}
-                Unknown
-              {{/if}}
-            </a>
+            <span
+              class="fantribe-feed-card__display-name"
+            >{{this.displayName}}</span>
+            <span
+              class="fantribe-feed-card__username-handle"
+            >@{{this.posterUsername}}</span>
             <span class="fantribe-feed-card__separator">&middot;</span>
             <span class="fantribe-feed-card__timestamp">{{formatDate
                 @topic.created_at
                 format="tiny"
               }}</span>
-            {{#if this.category}}
-              <span class="fantribe-feed-card__separator">&middot;</span>
-              <span
-                class="fantribe-feed-card__category-badge"
-                style={{this.categoryBadgeStyle}}
-              >
-                {{this.category.name}}
-              </span>
-            {{/if}}
-            {{#if this.tags.length}}
-              <span class="fantribe-feed-card__separator">&middot;</span>
-              <span class="fantribe-feed-card__tags">
-                {{#each this.tags as |tag index|}}
-                  {{#if (gt index 0)}}
-                    <span class="fantribe-feed-card__separator">&middot;</span>
-                  {{/if}}
-                  <span class="fantribe-feed-card__tag-badge">{{tag}}</span>
-                {{/each}}
-              </span>
-            {{/if}}
           </div>
+
+          <button
+            type="button"
+            class="fantribe-feed-card__more-btn"
+            {{on "click" this.stopPropagation}}
+          >
+            {{icon "ellipsis"}}
+          </button>
         </header>
 
         <div class="fantribe-feed-card__body">
