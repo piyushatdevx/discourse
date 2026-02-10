@@ -6,7 +6,6 @@
 // ============================================================================
 body {
   background: #f7f7f7 !important;
-  padding-top: 60px !important; // ONLY header height, no extra gap
   margin: 0 !important;
 }
 
@@ -14,6 +13,10 @@ body {
   background: #f7f7f7 !important;
   margin-top: 0 !important;
   padding-top: 0 !important;
+}
+
+.wrap {
+  margin-left: 0 !important;
 }
 
 // ============================================================================

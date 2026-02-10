@@ -1,77 +1,24 @@
-// FanTribe Admin — Component Styles
-// Styles for FtAdminStatCard and Attention Panel
-
-// overrides in main UI - Only hide fantribe-nav in admin pages
-.admin-interface .fantribe-nav-item {
-  display: none !important;
-}
-
-.admin-contents {
-  background-color: white !important;
-}
-
-.sidebar-row {
-  height: 2.8em;
-}
-
-// Groups
-.groups-header .groups-header-new {
-  background-color: #ff1744 !important;
-  color: white !important;
-}
-
-.groups-header .groups-header-new svg {
-  color: white !important;
-}
-
-.admin-container .container.groups-index {
-  background-color: white !important;
-}
-
-#main-outlet section h1 {
-  text-align: center;
-}
-
-// Group Creation Form - Fix broken layout
-.groups-form {
-  max-width: 700px !important;
-  margin: 0 auto !important;
-
-  .control-label {
-    display: block !important;
-    width: auto !important;
-    text-align: left !important;
-  }
-
-  .control-group {
-    display: block !important;
-    margin-bottom: 1.5rem;
-  }
-}
-
-// Group Detail Page
-#main-outlet .container.group {
-  padding: 0 42px;
-}
+// FanTribe Admin — Custom Component Styles
+// Styles for FtAdminStatCard and Attention Panel.
+// Misc admin page overrides (groups, etc.) at the bottom.
 
 // ════════════════════════════════════════════════════════════════════
 // FT STAT CARD
 // ════════════════════════════════════════════════════════════════════
 .ft-stat-card {
-  background: var(--ft-glass-card-bg, rgb(255, 255, 255, 0.85));
-  backdrop-filter: blur(var(--ft-glass-card-blur, 12px));
-  border: var(--ft-glass-card-border, 1px solid rgb(255, 255, 255, 0.3));
+  background: var(--ft-white, #fff);
+  border: 1px solid var(--ft-gray-200, #e8e6e3);
   border-radius: var(--ft-radius-lg, 12px);
   padding: var(--ft-space-5, 1.25rem);
   display: flex;
   flex-direction: column;
   gap: var(--ft-space-2, 0.5rem);
-  box-shadow: var(--ft-shadow-sm, 0 2px 8px rgb(0, 0, 0, 0.1));
+  box-shadow: 0 1px 3px rgb(0 0 0 / 5%);
   transition: box-shadow var(--ft-transition-normal, 250ms ease);
   min-width: 0;
 
   &:hover {
-    box-shadow: var(--ft-shadow-md, 0 4px 16px rgb(0, 0, 0, 0.12));
+    box-shadow: 0 2px 8px rgb(0 0 0 / 8%);
   }
 
   // Header
@@ -85,9 +32,9 @@
   &__title {
     font-size: var(--ft-font-caption, 0.75rem);
     font-weight: var(--ft-font-weight-semibold, 600);
-    color: var(--ft-gray-600, #757575);
+    color: var(--ft-gray-500, #9e9e9e);
     text-transform: uppercase;
-    letter-spacing: 0.03em;
+    letter-spacing: 0.04em;
   }
 
   &__icon {
@@ -108,7 +55,7 @@
     width: 100%;
     height: 32px;
     color: var(--ft-primary, #ff1744);
-    opacity: 0.6;
+    opacity: 0.5;
   }
 
   // Trend line
@@ -184,23 +131,23 @@
 
     &:hover {
       transform: translateY(-2px);
-      box-shadow: var(--ft-shadow-md, 0 4px 16px rgb(0, 0, 0, 0.12));
+      box-shadow: 0 4px 12px rgb(0 0 0 / 8%);
       text-decoration: none;
     }
 
     &--warning {
-      background: var(--ft-warning-light, rgb(255, 152, 0, 0.1));
-      border: 1px solid rgb(255, 152, 0, 0.2);
+      background: var(--ft-warning-light, rgb(255 152 0 / 10%));
+      border: 1px solid rgb(255 152 0 / 20%);
     }
 
     &--danger {
-      background: var(--ft-error-light, rgb(244, 67, 54, 0.1));
-      border: 1px solid rgb(244, 67, 54, 0.2);
+      background: var(--ft-error-light, rgb(244 67 54 / 10%));
+      border: 1px solid rgb(244 67 54 / 20%);
     }
 
     &--info {
-      background: var(--ft-info-light, rgb(33, 150, 243, 0.1));
-      border: 1px solid rgb(33, 150, 243, 0.2);
+      background: var(--ft-info-light, rgb(33 150 243 / 10%));
+      border: 1px solid rgb(33 150 243 / 20%);
     }
   }
 
@@ -239,8 +186,9 @@
     display: flex;
     align-items: center;
     gap: var(--ft-space-2, 0.5rem);
-    padding: var(--ft-space-4, 1rem) var(--ft-space-5, 1.25rem);
+    padding: var(--ft-space-3, 0.75rem) var(--ft-space-5, 1.25rem);
     background: var(--ft-pastel-mint, #d4f0e7);
+    border: 1px solid rgb(76 175 80 / 15%);
     border-radius: var(--ft-radius-lg, 12px);
     font-size: var(--ft-font-small, 0.875rem);
     font-weight: var(--ft-font-weight-medium, 500);
@@ -249,5 +197,57 @@
     .d-icon {
       color: var(--ft-success, #4caf50);
     }
+  }
+}
+
+// ════════════════════════════════════════════════════════════════════
+// ADMIN PAGE-LEVEL OVERRIDES
+// (Groups, settings, etc. — scoped to admin-interface)
+// ════════════════════════════════════════════════════════════════════
+
+// Hide fantribe public nav in admin
+.admin-interface .fantribe-nav-item {
+  display: none !important;
+}
+
+// Groups — New group button
+body.admin-interface {
+  .groups-header .groups-header-new {
+    background-color: var(--ft-primary, #ff1744) !important;
+    color: var(--ft-white, #fff) !important;
+    border-radius: var(--ft-radius-md, 8px);
+
+    svg {
+      color: var(--ft-white, #fff) !important;
+    }
+  }
+
+  .admin-container .container.groups-index {
+    background-color: var(--ft-white, #fff) !important;
+    border-radius: var(--ft-radius-lg, 12px);
+    border: 1px solid var(--ft-gray-200, #e8e6e3);
+    padding: var(--ft-space-4, 1rem);
+  }
+
+  // Group creation form
+  .groups-form {
+    max-width: 700px !important;
+    margin: 0 auto !important;
+
+    .control-label {
+      display: block !important;
+      width: auto !important;
+      text-align: left !important;
+    }
+
+    .control-group {
+      display: block !important;
+      margin-bottom: 1.5rem;
+    }
+  }
+
+  // Group detail page
+  #main-outlet .container.group {
+    padding: 0 var(--ft-space-8, 2rem);
   }
 }
