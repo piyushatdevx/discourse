@@ -1,41 +1,70 @@
 // FanTribe Admin — Sidebar Visual Restyling
 // Pure CSS overrides. No logic changes, no JS.
 
-// ── Sidebar panel background & border ───────────────────────────────
+// ═══════════════════════════════════════════════════════════════════
+// SIDEBAR PANEL BACKGROUND & BORDER
+// ═══════════════════════════════════════════════════════════════════
 .admin-area .sidebar-wrapper {
   .admin-panel {
-    background-color: var(--d-sidebar-admin-background);
+    background-color: var(--ft-white, #fff);
   }
 
   .sidebar-container {
-    border-right-color: var(--ft-gray-200, #e8e6e3);
+    border-right: 1px solid var(--ft-gray-200, #e8e6e3);
   }
 }
 
-// ── Section headers ─────────────────────────────────────────────────
+// ═══════════════════════════════════════════════════════════════════
+// SECTION HEADERS — Uppercase, muted, spaced
+// ═══════════════════════════════════════════════════════════════════
 .admin-area .sidebar-wrapper .sidebar-section-header-text {
-  font-size: var(--ft-font-caption, 0.75rem);
-  font-weight: var(--ft-font-weight-semibold, 600);
-  letter-spacing: 0.05em;
+  font-size: 0.65rem;
+  font-weight: var(--ft-font-weight-bold, 700);
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--ft-gray-500, #9e9e9e);
+  color: var(--ft-gray-400, #bdbdbd);
+  padding: var(--ft-space-2, 0.5rem) 0;
 }
 
-// ── Section link rows ───────────────────────────────────────────────
+// ═══════════════════════════════════════════════════════════════════
+// SECTION SPACING — Gaps between sidebar groups
+// ═══════════════════════════════════════════════════════════════════
+.admin-area .sidebar-wrapper {
+  .sidebar-section {
+    margin-bottom: var(--ft-space-2, 0.5rem);
+  }
+
+  .sidebar-section-wrapper {
+    padding-bottom: var(--ft-space-1, 0.25rem);
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// SIDEBAR ROW HEIGHT
+// ═══════════════════════════════════════════════════════════════════
+.admin-area .sidebar-row {
+  height: 2.5em;
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// SECTION LINK ROWS
+// ═══════════════════════════════════════════════════════════════════
 .admin-area .sidebar-section-link-wrapper {
   .sidebar-section-link {
     border-radius: var(--ft-radius-md, 8px);
     font-size: var(--ft-font-small, 0.875rem);
     font-weight: var(--ft-font-weight-medium, 500);
     color: var(--ft-gray-700, #364153);
+    padding: 6px 10px;
     transition:
       background var(--ft-transition-fast, 150ms ease),
-      color var(--ft-transition-fast, 150ms ease);
+      color var(--ft-transition-fast, 150ms ease),
+      box-shadow var(--ft-transition-fast, 150ms ease);
 
     // Hover state
     &:hover,
     &:focus-visible {
-      background: var(--ft-pastel-pink, #ffe4e8);
+      background: var(--ft-gray-50, #fafafa);
       color: var(--ft-gray-900, #212121);
     }
 
@@ -43,7 +72,7 @@
     &--active,
     &.active,
     &.exact-url-match {
-      background: var(--ft-primary-light, rgb(255, 23, 68, 0.1));
+      background: var(--ft-primary-light, rgb(255 23 68 / 8%));
       color: var(--ft-primary, #ff1744);
       font-weight: var(--ft-font-weight-semibold, 600);
       box-shadow: inset 3px 0 0 0 var(--ft-primary, #ff1744);
@@ -51,37 +80,49 @@
       .sidebar-section-link-prefix.icon {
         color: var(--ft-primary, #ff1744);
       }
+
+      &:hover {
+        background: var(--ft-primary-light, rgb(255 23 68 / 12%));
+      }
     }
   }
 
   // Icon colour default
   .sidebar-section-link-prefix.icon {
-    color: var(--ft-gray-500, #9e9e9e);
+    color: var(--ft-gray-400, #bdbdbd);
     transition: color var(--ft-transition-fast, 150ms ease);
   }
 
   // Icon colour on hover
-  &.--hovering .sidebar-section-link-prefix.icon {
-    color: var(--ft-gray-700, #364153);
+  &:hover .sidebar-section-link-prefix.icon {
+    color: var(--ft-gray-600, #757575);
   }
 }
 
-// ── Badge counts (review queue, etc.) ───────────────────────────────
+// ═══════════════════════════════════════════════════════════════════
+// BADGE COUNTS (review queue, etc.)
+// ═══════════════════════════════════════════════════════════════════
 .admin-area .sidebar-section-link .sidebar-section-link-content-badge {
-  background: var(--ft-primary-light, rgb(255, 23, 68, 0.1));
+  background: var(--ft-primary-light, rgb(255 23 68 / 10%));
   color: var(--ft-primary, #ff1744);
   font-weight: var(--ft-font-weight-semibold, 600);
   border-radius: var(--ft-radius-full, 9999px);
-  padding: 0 var(--ft-space-2, 0.5rem);
-  font-size: var(--ft-font-caption, 0.75rem);
+  padding: 1px var(--ft-space-2, 0.5rem);
+  font-size: 11px;
   line-height: 1.6;
+  min-width: 18px;
+  text-align: center;
 }
 
-// ── Back-to-forum link ──────────────────────────────────────────────
+// ═══════════════════════════════════════════════════════════════════
+// BACK-TO-FORUM LINK
+// ═══════════════════════════════════════════════════════════════════
 .admin-area .sidebar-sections__back-to-forum {
-  color: var(--ft-gray-600, #757575);
+  color: var(--ft-gray-500, #9e9e9e);
   font-size: var(--ft-font-small, 0.875rem);
+  font-weight: var(--ft-font-weight-medium, 500);
   transition: color var(--ft-transition-fast, 150ms ease);
+  padding: var(--ft-space-2, 0.5rem) 0;
 
   &:hover {
     color: var(--ft-primary, #ff1744);
@@ -92,11 +133,28 @@
   }
 }
 
-// ── Admin content area polish ───────────────────────────────────────
-.admin-area .admin-content {
-  background: var(--ft-bg, #f5f5f5);
+// ═══════════════════════════════════════════════════════════════════
+// SIDEBAR SEARCH INPUT
+// ═══════════════════════════════════════════════════════════════════
+.admin-area .sidebar-wrapper {
+  .sidebar-filter {
+    input {
+      border-radius: var(--ft-radius-md, 8px) !important;
+      border-color: var(--ft-gray-200, #e8e6e3) !important;
+      background: var(--ft-gray-50, #fafafa);
+      font-size: var(--ft-font-small, 0.875rem);
+
+      &:focus {
+        border-color: var(--ft-primary, #ff1744) !important;
+        background: var(--ft-white, #fff);
+      }
+    }
+  }
 }
 
-.admin-area .admin-contents {
-  padding: var(--ft-space-6, 1.5rem) var(--ft-space-8, 2rem);
+// ═══════════════════════════════════════════════════════════════════
+// ADMIN CONTENT AREA BACKGROUND
+// ═══════════════════════════════════════════════════════════════════
+.admin-area .admin-content {
+  background: var(--ft-bg, #f5f5f5);
 }
