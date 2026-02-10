@@ -66,6 +66,7 @@ register_asset "stylesheets/common/overlays.scss"
 register_asset "stylesheets/common/feedback.scss"
 register_asset "stylesheets/common/layout.scss"
 register_asset "stylesheets/common/login-signup.scss"
+register_asset "stylesheets/common/auth.scss"
 
 # Component styles (Phase 2.1 - Header)
 register_asset "stylesheets/common/components/header.scss"
@@ -100,6 +101,13 @@ register_topic_preloader_associations({ first_post: :uploads }) do
 end
 
 after_initialize do
+  # Default-enable auth settings when FanTribe is active
+  if SiteSetting.fantribe_theme_enabled
+    SiteSetting.login_required = true unless SiteSetting.login_required
+    SiteSetting.enable_google_oauth2_logins = true unless SiteSetting.enable_google_oauth2_logins
+    SiteSetting.enable_facebook_logins = true unless SiteSetting.enable_facebook_logins
+  end
+
   # Enable topic excerpts for feed cards
   module ::FantribeTheme
     module ListableTopicSerializerExtension
