@@ -1,0 +1,136 @@
+// FanTribe Anonymous / Logged-Out UI
+// When login_required is true and the user is not authenticated,
+// hide the full app shell and let Discourse's login-required page
+// (or login/signup modals) take over.
+//
+// Body class `fantribe-anon` is added by fantribe-customizations.js
+// when there is no currentUser.
+
+// ---------------------------------------------------------------------------
+// 1. Hide fantribe app shell for anonymous visitors
+// ---------------------------------------------------------------------------
+body.fantribe-anon.fantribe-theme:not(.admin-interface) {
+  // Custom header (logo, search bar, create button)
+  .fantribe-header {
+    display: none !important;
+  }
+
+  // Left sidebar (tribes panel)
+  .fantribe-left-sidebar {
+    display: none !important;
+  }
+
+  // Feed layout wrapper
+  .fantribe-feed-layout {
+    display: none !important;
+  }
+
+  // Floating action button
+  .fantribe-fab {
+    display: none !important;
+  }
+
+  // Mobile bottom nav
+  .fantribe-mobile-nav {
+    display: none !important;
+  }
+
+  // Remove the two-column grid — single column for login content
+  #main-outlet-wrapper {
+    display: block !important;
+    max-width: 100% !important;
+    padding: 0 !important;
+  }
+
+  // Remove extra top padding that compensates for the hidden header
+  padding-top: 0 !important;
+
+  // Let the login-required page fill the viewport
+  #main-outlet {
+    max-width: 100% !important;
+    padding: 0 !important;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// 2. Login-required landing page — non-scrollable, centered card
+// ---------------------------------------------------------------------------
+body.fantribe-anon.fantribe-theme.static-login:not(.admin-interface) {
+  // Lock viewport — no scroll
+  overflow: hidden !important;
+  height: 100vh !important;
+  background: linear-gradient(
+    135deg,
+    var(--ft-pastel-pink, #fce4ec) 0%,
+    var(--ft-pastel-lavender, #e8eaf6) 100%
+  ) !important;
+
+  // Strip backgrounds from wrappers so gradient shows through
+  #main-outlet-wrapper,
+  #main-outlet,
+  .ember-application,
+  .container {
+    background: transparent !important;
+  }
+
+  // Full-viewport centering for the card
+  .body-page {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    height: 100vh !important;
+    margin: 0 !important;
+    padding: 0 var(--ft-space-4, 16px) !important;
+    box-sizing: border-box !important;
+  }
+
+  // The card itself
+  .login-welcome {
+    background: rgb(255 255 255 / 85%) !important;
+    backdrop-filter: blur(16px) !important;
+    border: 1px solid rgb(255 255 255 / 40%) !important;
+    border-radius: var(--ft-radius-xl, 16px) !important;
+    box-shadow: 0 8px 32px rgb(0 0 0 / 8%) !important;
+    padding: var(--ft-space-8, 32px) var(--ft-space-6, 24px) !important;
+    max-width: 420px !important;
+    width: 100% !important;
+    text-align: center !important;
+  }
+
+  // Button row
+  .body-page-button-container {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: var(--ft-space-3, 12px) !important;
+    margin-top: var(--ft-space-4, 16px) !important;
+    width: 100% !important;
+
+    .btn-primary {
+      width: 100% !important;
+      padding: 12px !important;
+      font-size: var(--ft-font-body, 15px) !important;
+      font-weight: var(--ft-font-weight-semibold, 600) !important;
+      border-radius: var(--ft-radius-md, 8px) !important;
+    }
+
+    .sign-up-button {
+      background: var(--ft-primary, #e53935) !important;
+      border-color: var(--ft-primary, #e53935) !important;
+      color: #fff !important;
+
+      &:hover {
+        background: var(--ft-primary-dark, #d32f2f) !important;
+      }
+    }
+
+    .login-button {
+      background: transparent !important;
+      border: 1px solid var(--ft-gray-300, #d0d0d0) !important;
+      color: var(--ft-dark, #1a1a1a) !important;
+
+      &:hover {
+        background: var(--ft-gray-100, #f5f5f5) !important;
+      }
+    }
+  }
+}
