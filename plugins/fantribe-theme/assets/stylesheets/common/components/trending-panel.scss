@@ -4,6 +4,7 @@
   border: 1px solid var(--ft-gray-200);
   border-radius: 12px;
   overflow: hidden;
+  box-shadow: 0 1px 2px rgb(0 0 0 / 4%);
 
   // Panel header
   &__header {
@@ -34,7 +35,7 @@
     padding: 0 16px 16px;
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 2px;
   }
 
   // Footer
@@ -64,17 +65,17 @@
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  padding: 8px;
+  padding: 10px 8px;
   background: transparent;
   border: none;
-  border-radius: 6px;
+  border-radius: 8px;
   cursor: pointer;
   text-align: left;
   transition: background 0.1s ease;
   gap: 8px;
 
   &:hover {
-    background: #fafafa;
+    background: #f8f8f8;
   }
 
   &__info {
@@ -106,7 +107,7 @@
     color: var(--ft-gray-500);
   }
 
-  // Trending indicator
+  // Chevron indicator
   &__indicator {
     flex-shrink: 0;
     display: flex;
@@ -114,10 +115,10 @@
     justify-content: center;
     width: 20px;
     height: 20px;
-    color: var(--ft-primary);
+    color: var(--ft-gray-400);
 
     .d-icon {
-      font-size: 12px;
+      font-size: 11px;
     }
   }
 }

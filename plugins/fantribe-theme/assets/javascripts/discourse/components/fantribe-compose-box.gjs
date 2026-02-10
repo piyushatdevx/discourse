@@ -31,8 +31,8 @@ export default class FantribeComposeBox extends Component {
         </div>
 
         <div class="fantribe-compose-box__content">
-          <div class="fantribe-compose-box__input-placeholder">Share your sound,
-            story, or creative spark...</div>
+          <div class="fantribe-compose-box__input-placeholder">Share your
+            sound...</div>
 
           <div class="fantribe-compose-box__actions">
             <button

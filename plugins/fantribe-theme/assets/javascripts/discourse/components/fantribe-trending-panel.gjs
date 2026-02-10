@@ -88,7 +88,7 @@ export default class FantribeTrendingPanel extends Component {
               </div>
 
               <span class="fantribe-trending-item__indicator">
-                {{icon "arrow-trend-up"}}
+                {{icon "chevron-right"}}
               </span>
             </button>
           {{/each}}
