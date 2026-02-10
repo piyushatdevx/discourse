@@ -1,0 +1,45 @@
+// FanTribe Cards
+// Base card styling system
+.ft-card {
+  background: var(--ft-white);
+  border: 1px solid var(--ft-gray-200);
+  border-radius: var(--ft-radius-lg);
+  box-shadow: var(--ft-shadow-sm);
+  overflow: hidden;
+}
+
+.ft-card-hover {
+  @extend .ft-card;
+  transition:
+    border-color var(--ft-transition-fast),
+    box-shadow var(--ft-transition-fast),
+    transform var(--ft-transition-normal);
+
+  &:hover {
+    border-color: var(--ft-gray-300);
+    box-shadow: var(--ft-shadow-md);
+    transform: translateY(-2px);
+  }
+}
+
+.ft-card-flat {
+  background: var(--ft-white);
+  border: 1px solid var(--ft-gray-200);
+  border-radius: var(--ft-radius-lg);
+  box-shadow: none;
+}
+
+// Card sections
+.ft-card-header {
+  padding: var(--ft-space-4) var(--ft-space-4) 0;
+}
+
+.ft-card-body {
+  padding: var(--ft-space-4);
+}
+
+.ft-card-footer {
+  padding: 0 var(--ft-space-4) var(--ft-space-4);
+  border-top: 1px solid var(--ft-gray-200);
+  padding-top: var(--ft-space-4);
+}

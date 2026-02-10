@@ -1,5 +1,216 @@
 // FanTribe Buttons
-// Overrides Discourse button CSS variables for brand styling.
+// Utility classes and Discourse overrides
+
+// =============================================
+// BUTTON UTILITY CLASSES
+// =============================================
+
+// Base button reset
+.ft-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--ft-space-2);
+  font-family: var(--ft-font-family);
+  font-weight: var(--ft-font-weight-semibold);
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  transition:
+    background-color var(--ft-transition-fast),
+    color var(--ft-transition-fast),
+    box-shadow var(--ft-transition-fast),
+    transform var(--ft-transition-fast),
+    border-color var(--ft-transition-fast);
+
+  &:disabled,
+  &[aria-disabled="true"] {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+
+  &:focus-visible {
+    outline: none;
+    box-shadow: var(--ft-shadow-focus);
+  }
+}
+
+// Sizes
+.ft-btn--sm {
+  padding: var(--ft-space-1) var(--ft-space-3);
+  font-size: var(--ft-font-small);
+  border-radius: var(--ft-radius-md);
+  min-height: 32px;
+}
+
+.ft-btn--md {
+  padding: var(--ft-space-2) var(--ft-space-4);
+  font-size: var(--ft-font-body);
+  border-radius: var(--ft-radius-lg);
+  min-height: 40px;
+}
+
+.ft-btn--lg {
+  padding: var(--ft-space-3) var(--ft-space-6);
+  font-size: var(--ft-font-body);
+  border-radius: var(--ft-radius-lg);
+  min-height: 48px;
+}
+
+.ft-btn--full {
+  width: 100%;
+}
+
+// Primary button (#FF1744 with white text)
+.ft-btn--primary {
+  background-color: var(--ft-primary);
+  color: var(--ft-white);
+
+  &:hover {
+    background-color: var(--ft-primary-hover);
+  }
+
+  &:active {
+    background-color: var(--ft-primary-active);
+    transform: scale(0.98);
+  }
+}
+
+// Secondary / Ghost button (outline)
+.ft-btn--secondary {
+  background-color: transparent;
+  color: var(--ft-dark);
+  border: 1px solid var(--ft-gray-300);
+
+  &:hover {
+    background-color: var(--ft-gray-100);
+    border-color: var(--ft-gray-400);
+  }
+
+  &:active {
+    background-color: var(--ft-gray-200);
+  }
+}
+
+// Tertiary button (text only)
+.ft-btn--tertiary {
+  background-color: transparent;
+  color: var(--ft-primary);
+  padding-left: var(--ft-space-2);
+  padding-right: var(--ft-space-2);
+
+  &:hover {
+    background-color: var(--ft-primary-light);
+  }
+
+  &:active {
+    background-color: var(--ft-primary-medium);
+  }
+}
+
+// Danger button
+.ft-btn--danger {
+  background-color: var(--ft-error);
+  color: var(--ft-white);
+
+  &:hover {
+    background-color: #d32f2f;
+  }
+
+  &:active {
+    background-color: #c62828;
+  }
+}
+
+// Danger outline
+.ft-btn--danger-outline {
+  background-color: transparent;
+  color: var(--ft-error);
+  border: 1px solid var(--ft-error);
+
+  &:hover {
+    background-color: var(--ft-error-light);
+  }
+}
+
+// Icon button (square, for icon-only buttons)
+.ft-btn--icon {
+  padding: var(--ft-space-2);
+  border-radius: var(--ft-radius-full);
+  background: transparent;
+  color: var(--ft-gray-600);
+  min-width: 36px;
+  min-height: 36px;
+
+  &:hover {
+    background-color: var(--ft-gray-100);
+    color: var(--ft-dark);
+  }
+
+  &:active {
+    background-color: var(--ft-gray-200);
+  }
+
+  &.ft-btn--icon-active {
+    color: var(--ft-primary);
+
+    &:hover {
+      background-color: var(--ft-primary-light);
+    }
+  }
+}
+
+// Loading state
+.ft-btn--loading {
+  position: relative;
+  color: transparent !important; // stylelint-disable-line declaration-no-important
+
+  &::after {
+    content: "";
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    border: 2px solid rgb(255, 255, 255, 0.3);
+    border-top-color: var(--ft-white);
+    border-radius: var(--ft-radius-full);
+    animation: ft-spin 0.6s linear infinite;
+  }
+}
+
+// Social OAuth buttons
+.ft-btn--google {
+  background-color: var(--ft-white);
+  color: var(--ft-dark);
+  border: 1px solid var(--ft-gray-300);
+  box-shadow: var(--ft-shadow-sm);
+
+  &:hover {
+    background-color: var(--ft-gray-50);
+    box-shadow: var(--ft-shadow-md);
+  }
+}
+
+.ft-btn--facebook {
+  background-color: var(--ft-facebook);
+  color: var(--ft-white);
+
+  &:hover {
+    background-color: #1565c0;
+  }
+}
+
+// Spin animation for loading
+@keyframes ft-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+// =============================================
+// DISCOURSE OVERRIDES
+// =============================================
+// Override Discourse button CSS variables for brand styling
 :root {
   // Primary buttons use brand red
   --d-button-primary-bg-color: var(--ft-primary);

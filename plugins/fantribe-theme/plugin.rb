@@ -53,9 +53,7 @@ register_svg_icon "users"
 
 # Common styles (all viewports)
 register_asset "stylesheets/common/diagnostic.scss" # DIAGNOSTIC - REMOVE WHEN VERIFIED
-register_asset "stylesheets/common/design-tokens.scss"
-register_asset "stylesheets/common/typography.scss"
-register_asset "stylesheets/common/glassmorphism.scss"
+# Design tokens, typography, and glassmorphism now come from theme
 register_asset "stylesheets/common/buttons.scss"
 register_asset "stylesheets/common/inputs.scss"
 register_asset "stylesheets/common/cards.scss"
