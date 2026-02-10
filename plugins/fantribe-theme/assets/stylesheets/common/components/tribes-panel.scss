@@ -1,186 +1,214 @@
-// FanTribe Tribes Panel - Left Sidebar "My Tribes" Filter
-// Gradient buttons with online indicators
+// FanTribe Sidebar Navigation — Left nav menu with icons, active state, user profile
+// Matches fantribe-tribes-panel.gjs class names
+.fantribe-sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 
-.fantribe-tribes-panel {
-  background: var(--ft-white);
-  border: 1px solid var(--ft-gray-200);
-  border-radius: var(--ft-radius-xl);
-  overflow: hidden;
-
-  // Panel header
-  &__header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    padding: var(--ft-space-5) var(--ft-space-5) var(--ft-space-3);
-    border-bottom: 1px solid var(--ft-gray-100);
-    margin-bottom: var(--ft-space-4);
-  }
-
-  &__title-group {
+  // Scrollable nav items
+  &__items {
+    flex: 1;
     display: flex;
     flex-direction: column;
-    gap: var(--ft-space-1);
+    gap: 1px;
+    padding: var(--ft-space-2) 0;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--ft-gray-300) transparent;
   }
 
-  &__title {
+  // Individual nav item — 40px row, icon + label
+  &__item {
     display: flex;
     align-items: center;
     gap: var(--ft-space-2);
-    font-size: var(--ft-font-h5);
-    font-weight: var(--ft-font-weight-semibold);
-    color: var(--ft-dark);
-    margin: 0;
-
-    .d-icon {
-      color: var(--ft-primary);
-      font-size: 16px;
-    }
-  }
-
-  &__filter-icon {
-    flex-shrink: 0;
-    color: var(--ft-primary);
-    fill: none;
-    stroke: currentColor;
-  }
-
-  &__subtitle {
-    font-size: var(--ft-font-caption);
-    color: var(--ft-gray-500);
-    margin: 0;
-  }
-
-  &__clear-btn,
-  &__all-btn {
-    font-size: var(--ft-font-caption);
-    color: var(--ft-primary);
-    background: none;
+    width: 100%;
+    padding: 8px var(--ft-space-2);
     border: none;
-    padding: var(--ft-space-1) var(--ft-space-2);
+    border-radius: 6px;
+    background: transparent;
+    color: var(--ft-gray-600);
+    font-size: 13px;
+    font-weight: 500;
     cursor: pointer;
-    transition: all var(--ft-transition-fast);
+    transition:
+      background 0.1s ease,
+      color 0.1s ease;
+    text-align: left;
+    position: relative;
 
     &:hover {
-      text-decoration: underline;
+      background: var(--ft-gray-100);
+      color: var(--ft-dark);
+    }
+
+    // Active state — red accent
+    &--active {
+      background: rgb(255 245 245);
+      color: var(--ft-primary);
+      font-weight: 600;
+
+      .fantribe-sidebar-nav__item-icon .d-icon {
+        color: var(--ft-primary);
+      }
+
+      &:hover {
+        background: rgb(255 240 240);
+        color: var(--ft-primary);
+      }
     }
   }
 
-  // Panel content - tribe buttons container
-  &__content {
-    padding: var(--ft-space-5) var(--ft-space-6) var(--ft-space-5);
-    display: flex;
-    flex-direction: column;
-    gap: var(--ft-space-4);
-  }
-}
-
-// Individual Tribe Button (Figma: border border-gray-200 bg-white hover:bg-gray-50 hover:border-gray-300)
-.fantribe-tribe-button {
-  display: flex;
-  align-items: center;
-  gap: var(--ft-space-3);
-  padding: var(--ft-space-3);
-  border-radius: var(--ft-radius-xl);
-  border: 1px solid #e5e7eb;
-  cursor: pointer;
-  transition: all 200ms ease;
-  text-align: left;
-  width: 100%;
-  background: var(--ft-white);
-
-  &:hover:not(&--active) {
-    background: #f9f9f9;
-    border-color: #d1d5db;
-  }
-
-  // Active/selected state - light red border (no hover on selected)
-  &--active {
-    border: 1px solid #e04f5e;
-    background: linear-gradient(
-      to right,
-      #f8f4fa 0%,
-      #fdeff0 50%,
-      #fff0f5 100%
-    );
-    box-shadow: var(--ft-shadow-sm);
-  }
-
-  // Icon container
-  &__icon {
-    width: 44px;
-    height: 44px;
-    flex-shrink: 0;
+  &__item-icon {
     display: flex;
     align-items: center;
     justify-content: center;
-    background: var(--ft-white);
-    border-radius: var(--ft-radius-lg);
-    box-shadow: var(--ft-shadow-sm);
+    width: 20px;
+    flex-shrink: 0;
 
     .d-icon {
-      font-size: 20px;
-      color: var(--ft-gray-700);
-    }
-
-    // Category emoji
-    &-emoji {
-      font-size: 22px;
-      line-height: 1;
-
-      img.emoji {
-        width: 22px;
-        height: 22px;
-      }
-    }
-
-    // Category Font Awesome icon
-    &-fa {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    // Category color dot
-    &-dot {
-      width: 24px;
-      height: 24px;
-      border-radius: var(--ft-radius-full);
+      font-size: 16px;
+      color: var(--ft-gray-500);
     }
   }
 
-  // Text content
-  &__info {
+  &__item-label {
     flex: 1;
     min-width: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-  }
-
-  &__name {
-    font-size: var(--ft-font-small);
-    font-weight: var(--ft-font-weight-medium);
-    color: var(--ft-dark);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
   }
 
-  &__topic-count {
-    font-size: var(--ft-font-caption);
-    color: var(--ft-gray-500);
+  // Chevron shown on active items
+  &__item-chevron {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    color: var(--ft-primary);
+
+    .d-icon {
+      font-size: 12px;
+    }
   }
 
-  // Favorite heart indicator
-  &__favorite {
-    flex-shrink: 0;
-    color: var(--ft-primary);
-    font-size: 14px;
-    opacity: 0.7;
+  // Notification dot (future use)
+  &__item-dot {
+    display: none;
+  }
 
-    &--filled {
-      opacity: 1;
+  // Collapse toggle button
+  &__collapse {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: var(--ft-space-2);
+    margin-top: var(--ft-space-2);
+    border: none;
+    border-top: 1px solid var(--ft-gray-200);
+    background: transparent;
+    color: var(--ft-gray-400);
+    cursor: pointer;
+    transition: color var(--ft-transition-fast);
+
+    .d-icon {
+      font-size: 14px;
+    }
+
+    &:hover {
+      color: var(--ft-gray-600);
+    }
+  }
+
+  // User profile section at bottom
+  &__user {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    padding: 8px;
+    border: none;
+    border-top: 1px solid var(--ft-gray-200);
+    background: transparent;
+    cursor: pointer;
+    text-align: left;
+    transition: background 0.1s ease;
+
+    &:hover {
+      background: var(--ft-gray-50);
+    }
+  }
+
+  &__user-avatar {
+    flex-shrink: 0;
+    width: 32px;
+    height: 32px;
+    border-radius: var(--ft-radius-full);
+    overflow: hidden;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  &__user-info {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  &__user-name {
+    display: none;
+  }
+
+  &__user-username {
+    font-size: 12px;
+    color: var(--ft-gray-600);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &__user-chevron {
+    flex-shrink: 0;
+    color: var(--ft-gray-400);
+
+    .d-icon {
+      font-size: 10px;
+    }
+  }
+}
+
+// Collapsed sidebar state — icon only, no labels
+body.fantribe-sidebar-collapsed {
+  .fantribe-sidebar-nav {
+    &__item-label,
+    &__item-chevron,
+    &__user-info,
+    &__user-chevron {
+      display: none;
+    }
+
+    &__item {
+      justify-content: center;
+      padding: var(--ft-space-2);
+    }
+
+    &__item-icon {
+      width: auto;
+    }
+
+    &__user {
+      justify-content: center;
+    }
+
+    &__collapse .d-icon {
+      transform: rotate(180deg);
     }
   }
 }

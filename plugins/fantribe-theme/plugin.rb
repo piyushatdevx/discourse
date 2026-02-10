@@ -31,8 +31,28 @@ register_svg_icon "gear"
 register_svg_icon "right-from-bracket"
 register_svg_icon "comment"
 register_svg_icon "share"
+register_svg_icon "compass"
+register_svg_icon "store"
+register_svg_icon "people-group"
+register_svg_icon "tower-broadcast"
+register_svg_icon "comments"
+register_svg_icon "table-columns"
+register_svg_icon "tv"
+register_svg_icon "wand-magic-sparkles"
+register_svg_icon "address-book"
+register_svg_icon "gift"
+register_svg_icon "dollar-sign"
+register_svg_icon "handshake"
+register_svg_icon "chevron-right"
+register_svg_icon "chevron-left"
+register_svg_icon "ellipsis"
+register_svg_icon "bookmark"
+register_svg_icon "far-bookmark"
+register_svg_icon "circle"
+register_svg_icon "users"
 
 # Common styles (all viewports)
+register_asset "stylesheets/common/diagnostic.scss" # DIAGNOSTIC - REMOVE WHEN VERIFIED
 register_asset "stylesheets/common/design-tokens.scss"
 register_asset "stylesheets/common/typography.scss"
 register_asset "stylesheets/common/glassmorphism.scss"
@@ -51,6 +71,9 @@ register_asset "stylesheets/common/login-signup.scss"
 register_asset "stylesheets/common/components/header.scss"
 register_asset "stylesheets/common/components/mobile-nav.scss"
 
+# App-level layout (persistent sidebar + main content grid)
+register_asset "stylesheets/common/components/app-layout.scss"
+
 # Component styles (Phase 2.2 - Feed View)
 register_asset "stylesheets/common/components/feed-layout.scss"
 register_asset "stylesheets/common/components/tribes-panel.scss"
@@ -58,6 +81,9 @@ register_asset "stylesheets/common/components/trending-panel.scss"
 register_asset "stylesheets/common/components/mobile-tribe-chips.scss"
 register_asset "stylesheets/common/components/feed-card.scss"
 register_asset "stylesheets/common/components/compose-box.scss"
+
+# Discourse overrides - MUST load last
+register_asset "stylesheets/common/fantribe-overrides.scss"
 
 # Desktop-specific styles
 register_asset "stylesheets/desktop/desktop.scss", :desktop

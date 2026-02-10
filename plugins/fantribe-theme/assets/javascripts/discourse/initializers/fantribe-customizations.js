@@ -3,11 +3,7 @@ import { withPluginApi } from "discourse/lib/plugin-api";
 function initializeFantribe(api) {
   const siteSettings = api.container.lookup("service:site-settings");
 
-  if (!siteSettings.fantribe_theme_enabled) {
-    return;
-  }
-
-  // Add fantribe class to body for CSS targeting
+  // FORCE body class for debugging - normally this checks fantribe_theme_enabled
   document.body.classList.add("fantribe-theme");
 
   // Add glassmorphism class if enabled

@@ -1,0 +1,567 @@
+// FanTribe Discourse Visual Overrides
+// Force Discourse to look like a modern product feed
+
+// ============================================================================
+// GLOBAL BACKGROUND & LAYOUT SYSTEM
+// ============================================================================
+body.fantribe-theme:not(.admin-interface) {
+  background: #f5f5f5 !important;
+
+  // Force all page backgrounds to light gray
+  #main-outlet,
+  .ember-application,
+  #main,
+  .container,
+  .wrap {
+    background: #f5f5f5 !important;
+  }
+
+  // Remove Discourse default backgrounds
+  .list-controls,
+  .navigation-container,
+  #list-area,
+  .category-list,
+  .topic-list-container {
+    background: transparent !important;
+  }
+
+  // Remove Discourse borders that clash
+  .list-container,
+  #list-area {
+    border: none !important;
+  }
+}
+
+// ============================================================================
+// CARD SYSTEM - White rounded cards for all content
+// ============================================================================
+body.fantribe-theme:not(.admin-interface) {
+  // Feed cards / Topic list items
+  .topic-list-item,
+  .topic-list tbody tr {
+    background: #fff !important;
+    border: 1px solid #e8e8e8 !important;
+    border-radius: 10px !important;
+    margin-bottom: 12px !important;
+    padding: 12px 16px !important;
+    box-shadow: 0 1px 2px rgb(0, 0, 0, 0.04) !important;
+    transition: border-color 0.1s ease !important;
+
+    &:hover {
+      border-color: #d0d0d0 !important;
+    }
+  }
+
+  // Remove Discourse default table styles
+  .topic-list {
+    border-collapse: separate !important;
+    border-spacing: 0 !important;
+
+    thead {
+      display: none !important;
+    }
+
+    tbody {
+      border: none !important;
+    }
+  }
+
+  // Individual topic card
+  .topic-list-item {
+    display: block !important;
+
+    td {
+      border: none !important;
+      padding: 0 !important;
+    }
+  }
+
+  // Compose box as card
+  #reply-control {
+    background: #fff !important;
+    border: 1px solid #e8e8e8 !important;
+    border-radius: 12px !important;
+    box-shadow: 0 2px 8px rgb(0, 0, 0, 0.08) !important;
+  }
+}
+
+// ============================================================================
+// SIDEBAR NAVIGATION SYSTEM
+// ============================================================================
+body.fantribe-theme:not(.admin-interface) {
+  // Left sidebar container
+  .sidebar-wrapper,
+  .sidebar-container {
+    background: #fff !important;
+    border-right: 1px solid #e8e8e8 !important;
+    padding: 0 !important;
+  }
+
+  // Sidebar sections
+  .sidebar-section-wrapper {
+    margin: 0 !important;
+    padding: 8px !important;
+  }
+
+  // Sidebar links - clean nav style
+  .sidebar-section-link,
+  .sidebar-section-link-wrapper a {
+    padding: 8px 8px !important;
+    margin: 1px 0 !important;
+    border-radius: 6px !important;
+    font-size: 13px !important;
+    font-weight: 500 !important;
+    color: #666 !important;
+    transition: background 0.1s ease !important;
+
+    &:hover {
+      background: #f5f5f5 !important;
+      color: #000 !important;
+    }
+
+    &.active {
+      background: rgb(255, 245, 245) !important;
+      color: #e53935 !important;
+      font-weight: 600 !important;
+    }
+  }
+
+  // Sidebar icons
+  .sidebar-section-link-prefix,
+  .d-icon {
+    width: 16px !important;
+    height: 16px !important;
+    font-size: 16px !important;
+    margin-right: 8px !important;
+  }
+
+  // Remove Discourse sidebar decorations
+  .sidebar-section-header {
+    display: none !important;
+  }
+}
+
+// ============================================================================
+// HEADER SYSTEM - Slim, clean, detached
+// ============================================================================
+body.fantribe-theme:not(.admin-interface) {
+  // Force header height
+  .d-header {
+    height: 56px !important;
+    min-height: 56px !important;
+    background: #fff !important;
+    border-bottom: 1px solid #e8e8e8 !important;
+    box-shadow: none !important;
+  }
+
+  .d-header-wrap {
+    // height: 56px !important;
+  }
+
+  // Header contents
+  .d-header .contents {
+    padding: 0 16px !important;
+  }
+
+  // Logo
+  .d-header #site-logo {
+    height: 24px !important;
+
+    img {
+      height: 24px !important;
+    }
+  }
+
+  // Search
+  .d-header .search-menu {
+    input[type="text"] {
+      height: 38px !important;
+      background: #f5f5f5 !important;
+      border: 1px solid #e8e8e8 !important;
+      border-radius: 20px !important;
+      padding-left: 36px !important;
+      font-size: 14px !important;
+
+      &:focus {
+        background: #fff !important;
+        border-color: #d0d0d0 !important;
+      }
+    }
+  }
+
+  // Header buttons
+  .d-header button.btn {
+    height: 36px !important;
+    padding: 0 16px !important;
+    border-radius: 18px !important;
+    font-size: 14px !important;
+  }
+
+  .d-header .btn-primary {
+    background: #e53935 !important;
+    border-color: #e53935 !important;
+
+    &:hover {
+      background: #d32f2f !important;
+    }
+  }
+
+  // Adjust body padding for slim header
+  // #main-outlet {
+  //   padding-top: 56px !important;
+  // }
+}
+
+// ============================================================================
+// RIGHT SIDEBAR - Floating card panel
+// ============================================================================
+body.fantribe-theme:not(.admin-interface) {
+  // Right sidebar widgets
+  .sidebar-right,
+  aside.sidebar-right {
+    background: transparent !important;
+    padding: 16px !important;
+  }
+
+  // Widget cards
+  .sidebar-right .widget,
+  .sidebar-right section {
+    background: #fff !important;
+    border: 1px solid #e8e8e8 !important;
+    border-radius: 12px !important;
+    padding: 16px !important;
+    margin-bottom: 16px !important;
+    box-shadow: 0 1px 2px rgb(0, 0, 0, 0.04) !important;
+  }
+
+  // Widget headers
+  .sidebar-right .widget h3,
+  .sidebar-right .widget-title {
+    font-size: 15px !important;
+    font-weight: 600 !important;
+    margin-bottom: 12px !important;
+    padding-bottom: 8px !important;
+  }
+
+  // Widget lists
+  .sidebar-right ul {
+    list-style: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  .sidebar-right li {
+    padding: 8px !important;
+    border-radius: 6px !important;
+    margin-bottom: 4px !important;
+    transition: background 0.1s ease !important;
+
+    &:hover {
+      background: #fafafa !important;
+    }
+  }
+}
+
+// ============================================================================
+// FEED DENSITY - Tight spacing, clean rhythm
+// ============================================================================
+body.fantribe-theme:not(.admin-interface) {
+  // List container spacing
+  .list-container {
+    padding: 16px !important;
+  }
+
+  // Topic list spacing
+  .topic-list {
+    margin: 0 !important;
+
+    tbody {
+      tr + tr {
+        margin-top: 0 !important;
+      }
+    }
+  }
+
+  // Topic spacing inside cards
+  .topic-list-item {
+    .main-link {
+      padding: 0 !important;
+      margin-bottom: 8px !important;
+    }
+
+    .topic-title {
+      font-size: 14px !important;
+      font-weight: 600 !important;
+      line-height: 1.4 !important;
+      margin-bottom: 4px !important;
+    }
+
+    .topic-excerpt {
+      font-size: 14px !important;
+      line-height: 1.45 !important;
+      color: #666 !important;
+      margin: 8px 0 !important;
+    }
+
+    .topic-statuses,
+    .topic-category,
+    .topic-tags {
+      font-size: 12px !important;
+      margin-top: 8px !important;
+    }
+
+    // Topic meta row
+    .topic-item-stats {
+      font-size: 13px !important;
+      color: #999 !important;
+      margin-top: 10px !important;
+      padding-top: 10px !important;
+      border-top: 1px solid #f0f0f0 !important;
+    }
+  }
+
+  // Posters / avatars
+  .topic-list .posters {
+    display: none !important;
+  }
+}
+
+// ============================================================================
+// DISCOURSE ELEMENT RESETS - Remove forum aesthetics
+// ============================================================================
+body.fantribe-theme:not(.admin-interface) {
+  // Remove table borders
+  table,
+  tr,
+  td,
+  th {
+    border: none !important;
+  }
+
+  // Remove zebra striping
+  tr:nth-child(even),
+  tr:nth-child(odd) {
+    background: transparent !important;
+  }
+
+  // Remove hover states that clash
+  .topic-list tr:hover {
+    background: transparent !important;
+  }
+
+  // Clean link styles
+  a {
+    text-decoration: none !important;
+  }
+
+  a:hover {
+    text-decoration: none !important;
+  }
+
+  // Button resets
+  .btn {
+    border-radius: 6px !important;
+    font-weight: 500 !important;
+    transition: all 0.1s ease !important;
+  }
+
+  .btn-small {
+    padding: 6px 12px !important;
+    font-size: 13px !important;
+  }
+
+  // Form inputs
+  input[type="text"],
+  input[type="search"],
+  textarea,
+  select {
+    border-radius: 6px !important;
+    border: 1px solid #e8e8e8 !important;
+    background: #fff !important;
+    font-size: 14px !important;
+
+    &:focus {
+      border-color: #d0d0d0 !important;
+      box-shadow: 0 0 0 3px rgb(0, 0, 0, 0.02) !important;
+    }
+  }
+
+  // Remove category badges that look forum-like
+  .badge-wrapper {
+    border-radius: 10px !important;
+    font-size: 11px !important;
+    padding: 2px 8px !important;
+  }
+
+  // Clean tag styles
+  .discourse-tag,
+  .discourse-tags .discourse-tag {
+    background: #f5f5f5 !important;
+    color: #666 !important;
+    border-radius: 10px !important;
+    padding: 3px 8px !important;
+    font-size: 11px !important;
+    font-weight: 500 !important;
+  }
+
+  // User avatars - make consistent
+  .avatar,
+  img.avatar {
+    border-radius: 50% !important;
+  }
+
+  .avatar.small {
+    width: 32px !important;
+    height: 32px !important;
+  }
+
+  .avatar.medium {
+    width: 36px !important;
+    height: 36px !important;
+  }
+
+  .avatar.large {
+    width: 40px !important;
+    height: 40px !important;
+  }
+}
+
+// ============================================================================
+// NOTIFICATION & INDICATOR DOTS
+// ============================================================================
+body.fantribe-theme:not(.admin-interface) {
+  // Clean notification dots
+  .badge-notification,
+  .unread-posts {
+    background: #e53935 !important;
+    color: #fff !important;
+    border-radius: 10px !important;
+    padding: 2px 6px !important;
+    font-size: 11px !important;
+    font-weight: 600 !important;
+  }
+
+  // Unread indicator
+  .topic-list-item.unread {
+    border-left: 3px solid #e53935 !important;
+  }
+}
+
+// ============================================================================
+// MODAL & OVERLAY STYLING
+// ============================================================================
+body.fantribe-theme:not(.admin-interface) {
+  .modal-inner-container,
+  .modal-body {
+    border-radius: 12px !important;
+  }
+
+  .modal-header {
+    border-bottom: 1px solid #f0f0f0 !important;
+    padding: 16px 24px !important;
+  }
+
+  .modal-footer {
+    border-top: 1px solid #f0f0f0 !important;
+    padding: 16px 24px !important;
+  }
+}
+
+// ============================================================================
+// COMPOSER STYLING - Floating card
+// ============================================================================
+body.fantribe-theme:not(.admin-interface) {
+  #reply-control {
+    padding: 16px !important;
+
+    .reply-area {
+      padding: 0 !important;
+    }
+
+    .d-editor-container {
+      border-radius: 8px !important;
+      border: 1px solid #e8e8e8 !important;
+    }
+
+    .d-editor-textarea-wrapper {
+      textarea {
+        font-size: 14px !important;
+        line-height: 1.5 !important;
+        padding: 12px !important;
+      }
+    }
+
+    .d-editor-button-bar {
+      background: #fafafa !important;
+      border-bottom: 1px solid #e8e8e8 !important;
+      padding: 8px !important;
+    }
+
+    .submit-panel {
+      padding: 12px 0 0 !important;
+    }
+  }
+}
+
+// ============================================================================
+// LOADING & EMPTY STATES
+// ============================================================================
+body.fantribe-theme:not(.admin-interface) {
+  .loading-container {
+    background: transparent !important;
+  }
+
+  .spinner {
+    border-color: #e8e8e8 !important;
+    border-right-color: #e53935 !important;
+  }
+
+  .empty-state,
+  .no-topics {
+    background: #fff !important;
+    border: 1px solid #e8e8e8 !important;
+    border-radius: 12px !important;
+    padding: 48px 24px !important;
+    text-align: center !important;
+  }
+}
+
+// ============================================================================
+// MISC CLEAN-UPS
+// ============================================================================
+body.fantribe-theme:not(.admin-interface) {
+  // Remove unnecessary separators
+  hr {
+    border-color: #f0f0f0 !important;
+  }
+
+  // Clean scrollbars
+  ::-webkit-scrollbar {
+    width: 8px !important;
+    height: 8px !important;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent !important;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #d0d0d0 !important;
+    border-radius: 4px !important;
+
+    &:hover {
+      background: #b0b0b0 !important;
+    }
+  }
+
+  // Remove focus outlines that clash (add subtle ones)
+  *:focus {
+    outline: none !important;
+  }
+
+  button:focus,
+  a:focus,
+  input:focus {
+    box-shadow: 0 0 0 3px rgb(229, 57, 53, 0.1) !important;
+  }
+}

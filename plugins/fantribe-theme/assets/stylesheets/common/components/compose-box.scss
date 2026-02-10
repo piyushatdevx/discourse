@@ -1,61 +1,43 @@
-// FanTribe Compose Box - Post Creation Component (Figma: light gray card, white input, dark avatar, red Share)
-// Avatar + input + media buttons + share button
-
+// FanTribe Compose Box — Avatar + placeholder + outlined media buttons
 .fantribe-compose-box {
-  background: #f8f8f8;
+  background: var(--ft-white);
   border: 1px solid var(--ft-gray-200);
   border-radius: 12px;
   overflow: hidden;
   cursor: pointer;
-  transition: all var(--ft-transition-fast);
-  // box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
 
   &:hover {
     border-color: var(--ft-gray-300);
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 1px 3px rgb(0, 0, 0, 0.04);
   }
 
-  &:focus {
-    outline: 2px solid var(--ft-primary);
-    outline-offset: 2px;
-  }
-
-  // Main input area - white inner content
+  // Main input area
   &__input-area {
     display: flex;
     align-items: flex-start;
-    gap: var(--ft-space-3);
-    padding: var(--ft-space-4) var(--ft-space-5);
-    background: var(--ft-white);
+    gap: 10px;
+    padding: 16px;
   }
 
-  // User avatar - dark gray/blue (Figma: #607d8b)
+  // User avatar
   &__avatar {
-    width: 40px;
-    height: 40px;
+    width: 36px;
+    height: 36px;
     flex-shrink: 0;
     border-radius: var(--ft-radius-full);
     overflow: hidden;
-    background: #607d8b;
-    display: flex;
-    align-items: center;
-    justify-content: center;
 
     img {
       width: 100%;
       height: 100%;
       object-fit: cover;
     }
-
-    // Initials fallback - white text on dark bg
-    &-initials {
-      font-size: var(--ft-font-small);
-      font-weight: var(--ft-font-weight-semibold);
-      color: var(--ft-white);
-    }
   }
 
-  // Content column - input + actions, aligns with Figma (media buttons below textbox, same left edge)
+  // Content column
   &__content {
     flex: 1;
     min-width: 0;
@@ -63,94 +45,63 @@
     flex-direction: column;
   }
 
-  // Text input container
-  &__input-wrapper {
-    min-width: 0;
-    font-weight: 300;
-  }
-
-  // Input area - very light gray bg, rounded corners, subtle border (Figma: taller for multi-line)
+  // Placeholder text
   &__input-placeholder {
-    min-height: 70px;
-    padding: var(--ft-space-2) var(--ft-space-3);
-    font-size: var(--ft-font-body);
-    color: #888888;
-    line-height: var(--ft-line-height-normal);
+    min-height: 38px;
+    padding: 10px 14px;
+    font-size: 14px;
+    color: #999;
+    line-height: 1.4;
     display: flex;
-    align-items: flex-start;
+    align-items: center;
     pointer-events: none;
     background: #f8f8f8;
-    border: 1px solid #e8e8e8;
-    border-radius: 8px;
+    border: none;
+    border-radius: 20px;
   }
 
-  // Action bar - white to match inner content (no border above icons)
+  // Action bar
   &__actions {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    margin-top: var(--ft-space-3);
-    padding: 0;
+    gap: 8px;
+    margin-top: 12px;
   }
 
-  // Media buttons group
-  &__media-buttons {
-    display: flex;
-    align-items: center;
-    gap: var(--ft-space-2);
-  }
-
+  // Outlined media buttons — icon + label
   &__media-btn {
-    display: flex;
+    display: inline-flex;
     align-items: center;
-    justify-content: center;
-    padding: 6px 8px;
+    gap: 6px;
+    padding: 6px 12px;
     background: transparent;
-    border: none;
-    border-radius: var(--ft-radius-full);
+    border: 1px solid #ddd;
+    border-radius: 18px;
     color: var(--ft-gray-600);
-    font-size: 1.125rem;
-    line-height: 1;
+    font-size: 13px;
+    font-weight: 500;
     cursor: pointer;
-    transition: background-color var(--ft-transition-fast), color var(--ft-transition-fast);
-
-    &:hover {
-      background: var(--ft-gray-100);
-    }
-  }
-
-  // Share button - pill-shaped, bright red (Figma)
-  &__share-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: var(--ft-space-2) var(--ft-space-5);
-    background: var(--ft-primary);
-    color: var(--ft-white);
-    border: none;
-    border-radius: var(--ft-radius-full);
-    font-size: var(--ft-font-small);
-    font-weight: var(--ft-font-weight-small);
-    pointer-events: none;
+    transition:
+      border-color 0.15s ease,
+      color 0.15s ease;
 
     .d-icon {
       font-size: 14px;
     }
+
+    &:hover {
+      border-color: var(--ft-gray-400);
+      color: var(--ft-dark);
+    }
   }
 }
 
-// md: p-2 (8px) for media buttons
-@media (min-width: 768px) {
-  .fantribe-compose-box__media-btn {
-    padding: 8px; // md:p-2
-  }
-}
-
-// Mobile: full width, no borders (Figma mobile: card edge-to-edge, no left/right border)
-@media (max-width: 767px) {
+// Mobile
+@media (width <= 767px) {
   .fantribe-compose-box {
     border: none;
     border-radius: 0;
+    border-bottom: 1px solid var(--ft-gray-200);
     box-shadow: none;
 
     &__input-area {
@@ -163,21 +114,12 @@
     }
 
     &__input-placeholder {
-      font-size: var(--ft-font-caption);
+      font-size: var(--ft-font-small);
+      min-height: 36px;
     }
 
-    &__actions {
-      margin-top: var(--ft-space-2);
-    }
-
-    &__media-btn {
-      padding: 6px 8px;
-      font-size: 1.125rem;
-    }
-
-    &__share-btn {
-      padding: var(--ft-space-2) var(--ft-space-4);
-      font-size: var(--ft-font-caption);
+    &__media-btn span {
+      display: none;
     }
   }
 }
