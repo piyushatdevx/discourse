@@ -101,6 +101,7 @@ export default class FantribeHeader extends Component {
           </span>
           <input
             type="text"
+            id="fantribe-header_search-input"
             class="fantribe-header__search-input"
             placeholder="Search people, gear, or tribes..."
             {{on "focus" this.handleSearchFocus}}

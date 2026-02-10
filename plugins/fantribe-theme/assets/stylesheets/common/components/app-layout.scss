@@ -21,13 +21,12 @@ body.fantribe-theme:not(.admin-interface) {
   // core's #main-outlet-wrapper #main-outlet { grid-area: content } (0,2,0,0 specificity)
   #main-outlet-wrapper {
     display: grid;
-    grid-template-columns: 240px minmax(0, 1fr);
+    grid-template-columns: 300px minmax(0, 1fr);
     grid-template-rows: 1fr auto;
     grid-template-areas:
       "sidebar content"
       "sidebar below-content";
     max-width: 1400px !important;
-    margin: 0 auto;
     gap: 0 var(--ft-space-4);
   }
 
@@ -35,7 +34,7 @@ body.fantribe-theme:not(.admin-interface) {
   .fantribe-left-sidebar {
     grid-area: sidebar;
     position: sticky;
-    top: 72px; // header height (64px) + spacing
+    top: 0;
     align-self: start;
     min-width: 0;
     max-height: calc(100vh - 80px);
@@ -122,6 +121,7 @@ body.fantribe-sidebar-collapsed.fantribe-theme:not(.admin-interface) {
 
     .fantribe-left-sidebar {
       display: none;
+      background-color: #fff !important;
     }
 
     .wrap {
