@@ -104,8 +104,22 @@ after_initialize do
   # Default-enable auth settings when FanTribe is active
   if SiteSetting.fantribe_theme_enabled
     SiteSetting.login_required = true unless SiteSetting.login_required
+
+    # Google OAuth
     SiteSetting.enable_google_oauth2_logins = true unless SiteSetting.enable_google_oauth2_logins
+    if ENV["GOOGLE_OAUTH2_CLIENT_ID"].present?
+      SiteSetting.google_oauth2_client_id = ENV["GOOGLE_OAUTH2_CLIENT_ID"]
+    end
+    if ENV["GOOGLE_OAUTH2_CLIENT_SECRET"].present?
+      SiteSetting.google_oauth2_client_secret = ENV["GOOGLE_OAUTH2_CLIENT_SECRET"]
+    end
+
+    # Facebook OAuth
     SiteSetting.enable_facebook_logins = true unless SiteSetting.enable_facebook_logins
+    SiteSetting.facebook_app_id = ENV["FACEBOOK_APP_ID"] if ENV["FACEBOOK_APP_ID"].present?
+    if ENV["FACEBOOK_APP_SECRET"].present?
+      SiteSetting.facebook_app_secret = ENV["FACEBOOK_APP_SECRET"]
+    end
   end
 
   # Enable topic excerpts for feed cards
