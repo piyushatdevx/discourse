@@ -2,18 +2,18 @@
 // Applied globally on public routes via body.fantribe-theme
 // Admin UI excluded via :not(.admin-interface)
 body.fantribe-theme:not(.admin-interface) {
-  background-color: var(--ft-bg) !important;
+  background-color: var(--ft-bg);
 
   // Hide Discourse's built-in sidebar (we use our own)
   .sidebar-wrapper {
-    display: none !important;
+    display: none;
   }
 
   // Remove Discourse core max-width constraints and backgrounds
   #main-outlet-wrapper,
   #main-outlet {
     box-sizing: border-box;
-    background: transparent !important;
+    background: transparent;
   }
 
   // Layout grid: persistent left sidebar + main content
@@ -26,7 +26,7 @@ body.fantribe-theme:not(.admin-interface) {
     grid-template-areas:
       "sidebar content"
       "sidebar below-content";
-    max-width: 1400px !important;
+    max-width: 1400px;
     gap: 0 var(--ft-space-4);
   }
 
@@ -47,12 +47,12 @@ body.fantribe-theme:not(.admin-interface) {
   #main-outlet {
     min-width: 0;
     overflow-x: clip;
-    padding: 0 !important;
+    padding: 0;
   }
 
   // Hide welcome banner (custom feed has its own)
   .welcome-banner {
-    display: none !important;
+    display: none;
   }
 
   // Hide default list controls (we use our own filtering)
@@ -105,18 +105,18 @@ body.fantribe-sidebar-collapsed.fantribe-theme:not(.admin-interface) {
 
     .fantribe-left-sidebar {
       display: none;
-      background-color: #fff !important;
+      background-color: #fff;
     }
 
     .wrap {
-      padding-left: 0 !important;
-      padding-right: 0 !important;
+      padding-left: 0;
+      padding-right: 0;
     }
 
     .container.list-container {
-      padding-left: 0 !important;
-      padding-right: 0 !important;
-      padding-inline: 0 !important;
+      padding-left: 0;
+      padding-right: 0;
+      padding-inline: 0;
     }
 
     // Topic page mobile spacing

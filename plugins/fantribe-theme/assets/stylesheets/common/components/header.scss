@@ -5,7 +5,7 @@
 // Guard with :not(.admin-interface) so admin keeps its native header
 body.fantribe-custom-header:not(.admin-interface) {
   .d-header {
-    display: none !important;
+    display: none;
   }
 
   &.fantribe-theme {
@@ -18,7 +18,7 @@ body.admin-interface {
   .fantribe-header,
   .fantribe-mobile-nav,
   .fantribe-fab {
-    display: none !important;
+    display: none;
   }
 }
 
@@ -132,7 +132,7 @@ body.admin-interface {
     gap: var(--ft-space-2);
     padding: 9px var(--ft-space-5);
     background: var(--ft-primary);
-    color: var(--ft-white) !important;
+    color: var(--ft-white);
     border: none;
     border-radius: var(--ft-radius-full);
     font-size: var(--ft-font-small);
@@ -182,22 +182,22 @@ body.admin-interface {
   }
 
   &__login-btn {
-    color: var(--ft-primary) !important;
-    background: transparent !important;
+    color: var(--ft-primary);
+    background: transparent;
 
     &:hover {
-      color: var(--ft-white) !important;
-      background: var(--ft-primary) !important;
+      color: var(--ft-white);
+      background: var(--ft-primary);
     }
   }
 
   &__signup-btn {
-    color: var(--ft-white) !important;
-    background: var(--ft-primary) !important;
+    color: var(--ft-white);
+    background: var(--ft-primary);
 
     &:hover {
-      background: var(--ft-primary-hover) !important;
-      border-color: var(--ft-primary-hover) !important;
+      background: var(--ft-primary-hover);
+      border-color: var(--ft-primary-hover);
     }
   }
 
@@ -265,24 +265,24 @@ body.admin-interface {
   }
 
   &__mobile-login {
-    color: var(--ft-primary) !important;
-    background: transparent !important;
+    color: var(--ft-primary);
+    background: transparent;
     border: 2px solid var(--ft-primary);
 
     &:hover {
-      color: var(--ft-white) !important;
-      background: var(--ft-primary) !important;
+      color: var(--ft-white);
+      background: var(--ft-primary);
     }
   }
 
   &__mobile-signup {
-    color: var(--ft-white) !important;
-    background: var(--ft-primary) !important;
+    color: var(--ft-white);
+    background: var(--ft-primary);
     border: 2px solid var(--ft-primary);
 
     &:hover {
-      background: var(--ft-primary-hover) !important;
-      border-color: var(--ft-primary-hover) !important;
+      background: var(--ft-primary-hover);
+      border-color: var(--ft-primary-hover);
     }
   }
 }

@@ -167,7 +167,7 @@
     position: absolute;
     width: 18px;
     height: 18px;
-    border: 2px solid rgba(255, 255, 255, 0.3);
+    border: 2px solid rgb(255, 255, 255, 0.3);
     border-top-color: var(--ft-white);
     border-radius: var(--ft-radius-full);
     animation: ft-spin 0.6s linear infinite;
@@ -235,7 +235,7 @@
 
   &:hover {
     transform: scale(1.05);
-    box-shadow: 0 12px 40px rgba(255, 23, 68, 0.3);
+    box-shadow: 0 12px 40px rgb(255, 23, 68, 0.3);
   }
 
   &:active {
@@ -270,7 +270,7 @@
 
   &:hover {
     transform: scale(1.05);
-    box-shadow: 0 12px 40px rgba(255, 23, 68, 0.3);
+    box-shadow: 0 12px 40px rgb(255, 23, 68, 0.3);
   }
 
   &:active {
@@ -278,7 +278,7 @@
   }
 
   // Show on desktop only (>= 768px)
-  @media (min-width: 768px) {
+  @media (width >= 768px) {
     display: flex;
   }
 }
@@ -293,24 +293,24 @@
 // Override Discourse composer Create Topic button to use Fantribe red
 body.fantribe-theme {
   .btn-primary.create {
-    background-color: var(--ft-primary) !important;
-    color: var(--ft-white) !important;
-    border-color: var(--ft-primary) !important;
+    background-color: var(--ft-primary);
+    color: var(--ft-white);
+    border-color: var(--ft-primary);
 
     &:hover:not(.disabled) {
-      background-color: var(--ft-primary-hover) !important;
-      border-color: var(--ft-primary-hover) !important;
-      color: var(--ft-white) !important;
+      background-color: var(--ft-primary-hover);
+      border-color: var(--ft-primary-hover);
+      color: var(--ft-white);
     }
 
     &:active:not(.disabled) {
-      background-color: var(--ft-primary-active) !important;
-      border-color: var(--ft-primary-active) !important;
+      background-color: var(--ft-primary-active);
+      border-color: var(--ft-primary-active);
     }
 
     // Saving/loading spinner on Create Topic button – white on red (was blue)
     &.is-loading .loading-icon {
-      color: var(--ft-white) !important;
+      color: var(--ft-white);
     }
   }
 }

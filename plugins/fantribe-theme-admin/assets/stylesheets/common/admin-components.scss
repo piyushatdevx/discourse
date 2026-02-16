@@ -206,24 +206,24 @@
 // ════════════════════════════════════════════════════════════════════
 
 // Hide fantribe public nav in admin
-.admin-interface .fantribe-nav-item {
-  display: none !important;
+body.admin-interface .fantribe-nav-item {
+  display: none;
 }
 
 // Groups — New group button
-body.admin-interface {
+body.admin-interface .admin-area {
   .groups-header .groups-header-new {
-    background-color: var(--ft-primary, #ff1744) !important;
-    color: var(--ft-white, #fff) !important;
+    background-color: var(--ft-primary, #ff1744);
+    color: var(--ft-white, #fff);
     border-radius: var(--ft-radius-md, 8px);
 
     svg {
-      color: var(--ft-white, #fff) !important;
+      color: var(--ft-white, #fff);
     }
   }
 
   .admin-container .container.groups-index {
-    background-color: var(--ft-white, #fff) !important;
+    background-color: var(--ft-white, #fff);
     border-radius: var(--ft-radius-lg, 12px);
     border: 1px solid var(--ft-gray-200, #e8e6e3);
     padding: var(--ft-space-4, 1rem);
@@ -231,17 +231,17 @@ body.admin-interface {
 
   // Group creation form
   .groups-form {
-    max-width: 700px !important;
-    margin: 0 auto !important;
+    max-width: 700px;
+    margin: 0 auto;
 
     .control-label {
-      display: block !important;
-      width: auto !important;
-      text-align: left !important;
+      display: block;
+      width: auto;
+      text-align: left;
     }
 
     .control-group {
-      display: block !important;
+      display: block;
       margin-bottom: 1.5rem;
     }
   }

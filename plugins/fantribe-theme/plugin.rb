@@ -52,7 +52,6 @@ register_svg_icon "circle"
 register_svg_icon "users"
 
 # Common styles (all viewports)
-register_asset "stylesheets/common/diagnostic.scss" # DIAGNOSTIC - REMOVE WHEN VERIFIED
 register_asset "stylesheets/common/design-tokens.scss"
 register_asset "stylesheets/common/typography.scss"
 register_asset "stylesheets/common/glassmorphism.scss"

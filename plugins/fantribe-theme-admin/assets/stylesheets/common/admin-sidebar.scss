@@ -136,16 +136,16 @@
 // ═══════════════════════════════════════════════════════════════════
 // SIDEBAR SEARCH INPUT
 // ═══════════════════════════════════════════════════════════════════
-.admin-area .sidebar-wrapper {
+body.admin-interface .admin-area .sidebar-wrapper {
   .sidebar-filter {
     input {
-      border-radius: var(--ft-radius-md, 8px) !important;
-      border-color: var(--ft-gray-200, #e8e6e3) !important;
+      border-radius: var(--ft-radius-md, 8px);
+      border-color: var(--ft-gray-200, #e8e6e3);
       background: var(--ft-gray-50, #fafafa);
       font-size: var(--ft-font-small, 0.875rem);
 
       &:focus {
-        border-color: var(--ft-primary, #ff1744) !important;
+        border-color: var(--ft-primary, #ff1744);
         background: var(--ft-white, #fff);
       }
     }

@@ -247,24 +247,24 @@
 // Composer saving bar – red background, white text and loader (was blue)
 body.fantribe-theme {
   #reply-control.saving {
-    background: var(--ft-primary) !important;
-    color: var(--ft-white) !important;
+    background: var(--ft-primary);
+    color: var(--ft-white);
 
     .composer-controls .d-icon {
-      color: var(--ft-white) !important;
+      color: var(--ft-white);
     }
   }
 
   #reply-control.saving .saving-text {
-    color: var(--ft-white) !important;
+    color: var(--ft-white);
 
     .spinner {
-      border-color: var(--ft-white) !important;
-      border-right-color: transparent !important;
+      border-color: var(--ft-white);
+      border-right-color: transparent;
     }
 
     .d-icon {
-      color: var(--ft-white) !important;
+      color: var(--ft-white);
     }
   }
 }

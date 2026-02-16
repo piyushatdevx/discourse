@@ -12,43 +12,43 @@
 body.fantribe-anon.fantribe-theme:not(.admin-interface) {
   // Custom header (logo, search bar, create button)
   .fantribe-header {
-    display: none !important;
+    display: none;
   }
 
   // Left sidebar (tribes panel)
   .fantribe-left-sidebar {
-    display: none !important;
+    display: none;
   }
 
   // Feed layout wrapper
   .fantribe-feed-layout {
-    display: none !important;
+    display: none;
   }
 
   // Floating action button
   .fantribe-fab {
-    display: none !important;
+    display: none;
   }
 
   // Mobile bottom nav
   .fantribe-mobile-nav {
-    display: none !important;
+    display: none;
   }
 
   // Remove the two-column grid — single column for login content
   #main-outlet-wrapper {
-    display: block !important;
-    max-width: 100% !important;
-    padding: 0 !important;
+    display: block;
+    max-width: 100%;
+    padding: 0;
   }
 
   // Remove extra top padding that compensates for the hidden header
-  padding-top: 0 !important;
+  padding-top: 0;
 
   // Let the login-required page fill the viewport
   #main-outlet {
-    max-width: 100% !important;
-    padding: 0 !important;
+    max-width: 100%;
+    padding: 0;
   }
 }
 
@@ -57,79 +57,79 @@ body.fantribe-anon.fantribe-theme:not(.admin-interface) {
 // ---------------------------------------------------------------------------
 body.fantribe-anon.fantribe-theme.static-login:not(.admin-interface) {
   // Lock viewport — no scroll
-  overflow: hidden !important;
-  height: 100vh !important;
+  overflow: hidden;
+  height: 100vh;
   background: linear-gradient(
     135deg,
     var(--ft-pastel-pink, #fce4ec) 0%,
     var(--ft-pastel-lavender, #e8eaf6) 100%
-  ) !important;
+  );
 
   // Strip backgrounds from wrappers so gradient shows through
   #main-outlet-wrapper,
   #main-outlet,
   .ember-application,
   .container {
-    background: transparent !important;
+    background: transparent;
   }
 
   // Full-viewport centering for the card
   .body-page {
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    height: 100vh !important;
-    margin: 0 !important;
-    padding: 0 var(--ft-space-4, 16px) !important;
-    box-sizing: border-box !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+    padding: 0 var(--ft-space-4, 16px);
+    box-sizing: border-box;
   }
 
   // The card itself
   .login-welcome {
-    background: rgb(255 255 255 / 85%) !important;
-    backdrop-filter: blur(16px) !important;
-    border: 1px solid rgb(255 255 255 / 40%) !important;
-    border-radius: var(--ft-radius-xl, 16px) !important;
-    box-shadow: 0 8px 32px rgb(0 0 0 / 8%) !important;
-    padding: var(--ft-space-8, 32px) var(--ft-space-6, 24px) !important;
-    max-width: 420px !important;
-    width: 100% !important;
-    text-align: center !important;
+    background: rgb(255 255 255 / 85%);
+    backdrop-filter: blur(16px);
+    border: 1px solid rgb(255 255 255 / 40%);
+    border-radius: var(--ft-radius-xl, 16px);
+    box-shadow: 0 8px 32px rgb(0 0 0 / 8%);
+    padding: var(--ft-space-8, 32px) var(--ft-space-6, 24px);
+    max-width: 420px;
+    width: 100%;
+    text-align: center;
   }
 
   // Button row
   .body-page-button-container {
-    display: flex !important;
-    flex-direction: column !important;
-    gap: var(--ft-space-3, 12px) !important;
-    margin-top: var(--ft-space-4, 16px) !important;
-    width: 100% !important;
+    display: flex;
+    flex-direction: column;
+    gap: var(--ft-space-3, 12px);
+    margin-top: var(--ft-space-4, 16px);
+    width: 100%;
 
     .btn-primary {
-      width: 100% !important;
-      padding: 12px !important;
-      font-size: var(--ft-font-body, 15px) !important;
-      font-weight: var(--ft-font-weight-semibold, 600) !important;
-      border-radius: var(--ft-radius-md, 8px) !important;
+      width: 100%;
+      padding: 12px;
+      font-size: var(--ft-font-body, 15px);
+      font-weight: var(--ft-font-weight-semibold, 600);
+      border-radius: var(--ft-radius-md, 8px);
     }
 
     .sign-up-button {
-      background: var(--ft-primary, #e53935) !important;
-      border-color: var(--ft-primary, #e53935) !important;
-      color: #fff !important;
+      background: var(--ft-primary, #e53935);
+      border-color: var(--ft-primary, #e53935);
+      color: #fff;
 
       &:hover {
-        background: var(--ft-primary-dark, #d32f2f) !important;
+        background: var(--ft-primary-dark, #d32f2f);
       }
     }
 
     .login-button {
-      background: transparent !important;
-      border: 1px solid var(--ft-gray-300, #d0d0d0) !important;
-      color: var(--ft-dark, #1a1a1a) !important;
+      background: transparent;
+      border: 1px solid var(--ft-gray-300, #d0d0d0);
+      color: var(--ft-dark, #1a1a1a);
 
       &:hover {
-        background: var(--ft-gray-100, #f5f5f5) !important;
+        background: var(--ft-gray-100, #f5f5f5);
       }
     }
   }
