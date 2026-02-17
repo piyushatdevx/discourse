@@ -15,6 +15,8 @@ const MAX_CHARS = 2000;
 export default class FtCreatePostModal extends Component {
   @service currentUser;
   @service router;
+  @service siteSettings;
+  @service site;
   @service fantribeCreate;
 
   @tracked postTitle = "";
@@ -77,11 +79,16 @@ export default class FtCreatePostModal extends Component {
     this.isSubmitting = true;
 
     try {
+      const categoryId =
+        parseInt(this.siteSettings.default_composer_category, 10) ||
+        this.site.uncategorized_category_id;
+
       const result = await ajax("/posts", {
         type: "POST",
         data: {
           raw: this.postText,
           title: this.postTitle,
+          category: categoryId,
           archetype: "regular",
         },
       });
