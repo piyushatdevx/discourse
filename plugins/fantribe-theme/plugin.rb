@@ -70,6 +70,8 @@ register_svg_icon "xmark"
 register_svg_icon "clock"
 register_svg_icon "tag"
 register_svg_icon "music"
+register_svg_icon "calendar"
+register_svg_icon "circle-xmark"
 
 # Common styles (all viewports)
 register_asset "stylesheets/common/design-tokens.scss"

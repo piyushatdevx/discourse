@@ -8,6 +8,7 @@ import avatar from "discourse/helpers/avatar";
 import icon from "discourse/helpers/d-icon";
 import { ajax } from "discourse/lib/ajax";
 import { popupAjaxError } from "discourse/lib/ajax-error";
+import { getUploadMarkdown } from "discourse/lib/uploads";
 import { eq } from "discourse/truth-helpers";
 
 const MAX_CHARS = 2000;
@@ -23,6 +24,11 @@ export default class FtCreatePostModal extends Component {
   @tracked postText = "";
   @tracked visibility = "public";
   @tracked isSubmitting = false;
+  @tracked uploadedMedia = [];
+  @tracked showScheduler = false;
+  @tracked scheduledDate = "";
+  @tracked scheduledTime = "";
+  @tracked isUploading = false;
 
   get charCount() {
     return this.postText.length;
@@ -37,8 +43,13 @@ export default class FtCreatePostModal extends Component {
       !this.postTitle.trim() ||
       !this.postText.trim() ||
       this.isOverLimit ||
-      this.isSubmitting
+      this.isSubmitting ||
+      this.isUploading
     );
+  }
+
+  get hasUploadedMedia() {
+    return this.uploadedMedia.length > 0;
   }
 
   @action
@@ -71,6 +82,75 @@ export default class FtCreatePostModal extends Component {
   }
 
   @action
+  triggerFileInput(type) {
+    const input = document.querySelector(`.ft-modal__file-input--${type}`);
+    if (input) {
+      input.value = "";
+      input.click();
+    }
+  }
+
+  @action
+  async handleFileSelected(type, event) {
+    const files = event.target.files;
+    if (!files || files.length === 0) {
+      return;
+    }
+
+    this.isUploading = true;
+
+    try {
+      for (const file of files) {
+        const formData = new FormData();
+        formData.append("file", file);
+        formData.append("type", "composer");
+
+        const upload = await ajax("/uploads.json", {
+          type: "POST",
+          data: formData,
+          processData: false,
+          contentType: false,
+        });
+
+        const uploadMarkdown = getUploadMarkdown(upload);
+        this.uploadedMedia = [
+          ...this.uploadedMedia,
+          { type, name: file.name, uploadMarkdown },
+        ];
+      }
+    } catch (error) {
+      popupAjaxError(error);
+    } finally {
+      this.isUploading = false;
+      event.target.value = "";
+    }
+  }
+
+  @action
+  removeMedia(index) {
+    this.uploadedMedia = this.uploadedMedia.filter((_, i) => i !== index);
+  }
+
+  @action
+  toggleScheduler() {
+    this.showScheduler = !this.showScheduler;
+    if (!this.showScheduler) {
+      this.scheduledDate = "";
+      this.scheduledTime = "";
+    }
+  }
+
+  @action
+  updateScheduledDate(event) {
+    this.scheduledDate = event.target.value;
+  }
+
+  @action
+  updateScheduledTime(event) {
+    this.scheduledTime = event.target.value;
+  }
+
+  @action
   async submitPost() {
     if (this.isDisabled) {
       return;
@@ -83,10 +163,14 @@ export default class FtCreatePostModal extends Component {
         parseInt(this.siteSettings.default_composer_category, 10) ||
         this.site.uncategorized_category_id;
 
+      const mediaParts = this.uploadedMedia.map((m) => m.uploadMarkdown);
+      const rawParts = [...mediaParts, this.postText];
+      const raw = rawParts.join("\n\n");
+
       const result = await ajax("/posts", {
         type: "POST",
         data: {
-          raw: this.postText,
+          raw,
           title: this.postTitle,
           category: categoryId,
           archetype: "regular",
@@ -169,11 +253,36 @@ export default class FtCreatePostModal extends Component {
             {{this.charCount}}/{{MAX_CHARS}}
           </div>
 
+          {{! Hidden file inputs }}
+          <input
+            type="file"
+            class="ft-modal__file-input ft-modal__file-input--image"
+            accept="image/*"
+            multiple
+            {{on "change" (fn this.handleFileSelected "image")}}
+          />
+          <input
+            type="file"
+            class="ft-modal__file-input ft-modal__file-input--video"
+            accept="video/*"
+            multiple
+            {{on "change" (fn this.handleFileSelected "video")}}
+          />
+          <input
+            type="file"
+            class="ft-modal__file-input ft-modal__file-input--audio"
+            accept="audio/*"
+            multiple
+            {{on "change" (fn this.handleFileSelected "audio")}}
+          />
+
           {{! Media Buttons }}
           <div class="ft-modal__media-buttons">
             <button
               type="button"
               class="ft-modal__media-pill ft-modal__media-pill--photo"
+              disabled={{this.isUploading}}
+              {{on "click" (fn this.triggerFileInput "image")}}
             >
               {{icon "image"}}
               <span>Photo</span>
@@ -181,6 +290,8 @@ export default class FtCreatePostModal extends Component {
             <button
               type="button"
               class="ft-modal__media-pill ft-modal__media-pill--video"
+              disabled={{this.isUploading}}
+              {{on "click" (fn this.triggerFileInput "video")}}
             >
               {{icon "video"}}
               <span>Video</span>
@@ -188,11 +299,77 @@ export default class FtCreatePostModal extends Component {
             <button
               type="button"
               class="ft-modal__media-pill ft-modal__media-pill--audio"
+              disabled={{this.isUploading}}
+              {{on "click" (fn this.triggerFileInput "audio")}}
             >
               {{icon "music"}}
               <span>Audio</span>
             </button>
           </div>
+
+          {{! Upload progress }}
+          {{#if this.isUploading}}
+            <div class="ft-modal__upload-status">Uploading...</div>
+          {{/if}}
+
+          {{! Uploaded Media Previews }}
+          {{#if this.hasUploadedMedia}}
+            <div class="ft-modal__uploaded-media">
+              {{#each this.uploadedMedia as |media index|}}
+                <div class="ft-modal__uploaded-item">
+                  <span class="ft-modal__uploaded-item-icon">
+                    {{#if (eq media.type "image")}}
+                      {{icon "image"}}
+                    {{else if (eq media.type "video")}}
+                      {{icon "video"}}
+                    {{else}}
+                      {{icon "music"}}
+                    {{/if}}
+                  </span>
+                  <span
+                    class="ft-modal__uploaded-item-name"
+                  >{{media.name}}</span>
+                  <button
+                    type="button"
+                    class="ft-modal__uploaded-item-remove"
+                    {{on "click" (fn this.removeMedia index)}}
+                  >
+                    {{icon "xmark"}}
+                  </button>
+                </div>
+              {{/each}}
+            </div>
+          {{/if}}
+
+          {{! Schedule Panel }}
+          {{#if this.showScheduler}}
+            <div class="ft-modal__schedule-panel">
+              <div class="ft-modal__schedule-panel-header">
+                {{icon "calendar"}}
+                <span>Schedule Post</span>
+              </div>
+              <div class="ft-modal__schedule-grid">
+                <div class="ft-modal__schedule-field">
+                  <label class="ft-modal__schedule-label">Date</label>
+                  <input
+                    type="date"
+                    class="ft-modal__schedule-input"
+                    value={{this.scheduledDate}}
+                    {{on "input" this.updateScheduledDate}}
+                  />
+                </div>
+                <div class="ft-modal__schedule-field">
+                  <label class="ft-modal__schedule-label">Time</label>
+                  <input
+                    type="time"
+                    class="ft-modal__schedule-input"
+                    value={{this.scheduledTime}}
+                    {{on "input" this.updateScheduledTime}}
+                  />
+                </div>
+              </div>
+            </div>
+          {{/if}}
 
           {{! Tag Gear }}
           <div class="ft-modal__tag-gear">
@@ -253,9 +430,18 @@ export default class FtCreatePostModal extends Component {
 
         {{! Footer }}
         <div class="ft-modal__footer">
-          <button type="button" class="ft-modal__schedule-toggle">
+          <button
+            type="button"
+            class="ft-modal__schedule-toggle
+              {{if this.showScheduler 'ft-modal__schedule-toggle--active'}}"
+            {{on "click" this.toggleScheduler}}
+          >
             {{icon "clock"}}
-            <span>Schedule for Later</span>
+            <span>{{if
+                this.showScheduler
+                "Cancel Schedule"
+                "Schedule for Later"
+              }}</span>
           </button>
           <div class="ft-modal__action-buttons">
             <button
@@ -269,7 +455,14 @@ export default class FtCreatePostModal extends Component {
                 {{if this.isDisabled 'ft-modal__publish-btn--disabled'}}"
               disabled={{this.isDisabled}}
               {{on "click" this.submitPost}}
-            >Publish Now</button>
+            >
+              {{#if this.showScheduler}}
+                {{icon "calendar"}}
+                Schedule Post
+              {{else}}
+                Publish Now
+              {{/if}}
+            </button>
           </div>
         </div>
       </div>
