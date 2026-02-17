@@ -1,24 +1,25 @@
-// Right Sidebar — Exact values from FeedPage_UI_Master_Spec.md §3.5
+// Right Sidebar — Values from Cretor Tribe V1 RightSidebar.tsx
 //
-// Container: display none, xl:block, w-80 (320px), h-100%, overflow-y auto
-// Padding: 24px, pb 80px, gap 24px vertical
-// Widget: bg white, radius 24px, border 1px #D4D2CF, shadow-sm
-// Header: p-5, border-b, icon w-5 h-5, title font-semibold
-// Items: p-4, hover bg-electric-blue-light, transition 200ms
-// Live indicator: 8px (w-2 h-2), bg-red-500, ping animation, border 2px white
+// Class names matched to fantribe-right-sidebar.gjs template.
+// Container: hidden by default, xl:flex column, w-80 (320px), h-full, overflow-y auto
+// Padding: 24px (p-6), pb 80px (pb-20), gap 24px (space-y-6)
+// Widget: bg white, rounded-3xl (24px), border 1px slate-200, shadow-sm, overflow hidden
+// Header: p-5 (20px), border-b slate-200, flex gap-2, icon 20px, title semibold
+// Items: p-4 (16px), hover bg-electric-blue-light, transition-all 200ms
+// Live indicator: 8px red-500, ping 1s, border 2px white
 body.fantribe-theme:not(.admin-interface) {
   .fantribe-right-sidebar {
-    display: none; // hidden by default
+    display: none;
 
     @media (width >= 1280px) {
-      display: block;
-      width: 320px; // w-80 (Spec §3.5)
-      height: 100%; // h-full
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      width: 320px;
+      height: 100%;
       overflow-y: auto;
-      padding: 24px; // p-6
-      padding-bottom: 80px; // pb-20
+      padding-bottom: 80px;
 
-      // Scrollbar hiding
       &::-webkit-scrollbar {
         display: none;
       }
@@ -26,285 +27,287 @@ body.fantribe-theme:not(.admin-interface) {
       scrollbar-width: none;
     }
 
-    // Vertical gap between widgets (Spec §3.5: gap 24px)
-    &__widgets {
-      display: flex;
-      flex-direction: column;
-      gap: 24px;
-    }
-
-    // Widget Card (Spec §3.5)
+    // Widget Card (shared by Trending + Live)
     &__widget {
       background: white;
-      border-radius: 24px; // rounded-3xl (Spec §3.5)
-      border: 1px solid var(--ft-slate-200); // #D4D2CF
+      border-radius: 24px;
+      border: 1px solid var(--ft-slate-200);
       box-shadow: var(--ft-shadow-sm);
       overflow: hidden;
     }
 
-    // Widget header (Spec §3.5: p-5, border-b)
-    &__header {
-      padding: 20px; // p-5
+    // Widget Header (GJS: __widget-header)
+    &__widget-header {
+      padding: 20px;
       border-bottom: 1px solid var(--ft-slate-200);
-    }
-
-    &__header-content {
       display: flex;
       align-items: center;
-      gap: 8px; // gap-2
-    }
+      gap: 8px;
 
-    &__header-icon {
-      width: 20px; // w-5
-      height: 20px; // h-5
-
-      svg,
-      .d-icon {
+      > .d-icon {
         width: 20px;
         height: 20px;
+        flex-shrink: 0;
       }
 
-      &--trending {
+      > .d-icon-arrow-trend-up {
         color: var(--ft-electric-blue);
       }
 
-      &--live {
-        color: #dc2626; // red-600
+      h3 {
+        font-weight: var(--ft-font-weight-semibold);
+        color: var(--ft-slate-900);
+        font-size: var(--ft-font-base);
+        margin: 0;
+        line-height: var(--ft-line-height-tight);
       }
     }
 
-    &__header-title {
-      font-weight: var(--ft-font-weight-semibold); // 600
-      color: var(--ft-slate-900);
+    // Live icon wrapper in header
+    &__live-icon-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+
+      .d-icon {
+        width: 20px;
+        height: 20px;
+        color: #dc2626;
+      }
     }
 
-    // List items (Spec §3.5: p-4, hover bg-electric-blue-light)
-    &__items {
+    &__live-ping {
+      position: absolute;
+      top: -4px;
+      right: -4px;
+      width: 8px;
+      height: 8px;
+      background: #ef4444;
+      border-radius: var(--ft-radius-pill);
+      animation: ft-ping 1s cubic-bezier(0, 0, 0.2, 1) infinite;
+      opacity: 0.75;
+    }
+
+    &__live-dot {
+      position: absolute;
+      top: -4px;
+      right: -4px;
+      width: 8px;
+      height: 8px;
+      background: #ef4444;
+      border-radius: var(--ft-radius-pill);
+    }
+
+    // Widget Content list (GJS: __widget-content)
+    &__widget-content {
       > * + * {
-        border-top: 1px solid var(--ft-slate-100); // divide-y
+        border-top: 1px solid var(--ft-slate-100);
       }
     }
 
-    &__item {
-      padding: 16px; // p-4
-      cursor: pointer;
-      transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
-      display: block;
-      width: 100%;
-      background: transparent;
-      border: none;
-      text-align: left;
-
-      &:hover {
-        background: var(--ft-electric-blue-light); // bg-electric-blue-light
-      }
-
-      &--live:hover {
-        background: linear-gradient(
-          to right,
-          #fef2f2,
-          #fce7f3
-        ); // from-red-50 to-pink-50
-      }
-    }
-
-    &__item-content {
+    // Trending Tribes Items (GJS: __tribe-item)
+    &__tribe-item {
       display: flex;
       align-items: flex-start;
       justify-content: space-between;
-      gap: 12px; // gap-3
+      gap: 12px;
+      width: 100%;
+      padding: 16px;
+      cursor: pointer;
+      background: transparent;
+      border: none;
+      text-align: left;
+      transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
+
+      &:hover {
+        background: var(--ft-electric-blue-light);
+      }
+
+      > .d-icon-chevron-right {
+        width: 16px;
+        height: 16px;
+        color: var(--ft-slate-400);
+        flex-shrink: 0;
+        margin-top: 2px;
+        transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      &:hover > .d-icon-chevron-right {
+        color: var(--ft-electric-blue);
+        transform: translateX(4px);
+      }
     }
 
-    &__item-info {
+    &__tribe-info {
       flex: 1;
       min-width: 0;
     }
 
-    &__item-header {
+    &__tribe-name-row {
       display: flex;
       align-items: center;
-      gap: 8px; // gap-2
-      margin-bottom: 4px; // mb-1
+      gap: 8px;
+      margin-bottom: 4px;
     }
 
-    &__item-name {
-      font-weight: var(--ft-font-weight-medium); // 500
+    &__tribe-name {
+      font-weight: var(--ft-font-weight-medium);
       color: var(--ft-slate-900);
-      font-size: var(--ft-font-sm); // 14px
+      font-size: var(--ft-font-sm);
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
       transition: color 200ms cubic-bezier(0.4, 0, 0.2, 1);
 
-      .fantribe-right-sidebar__item:hover & {
+      .fantribe-right-sidebar__tribe-item:hover & {
         color: var(--ft-electric-blue);
-      }
-
-      .fantribe-right-sidebar__item--live:hover & {
-        color: #dc2626; // red-600
       }
     }
 
     &__new-badge {
-      padding: 2px 8px; // py-0.5 px-2
+      padding: 2px 8px;
       background: var(--ft-gradient-action);
       color: white;
-      font-size: var(--ft-font-xs); // 12px
-      font-weight: var(--ft-font-weight-bold); // 700
+      font-size: var(--ft-font-xs);
+      font-weight: var(--ft-font-weight-bold);
       border-radius: var(--ft-radius-pill);
+      white-space: nowrap;
+      flex-shrink: 0;
     }
 
-    &__item-meta {
+    &__tribe-meta {
       display: flex;
       align-items: center;
-      gap: 8px; // gap-2
-      font-size: var(--ft-font-xs); // 12px
+      gap: 8px;
+      font-size: var(--ft-font-xs);
       color: var(--ft-slate-500);
-    }
 
-    &__meta-icon {
-      width: 12px; // w-3
-      height: 12px; // h-3
-
-      svg,
       .d-icon {
         width: 12px;
         height: 12px;
       }
     }
 
-    &__chevron {
-      width: 16px; // w-4
-      height: 16px; // h-4
-      color: var(--ft-slate-400);
-      flex-shrink: 0;
-      transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
-
-      svg,
-      .d-icon {
-        width: 16px;
-        height: 16px;
-      }
-
-      .fantribe-right-sidebar__item:hover & {
-        color: var(--ft-electric-blue);
-        transform: translateX(4px); // hover:translate-x-1 = 4px
-      }
-    }
-
-    // Live streams section
-    &__live-item {
+    // Live Now Stream Items (GJS: __stream-item)
+    &__stream-item {
       display: flex;
       align-items: flex-start;
-      gap: 12px; // gap-3
+      gap: 12px;
+      width: 100%;
+      padding: 16px;
+      cursor: pointer;
+      background: transparent;
+      border: none;
+      text-align: left;
+      transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
+
+      &:hover {
+        background: linear-gradient(to right, #fef2f2, #fce7f3);
+      }
     }
 
-    &__avatar-container {
+    &__stream-avatar-wrapper {
       position: relative;
       flex-shrink: 0;
     }
 
-    // Live indicator (Spec §3.5: 8px w-2 h-2, red-500, ping, border 2px white)
-    &__live-badge {
+    &__stream-live-badge {
       position: absolute;
-      top: -2px;
-      right: -2px;
+      top: -4px;
+      right: -4px;
     }
 
-    &__ping-container {
-      position: relative;
-      width: 8px; // w-2
-      height: 8px; // h-2
-    }
-
-    &__ping-outer {
+    &__stream-ping {
       position: absolute;
-      width: 8px;
-      height: 8px;
-      background: #ef4444; // red-500
+      width: 12px;
+      height: 12px;
+      background: #ef4444;
       border-radius: var(--ft-radius-pill);
-      animation: ft-ping 1s cubic-bezier(0, 0, 0.2, 1) infinite; // Spec: 1s
+      animation: ft-ping 1s cubic-bezier(0, 0, 0.2, 1) infinite;
       opacity: 0.75;
     }
 
-    &__ping-inner {
+    &__stream-dot {
       position: relative;
-      width: 8px;
-      height: 8px;
-      background: #ef4444; // red-500
+      display: block;
+      width: 12px;
+      height: 12px;
+      background: #ef4444;
       border-radius: var(--ft-radius-pill);
-      border: 2px solid white; // border 2px white (Spec §3.5)
+      border: 2px solid white;
     }
 
-    &__stream-title {
+    &__stream-info {
+      flex: 1;
+      min-width: 0;
+
+      > p {
+        font-size: var(--ft-font-xs);
+        color: var(--ft-slate-600);
+        margin: 0 0 8px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+    }
+
+    &__stream-name {
+      display: block;
       font-weight: var(--ft-font-weight-medium);
       color: var(--ft-slate-900);
-      font-size: var(--ft-font-sm); // 14px
-      margin-bottom: 4px; // mb-1
+      font-size: var(--ft-font-sm);
+      margin-bottom: 4px;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
       transition: color 200ms cubic-bezier(0.4, 0, 0.2, 1);
 
-      .fantribe-right-sidebar__item--live:hover & {
-        color: #dc2626; // red-600
+      .fantribe-right-sidebar__stream-item:hover & {
+        color: #dc2626;
       }
     }
 
-    &__stream-subtitle {
-      font-size: var(--ft-font-xs); // 12px
-      color: var(--ft-slate-600);
-      margin-bottom: 8px; // mb-2
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    &__stream-stats {
+    &__stream-viewers {
       display: flex;
       align-items: center;
-      gap: 8px; // gap-2
-    }
-
-    &__live-pill {
-      display: flex;
-      align-items: center;
-      gap: 4px; // gap-1
-      padding: 4px 8px; // py-1 px-2
-      background: #fee2e2; // red-100
-      color: #991b1b; // red-800
-      border-radius: var(--ft-radius-pill);
-      font-size: var(--ft-font-xs); // 12px
-      font-weight: var(--ft-font-weight-medium);
-    }
-
-    &__play-icon {
-      width: 12px; // w-3
-      height: 12px; // h-3
-
-      svg,
-      .d-icon {
-        width: 12px;
-        height: 12px;
-        fill: #991b1b; // red-700
-      }
-    }
-
-    &__viewers {
-      font-size: var(--ft-font-xs); // 12px
+      gap: 8px;
+      font-size: var(--ft-font-xs);
       color: var(--ft-slate-500);
     }
 
-    // Widget footer
-    &__footer {
-      padding: 16px; // p-4
+    // LIVE pill badge (GJS: __live-badge inside stream-viewers)
+    &__live-badge {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 8px;
+      background: #fee2e2;
+      color: #b91c1c;
+      border-radius: var(--ft-radius-pill);
+      font-size: var(--ft-font-xs);
+      font-weight: var(--ft-font-weight-medium);
+
+      .d-icon {
+        width: 12px;
+        height: 12px;
+        fill: #b91c1c;
+      }
+    }
+
+    // Widget Footer (GJS: __widget-footer)
+    &__widget-footer {
+      padding: 16px;
       border-top: 1px solid var(--ft-slate-200);
     }
 
-    &__footer-button {
+    // Footer button (GJS: __footer-btn)
+    &__footer-btn {
+      display: block;
       width: 100%;
       text-align: center;
-      font-size: var(--ft-font-sm); // 14px
+      font-size: var(--ft-font-sm);
       font-weight: var(--ft-font-weight-medium);
       color: var(--ft-electric-blue);
       background: transparent;
@@ -317,12 +320,62 @@ body.fantribe-theme:not(.admin-interface) {
       }
 
       &--live {
-        color: #dc2626; // red-600
+        color: #dc2626;
 
         &:hover {
-          color: #b91c1c; // red-700
+          color: #b91c1c;
         }
       }
     }
+
+    // Suggested For You Section (GJS: __suggested)
+    &__suggested {
+      background: var(--ft-electric-blue-light);
+      border: 1px solid rgb(0 128 255 / 0.2);
+      border-radius: 24px;
+      padding: 20px;
+
+      h3 {
+        font-weight: var(--ft-font-weight-semibold);
+        color: var(--ft-slate-900);
+        font-size: var(--ft-font-base);
+        margin: 0 0 12px;
+      }
+
+      p {
+        font-size: var(--ft-font-sm);
+        color: var(--ft-slate-600);
+        margin: 0 0 16px;
+      }
+    }
+
+    // Discover button (GJS: __discover-btn)
+    &__discover-btn {
+      display: block;
+      width: 100%;
+      background: var(--ft-gradient-community);
+      color: white;
+      padding: 12px 16px;
+      border-radius: var(--ft-radius-pill);
+      border: none;
+      font-weight: var(--ft-font-weight-medium);
+      font-size: var(--ft-font-sm);
+      cursor: pointer;
+      box-shadow: var(--ft-shadow-lg);
+      transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
+
+      &:hover {
+        box-shadow: var(--ft-shadow-xl);
+        transform: scale(1.05);
+      }
+    }
+  }
+}
+
+@keyframes ft-ping {
+  75%,
+  100% {
+    transform: scale(2);
+    opacity: 0;
   }
 }
