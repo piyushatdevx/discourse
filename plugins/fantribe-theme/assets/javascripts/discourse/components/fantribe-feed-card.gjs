@@ -238,6 +238,8 @@ export default class FantribeFeedCard extends Component {
               @onClose={{this.closeMenu}}
               @isOwnPost={{this.isOwnPost}}
               @userName={{this.posterUsername}}
+              @topic={{@topic}}
+              @firstPostId={{this.firstPostId}}
             />
           </div>
         </header>
