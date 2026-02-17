@@ -252,7 +252,7 @@ export default class FantribeEngagementBar extends Component {
           class="fantribe-engagement__action fantribe-engagement__action--share"
           {{on "click" this.handleShare}}
         >
-          {{icon "share"}}
+          {{icon "share-nodes"}}
           <span>Share</span>
         </button>
 

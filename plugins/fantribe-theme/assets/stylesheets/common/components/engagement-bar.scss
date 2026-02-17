@@ -1,17 +1,18 @@
-// Engagement — Exact from FeedPage_UI_Master_Spec.md §3.4
+// Engagement Bar — Values from Cretor Tribe V1 PostCard.tsx + ReactionBar.tsx
 //
 // Two-row layout:
-// 1. Reaction row: emoji pills (❤️🔥👏🎵) with counts
-//    - Default: bg-slate-50, border 1px slate-200, rounded-full, px-4 py-2
-//    - Active: bg-vibrant-red-light, border 2px vibrant-red, scale(1.05), bounce-once
-// 2. Action bar: comment count + share + save
-//    - border-top 1px slate-200
-//    - Buttons: text-slate-500, hover colors per action
-//    - Icons: w-5 h-5, hover scale(1.1)
+// 1. Reaction row: emoji pills with counts
+//    - Default: bg-slate-50, border 1px slate-200, rounded-full, px-4 py-2, gap-2
+//    - Hover: bg-slate-100, border-slate-300
+//    - Active: bg-vibrant-red-light, border-2 vibrant-red, scale-105
+// 2. Action bar: comment + share + save
+//    - justify-between (spread across full width)
+//    - text-slate-500, hover color per action (no bg tint)
+//    - Icons: w-5 h-5, group-hover:scale-110
 body.fantribe-theme:not(.admin-interface) {
   .fantribe-engagement {
     // ==========================================
-    // REACTION ROW (Spec §3.4)
+    // REACTION ROW
     // ==========================================
     &__reactions {
       display: flex;
@@ -24,7 +25,7 @@ body.fantribe-theme:not(.admin-interface) {
     &__reaction {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
+      gap: 8px; // gap-2
       padding: 8px 16px; // py-2 px-4
       border-radius: 9999px; // rounded-full
       background: var(--ft-slate-50);
@@ -34,13 +35,13 @@ body.fantribe-theme:not(.admin-interface) {
       font-size: 0.875rem; // 14px
 
       &:hover {
-        transform: scale(1.05);
-        box-shadow: var(--ft-shadow-sm);
+        background: var(--ft-slate-100); // hover:bg-slate-100
+        border-color: var(--ft-slate-300); // hover:border-slate-300
       }
 
       // Active: bg-vibrant-red-light, border-2 vibrant-red, scale-105
       &--active {
-        background: var(--ft-vibrant-red-tint);
+        background: var(--ft-vibrant-red-light); // bg-vibrant-red-light
         border: 2px solid var(--ft-vibrant-red);
         transform: scale(1.05);
       }
@@ -51,23 +52,27 @@ body.fantribe-theme:not(.admin-interface) {
     }
 
     &__reaction-emoji {
-      font-size: 1rem; // 16px
+      font-size: 1.125rem; // text-lg (18px)
       line-height: 1;
     }
 
     &__reaction-count {
-      font-weight: 500;
-      color: var(--ft-slate-700);
-      font-size: 0.875rem; // 14px
+      font-weight: 500; // font-medium
+      color: var(--ft-slate-600); // text-slate-600
+      font-size: 0.875rem; // text-sm
+
+      .fantribe-engagement__reaction--active & {
+        color: var(--ft-vibrant-red); // text-vibrant-red when active
+      }
     }
 
     // ==========================================
-    // ACTION BAR (Spec §3.4: px-6 pb-6 pt-4, border-t)
+    // ACTION BAR (comment, share, save)
     // ==========================================
     &__actions {
       display: flex;
       align-items: center;
-      gap: 4px; // gap-1
+      justify-content: space-between; // spread across full width
       padding: 16px 24px 24px; // pt-4 px-6 pb-6
       border-top: 1px solid var(--ft-slate-200);
     }
@@ -76,15 +81,13 @@ body.fantribe-theme:not(.admin-interface) {
       display: flex;
       align-items: center;
       gap: 8px; // gap-2
-      padding: 8px 16px; // py-2 px-4
-      border-radius: 9999px; // rounded-full
       background: transparent;
       border: none;
       cursor: pointer;
-      color: var(--ft-slate-500);
-      font-size: 0.875rem; // 14px
-      font-weight: 500;
-      transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
+      color: var(--ft-slate-500); // text-slate-500
+      font-size: 0.875rem; // text-sm
+      font-weight: 500; // font-medium
+      transition: color 200ms cubic-bezier(0.4, 0, 0.2, 1);
 
       svg,
       .d-icon {
@@ -96,61 +99,28 @@ body.fantribe-theme:not(.admin-interface) {
       &:hover {
         svg,
         .d-icon {
-          transform: scale(1.1); // scale-110
+          transform: scale(1.1); // group-hover:scale-110
         }
       }
 
       // Comment hover: electric-blue
       &--comment:hover {
         color: var(--ft-electric-blue);
-        background: var(--ft-electric-blue-tint);
       }
 
       // Share hover: coral
       &--share:hover {
         color: var(--ft-coral);
-        background: var(--ft-coral-tint);
       }
 
-      // Bookmark/Save hover: amber
+      // Bookmark/Save hover: mint
       &--bookmark:hover {
-        color: var(--ft-amber);
-        background: var(--ft-amber-tint);
+        color: var(--ft-mint);
       }
 
       &--bookmark.fantribe-engagement__action--active {
-        color: var(--ft-amber);
+        color: var(--ft-mint);
       }
-    }
-  }
-
-  // Legacy class support (old engagement bar)
-  .fantribe-engagement-bar {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    padding: 16px 24px 24px;
-    border-top: 1px solid var(--ft-slate-200);
-  }
-
-  .fantribe-engagement-btn {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 8px 16px;
-    border-radius: 9999px;
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    color: var(--ft-slate-500);
-    font-size: 0.875rem;
-    font-weight: 500;
-    transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
-
-    svg,
-    .d-icon {
-      width: 20px;
-      height: 20px;
     }
   }
 }
