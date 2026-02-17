@@ -56,7 +56,7 @@ export default class FantribePostMenu extends Component {
               class="fantribe-post-menu__item"
               {{on "click" (fn this.handleAction "copy-link")}}
             >
-              {{icon " link"}}
+              {{icon "link"}}
               <span>Copy Link</span>
             </button>
 
