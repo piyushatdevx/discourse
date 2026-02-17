@@ -33,7 +33,7 @@ export default class FtCreateMenu extends Component {
           {{on "click" this.handleCreatePost}}
         >
           <span class="ft-create-menu__icon ft-create-menu__icon--blue">
-            {{icon "pencil-alt"}}
+            {{icon "pencil"}}
           </span>
           <div class="ft-create-menu__item-content">
             <span class="ft-create-menu__item-label">Create Post</span>

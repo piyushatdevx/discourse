@@ -116,6 +116,33 @@ body.fantribe-theme:not(.admin-interface) {
       padding: 5px 24px 24px;
     }
 
+    &__title-input {
+      width: 100%;
+      padding: 14px 16px;
+      background: var(--ft-slate-50);
+      border: 1px solid var(--ft-slate-200);
+      border-radius: 14px;
+      font-family: var(--ft-font-family);
+      font-size: var(--ft-font-base);
+      font-weight: var(--ft-font-weight-semibold);
+      color: var(--ft-slate-900);
+      outline: none;
+      margin-bottom: 12px;
+      transition:
+        border-color 200ms cubic-bezier(0.4, 0, 0.2, 1),
+        box-shadow 200ms cubic-bezier(0.4, 0, 0.2, 1);
+
+      &::placeholder {
+        color: var(--ft-slate-400);
+        font-weight: var(--ft-font-weight-medium);
+      }
+
+      &:focus {
+        border-color: transparent;
+        box-shadow: 0 0 0 2px var(--ft-electric-blue);
+      }
+    }
+
     &__textarea {
       width: 100%;
       min-height: 120px;

@@ -6,17 +6,21 @@ import { action } from "@ember/object";
 import { service } from "@ember/service";
 import avatar from "discourse/helpers/avatar";
 import icon from "discourse/helpers/d-icon";
+import { ajax } from "discourse/lib/ajax";
+import { popupAjaxError } from "discourse/lib/ajax-error";
 import { eq } from "discourse/truth-helpers";
 
 const MAX_CHARS = 2000;
 
 export default class FtCreatePostModal extends Component {
   @service currentUser;
-  @service composer;
+  @service router;
   @service fantribeCreate;
 
+  @tracked postTitle = "";
   @tracked postText = "";
   @tracked visibility = "public";
+  @tracked isSubmitting = false;
 
   get charCount() {
     return this.postText.length;
@@ -27,7 +31,17 @@ export default class FtCreatePostModal extends Component {
   }
 
   get isDisabled() {
-    return !this.postText.trim() || this.isOverLimit;
+    return (
+      !this.postTitle.trim() ||
+      !this.postText.trim() ||
+      this.isOverLimit ||
+      this.isSubmitting
+    );
+  }
+
+  @action
+  updateTitle(event) {
+    this.postTitle = event.target.value;
   }
 
   @action
@@ -59,14 +73,34 @@ export default class FtCreatePostModal extends Component {
     if (this.isDisabled) {
       return;
     }
-    this.composer.open({
-      action: "createTopic",
-      draftKey: "new_topic",
-      draftSequence: 0,
-      title: "",
-      body: this.postText,
-    });
-    this.fantribeCreate.closeCreatePostModal();
+
+    this.isSubmitting = true;
+
+    try {
+      const result = await ajax("/posts", {
+        type: "POST",
+        data: {
+          raw: this.postText,
+          title: this.postTitle,
+          archetype: "regular",
+        },
+      });
+
+      this.fantribeCreate.closeCreatePostModal();
+
+      if (result?.post?.topic_slug && result?.post?.topic_id) {
+        this.router.transitionTo(
+          "topic.fromParamsNear",
+          result.post.topic_slug,
+          result.post.topic_id,
+          result.post.post_number
+        );
+      }
+    } catch (error) {
+      popupAjaxError(error);
+    } finally {
+      this.isSubmitting = false;
+    }
   }
 
   <template>
@@ -108,6 +142,13 @@ export default class FtCreatePostModal extends Component {
 
         {{! Body }}
         <div class="ft-modal__body">
+          <input
+            type="text"
+            class="ft-modal__title-input"
+            placeholder="Post title..."
+            value={{this.postTitle}}
+            {{on "input" this.updateTitle}}
+          />
           <textarea
             class="ft-modal__textarea"
             placeholder="What's on your mind? Share your music, updates, and vibes..."
