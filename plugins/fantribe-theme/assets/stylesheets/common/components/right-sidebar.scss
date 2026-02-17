@@ -1,0 +1,328 @@
+// Right Sidebar — Exact values from FeedPage_UI_Master_Spec.md §3.5
+//
+// Container: display none, xl:block, w-80 (320px), h-100%, overflow-y auto
+// Padding: 24px, pb 80px, gap 24px vertical
+// Widget: bg white, radius 24px, border 1px #D4D2CF, shadow-sm
+// Header: p-5, border-b, icon w-5 h-5, title font-semibold
+// Items: p-4, hover bg-electric-blue-light, transition 200ms
+// Live indicator: 8px (w-2 h-2), bg-red-500, ping animation, border 2px white
+body.fantribe-theme:not(.admin-interface) {
+  .fantribe-right-sidebar {
+    display: none; // hidden by default
+
+    @media (width >= 1280px) {
+      display: block;
+      width: 320px; // w-80 (Spec §3.5)
+      height: 100%; // h-full
+      overflow-y: auto;
+      padding: 24px; // p-6
+      padding-bottom: 80px; // pb-20
+
+      // Scrollbar hiding
+      &::-webkit-scrollbar {
+        display: none;
+      }
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
+    // Vertical gap between widgets (Spec §3.5: gap 24px)
+    &__widgets {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    // Widget Card (Spec §3.5)
+    &__widget {
+      background: white;
+      border-radius: 24px; // rounded-3xl (Spec §3.5)
+      border: 1px solid var(--ft-slate-200); // #D4D2CF
+      box-shadow: var(--ft-shadow-sm);
+      overflow: hidden;
+    }
+
+    // Widget header (Spec §3.5: p-5, border-b)
+    &__header {
+      padding: 20px; // p-5
+      border-bottom: 1px solid var(--ft-slate-200);
+    }
+
+    &__header-content {
+      display: flex;
+      align-items: center;
+      gap: 8px; // gap-2
+    }
+
+    &__header-icon {
+      width: 20px; // w-5
+      height: 20px; // h-5
+
+      svg,
+      .d-icon {
+        width: 20px;
+        height: 20px;
+      }
+
+      &--trending {
+        color: var(--ft-electric-blue);
+      }
+
+      &--live {
+        color: #dc2626; // red-600
+      }
+    }
+
+    &__header-title {
+      font-weight: var(--ft-font-weight-semibold); // 600
+      color: var(--ft-slate-900);
+    }
+
+    // List items (Spec §3.5: p-4, hover bg-electric-blue-light)
+    &__items {
+      > * + * {
+        border-top: 1px solid var(--ft-slate-100); // divide-y
+      }
+    }
+
+    &__item {
+      padding: 16px; // p-4
+      cursor: pointer;
+      transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
+      display: block;
+      width: 100%;
+      background: transparent;
+      border: none;
+      text-align: left;
+
+      &:hover {
+        background: var(--ft-electric-blue-light); // bg-electric-blue-light
+      }
+
+      &--live:hover {
+        background: linear-gradient(
+          to right,
+          #fef2f2,
+          #fce7f3
+        ); // from-red-50 to-pink-50
+      }
+    }
+
+    &__item-content {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px; // gap-3
+    }
+
+    &__item-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    &__item-header {
+      display: flex;
+      align-items: center;
+      gap: 8px; // gap-2
+      margin-bottom: 4px; // mb-1
+    }
+
+    &__item-name {
+      font-weight: var(--ft-font-weight-medium); // 500
+      color: var(--ft-slate-900);
+      font-size: var(--ft-font-sm); // 14px
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      transition: color 200ms cubic-bezier(0.4, 0, 0.2, 1);
+
+      .fantribe-right-sidebar__item:hover & {
+        color: var(--ft-electric-blue);
+      }
+
+      .fantribe-right-sidebar__item--live:hover & {
+        color: #dc2626; // red-600
+      }
+    }
+
+    &__new-badge {
+      padding: 2px 8px; // py-0.5 px-2
+      background: var(--ft-gradient-action);
+      color: white;
+      font-size: var(--ft-font-xs); // 12px
+      font-weight: var(--ft-font-weight-bold); // 700
+      border-radius: var(--ft-radius-pill);
+    }
+
+    &__item-meta {
+      display: flex;
+      align-items: center;
+      gap: 8px; // gap-2
+      font-size: var(--ft-font-xs); // 12px
+      color: var(--ft-slate-500);
+    }
+
+    &__meta-icon {
+      width: 12px; // w-3
+      height: 12px; // h-3
+
+      svg,
+      .d-icon {
+        width: 12px;
+        height: 12px;
+      }
+    }
+
+    &__chevron {
+      width: 16px; // w-4
+      height: 16px; // h-4
+      color: var(--ft-slate-400);
+      flex-shrink: 0;
+      transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
+
+      svg,
+      .d-icon {
+        width: 16px;
+        height: 16px;
+      }
+
+      .fantribe-right-sidebar__item:hover & {
+        color: var(--ft-electric-blue);
+        transform: translateX(4px); // hover:translate-x-1 = 4px
+      }
+    }
+
+    // Live streams section
+    &__live-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px; // gap-3
+    }
+
+    &__avatar-container {
+      position: relative;
+      flex-shrink: 0;
+    }
+
+    // Live indicator (Spec §3.5: 8px w-2 h-2, red-500, ping, border 2px white)
+    &__live-badge {
+      position: absolute;
+      top: -2px;
+      right: -2px;
+    }
+
+    &__ping-container {
+      position: relative;
+      width: 8px; // w-2
+      height: 8px; // h-2
+    }
+
+    &__ping-outer {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      background: #ef4444; // red-500
+      border-radius: var(--ft-radius-pill);
+      animation: ft-ping 1s cubic-bezier(0, 0, 0.2, 1) infinite; // Spec: 1s
+      opacity: 0.75;
+    }
+
+    &__ping-inner {
+      position: relative;
+      width: 8px;
+      height: 8px;
+      background: #ef4444; // red-500
+      border-radius: var(--ft-radius-pill);
+      border: 2px solid white; // border 2px white (Spec §3.5)
+    }
+
+    &__stream-title {
+      font-weight: var(--ft-font-weight-medium);
+      color: var(--ft-slate-900);
+      font-size: var(--ft-font-sm); // 14px
+      margin-bottom: 4px; // mb-1
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      transition: color 200ms cubic-bezier(0.4, 0, 0.2, 1);
+
+      .fantribe-right-sidebar__item--live:hover & {
+        color: #dc2626; // red-600
+      }
+    }
+
+    &__stream-subtitle {
+      font-size: var(--ft-font-xs); // 12px
+      color: var(--ft-slate-600);
+      margin-bottom: 8px; // mb-2
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    &__stream-stats {
+      display: flex;
+      align-items: center;
+      gap: 8px; // gap-2
+    }
+
+    &__live-pill {
+      display: flex;
+      align-items: center;
+      gap: 4px; // gap-1
+      padding: 4px 8px; // py-1 px-2
+      background: #fee2e2; // red-100
+      color: #991b1b; // red-800
+      border-radius: var(--ft-radius-pill);
+      font-size: var(--ft-font-xs); // 12px
+      font-weight: var(--ft-font-weight-medium);
+    }
+
+    &__play-icon {
+      width: 12px; // w-3
+      height: 12px; // h-3
+
+      svg,
+      .d-icon {
+        width: 12px;
+        height: 12px;
+        fill: #991b1b; // red-700
+      }
+    }
+
+    &__viewers {
+      font-size: var(--ft-font-xs); // 12px
+      color: var(--ft-slate-500);
+    }
+
+    // Widget footer
+    &__footer {
+      padding: 16px; // p-4
+      border-top: 1px solid var(--ft-slate-200);
+    }
+
+    &__footer-button {
+      width: 100%;
+      text-align: center;
+      font-size: var(--ft-font-sm); // 14px
+      font-weight: var(--ft-font-weight-medium);
+      color: var(--ft-electric-blue);
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      transition: color 200ms cubic-bezier(0.4, 0, 0.2, 1);
+
+      &:hover {
+        color: var(--ft-electric-blue-hover);
+      }
+
+      &--live {
+        color: #dc2626; // red-600
+
+        &:hover {
+          color: #b91c1c; // red-700
+        }
+      }
+    }
+  }
+}

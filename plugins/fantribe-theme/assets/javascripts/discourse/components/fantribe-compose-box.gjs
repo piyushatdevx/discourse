@@ -37,7 +37,7 @@ export default class FantribeComposeBox extends Component {
           <div class="fantribe-compose-box__actions">
             <button
               type="button"
-              class="fantribe-compose-box__media-btn"
+              class="fantribe-compose-box__media-btn fantribe-compose-box__media-btn--photo"
               title="Photo"
             >
               {{icon "image"}}
@@ -45,7 +45,7 @@ export default class FantribeComposeBox extends Component {
             </button>
             <button
               type="button"
-              class="fantribe-compose-box__media-btn"
+              class="fantribe-compose-box__media-btn fantribe-compose-box__media-btn--video"
               title="Video"
             >
               {{icon "video"}}
@@ -53,11 +53,19 @@ export default class FantribeComposeBox extends Component {
             </button>
             <button
               type="button"
-              class="fantribe-compose-box__media-btn"
+              class="fantribe-compose-box__media-btn fantribe-compose-box__media-btn--audio"
               title="Audio"
             >
-              {{icon "play"}}
+              {{icon "headphones"}}
               <span>Audio</span>
+            </button>
+            <button
+              type="button"
+              class="fantribe-compose-box__media-btn fantribe-compose-box__media-btn--tag-gear"
+              title="Tag Gear"
+            >
+              {{icon "tag"}}
+              <span>Tag Gear</span>
             </button>
           </div>
         </div>

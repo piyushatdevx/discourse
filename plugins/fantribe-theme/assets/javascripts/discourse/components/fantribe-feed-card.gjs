@@ -186,17 +186,21 @@ export default class FantribeFeedCard extends Component {
           </button>
 
           <div class="fantribe-feed-card__meta">
-            <span
-              class="fantribe-feed-card__display-name"
-            >{{this.displayName}}</span>
-            <span
-              class="fantribe-feed-card__username-handle"
-            >@{{this.posterUsername}}</span>
-            <span class="fantribe-feed-card__separator">&middot;</span>
-            <span class="fantribe-feed-card__timestamp">{{formatDate
-                @topic.created_at
-                format="tiny"
-              }}</span>
+            <div class="fantribe-feed-card__meta-name-row">
+              <span
+                class="fantribe-feed-card__display-name"
+              >{{this.displayName}}</span>
+            </div>
+            <div class="fantribe-feed-card__meta-info-row">
+              <span
+                class="fantribe-feed-card__username-handle"
+              >@{{this.posterUsername}}</span>
+              <span class="fantribe-feed-card__separator">&middot;</span>
+              <span class="fantribe-feed-card__timestamp">{{formatDate
+                  @topic.created_at
+                  format="tiny"
+                }}</span>
+            </div>
           </div>
 
           <button

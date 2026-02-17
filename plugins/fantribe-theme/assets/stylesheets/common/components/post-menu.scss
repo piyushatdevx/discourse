@@ -1,0 +1,115 @@
+// Post Menu (Dropdown) — Exact values from FeedPage_UI_Master_Spec.md §5
+//
+// Animation: initial{opacity:0, scale:0.95, y:-10} → {opacity:1, scale:1, y:0}, 150ms
+// Width: w-64 (256px)
+// Border-radius: rounded-2xl (16px)
+// Item padding: py-3 px-4 (12px 16px)
+// Icon: w-5 h-5 (20px)
+// Backdrop: fixed inset-0, z-40
+body.fantribe-theme:not(.admin-interface) {
+  .fantribe-post-menu {
+    position: relative;
+
+    &__trigger {
+      background: none;
+      border: none;
+      padding: 8px;
+      cursor: pointer;
+      border-radius: var(--ft-radius-pill);
+      color: var(--ft-slate-400);
+      transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
+
+      svg,
+      .d-icon {
+        width: 20px; // w-5
+        height: 20px;
+      }
+
+      &:hover {
+        background: var(--ft-slate-50);
+        color: var(--ft-slate-600);
+      }
+    }
+
+    &__backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 40; // z-sticky
+    }
+
+    &__dropdown {
+      position: absolute;
+      right: 0;
+      top: 100%;
+      margin-top: 8px; // mt-2
+      width: 256px; // w-64
+      background: white;
+      border-radius: 16px; // rounded-2xl
+      border: 1px solid var(--ft-slate-200);
+      box-shadow: var(--ft-shadow-xl);
+      overflow: hidden;
+      z-index: 50; // z-dropdown
+
+      // Dropdown animation (Spec §5: 150ms, scale 0.95→1, y -10→0)
+      animation: ft-dropdown-enter 150ms cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    &__content {
+      padding: 8px 0; // py-2
+    }
+
+    &__item {
+      width: 100%;
+      padding: 12px 16px; // py-3 px-4
+      display: flex;
+      align-items: center;
+      gap: 12px; // gap-3
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1);
+      text-align: left;
+
+      &:hover {
+        background: var(--ft-slate-50); // hover:bg-slate-50
+      }
+
+      &--danger:hover {
+        background: #fef2f2; // red-50
+      }
+    }
+
+    &__icon {
+      width: 20px; // w-5
+      height: 20px; // h-5
+      color: var(--ft-slate-600);
+      flex-shrink: 0;
+
+      svg,
+      .d-icon {
+        width: 20px;
+        height: 20px;
+      }
+
+      .fantribe-post-menu__item--danger & {
+        color: #dc2626; // red-600
+      }
+    }
+
+    &__text {
+      font-size: var(--ft-font-sm); // 14px
+      color: var(--ft-slate-700);
+
+      .fantribe-post-menu__item--danger & {
+        color: #dc2626; // red-600
+        font-weight: var(--ft-font-weight-medium);
+      }
+    }
+
+    &__divider {
+      height: 1px;
+      background: var(--ft-slate-200);
+      margin: 8px 0; // my-2
+    }
+  }
+}

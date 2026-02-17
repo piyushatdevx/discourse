@@ -81,20 +81,30 @@ export default class FantribeHeader extends Component {
   <template>
     <header class="fantribe-header">
       <div class="fantribe-header__container">
-        {{! Logo }}
-        <button
-          class="fantribe-header__logo"
-          type="button"
-          {{on "click" this.navigateToHome}}
-        >
-          <img
-            src={{this.logoUrl}}
-            alt="CreatorTribe"
-            class="fantribe-header__logo-img"
-          />
-        </button>
+        {{! Left section: hamburger + logo (Figma: flex items-center gap-3) }}
+        <div class="fantribe-header__left-group">
+          <button
+            class="fantribe-header__sidebar-toggle"
+            type="button"
+            {{on "click" @onToggleSidebar}}
+          >
+            {{icon "bars"}}
+          </button>
 
-        {{! Center Search Bar }}
+          <button
+            class="fantribe-header__logo"
+            type="button"
+            {{on "click" this.navigateToHome}}
+          >
+            <img
+              src={{this.logoUrl}}
+              alt="CreatorTribe"
+              class="fantribe-header__logo-img"
+            />
+          </button>
+        </div>
+
+        {{! Center Search Bar (Figma: hidden sm:block) }}
         <div class="fantribe-header__search" role="search">
           <span class="fantribe-header__search-icon">
             {{icon "magnifying-glass"}}

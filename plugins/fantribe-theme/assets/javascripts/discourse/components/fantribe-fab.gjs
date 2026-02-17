@@ -21,6 +21,7 @@ export default class FantribeFab extends Component {
     {{#if this.isVisible}}
       <button
         class="fantribe-fab"
+        style="display: none;"
         type="button"
         aria-label="Create new post"
         {{on "click" this.openComposer}}

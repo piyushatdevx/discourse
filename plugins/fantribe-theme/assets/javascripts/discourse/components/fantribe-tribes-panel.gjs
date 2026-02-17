@@ -18,7 +18,7 @@ const NAV_ITEMS = [
     id: "explore-tribes",
     label: "Explore Tribes",
     icon: "compass",
-    route: "discovery.categories",
+    route: "explore",
   },
   { id: "marketplace", label: "Marketplace", icon: "store" },
   { id: "co-create", label: "Co-Create", icon: "people-group" },
@@ -60,8 +60,8 @@ export default class FantribeTribesPanel extends Component {
         route === "index"
       );
     }
-    if (item.route === "discovery.categories") {
-      return route === "discovery.categories";
+    if (item.route === "explore") {
+      return route === "explore";
     }
     if (item.route === "chat.index") {
       return route.startsWith("chat");

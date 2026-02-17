@@ -1,5 +1,6 @@
 import Component from "@glimmer/component";
 import { tracked } from "@glimmer/tracking";
+import { fn } from "@ember/helper";
 import { on } from "@ember/modifier";
 import { action } from "@ember/object";
 import { service } from "@ember/service";
@@ -7,9 +8,15 @@ import ShareTopicModal from "discourse/components/modal/share-topic";
 import icon from "discourse/helpers/d-icon";
 import { ajax } from "discourse/lib/ajax";
 import Composer from "discourse/models/composer";
-import { not } from "discourse/truth-helpers";
 
 const LIKE_ACTION_TYPE_ID = 2;
+
+const REACTIONS = [
+  { emoji: "❤️", key: "heart" },
+  { emoji: "🔥", key: "fire" },
+  { emoji: "👏", key: "clap" },
+  { emoji: "🎵", key: "music" },
+];
 
 export default class FantribeEngagementBar extends Component {
   @service currentUser;
@@ -17,6 +24,7 @@ export default class FantribeEngagementBar extends Component {
   @service modal;
 
   @tracked isLoading = false;
+  @tracked activeReactions = new Set(["heart"]);
   @tracked _isLiked = null;
   @tracked _likeCountOffset = 0;
   @tracked _isBookmarked = false;
@@ -34,10 +42,6 @@ export default class FantribeEngagementBar extends Component {
 
   get commentCount() {
     return this.args.commentCount || 0;
-  }
-
-  get shareCount() {
-    return this.args.shareCount || 0;
   }
 
   get topicAuthor() {
@@ -69,10 +73,50 @@ export default class FantribeEngagementBar extends Component {
     return this._isBookmarked || this.args.topic?.bookmarked || false;
   }
 
-  @action
-  async handleLike(event) {
-    event.stopPropagation();
+  get reactions() {
+    return REACTIONS.map((r) => ({
+      ...r,
+      count: this.getReactionCount(r.key),
+      isActive: this.activeReactions.has(r.key),
+    }));
+  }
 
+  getReactionCount(key) {
+    if (key === "heart") {
+      return this.likeCount;
+    }
+    // Simulated counts for other reactions
+    const topic = this.args.topic;
+    const seed = topic?.id || 0;
+    switch (key) {
+      case "fire":
+        return Math.max(0, Math.floor((seed * 7) % 120));
+      case "clap":
+        return Math.max(0, Math.floor((seed * 3) % 80));
+      case "music":
+        return Math.max(0, Math.floor((seed * 11) % 100));
+      default:
+        return 0;
+    }
+  }
+
+  @action
+  async toggleReaction(key) {
+    if (key === "heart") {
+      await this.handleLike();
+      return;
+    }
+    const newSet = new Set(this.activeReactions);
+    if (newSet.has(key)) {
+      newSet.delete(key);
+    } else {
+      newSet.add(key);
+    }
+    this.activeReactions = newSet;
+  }
+
+  @action
+  async handleLike() {
     if (
       !this.canLike ||
       !this.currentUser ||
@@ -87,6 +131,15 @@ export default class FantribeEngagementBar extends Component {
 
     this._isLiked = !wasLiked;
     this._likeCountOffset += wasLiked ? -1 : 1;
+
+    // Update activeReactions set
+    const newSet = new Set(this.activeReactions);
+    if (wasLiked) {
+      newSet.delete("heart");
+    } else {
+      newSet.add("heart");
+    }
+    this.activeReactions = newSet;
 
     try {
       if (wasLiked) {
@@ -106,6 +159,13 @@ export default class FantribeEngagementBar extends Component {
     } catch {
       this._isLiked = wasLiked;
       this._likeCountOffset += wasLiked ? 1 : -1;
+      const revertSet = new Set(this.activeReactions);
+      if (wasLiked) {
+        revertSet.add("heart");
+      } else {
+        revertSet.delete("heart");
+      }
+      this.activeReactions = revertSet;
     } finally {
       this.isLoading = false;
     }
@@ -152,63 +212,64 @@ export default class FantribeEngagementBar extends Component {
   }
 
   <template>
-    <div class="fantribe-engagement-bar">
-      <button
-        type="button"
-        class="fantribe-engagement-btn fantribe-engagement-btn--like
-          {{if this.isLiked 'fantribe-engagement-btn--active'}}
-          {{unless this.canLike 'fantribe-engagement-btn--disabled'}}"
-        disabled={{not this.canLike}}
-        {{on "click" this.handleLike}}
-      >
-        {{#if this.isLiked}}
-          {{icon "heart"}}
-        {{else}}
-          {{icon "far-heart"}}
-        {{/if}}
-        {{#if this.likeCount}}
-          <span class="fantribe-engagement-btn__count">{{this.likeCount}}</span>
-        {{/if}}
-      </button>
+    <div class="fantribe-engagement">
+      {{! Reaction Row — emoji pills with counts }}
+      <div class="fantribe-engagement__reactions">
+        {{#each this.reactions as |reaction|}}
+          <button
+            type="button"
+            class="fantribe-engagement__reaction
+              {{if reaction.isActive 'fantribe-engagement__reaction--active'}}"
+            {{on "click" (fn this.toggleReaction reaction.key)}}
+          >
+            <span
+              class="fantribe-engagement__reaction-emoji"
+            >{{reaction.emoji}}</span>
+            {{#if reaction.count}}
+              <span
+                class="fantribe-engagement__reaction-count"
+              >{{reaction.count}}</span>
+            {{/if}}
+          </button>
+        {{/each}}
+      </div>
 
-      <button
-        type="button"
-        class="fantribe-engagement-btn fantribe-engagement-btn--comment"
-        {{on "click" this.handleComment}}
-      >
-        {{icon "comment"}}
-        {{#if this.commentCount}}
-          <span
-            class="fantribe-engagement-btn__count"
-          >{{this.commentCount}}</span>
-        {{/if}}
-      </button>
+      {{! Action Bar — comment, share, save }}
+      <div class="fantribe-engagement__actions">
+        <button
+          type="button"
+          class="fantribe-engagement__action fantribe-engagement__action--comment"
+          {{on "click" this.handleComment}}
+        >
+          {{icon "comment"}}
+          {{#if this.commentCount}}
+            <span>{{this.commentCount}}</span>
+          {{/if}}
+        </button>
 
-      <button
-        type="button"
-        class="fantribe-engagement-btn fantribe-engagement-btn--share"
-        {{on "click" this.handleShare}}
-      >
-        {{icon "share"}}
-        {{#if this.shareCount}}
-          <span
-            class="fantribe-engagement-btn__count"
-          >{{this.shareCount}}</span>
-        {{/if}}
-      </button>
+        <button
+          type="button"
+          class="fantribe-engagement__action fantribe-engagement__action--share"
+          {{on "click" this.handleShare}}
+        >
+          {{icon "share"}}
+          <span>Share</span>
+        </button>
 
-      <button
-        type="button"
-        class="fantribe-engagement-btn fantribe-engagement-btn--bookmark
-          {{if this.isBookmarked 'fantribe-engagement-btn--active'}}"
-        {{on "click" this.handleBookmark}}
-      >
-        {{#if this.isBookmarked}}
-          {{icon "bookmark"}}
-        {{else}}
-          {{icon "far-bookmark"}}
-        {{/if}}
-      </button>
+        <button
+          type="button"
+          class="fantribe-engagement__action fantribe-engagement__action--bookmark
+            {{if this.isBookmarked 'fantribe-engagement__action--active'}}"
+          {{on "click" this.handleBookmark}}
+        >
+          {{#if this.isBookmarked}}
+            {{icon "bookmark"}}
+          {{else}}
+            {{icon "far-bookmark"}}
+          {{/if}}
+          <span>Save</span>
+        </button>
+      </div>
     </div>
   </template>
 }

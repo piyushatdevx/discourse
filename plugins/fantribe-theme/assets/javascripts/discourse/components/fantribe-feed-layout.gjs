@@ -6,7 +6,7 @@ import PeriodChooser from "discourse/select-kit/components/period-chooser";
 import FantribeComposeBox from "./fantribe-compose-box";
 import FantribeFeedCard from "./fantribe-feed-card";
 import FantribeMobileTribeChips from "./fantribe-mobile-tribe-chips";
-import FantribeTrendingPanel from "./fantribe-trending-panel";
+import FantribeRightSidebar from "./fantribe-right-sidebar";
 
 export default class FantribeFeedLayout extends Component {
   @service fantribeFilter;
@@ -98,7 +98,7 @@ export default class FantribeFeedLayout extends Component {
 
       {{! Right sidebar - Trending }}
       <aside class="fantribe-feed-layout__right-sidebar">
-        <FantribeTrendingPanel @topics={{this.trendingTopics}} />
+        <FantribeRightSidebar />
       </aside>
     </div>
   </template>

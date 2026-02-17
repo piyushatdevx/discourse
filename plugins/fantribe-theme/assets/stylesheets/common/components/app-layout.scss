@@ -1,8 +1,13 @@
 // FanTribe App Layout — Persistent sidebar + main content grid
 // Applied globally on public routes via body.fantribe-theme
 // Admin UI excluded via :not(.admin-interface)
+//
+// Responsive behavior (from Figma source):
+// - Desktop ≥1024px: sidebar (288px) + content
+// - Below 1024px: single column (sidebar is fixed overlay)
+// - Header: 64px mobile, 80px desktop
 body.fantribe-theme:not(.admin-interface) {
-  background-color: var(--ft-bg);
+  background-color: #f0f0f2;
 
   // Hide Discourse's built-in sidebar (we use our own)
   .sidebar-wrapper {
@@ -17,33 +22,42 @@ body.fantribe-theme:not(.admin-interface) {
   }
 
   // Layout grid: persistent left sidebar + main content
-  // Area names match Discourse core ("sidebar content") so we don't fight
-  // core's #main-outlet-wrapper #main-outlet { grid-area: content } (0,2,0,0 specificity)
   #main-outlet-wrapper {
     display: grid;
-    grid-template-columns: 300px minmax(0, 1fr);
+    grid-template-columns: 288px minmax(0, 1fr);
     grid-template-rows: 1fr auto;
     grid-template-areas:
       "sidebar content"
       "sidebar below-content";
-    max-width: 1400px;
-    gap: 0 var(--ft-space-4);
+    max-width: 100%;
+    gap: 0;
+
+    // Below 1024px: single column (sidebar is fixed overlay, not in grid)
+    @media (width <= 1023px) {
+      display: block;
+      padding-top: 0;
+    }
   }
 
   // Persistent left sidebar (injected via before-main-outlet connector)
   .fantribe-left-sidebar {
     grid-area: sidebar;
     position: sticky;
-    top: 64px;
+    top: 80px;
     align-self: start;
     min-width: 0;
-    height: calc(100dvh - 64px);
+    height: calc(100dvh - 80px);
     overflow: visible;
     box-sizing: border-box;
+
+    @media (width <= 1023px) {
+      // On mobile/tablet the sidebar is positioned fixed by left-sidebar.scss
+      // Remove grid area assignment
+      grid-area: unset;
+    }
   }
 
-  // Main content area — no grid-area override needed, core sets "content" which
-  // matches our grid-template-areas above
+  // Main content area
   #main-outlet {
     min-width: 0;
     overflow-x: clip;
@@ -79,35 +93,19 @@ body.fantribe-theme:not(.admin-interface) {
   }
 }
 
-// Collapsed sidebar: icon-only column
-body.fantribe-sidebar-collapsed.fantribe-theme:not(.admin-interface) {
-  #main-outlet-wrapper {
-    grid-template-columns: 72px minmax(0, 1fr);
-  }
-}
-
-// Tablet: narrower sidebar
-@media (width <= 1023px) {
-  body.fantribe-theme:not(.admin-interface) {
-    #main-outlet-wrapper {
-      grid-template-columns: 200px minmax(0, 1fr);
+// Collapsed sidebar: icon-only column (80px)
+body.fantribe-theme:not(.admin-interface) {
+  .fantribe-left-sidebar--collapsed ~ #main-outlet,
+  #main-outlet-wrapper:has(.fantribe-left-sidebar--collapsed) {
+    @media (width >= 1024px) {
+      grid-template-columns: 80px minmax(0, 1fr);
     }
   }
 }
 
-// Mobile: single column, no sidebar
+// Mobile: extra spacing cleanup
 @media (width <= 767px) {
   body.fantribe-theme:not(.admin-interface) {
-    #main-outlet-wrapper {
-      display: block;
-      padding-top: 0;
-    }
-
-    .fantribe-left-sidebar {
-      display: none;
-      background-color: #fff;
-    }
-
     .wrap {
       padding-left: 0;
       padding-right: 0;
@@ -123,8 +121,8 @@ body.fantribe-sidebar-collapsed.fantribe-theme:not(.admin-interface) {
     #main-outlet .container.posts {
       width: 100%;
       max-width: 100%;
-      padding-left: var(--ft-space-4);
-      padding-right: var(--ft-space-4);
+      padding-left: 16px;
+      padding-right: 16px;
       box-sizing: border-box;
     }
 
@@ -135,16 +133,20 @@ body.fantribe-sidebar-collapsed.fantribe-theme:not(.admin-interface) {
     }
 
     #topic-title.container {
-      padding-left: var(--ft-space-4);
-      padding-right: var(--ft-space-4);
+      padding-left: 16px;
+      padding-right: 16px;
       box-sizing: border-box;
     }
   }
 }
 
-// Chat full-page: ensure proper height with fantribe's 64px fixed header
+// Chat full-page: ensure proper height with fantribe's fixed header
 body.fantribe-theme.has-full-page-chat:not(.admin-interface) {
   .full-page-chat {
     height: calc(100vh - 64px);
+
+    @media (width >= 768px) {
+      height: calc(100vh - 80px);
+    }
   }
 }

@@ -50,6 +50,10 @@ register_svg_icon "bookmark"
 register_svg_icon "far-bookmark"
 register_svg_icon "circle"
 register_svg_icon "users"
+register_svg_icon "sliders"
+register_svg_icon "chevron-down"
+register_svg_icon "check"
+register_svg_icon "lock"
 
 # Common styles (all viewports)
 register_asset "stylesheets/common/design-tokens.scss"
@@ -82,6 +86,23 @@ register_asset "stylesheets/common/components/mobile-tribe-chips.scss"
 register_asset "stylesheets/common/components/feed-card.scss"
 register_asset "stylesheets/common/components/compose-box.scss"
 
+# Component styles (Phase 2.3 - Feed V1 Components)
+register_asset "stylesheets/common/feed-animations.scss"
+register_asset "stylesheets/common/components/avatar.scss"
+register_asset "stylesheets/common/components/badge.scss"
+register_asset "stylesheets/common/components/gear-pill.scss"
+register_asset "stylesheets/common/components/reaction-bar.scss"
+register_asset "stylesheets/common/components/post-menu.scss"
+register_asset "stylesheets/common/components/right-sidebar.scss"
+register_asset "stylesheets/common/components/create-post-modal.scss"
+register_asset "stylesheets/common/components/engagement-bar.scss"
+
+# Component styles (Explore Page)
+register_asset "stylesheets/common/components/explore-page.scss"
+register_asset "stylesheets/common/components/tribe-grid.scss"
+register_asset "stylesheets/common/components/tribe-card.scss"
+register_asset "stylesheets/common/components/filter-dropdown.scss"
+
 # Discourse overrides - MUST load last
 register_asset "stylesheets/common/fantribe-overrides.scss"
 
@@ -100,6 +121,21 @@ register_topic_preloader_associations({ first_post: :uploads }) do
 end
 
 after_initialize do
+  # Explore page controller — serves the Ember shell without preloaded
+  # discovery data so the client-side explore route renders cleanly.
+  module ::FantribeTheme
+    class ExploreController < ::ApplicationController
+      requires_plugin "fantribe-theme"
+      skip_before_action :check_xhr
+
+      def index
+        render html: "".html_safe, layout: true
+      end
+    end
+  end
+
+  Discourse::Application.routes.prepend { get "/explore" => "fantribe_theme/explore#index" }
+
   # Default-enable auth settings when FanTribe is active
   if SiteSetting.fantribe_theme_enabled
     SiteSetting.login_required = true unless SiteSetting.login_required

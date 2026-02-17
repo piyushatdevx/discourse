@@ -1,9 +1,97 @@
-// FanTribe Left Sidebar — Visual appearance only
+// FanTribe Left Sidebar — Visual appearance, responsive, collapse states
 // Grid placement and positioning are in app-layout.scss
 // Inner nav component styles are in tribes-panel.scss
+//
+// Responsive behavior (from Figma source: Sidebar.tsx + Layout.tsx):
+// - Desktop (≥1024px): visible, fixed w-72 (288px)
+// - Tablet/Mobile (<1024px): hidden by default, slides in when toggled
+// - Collapsed state (desktop): w-20 (80px), icons only
 body.fantribe-theme:not(.admin-interface) {
   .fantribe-left-sidebar {
     background: #fff;
-    border-right: 1px solid #e8e8e8;
+    border-right: 1px solid #d4d2cf;
+    overflow-y: auto;
+    overflow-x: hidden;
+    box-sizing: border-box;
+    transition:
+      width 300ms ease,
+      transform 300ms ease;
+
+    // Hide scrollbars completely
+    &::-webkit-scrollbar {
+      display: none;
+    }
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+
+    // Mobile / tablet: hidden off-screen by default
+    @media (width <= 1023px) {
+      position: fixed;
+      top: 64px;
+      bottom: 0;
+      left: 0;
+      width: 288px;
+      z-index: 40;
+      transform: translateX(-100%);
+      box-shadow: none;
+
+      @media (width >= 768px) {
+        top: 80px;
+      }
+    }
+
+    // Mobile open state — slide in from left
+    &--mobile-open {
+      @media (width <= 1023px) {
+        transform: translateX(0);
+        box-shadow: 4px 0 24px rgb(0, 0, 0, 0.15);
+      }
+    }
+
+    // Desktop collapsed state — narrow with icons only
+    &--collapsed {
+      @media (width >= 1024px) {
+        width: 80px !important;
+      }
+
+      .ft-tribes-panel__nav-label,
+      .ft-tribes-panel__user-details,
+      .ft-tribes-panel__nav-active-icon,
+      .ft-tribes-panel__notification-dot {
+        display: none;
+      }
+
+      .ft-tribes-panel__nav-item {
+        justify-content: center;
+        padding: 12px;
+      }
+
+      .ft-tribes-panel__user-section {
+        justify-content: center;
+        padding: 12px;
+
+        .ft-tribes-panel__user-trigger {
+          justify-content: center;
+        }
+      }
+    }
+  }
+
+  // Mobile overlay backdrop
+  .fantribe-sidebar-overlay {
+    display: none;
+
+    @media (width <= 1023px) {
+      display: block;
+      position: fixed;
+      inset: 0;
+      top: 64px;
+      background: rgb(0, 0, 0, 0.3);
+      z-index: 39;
+
+      @media (width >= 768px) {
+        top: 80px;
+      }
+    }
   }
 }

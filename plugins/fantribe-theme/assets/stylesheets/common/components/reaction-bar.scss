@@ -1,0 +1,57 @@
+// Reaction Bar — Exact values from FeedPage_UI_Master_Spec.md §3.4, §5
+//
+// Buttons: px-4 py-2, rounded-full
+// Default: bg-slate-50, border 1px slate-200
+// Active: bg-vibrant-red-light, border 2px vibrant-red, scale-105
+// Emoji: animate-bounce-once on click (400ms)
+body.fantribe-theme:not(.admin-interface) {
+  .fantribe-reaction-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px; // gap-2
+    flex-wrap: wrap;
+
+    &__button {
+      display: flex;
+      align-items: center;
+      gap: 8px; // gap-2
+      padding: 8px 16px; // py-2 px-4
+      border-radius: var(--ft-radius-pill); // rounded-full
+      background: var(--ft-slate-50); // bg-slate-50
+      border: 1px solid var(--ft-slate-200); // border slate-200
+      cursor: pointer;
+      transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
+
+      &:hover {
+        background: var(--ft-slate-100);
+        border-color: var(--ft-slate-300);
+      }
+
+      // Active state (Spec §5: bg-vibrant-red-light, border 2px, scale 1.05)
+      &--active {
+        background: var(--ft-vibrant-red-light); // #FFE5EC
+        border: 2px solid var(--ft-vibrant-red); // border-2 vibrant-red
+        transform: scale(1.05); // scale-105
+      }
+    }
+
+    &__emoji {
+      font-size: var(--ft-font-lg); // 18px (text-lg)
+
+      // Bounce on active (Spec §5: animate-bounce-once)
+      .fantribe-reaction-bar__button--active & {
+        animation: ft-bounce-once 400ms ease-out;
+      }
+    }
+
+    &__count {
+      font-size: var(--ft-font-sm); // 14px
+      font-weight: var(--ft-font-weight-medium);
+      color: var(--ft-slate-600);
+
+      .fantribe-reaction-bar__button--active & {
+        color: var(--ft-vibrant-red);
+      }
+    }
+  }
+}
