@@ -5,62 +5,29 @@ import { on } from "@ember/modifier";
 import { action } from "@ember/object";
 import { service } from "@ember/service";
 import avatar from "discourse/helpers/avatar";
-import ftIcon from "../helpers/ft-icon";
-import { animateModalIn, animateModalOut } from "../lib/spring-animation";
+import icon from "discourse/helpers/d-icon";
+import { eq } from "discourse/truth-helpers";
+
+const MAX_CHARS = 2000;
 
 export default class FtCreatePostModal extends Component {
   @service currentUser;
   @service composer;
+  @service fantribeCreate;
 
   @tracked postText = "";
   @tracked visibility = "public";
-  @tracked gearTags = [];
-  @tracked visibilityDropdownOpen = false;
 
-  _animHandle = null;
-  _modalElement = null;
+  get charCount() {
+    return this.postText.length;
+  }
 
-  willDestroy() {
-    super.willDestroy(...arguments);
-    if (this._animHandle) {
-      this._animHandle.cancel();
-    }
+  get isOverLimit() {
+    return this.charCount > MAX_CHARS;
   }
 
   get isDisabled() {
-    return !this.postText.trim();
-  }
-
-  get visibilityIcon() {
-    switch (this.visibility) {
-      case "public":
-        return "globe";
-      case "private":
-        return "lock";
-      case "tribe":
-        return "users";
-      default:
-        return "globe";
-    }
-  }
-
-  get visibilityLabel() {
-    switch (this.visibility) {
-      case "public":
-        return "Public";
-      case "private":
-        return "Only Me";
-      case "tribe":
-        return "Tribe Only";
-      default:
-        return "Public";
-    }
-  }
-
-  @action
-  setupModal(element) {
-    this._modalElement = element;
-    this._animHandle = animateModalIn(element);
+    return !this.postText.trim() || this.isOverLimit;
   }
 
   @action
@@ -71,41 +38,19 @@ export default class FtCreatePostModal extends Component {
   @action
   setVisibility(value) {
     this.visibility = value;
-    this.visibilityDropdownOpen = false;
-  }
-
-  @action
-  toggleVisibilityDropdown(event) {
-    event.stopPropagation();
-    this.visibilityDropdownOpen = !this.visibilityDropdownOpen;
-  }
-
-  @action
-  closeVisibilityDropdown() {
-    this.visibilityDropdownOpen = false;
-  }
-
-  @action
-  async handleClose() {
-    if (this._modalElement) {
-      await new Promise((resolve) => {
-        this._animHandle = animateModalOut(this._modalElement, resolve);
-      });
-    }
-    this.args.onClose?.();
   }
 
   @action
   handleBackdropClick(event) {
     if (event.target === event.currentTarget) {
-      this.handleClose();
+      this.fantribeCreate.closeCreatePostModal();
     }
   }
 
   @action
   handleKeydown(event) {
     if (event.key === "Escape") {
-      this.handleClose();
+      this.fantribeCreate.closeCreatePostModal();
     }
   }
 
@@ -121,7 +66,7 @@ export default class FtCreatePostModal extends Component {
       title: "",
       body: this.postText,
     });
-    this.handleClose();
+    this.fantribeCreate.closeCreatePostModal();
   }
 
   <template>
@@ -133,103 +78,151 @@ export default class FtCreatePostModal extends Component {
       role="dialog"
       aria-modal="true"
     >
-      <div class="ft-modal" {{on "insert" this.setupModal}}>
-        {{! Modal Header }}
-        <div class="ft-modal__header">
-          <div class="ft-modal__header-left">
-            {{#if this.currentUser}}
-              <div class="ft-modal__avatar">
-                {{avatar this.currentUser imageSize="medium"}}
-              </div>
-            {{/if}}
-            <div>
-              <div class="ft-modal__user-name">
-                {{this.currentUser.name}}
-              </div>
-              <button
-                type="button"
-                class="ft-modal__visibility-btn"
-                {{on "click" this.toggleVisibilityDropdown}}
-              >
-                {{ftIcon this.visibilityIcon size=16}}
-                <span>{{this.visibilityLabel}}</span>
-                {{ftIcon "chevron-right" size=12}}
-              </button>
-
-              {{#if this.visibilityDropdownOpen}}
-                <div class="ft-modal__visibility-dropdown ft-animate-dropdown">
-                  <button
-                    type="button"
-                    class="ft-modal__visibility-option"
-                    {{on "click" (fn this.setVisibility "public")}}
-                  >
-                    {{ftIcon "globe" size=20}}
-                    <span>Public</span>
-                  </button>
-                  <button
-                    type="button"
-                    class="ft-modal__visibility-option"
-                    {{on "click" (fn this.setVisibility "private")}}
-                  >
-                    {{ftIcon "lock" size=20}}
-                    <span>Only Me</span>
-                  </button>
-                  <button
-                    type="button"
-                    class="ft-modal__visibility-option"
-                    {{on "click" (fn this.setVisibility "tribe")}}
-                  >
-                    {{ftIcon "users" size=20}}
-                    <span>Tribe Only</span>
-                  </button>
-                </div>
-              {{/if}}
-            </div>
-          </div>
+      <div class="ft-modal">
+        {{! Title Bar }}
+        <div class="ft-modal__title-bar">
+          <h2 class="ft-modal__title">Create Post</h2>
           <button
             type="button"
             class="ft-modal__close-btn"
-            {{on "click" this.handleClose}}
+            {{on "click" this.fantribeCreate.closeCreatePostModal}}
           >
-            {{ftIcon "x" size=20}}
+            {{icon "xmark"}}
           </button>
         </div>
 
-        {{! Modal Body }}
+        {{! User Info }}
+        <div class="ft-modal__user-info">
+          {{#if this.currentUser}}
+            <div class="ft-modal__avatar">
+              {{avatar this.currentUser imageSize="medium"}}
+            </div>
+          {{/if}}
+          <div>
+            <div class="ft-modal__user-name">{{this.currentUser.name}}</div>
+            <div
+              class="ft-modal__user-handle"
+            >@{{this.currentUser.username}}</div>
+          </div>
+        </div>
+
+        {{! Body }}
         <div class="ft-modal__body">
           <textarea
             class="ft-modal__textarea"
-            placeholder="What's on your mind?"
+            placeholder="What's on your mind? Share your music, updates, and vibes..."
             value={{this.postText}}
             {{on "input" this.updateText}}
           ></textarea>
-        </div>
+          <div
+            class="ft-modal__char-count
+              {{if this.isOverLimit 'ft-modal__char-count--over'}}"
+          >
+            {{this.charCount}}/{{MAX_CHARS}}
+          </div>
 
-        {{! Modal Footer }}
-        <div class="ft-modal__footer">
-          <div class="ft-modal__tools">
-            <button type="button" class="ft-modal__tool-btn" title="Add Media">
-              {{ftIcon "image" size=20}}
+          {{! Media Buttons }}
+          <div class="ft-modal__media-buttons">
+            <button
+              type="button"
+              class="ft-modal__media-pill ft-modal__media-pill--photo"
+            >
+              {{icon "image"}}
+              <span>Photo</span>
             </button>
-            <button type="button" class="ft-modal__tool-btn" title="Tag Gear">
-              {{ftIcon "tag" size=20}}
+            <button
+              type="button"
+              class="ft-modal__media-pill ft-modal__media-pill--video"
+            >
+              {{icon "video"}}
+              <span>Video</span>
             </button>
-            <button type="button" class="ft-modal__tool-btn" title="Schedule">
-              {{ftIcon "calendar" size=20}}
-            </button>
-            <button type="button" class="ft-modal__tool-btn" title="AI Assist">
-              {{ftIcon "sparkles" size=20}}
+            <button
+              type="button"
+              class="ft-modal__media-pill ft-modal__media-pill--audio"
+            >
+              {{icon "music"}}
+              <span>Audio</span>
             </button>
           </div>
-          <button
-            type="button"
-            class="ft-modal__submit-btn
-              {{if this.isDisabled 'ft-modal__submit-btn--disabled'}}"
-            disabled={{this.isDisabled}}
-            {{on "click" this.submitPost}}
-          >
-            Post
+
+          {{! Tag Gear }}
+          <div class="ft-modal__tag-gear">
+            <label class="ft-modal__tag-gear-label">
+              {{icon "tag"}}
+              <span>Tag Gear</span>
+            </label>
+            <input
+              type="text"
+              class="ft-modal__tag-gear-input"
+              placeholder="Search gear to tag..."
+            />
+          </div>
+
+          {{! Visibility }}
+          <div class="ft-modal__visibility-section">
+            <span class="ft-modal__section-label">Who can see this?</span>
+            <div class="ft-modal__visibility-grid">
+              <button
+                type="button"
+                class="ft-modal__visibility-card
+                  {{if
+                    (eq this.visibility 'public')
+                    'ft-modal__visibility-card--selected'
+                  }}"
+                {{on "click" (fn this.setVisibility "public")}}
+              >
+                {{icon "globe"}}
+                <span>Public</span>
+              </button>
+              <button
+                type="button"
+                class="ft-modal__visibility-card
+                  {{if
+                    (eq this.visibility 'followers')
+                    'ft-modal__visibility-card--selected'
+                  }}"
+                {{on "click" (fn this.setVisibility "followers")}}
+              >
+                {{icon "users"}}
+                <span>Followers</span>
+              </button>
+              <button
+                type="button"
+                class="ft-modal__visibility-card
+                  {{if
+                    (eq this.visibility 'private')
+                    'ft-modal__visibility-card--selected'
+                  }}"
+                {{on "click" (fn this.setVisibility "private")}}
+              >
+                {{icon "lock"}}
+                <span>Private</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {{! Footer }}
+        <div class="ft-modal__footer">
+          <button type="button" class="ft-modal__schedule-toggle">
+            {{icon "clock"}}
+            <span>Schedule for Later</span>
           </button>
+          <div class="ft-modal__action-buttons">
+            <button
+              type="button"
+              class="ft-modal__cancel-btn"
+              {{on "click" this.fantribeCreate.closeCreatePostModal}}
+            >Cancel</button>
+            <button
+              type="button"
+              class="ft-modal__publish-btn
+                {{if this.isDisabled 'ft-modal__publish-btn--disabled'}}"
+              disabled={{this.isDisabled}}
+              {{on "click" this.submitPost}}
+            >Publish Now</button>
+          </div>
         </div>
       </div>
     </div>

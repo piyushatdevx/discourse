@@ -1,28 +1,19 @@
 import Component from "@glimmer/component";
 import { on } from "@ember/modifier";
-import { action } from "@ember/object";
 import { service } from "@ember/service";
 import avatar from "discourse/helpers/avatar";
 import icon from "discourse/helpers/d-icon";
 
 export default class FantribeComposeBox extends Component {
   @service currentUser;
-  @service composer;
-
-  @action
-  openComposer() {
-    this.composer.open({
-      action: "createTopic",
-      draftKey: "new_topic",
-      draftSequence: 0,
-      title: "",
-      body: "",
-    });
-  }
+  @service fantribeCreate;
 
   <template>
     {{! template-lint-disable no-invalid-interactive }}
-    <div class="fantribe-compose-box" {{on "click" this.openComposer}}>
+    <div
+      class="fantribe-compose-box"
+      {{on "click" this.fantribeCreate.openCreatePostModal}}
+    >
       <div class="fantribe-compose-box__input-area">
         <div class="fantribe-compose-box__avatar">
           {{#if this.currentUser}}

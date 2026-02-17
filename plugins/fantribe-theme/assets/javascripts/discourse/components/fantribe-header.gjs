@@ -6,12 +6,14 @@ import { action } from "@ember/object";
 import { service } from "@ember/service";
 import icon from "discourse/helpers/d-icon";
 import closeOnClickOutside from "discourse/modifiers/close-on-click-outside";
+import FtCreateMenu from "./ft-create-menu";
+import FtCreatePostModal from "./ft-create-post-modal";
 
 export default class FantribeHeader extends Component {
   @service router;
   @service currentUser;
   @service siteSettings;
-  @service composer;
+  @service fantribeCreate;
 
   @tracked mobileMenuOpen = false;
 
@@ -48,15 +50,6 @@ export default class FantribeHeader extends Component {
   }
 
   @action
-  openComposer() {
-    this.composer.open({
-      action: "createTopic",
-      draftKey: "new_topic",
-      draftSequence: 0,
-    });
-  }
-
-  @action
   toggleMobileMenu() {
     this.mobileMenuOpen = !this.mobileMenuOpen;
   }
@@ -81,7 +74,7 @@ export default class FantribeHeader extends Component {
   <template>
     <header class="fantribe-header">
       <div class="fantribe-header__container">
-        {{! Left section: hamburger + logo (Figma: flex items-center gap-3) }}
+        {{! Left section: hamburger + logo }}
         <div class="fantribe-header__left-group">
           <button
             class="fantribe-header__sidebar-toggle"
@@ -104,7 +97,7 @@ export default class FantribeHeader extends Component {
           </button>
         </div>
 
-        {{! Center Search Bar (Figma: hidden sm:block) }}
+        {{! Center Search Bar }}
         <div class="fantribe-header__search" role="search">
           <span class="fantribe-header__search-icon">
             {{icon "magnifying-glass"}}
@@ -125,11 +118,15 @@ export default class FantribeHeader extends Component {
             <button
               type="button"
               class="fantribe-header__create-btn"
-              {{on "click" this.openComposer}}
+              {{on "click" this.fantribeCreate.toggleCreateMenu}}
             >
               {{icon "plus"}}
               <span>Create</span>
             </button>
+
+            {{#if this.fantribeCreate.isCreateMenuOpen}}
+              <FtCreateMenu />
+            {{/if}}
           {{else}}
             {{! Desktop: show buttons }}
             <a href="/login" class="fantribe-header__login-btn">Log In</a>
@@ -172,5 +169,9 @@ export default class FantribeHeader extends Component {
         </div>
       </div>
     </header>
+
+    {{#if this.fantribeCreate.isCreatePostModalOpen}}
+      <FtCreatePostModal />
+    {{/if}}
   </template>
 }

@@ -4,16 +4,10 @@ import { service } from "@ember/service";
 import icon from "discourse/helpers/d-icon";
 
 export default class FantribeFab extends Component {
-  @service composer;
+  @service fantribeCreate;
   @service currentUser;
 
-  openComposer = () => {
-    this.composer.openNewTopic();
-  };
-
   get isVisible() {
-    // Only show FAB when user is logged in
-    // CSS handles desktop/mobile visibility
     return this.currentUser;
   }
 
@@ -24,7 +18,7 @@ export default class FantribeFab extends Component {
         style="display: none;"
         type="button"
         aria-label="Create new post"
-        {{on "click" this.openComposer}}
+        {{on "click" this.fantribeCreate.openCreatePostModal}}
       >
         {{icon "plus"}}
       </button>

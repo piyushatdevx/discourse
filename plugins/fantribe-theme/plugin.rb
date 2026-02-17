@@ -66,6 +66,10 @@ register_svg_icon "eye"
 register_svg_icon "flag"
 register_svg_icon "ban"
 register_svg_icon "user-plus"
+register_svg_icon "xmark"
+register_svg_icon "clock"
+register_svg_icon "tag"
+register_svg_icon "music"
 
 # Common styles (all viewports)
 register_asset "stylesheets/common/design-tokens.scss"
@@ -106,6 +110,7 @@ register_asset "stylesheets/common/components/gear-pill.scss"
 register_asset "stylesheets/common/components/reaction-bar.scss"
 register_asset "stylesheets/common/components/post-menu.scss"
 register_asset "stylesheets/common/components/right-sidebar.scss"
+register_asset "stylesheets/common/components/create-menu.scss"
 register_asset "stylesheets/common/components/create-post-modal.scss"
 register_asset "stylesheets/common/components/engagement-bar.scss"
 

@@ -157,7 +157,7 @@ export default class FantribeTribeCard extends Component {
               <span class="ft-tribe-card__meta-sep">&bull;</span>
               <span class="ft-tribe-card__meta-item">
                 {{icon "users"}}
-                <span>{{this.memberLabel}} topics</span>
+                <span>{{this.memberLabel}}</span>
               </span>
             </div>
           </div>
@@ -179,7 +179,7 @@ export default class FantribeTribeCard extends Component {
           </div>
           <span class="ft-tribe-card__activity-text">
             {{this.topicCount}}
-            topics
+            active today
           </span>
         </div>
 
@@ -189,7 +189,7 @@ export default class FantribeTribeCard extends Component {
           class="ft-tribe-card__join-btn"
           {{on "click" this.handleJoinClick}}
         >
-          Enter Tribe
+          Join Tribe
         </button>
       </div>
     </div>

@@ -5,7 +5,6 @@
 .ft-card {
   background: var(--ft-glass-card-bg);
   backdrop-filter: blur(var(--ft-glass-card-blur));
-  -webkit-backdrop-filter: blur(var(--ft-glass-card-blur));
   border: var(--ft-glass-card-border);
   border-radius: var(--ft-radius-lg);
   box-shadow: var(--ft-shadow-sm);
@@ -56,7 +55,7 @@
     font-size: var(--ft-font-body);
     line-height: var(--ft-line-height-normal);
     color: var(--ft-dark);
-    word-wrap: break-word;
+    overflow-wrap: break-word;
   }
 
   .ft-post-card__see-more {
@@ -255,70 +254,6 @@
   }
 }
 
-// Tribe card (grid view for discovery)
-.ft-tribe-card {
-  @extend .ft-card;
-  padding: 0;
-  overflow: hidden;
-  transition:
-    transform var(--ft-transition-normal),
-    box-shadow var(--ft-transition-normal);
-
-  &:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--ft-shadow-md);
-  }
-
-  .ft-tribe-card__banner {
-    width: 100%;
-    height: 120px;
-    background: linear-gradient(135deg, var(--ft-primary), var(--ft-dark));
-    overflow: hidden;
-
-    img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-  }
-
-  .ft-tribe-card__body {
-    padding: var(--ft-space-3);
-    padding-top: var(--ft-space-8);
-    position: relative;
-  }
-
-  .ft-tribe-card__icon {
-    position: absolute;
-    top: -24px;
-    left: var(--ft-space-3);
-  }
-
-  .ft-tribe-card__name {
-    font-weight: var(--ft-font-weight-semibold);
-    font-size: var(--ft-font-body);
-    color: var(--ft-dark);
-    margin-bottom: var(--ft-space-1);
-  }
-
-  .ft-tribe-card__desc {
-    font-size: var(--ft-font-small);
-    color: var(--ft-gray-600);
-    margin-bottom: var(--ft-space-3);
-  }
-
-  .ft-tribe-card__footer {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-
-  .ft-tribe-card__members {
-    font-size: var(--ft-font-caption);
-    color: var(--ft-gray-500);
-  }
-}
-
 // Notification card
 .ft-notification-card {
   display: flex;
@@ -337,7 +272,7 @@
     background-color: var(--ft-primary-light);
 
     &:hover {
-      background-color: rgba(255, 23, 68, 0.08);
+      background-color: rgb(255, 23, 68, 0.08);
     }
   }
 
