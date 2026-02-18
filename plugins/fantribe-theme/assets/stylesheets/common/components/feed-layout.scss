@@ -3,19 +3,25 @@
 body.fantribe-theme:not(.admin-interface) {
   .fantribe-feed-layout {
     display: flex;
+    flex-direction: column; // stack tribe chips above feed on mobile/tablet
     min-height: 0;
     overflow: visible;
 
-    // Mobile tribe chips (above main feed)
+    // Wide desktop: content + right sidebar side by side
+    @media (width >= 1280px) {
+      flex-direction: row;
+      align-items: flex-start;
+    }
+
+    // Tribe chips — hidden until Fantribe custom categories are set up
     &__mobile-chips {
-      @media (width >= 768px) {
-        display: none;
-      }
+      display: none;
     }
 
     // Main feed content area — scrollable
     &__content {
       flex: 1;
+      min-width: 0; // prevent flex item overflow
       overflow-y: auto;
 
       // Scrollbar hiding (Spec §6)
