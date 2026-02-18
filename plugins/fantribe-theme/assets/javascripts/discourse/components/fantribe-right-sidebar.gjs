@@ -2,7 +2,7 @@ import Component from "@glimmer/component";
 import { on } from "@ember/modifier";
 import { action } from "@ember/object";
 import icon from "discourse/helpers/d-icon";
-import FantribeAvatar from "./fantribe-avatar";
+// import FantribeAvatar from "./fantribe-avatar";
 
 export default class FantribeRightSidebar extends Component {
   get trendingTribes() {
@@ -106,7 +106,7 @@ export default class FantribeRightSidebar extends Component {
       </div>
 
       {{! Live Now Widget }}
-      <div class="fantribe-right-sidebar__widget">
+      {{!-- <div class="fantribe-right-sidebar__widget">
         <div class="fantribe-right-sidebar__widget-header">
           <div class="fantribe-right-sidebar__live-icon-wrapper">
             {{icon "broadcast-tower"}}
@@ -157,10 +157,10 @@ export default class FantribeRightSidebar extends Component {
             View all live streams
           </button>
         </div>
-      </div>
+      </div> --}}
 
       {{! Suggested For You }}
-      <div class="fantribe-right-sidebar__suggested">
+      {{!-- <div class="fantribe-right-sidebar__suggested">
         <h3>Suggested for you</h3>
         <p>Connect with creators who share your vibe</p>
         <button
@@ -170,7 +170,7 @@ export default class FantribeRightSidebar extends Component {
         >
           Discover Creators
         </button>
-      </div>
+      </div> --}}
     </div>
   </template>
 }

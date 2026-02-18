@@ -101,7 +101,8 @@ export default class FantribeEngagementBar extends Component {
   }
 
   @action
-  async toggleReaction(key) {
+  async toggleReaction(key, event) {
+    event?.stopPropagation();
     if (key === "heart") {
       await this.handleLike();
       return;

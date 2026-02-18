@@ -522,12 +522,6 @@ body.fantribe-theme:not(.admin-interface) {
     outline: none;
   }
 
-  button:focus,
-  a:focus,
-  input:focus {
-    box-shadow: 0 0 0 3px rgb(229, 57, 53, 0.1);
-  }
-
   // Hide "Powered by Discourse" footer
   .powered-by-discourse {
     display: none;
