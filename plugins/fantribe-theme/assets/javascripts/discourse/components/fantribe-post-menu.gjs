@@ -164,7 +164,7 @@ export default class FantribePostMenu extends Component {
               class="fantribe-post-menu__item"
               {{on "click" this.handleEdit}}
             >
-              {{icon "pencil-alt"}}
+              {{icon "pencil"}}
               <span>Edit Post</span>
             </button>
 

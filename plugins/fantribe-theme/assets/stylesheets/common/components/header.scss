@@ -161,7 +161,7 @@ body.admin-interface {
     height: 48px;
     padding: 12px 16px 12px 48px;
     border: 1px solid #d4d2cf;
-    border-radius: 9999px;
+    border-radius: 9999px !important;
     background: #f0f0f2;
     font-size: 16px;
     color: #1a1916;
@@ -179,6 +179,10 @@ body.admin-interface {
       background: #fff;
       box-shadow: 0 0 0 2px #0080ff;
     }
+  }
+
+  .fantribe-header__search-icon {
+    padding-bottom: 8px;
   }
 
   // Right side actions
