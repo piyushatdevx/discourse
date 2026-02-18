@@ -1,117 +1,112 @@
-// FanTribe Design Tokens
-// Brand colors, spacing, shadows, radii, and glassmorphism variables
-
+// FanTribe Design Tokens — Exact values from FeedPage_UI_Master_Spec.md
+// 60-30-10 color rule. DO NOT MODIFY individual values.
 :root {
   // =============================================
-  // BRAND COLORS
-  // =============================================
-  --ft-primary: #ff1744;
-  --ft-primary-hover: #e50030;
-  --ft-primary-active: #cc002b;
-  --ft-primary-light: rgba(255, 23, 68, 0.1);
-  --ft-primary-medium: rgba(255, 23, 68, 0.3);
-
-  --ft-dark: #1a1a1a;
-  --ft-dark-hover: #2a2a2a;
-  --ft-dark-light: rgba(26, 26, 26, 0.7);
-
-  --ft-white: #ffffff;
-  --ft-bg: #f5f5f5;
-
-  // =============================================
-  // GRAY SCALE
-  // =============================================
-  --ft-gray-50: #fafafa;
-  --ft-gray-100: #f5f5f5;
-  // --ft-gray-200: #eeeeee;
-  --ft-gray-200: #e8e6e3;
-  --ft-gray-300: #e0e0e0;
-  --ft-gray-400: #bdbdbd;
-  --ft-gray-500: #9e9e9e;
-  --ft-gray-600: #757575;
-  --ft-gray-700: #364153;
-  --ft-gray-800: #424242;
-  --ft-gray-900: #212121;
-
-  // =============================================
-  // SEMANTIC COLORS
-  // =============================================
-  --ft-success: #4caf50;
-  --ft-success-light: rgba(76, 175, 80, 0.1);
-  --ft-warning: #ff9800;
-  --ft-warning-light: rgba(255, 152, 0, 0.1);
-  --ft-error: #f44336;
-  --ft-error-light: rgba(244, 67, 54, 0.1);
-  --ft-info: #2196f3;
-  --ft-info-light: rgba(33, 150, 243, 0.1);
-
-  // Social provider colors
-  --ft-google: #4285f4;
-  --ft-facebook: #1877f2;
-
-  // Role badge colors
-  --ft-role-owner: #ffc107;
-  --ft-role-admin: #9c27b0;
-  --ft-role-moderator: #2196f3;
-
-  // =============================================
-  // PASTEL COLORS (For Soothing Experience)
-  // =============================================
-  // DESIGN GUIDELINE: When making design decisions or when specific
-  // colors are not mentioned, ALWAYS prefer pastel/soft colors for
-  // a calming, soothing user experience. Reserve primary red (#FF1744)
-  // for important CTAs and key actions only.
-  // =============================================
-
-  // Core Pastels
-  --ft-pastel-pink: #ffe4e8; // Light pink - soft backgrounds
-  --ft-pastel-red: #ffccd5; // Muted red - hover states, light accents
-  --ft-pastel-peach: #ffe5d9; // Peach - warm accents
-  --ft-pastel-lavender: #e8e0f0; // Lavender - secondary accents
-  --ft-pastel-mint: #d4f0e7; // Mint - success states, positive feedback
-  --ft-pastel-sky: #e0f2fe; // Sky blue - info states, links
-  --ft-pastel-cream: #fff8f0; // Cream - alternative backgrounds
-  --ft-pastel-gray: #f5f5f7; // Soft gray - neutral backgrounds
-
-  // Pastel Usage:
-  // - Card hover backgrounds: --ft-pastel-pink or --ft-pastel-cream
-  // - Success messages/badges: --ft-pastel-mint
-  // - Info/notification backgrounds: --ft-pastel-sky
-  // - Secondary buttons hover: --ft-pastel-red
-  // - Tag/badge backgrounds: --ft-pastel-lavender, --ft-pastel-peach
-  // - Empty states: --ft-pastel-gray
-  // - Tribe category colors: Mix of pastels for visual variety
-
-  // =============================================
-  // TYPOGRAPHY
+  // FONT FAMILY (Spec §1.2)
   // =============================================
   --ft-font-family:
-  -apple-system, "system-ui", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-
+    "Inter", -apple-system, blinkmacsystemfont, "Segoe UI", roboto,
+    "Helvetica Neue", arial, sans-serif;
   --font-family: var(--ft-font-family);
 
-  --ft-font-display: 3rem; // 48px
-  --ft-font-h1: 2.25rem; // 36px
-  --ft-font-h2: 1.875rem; // 30px
-  --ft-font-h3: 1.5rem; // 24px
-  --ft-font-h4: 1.25rem; // 20px
-  --ft-font-h5: 1.125rem; // 18px
-  --ft-font-h6: 1rem; // 16px
-  --ft-font-body: 1rem; // 16px
-  --ft-font-small: 0.875rem; // 14px
-  --ft-font-caption: 0.75rem; // 12px
+  // =============================================
+  // 30% PRIMARY BRAND COLORS (Spec §1.1)
+  // =============================================
+  --ft-vibrant-red: #ff1744;
+  --ft-vibrant-red-hover: #e6143d;
+  --ft-vibrant-red-light: #ffe5ec;
+  --ft-vibrant-red-tint: #fff5f7;
+  --ft-vibrant-red-border: rgb(255, 23, 68, 0.2);
+  --ft-electric-blue: #0080ff;
+  --ft-electric-blue-hover: #006dd9;
+  --ft-electric-blue-light: #e5f3ff;
+  --ft-electric-blue-tint: #f0f8ff;
+  --ft-electric-blue-border: rgb(0, 128, 255, 0.2);
+  --ft-deep-charcoal: #1a1d23;
+  --ft-deep-charcoal-light: #2d3139;
+  --ft-deep-charcoal-border: rgb(26, 29, 35, 0.2);
 
-  --ft-font-weight-regular: 400;
+  // =============================================
+  // 60% NEUTRAL COLORS (Spec §1.1)
+  // =============================================
+  --ft-warm-white: #fdfcfb;
+  --ft-soft-stone: #f5f3f0;
+  --ft-light-mist: #f0f0f2;
+  --ft-neutral-50: #fdfcfb;
+  --ft-neutral-100: #f5f3f0;
+  --ft-neutral-200: #e8e6e3;
+  --ft-neutral-300: #d4d2cf;
+  --ft-neutral-400: #a8a6a3;
+  --ft-neutral-500: #78766f;
+  --ft-neutral-600: #5a584f;
+  --ft-neutral-700: #3d3b33;
+  --ft-neutral-800: #2a2822;
+  --ft-neutral-900: #1a1916;
+
+  // Slate Scale (Legacy Compatibility) (Spec §1.1)
+  --ft-slate-50: #f0f0f2;
+  --ft-slate-100: #e8e6e3;
+  --ft-slate-200: #d4d2cf;
+  --ft-slate-300: #a8a6a3;
+  --ft-slate-400: #78766f;
+  --ft-slate-500: #5a584f;
+  --ft-slate-600: #3d3b33;
+  --ft-slate-700: #2a2822;
+  --ft-slate-800: #1a1d23;
+  --ft-slate-900: #1a1916;
+
+  // =============================================
+  // 10% ACCENT COLORS (Spec §1.1)
+  // =============================================
+  --ft-coral: #ff6b6b;
+  --ft-coral-light: #ffe5e5;
+  --ft-coral-tint: #fff5f5;
+  --ft-amber: #ffb84d;
+  --ft-amber-light: #fff3e0;
+  --ft-amber-tint: #fff9f0;
+  --ft-mint: #51cf66;
+  --ft-mint-light: #e7f5e9;
+  --ft-mint-tint: #f3faf4;
+  --ft-purple: #b197fc;
+  --ft-purple-light: #f3efff;
+  --ft-purple-tint: #f9f7ff;
+
+  // =============================================
+  // VERIFICATION RINGS (Spec §1.1)
+  // =============================================
+  --ft-bronze: rgb(205, 127, 50);
+  --ft-silver: rgb(192, 192, 192);
+  --ft-gold: rgb(255, 215, 0);
+  --ft-blue-verified: #0080ff;
+
+  // =============================================
+  // GRADIENTS (Spec §1.1) — all 135deg
+  // =============================================
+  --ft-gradient-action: linear-gradient(135deg, #ff1744, #ff6b6b);
+  --ft-gradient-community: linear-gradient(135deg, #0080ff, #b197fc);
+  --ft-gradient-commerce: linear-gradient(135deg, #51cf66, #0080ff);
+  --ft-gradient-vibrant: linear-gradient(135deg, #ff1744, #e6143d);
+  --ft-gradient-electric: linear-gradient(135deg, #0080ff, #006dd9);
+
+  // =============================================
+  // TYPOGRAPHY (Spec §1.2)
+  // =============================================
+  --ft-font-xs: 0.75rem; // 12px
+  --ft-font-sm: 0.875rem; // 14px
+  --ft-font-base: 1rem; // 16px
+  --ft-font-lg: 1.125rem; // 18px
+  --ft-font-xl: 1.25rem; // 20px
+  --ft-font-2xl: 1.5rem; // 24px
+  --ft-font-weight-normal: 400;
   --ft-font-weight-medium: 500;
   --ft-font-weight-semibold: 600;
   --ft-font-weight-bold: 700;
-
+  --ft-line-height: 1.5;
+  --ft-line-height-relaxed: 1.625;
   --ft-line-height-tight: 1.25;
-  --ft-line-height-normal: 1.5;
-  --ft-line-height-relaxed: 1.75;
 
   // =============================================
-  // SPACING (4px increments)
+  // SPACING (Spec §1.3 — Tailwind scale)
   // =============================================
   --ft-space-1: 0.25rem; // 4px
   --ft-space-2: 0.5rem; // 8px
@@ -120,231 +115,165 @@
   --ft-space-5: 1.25rem; // 20px
   --ft-space-6: 1.5rem; // 24px
   --ft-space-8: 2rem; // 32px
+
+  // =============================================
+  // BORDER RADIUS (Spec §1.4)
+  // =============================================
+  --ft-radius-pill: 9999px;
+  --ft-radius-card: 24px; // rounded-3xl
+  --ft-radius-medium: 16px; // rounded-2xl
+  --ft-radius-small: 12px; // rounded-xl
+  --ft-radius-lg: 8px; // rounded-lg
+
+  // =============================================
+  // SHADOWS (Spec §1.5 — exact Tailwind values)
+  // =============================================
+  --ft-shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --ft-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  --ft-shadow-md:
+    0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --ft-shadow-lg:
+    0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --ft-shadow-xl:
+    0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  --ft-shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+
+  // =============================================
+  // TRANSITIONS (Spec §1.6)
+  // =============================================
+  --ft-transition-all: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
+  --ft-transition-colors:
+    color, background-color, border-color 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --ft-transition-transform: transform 200ms cubic-bezier(0.4, 0, 0.2, 1);
+  --ft-transition-shadow: box-shadow 200ms cubic-bezier(0.4, 0, 0.2, 1);
+
+  // =============================================
+  // Z-INDEX (Spec §6 Implementation Notes)
+  // =============================================
+  --ft-z-sticky: 40;
+  --ft-z-dropdown: 50;
+  --ft-z-modal-backdrop: 100;
+  --ft-z-modal: 110;
+
+  // =============================================
+  // BASE COLORS (used by app-layout, left-sidebar, etc.)
+  // =============================================
+  --ft-white: #fff;
+  --ft-bg: #fdfcfb; // warm-white page background
+  --ft-dark: #1a1916;
+  --ft-dark-hover: #111;
+
+  // =============================================
+  // GRAY SCALE (used by tribes-panel, inputs, buttons, etc.)
+  // Maps to a true gray scale complementing the warm neutrals
+  // =============================================
+  --ft-gray-50: #f9fafb;
+  --ft-gray-100: #f3f4f6;
+  --ft-gray-200: #e5e7eb;
+  --ft-gray-300: #d1d5db;
+  --ft-gray-400: #9ca3af;
+  --ft-gray-500: #6b7280;
+  --ft-gray-600: #4b5563;
+  --ft-gray-700: #374151;
+  --ft-gray-900: #111827;
+
+  // =============================================
+  // BRAND ALIASES (primary = vibrant-red)
+  // =============================================
+  --ft-primary: var(--ft-vibrant-red);
+  --ft-primary-hover: var(--ft-vibrant-red-hover);
+  --ft-primary-active: #cc1236;
+  --ft-primary-light: var(--ft-vibrant-red-light);
+  --ft-primary-medium: #ff4d6d;
+
+  // =============================================
+  // PASTEL TINTS (sidebar active states, soft backgrounds)
+  // =============================================
+  --ft-pastel-pink: #ffe5ec; // same as vibrant-red-light
+  --ft-pastel-red: #ffd6e0;
+  --ft-pastel-cream: #fff8f0;
+  --ft-pastel-lavender: #f3efff; // same as purple-light
+
+  // =============================================
+  // SEMANTIC COLORS (alerts, badges, form validation)
+  // =============================================
+  --ft-error: #ef4444;
+  --ft-error-light: #fee2e2;
+  --ft-success: #22c55e;
+  --ft-success-light: #dcfce7;
+  --ft-warning: #f59e0b;
+  --ft-warning-light: #fef3c7;
+  --ft-info: #3b82f6;
+  --ft-info-light: #dbeafe;
+
+  // =============================================
+  // SOCIAL BRAND COLORS (login/signup buttons)
+  // =============================================
+  --ft-facebook: #1877f2;
+  --ft-google: #4285f4;
+
+  // =============================================
+  // EXTENDED TYPOGRAPHY (heading scale, aliases)
+  // =============================================
+  --ft-font-small: 0.875rem; // alias for ft-font-sm
+  --ft-font-body: 1rem; // alias for ft-font-base
+  --ft-font-caption: 0.6875rem; // 11px
+  --ft-font-display: 2rem; // 32px
+  --ft-font-h1: 2rem;
+  --ft-font-h2: 1.5rem;
+  --ft-font-h3: 1.25rem;
+  --ft-font-h4: 1.125rem;
+  --ft-font-h5: 1rem;
+  --ft-font-h6: 0.875rem;
+  --ft-font-weight-regular: 400; // alias for normal
+  --ft-font-weight-small: 300;
+  --ft-line-height-normal: 1.5; // alias for ft-line-height
+
+  // =============================================
+  // EXTENDED RADIUS (sidebar pills, small elements)
+  // =============================================
+  --ft-radius-sm: 8px;
+  --ft-radius-md: 12px; // alias for radius-small
+  --ft-radius-xl: 20px;
+  --ft-radius-full: 9999px; // alias for radius-pill
+
+  // =============================================
+  // EXTENDED SPACING
+  // =============================================
   --ft-space-12: 3rem; // 48px
   --ft-space-16: 4rem; // 64px
 
   // =============================================
-  // BORDER RADIUS
+  // SIMPLE TRANSITIONS (sidebar, buttons)
   // =============================================
-  --ft-radius-sm: 4px;
-  --ft-radius-md: 8px;
-  --ft-radius-lg: 12px;
-  --ft-radius-xl: 16px;
-  --ft-radius-full: 9999px;
+  --ft-transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --ft-transition-normal: 200ms cubic-bezier(0.4, 0, 0.2, 1);
 
   // =============================================
-  // SHADOWS
+  // GLASSMORPHISM (cards, overlays)
   // =============================================
-  --ft-shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.1);
-  --ft-shadow-md: 0 4px 16px rgba(0, 0, 0, 0.12);
-  --ft-shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.15);
-  --ft-shadow-focus: 0 0 0 3px rgba(255, 23, 68, 0.3);
-
-  // =============================================
-  // GLASSMORPHISM
-  // =============================================
-  --ft-glass-light-bg: rgba(255, 255, 255, 0.1);
-  --ft-glass-light-blur: 10px;
-
-  --ft-glass-medium-bg: rgba(255, 255, 255, 0.15);
-  --ft-glass-medium-blur: 20px;
-
-  --ft-glass-dark-bg: rgba(26, 26, 26, 0.5);
+  --ft-glass-light-bg: rgb(255, 255, 255, 0.7);
+  --ft-glass-light-blur: 12px;
+  --ft-glass-medium-bg: rgb(255, 255, 255, 0.5);
+  --ft-glass-medium-blur: 16px;
+  --ft-glass-dark-bg: rgb(0, 0, 0, 0.4);
   --ft-glass-dark-blur: 20px;
-
-  --ft-glass-border: 1px solid rgba(255, 255, 255, 0.1);
-  --ft-glass-border-subtle: 1px solid rgba(26, 26, 26, 0.1);
-
-  // Card glass (used for most UI cards on light backgrounds)
-  --ft-glass-card-bg: rgba(255, 255, 255, 0.85);
+  --ft-glass-card-bg: rgb(255, 255, 255, 0.8);
   --ft-glass-card-blur: 12px;
-  --ft-glass-card-border: 1px solid rgba(255, 255, 255, 0.3);
+  --ft-glass-card-border: rgb(255, 255, 255, 0.3);
+  --ft-glass-border: rgb(255, 255, 255, 0.2);
+  --ft-glass-border-subtle: rgb(255, 255, 255, 0.1);
 
   // =============================================
-  // TRANSITIONS
+  // EXTENDED SHADOWS & Z-INDEX
   // =============================================
-  --ft-transition-fast: 150ms ease;
-  --ft-transition-normal: 250ms ease;
-  --ft-transition-slow: 350ms ease;
+  --ft-shadow-focus: 0 0 0 3px rgb(0, 128, 255, 0.3);
+  --ft-z-overlay: 60;
+  --ft-z-toast: 200;
 
   // =============================================
-  // Z-INDEX SCALE
+  // ROLE BADGE COLORS
   // =============================================
-  --ft-z-dropdown: 100;
-  --ft-z-sticky: 200;
-  --ft-z-overlay: 300;
-  --ft-z-modal: 400;
-  --ft-z-toast: 500;
+  --ft-role-admin: #dc2626;
+  --ft-role-moderator: #2563eb;
 }
-
-// =============================================
-// DARK MODE - SOFT DARK PASTEL THEME
-// =============================================
-// Automatically switches when system prefers dark color scheme.
-// Uses muted, desaturated colors for a soothing dark experience.
-// Does NOT apply if user has manually selected light theme (.ft-light-theme).
-// =============================================
-
-// @media (prefers-color-scheme: dark) {
-//   :root:not(.ft-light-theme) {
-//     // Brand colors (softened for dark mode)
-//     --ft-primary: #ff6b8a;
-//     --ft-primary-hover: #ff8fa8;
-//     --ft-primary-active: #ff5577;
-//     --ft-primary-light: rgba(255, 107, 138, 0.15);
-//     --ft-primary-medium: rgba(255, 107, 138, 0.3);
-//
-//     // Core backgrounds (inverted)
-//     --ft-dark: #e8e8ec;
-//     --ft-dark-hover: #d8d8dc;
-//     --ft-dark-light: rgba(232, 232, 236, 0.7);
-//
-//     --ft-white: #1a1a2e;
-//     --ft-bg: #12121f;
-//
-//     // Gray scale (inverted and softened)
-//     --ft-gray-50: #1a1a2e;
-//     --ft-gray-100: #1f1f33;
-//     --ft-gray-200: #252538;
-//     --ft-gray-300: #2d2d42;
-//     --ft-gray-400: #404055;
-//     --ft-gray-500: #5a5a70;
-//     --ft-gray-600: #8080a0;
-//     --ft-gray-700: #a0a0b8;
-//     --ft-gray-800: #c0c0d0;
-//     --ft-gray-900: #e8e8ec;
-//
-//     // Semantic colors (pastel versions for dark)
-//     --ft-success: #86efac;
-//     --ft-success-light: rgba(134, 239, 172, 0.15);
-//     --ft-warning: #fcd34d;
-//     --ft-warning-light: rgba(252, 211, 77, 0.15);
-//     --ft-error: #fca5a5;
-//     --ft-error-light: rgba(252, 165, 165, 0.15);
-//     --ft-info: #93c5fd;
-//     --ft-info-light: rgba(147, 197, 253, 0.15);
-//
-//     // Social provider colors (slightly adjusted for dark)
-//     --ft-google: #5a9cf5;
-//     --ft-facebook: #4a8ff5;
-//
-//     // Role badge colors (softened for dark backgrounds)
-//     --ft-role-owner: #fcd34d;
-//     --ft-role-admin: #c084fc;
-//     --ft-role-moderator: #60a5fa;
-//
-//     // Dark pastels (muted, desaturated versions)
-//     --ft-pastel-pink: #3d2d35;
-//     --ft-pastel-red: #4a2d38;
-//     --ft-pastel-peach: #3d3028;
-//     --ft-pastel-lavender: #2d2a3d;
-//     --ft-pastel-mint: #253530;
-//     --ft-pastel-sky: #252d3d;
-//     --ft-pastel-cream: #2d2a25;
-//     --ft-pastel-gray: #252530;
-//
-//     // Shadows (deeper for dark mode)
-//     --ft-shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
-//     --ft-shadow-md: 0 4px 16px rgba(0, 0, 0, 0.4);
-//     --ft-shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.5);
-//     --ft-shadow-focus: 0 0 0 3px rgba(255, 107, 138, 0.4);
-//
-//     // Glassmorphism (adjusted for dark backgrounds)
-//     --ft-glass-light-bg: rgba(255, 255, 255, 0.05);
-//     --ft-glass-light-blur: 10px;
-//
-//     --ft-glass-medium-bg: rgba(255, 255, 255, 0.08);
-//     --ft-glass-medium-blur: 20px;
-//
-//     --ft-glass-dark-bg: rgba(0, 0, 0, 0.3);
-//     --ft-glass-dark-blur: 20px;
-//
-//     --ft-glass-border: 1px solid rgba(255, 255, 255, 0.08);
-//     --ft-glass-border-subtle: 1px solid rgba(255, 255, 255, 0.05);
-//
-//     --ft-glass-card-bg: rgba(30, 30, 50, 0.85);
-//     --ft-glass-card-blur: 12px;
-//     --ft-glass-card-border: 1px solid rgba(255, 255, 255, 0.1);
-//   }
-// }
-
-// =============================================
-// MANUAL THEME OVERRIDE CLASSES
-// =============================================
-// These classes allow the theme toggle to override system preference.
-// Applied to <html> element via JavaScript.
-// =============================================
-
-// Force dark theme (overrides system preference)
-// html.ft-dark-theme {
-//   --ft-primary: #ff6b8a;
-//   --ft-primary-hover: #ff8fa8;
-//   --ft-primary-active: #ff5577;
-//   --ft-primary-light: rgba(255, 107, 138, 0.15);
-//   --ft-primary-medium: rgba(255, 107, 138, 0.3);
-//
-//   --ft-dark: #e8e8ec;
-//   --ft-dark-hover: #d8d8dc;
-//   --ft-dark-light: rgba(232, 232, 236, 0.7);
-//
-//   --ft-white: #1a1a2e;
-//   --ft-bg: #12121f;
-//
-//   --ft-gray-50: #1a1a2e;
-//   --ft-gray-100: #1f1f33;
-//   --ft-gray-200: #252538;
-//   --ft-gray-300: #2d2d42;
-//   --ft-gray-400: #404055;
-//   --ft-gray-500: #5a5a70;
-//   --ft-gray-600: #8080a0;
-//   --ft-gray-700: #a0a0b8;
-//   --ft-gray-800: #c0c0d0;
-//   --ft-gray-900: #e8e8ec;
-//
-//   --ft-success: #86efac;
-//   --ft-success-light: rgba(134, 239, 172, 0.15);
-//   --ft-warning: #fcd34d;
-//   --ft-warning-light: rgba(252, 211, 77, 0.15);
-//   --ft-error: #fca5a5;
-//   --ft-error-light: rgba(252, 165, 165, 0.15);
-//   --ft-info: #93c5fd;
-//   --ft-info-light: rgba(147, 197, 253, 0.15);
-//
-//   --ft-google: #5a9cf5;
-//   --ft-facebook: #4a8ff5;
-//
-//   --ft-role-owner: #fcd34d;
-//   --ft-role-admin: #c084fc;
-//   --ft-role-moderator: #60a5fa;
-//
-//   --ft-pastel-pink: #3d2d35;
-//   --ft-pastel-red: #4a2d38;
-//   --ft-pastel-peach: #3d3028;
-//   --ft-pastel-lavender: #2d2a3d;
-//   --ft-pastel-mint: #253530;
-//   --ft-pastel-sky: #252d3d;
-//   --ft-pastel-cream: #2d2a25;
-//   --ft-pastel-gray: #252530;
-//
-//   --ft-shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
-//   --ft-shadow-md: 0 4px 16px rgba(0, 0, 0, 0.4);
-//   --ft-shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.5);
-//   --ft-shadow-focus: 0 0 0 3px rgba(255, 107, 138, 0.4);
-//
-//   --ft-glass-light-bg: rgba(255, 255, 255, 0.05);
-//   --ft-glass-light-blur: 10px;
-//   --ft-glass-medium-bg: rgba(255, 255, 255, 0.08);
-//   --ft-glass-medium-blur: 20px;
-//   --ft-glass-dark-bg: rgba(0, 0, 0, 0.3);
-//   --ft-glass-dark-blur: 20px;
-//   --ft-glass-border: 1px solid rgba(255, 255, 255, 0.08);
-//   --ft-glass-border-subtle: 1px solid rgba(255, 255, 255, 0.05);
-//   --ft-glass-card-bg: rgba(30, 30, 50, 0.85);
-//   --ft-glass-card-blur: 12px;
-//   --ft-glass-card-border: 1px solid rgba(255, 255, 255, 0.1);
-// }
-
-// Force light theme (overrides system dark preference)
-// Note: .ft-light-theme uses default :root values, no overrides needed.
-// The class presence prevents the @media (prefers-color-scheme: dark) from applying
-// when combined with :not(.ft-light-theme) selector if needed in the future.

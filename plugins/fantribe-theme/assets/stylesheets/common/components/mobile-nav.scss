@@ -1,6 +1,5 @@
 // FanTribe Mobile Bottom Navigation
 // Instagram/TikTok style bottom navigation for mobile
-
 .fantribe-mobile-nav {
   // Hidden on desktop, visible on mobile
   display: none;
@@ -12,11 +11,10 @@
   height: 64px;
   background: var(--ft-glass-card-bg);
   backdrop-filter: blur(var(--ft-glass-card-blur)) saturate(180%);
-  -webkit-backdrop-filter: blur(var(--ft-glass-card-blur)) saturate(180%);
   border-top: var(--ft-glass-border-subtle);
   padding-bottom: env(safe-area-inset-bottom, 0);
 
-  @media (max-width: 767px) {
+  @media (width <= 767px) {
     display: flex;
     align-items: center;
     justify-content: space-around;
@@ -82,7 +80,7 @@
 }
 
 // Add padding to body on mobile to account for bottom nav
-@media (max-width: 767px) {
+@media (width <= 767px) {
   body.fantribe-theme {
     padding-bottom: calc(64px + env(safe-area-inset-bottom, 0));
   }
@@ -90,7 +88,7 @@
   // Hide Discourse's native FAB when our mobile nav is visible
   body.fantribe-custom-header {
     #create-topic {
-      display: none !important;
+      display: none;
     }
 
     .footer-message {

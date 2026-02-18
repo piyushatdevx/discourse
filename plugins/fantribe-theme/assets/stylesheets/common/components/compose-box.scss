@@ -1,127 +1,151 @@
-// FanTribe Compose Box — Avatar + placeholder + outlined media buttons
-.fantribe-compose-box {
-  background: var(--ft-white);
-  border: 1px solid var(--ft-gray-200);
-  border-radius: 12px;
-  overflow: hidden;
-  cursor: pointer;
-  box-shadow: 0 1px 2px rgb(0 0 0 / 4%);
-  transition:
-    border-color 0.2s ease,
-    box-shadow 0.2s ease;
-
-  &:hover {
-    border-color: var(--ft-gray-300);
-    box-shadow: 0 2px 6px rgb(0 0 0 / 6%);
-  }
-
-  // Main input area
-  &__input-area {
-    display: flex;
-    align-items: flex-start;
-    gap: 10px;
-    padding: 16px;
-  }
-
-  // User avatar
-  &__avatar {
-    width: 36px;
-    height: 36px;
-    flex-shrink: 0;
-    border-radius: var(--ft-radius-full);
-    overflow: hidden;
-
-    img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      margin: 0 !important;
-    }
-  }
-
-  // Content column
-  &__content {
-    flex: 1;
-    min-width: 0;
-    display: flex;
-    flex-direction: column;
-  }
-
-  // Placeholder text
-  &__input-placeholder {
-    min-height: 38px;
-    padding: 10px 14px;
-    font-size: 14px;
-    color: #999;
-    line-height: 1.4;
-    display: flex;
-    align-items: center;
-    pointer-events: none;
-    background: #f8f8f8;
-    border: none;
-    border-radius: 20px;
-  }
-
-  // Action bar
-  &__actions {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-top: 12px;
-  }
-
-  // Outlined media buttons — icon + label
-  &__media-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 6px 12px;
-    background: transparent;
-    border: 1px solid #ddd;
-    border-radius: 18px;
-    color: var(--ft-gray-600);
-    font-size: 13px;
-    font-weight: 500;
+// Compose Box — Exact from FeedPage_UI_Master_Spec.md §3.3
+//
+// Container: bg white, radius 16→24px, border 1px #D4D2CF, shadow-sm, hover shadow-md
+// Avatar: 52x52px, gradient ring, hidden on mobile
+// Input: bg #F0F0F2, border 1px #D4D2CF, radius pill, py 10-12px, px 16-20px
+// Media buttons — each has unique color:
+//   Photo: bg-slate-50 hover:bg-purple-light, text-purple
+//   Video: bg-slate-50 hover:bg-vibrant-red-light, text-vibrant-red
+//   Audio: bg-slate-50 hover:bg-electric-blue-light, text-electric-blue
+//   Tag Gear: bg-mint-light hover:bg-mint, text-mint hover:text-white
+body.fantribe-theme:not(.admin-interface) {
+  .fantribe-compose-box {
+    background: white;
+    border-radius: 16px; // mobile
+    border: 1px solid var(--ft-slate-200); // #D4D2CF
+    padding: 16px; // p-4 mobile
+    box-shadow: var(--ft-shadow-sm);
+    transition: box-shadow 200ms cubic-bezier(0.4, 0, 0.2, 1);
     cursor: pointer;
-    transition:
-      border-color 0.15s ease,
-      color 0.15s ease;
-
-    .d-icon {
-      font-size: 14px;
-    }
 
     &:hover {
-      border-color: var(--ft-gray-400);
-      color: var(--ft-dark);
+      box-shadow: var(--ft-shadow-md);
     }
-  }
-}
 
-// Mobile
-@media (width <= 767px) {
-  .fantribe-compose-box {
-    border: none;
-    border-radius: 0;
-    border-bottom: 1px solid var(--ft-gray-200);
-    box-shadow: none;
+    // Desktop: radius 24px, padding 24px
+    @media (width >= 768px) {
+      border-radius: 24px;
+      padding: 24px;
+    }
 
+    // ---- Input Area (avatar + content) ----
     &__input-area {
-      padding: var(--ft-space-3) var(--ft-space-4);
+      display: flex;
+      align-items: flex-start;
+      gap: 16px; // gap-4
     }
 
+    // ---- Avatar: 52x52px, hidden on mobile ----
     &__avatar {
-      width: 36px;
-      height: 36px;
-    }
-
-    &__input-placeholder {
-      font-size: var(--ft-font-small);
-      min-height: 36px;
-    }
-
-    &__media-btn span {
       display: none;
+      flex-shrink: 0;
+
+      @media (width >= 768px) {
+        display: block;
+      }
+
+      img,
+      .avatar {
+        width: 52px;
+        height: 52px;
+        border-radius: 9999px;
+        object-fit: cover;
+      }
+    }
+
+    // ---- Content area ----
+    &__content {
+      flex: 1;
+      min-width: 0;
+    }
+
+    // ---- Input placeholder pill ----
+    &__input-placeholder {
+      background: var(--ft-slate-50); // #F0F0F2
+      border: 1px solid var(--ft-slate-200); // #D4D2CF
+      border-radius: 9999px; // rounded-full
+      padding: 10px 20px;
+      font-size: 0.875rem; // 14px mobile
+      color: var(--ft-slate-400);
+      pointer-events: none;
+      margin-bottom: 12px; // gap below input
+
+      @media (width >= 768px) {
+        font-size: 1rem; // 16px desktop
+        padding: 12px 20px;
+      }
+    }
+
+    // ---- Media buttons row ----
+    &__actions {
+      display: none; // hidden on mobile
+
+      @media (width >= 768px) {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px; // gap-2
+      }
+    }
+
+    // ---- Individual media button ----
+    &__media-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px; // gap-2
+      padding: 8px 16px; // py-2 px-4
+      border-radius: 9999px; // rounded-full
+      border: none;
+      cursor: pointer;
+      font-size: 0.875rem; // 14px
+      font-weight: 500;
+      transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
+
+      svg,
+      .d-icon {
+        width: 16px; // w-4
+        height: 16px; // h-4
+      }
+
+      // ---- Photo: purple ----
+      &--photo {
+        background: var(--ft-slate-50);
+        color: var(--ft-purple);
+
+        &:hover {
+          background: var(--ft-purple-light);
+        }
+      }
+
+      // ---- Video: vibrant red ----
+      &--video {
+        background: var(--ft-slate-50);
+        color: var(--ft-vibrant-red);
+
+        &:hover {
+          background: var(--ft-vibrant-red-light);
+        }
+      }
+
+      // ---- Audio: electric blue ----
+      &--audio {
+        background: var(--ft-slate-50);
+        color: var(--ft-electric-blue);
+
+        &:hover {
+          background: var(--ft-electric-blue-light);
+        }
+      }
+
+      // ---- Tag Gear: mint (fill changes on hover) ----
+      &--tag-gear {
+        background: var(--ft-mint-light);
+        color: var(--ft-mint);
+
+        &:hover {
+          background: var(--ft-mint);
+          color: white;
+        }
+      }
     }
   }
 }

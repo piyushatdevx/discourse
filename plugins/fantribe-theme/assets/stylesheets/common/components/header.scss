@@ -1,15 +1,19 @@
 // FanTribe Custom Header Styles
-// Clean header: logo | search bar | create button
+// Matches Figma source: Header.tsx from Cretor Tribe V1
+// Responsive: h-16 mobile, h-20 desktop (64px / 80px)
 
 // Hide Discourse's native header when custom header is active
-// Guard with :not(.admin-interface) so admin keeps its native header
 body.fantribe-custom-header:not(.admin-interface) {
   .d-header {
-    display: none !important;
+    display: none;
   }
 
   &.fantribe-theme {
     padding-top: 64px;
+
+    @media (width >= 768px) {
+      padding-top: 80px;
+    }
   }
 }
 
@@ -18,30 +22,78 @@ body.admin-interface {
   .fantribe-header,
   .fantribe-mobile-nav,
   .fantribe-fab {
-    display: none !important;
+    display: none;
   }
 }
 
 // Main header container
+// Figma: w-full h-16 md:h-20 bg-white border-b border-slate-200 z-50
 .fantribe-header {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   z-index: var(--ft-z-sticky);
-  height: 56px;
-  background: var(--ft-white);
-  border-bottom: 1px solid var(--ft-gray-200);
+  height: 64px;
+  background: #fff;
+  border-bottom: 1px solid #d4d2cf;
 
+  @media (width >= 768px) {
+    height: 80px;
+  }
+
+  // Figma: h-full pl-4 pr-4 md:pl-6 md:pr-8 flex items-center justify-between
   &__container {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: var(--ft-space-3);
+    gap: 16px;
     height: 100%;
-    max-width: 1400px;
-    margin: 0 auto;
     padding: 0 16px;
+
+    @media (width >= 768px) {
+      padding: 0 24px 0 32px;
+    }
+  }
+
+  // Left section: hamburger + logo grouped
+  // Figma: flex items-center gap-3 md:gap-4
+  &__left-group {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-shrink: 0;
+
+    @media (width >= 768px) {
+      gap: 16px;
+    }
+  }
+
+  // Sidebar toggle hamburger
+  // Figma: p-2 hover:bg-slate-100 rounded-xl w-10 h-10
+  &__sidebar-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    padding: 8px;
+    background: transparent;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: background 200ms ease;
+    flex-shrink: 0;
+
+    .d-icon {
+      width: 24px;
+      height: 20px;
+      color: #2a2822;
+    }
+
+    &:hover {
+      background: #e8e6e3;
+    }
   }
 
   // Logo
@@ -52,9 +104,9 @@ body.admin-interface {
     background: none;
     border: none;
     cursor: pointer;
-    padding: var(--ft-space-1);
-    border-radius: var(--ft-radius-md);
-    transition: opacity var(--ft-transition-fast);
+    padding: 4px;
+    border-radius: 8px;
+    transition: opacity 200ms ease;
 
     &:hover {
       opacity: 0.8;
@@ -68,52 +120,64 @@ body.admin-interface {
   }
 
   // Center search bar
+  // Figma: flex-1 max-w-2xl hidden sm:block mx-6
   &__search {
     flex: 1;
-    max-width: 600px;
+    max-width: 672px;
     position: relative;
-    display: flex;
+    display: none;
     align-items: center;
+    margin: 0 24px;
 
-    @media (width <= 767px) {
-      display: none;
+    @media (width >= 640px) {
+      display: flex;
     }
   }
 
+  // Figma: absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400
   &__search-icon {
     position: absolute;
-    left: 12px;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
     display: flex;
     align-items: center;
-    color: var(--ft-gray-400);
+    color: #78766f;
     pointer-events: none;
+    z-index: 1;
 
     .d-icon {
-      font-size: 15px;
+      width: 20px;
+      height: 20px;
     }
   }
 
-  &__search-input {
+  // Figma: w-full pl-12 pr-4 py-3 bg-slate-50 border border-slate-200
+  //        rounded-full text-slate-900 placeholder-slate-400
+  // Using body selector for higher specificity to override Discourse defaults
+  &__search-input,
+  input[type="text"].fantribe-header__search-input {
     width: 100%;
-    height: 38px;
-    padding: 0 16px 0 36px;
-    border: 1px solid var(--ft-gray-200);
-    border-radius: 20px;
-    background: #f5f5f5;
-    font-size: 14px;
-    color: var(--ft-dark);
+    height: 48px;
+    padding: 12px 16px 12px 48px;
+    border: 1px solid #d4d2cf;
+    border-radius: 9999px;
+    background: #f0f0f2;
+    font-size: 16px;
+    color: #1a1916;
     outline: none;
-    transition:
-      border-color 0.2s ease,
-      background 0.2s ease;
+    box-sizing: border-box;
+    transition: all 200ms ease;
+    appearance: none;
 
     &::placeholder {
-      color: var(--ft-gray-400);
+      color: #78766f;
     }
 
     &:focus {
-      border-color: var(--ft-gray-300);
-      background: var(--ft-white);
+      border-color: transparent;
+      background: #fff;
+      box-shadow: 0 0 0 2px #0080ff;
     }
   }
 
@@ -121,39 +185,52 @@ body.admin-interface {
   &__actions {
     display: flex;
     align-items: center;
-    gap: var(--ft-space-2);
+    gap: 8px;
     flex-shrink: 0;
+    position: relative;
   }
 
   // + Create button (logged in)
+  // Figma: gradient-action text-white px-4 md:px-6 py-2.5 md:py-3 rounded-full
+  //        font-medium shadow-lg hover:shadow-xl hover:scale-105
   &__create-btn {
     display: inline-flex;
     align-items: center;
-    gap: var(--ft-space-2);
-    padding: 9px var(--ft-space-5);
-    background: var(--ft-primary);
-    color: var(--ft-white) !important;
+    gap: 8px;
+    padding: 10px 16px;
+    background: linear-gradient(135deg, #ff1744, #ff6b6b);
+    color: #fff;
     border: none;
-    border-radius: var(--ft-radius-full);
-    font-size: var(--ft-font-small);
-    font-weight: var(--ft-font-weight-semibold);
+    border-radius: 9999px;
+    font-size: 16px;
+    font-weight: 500;
     cursor: pointer;
-    transition:
-      background 0.2s ease,
-      transform 0.1s ease;
+    transition: all 200ms ease;
     white-space: nowrap;
+    box-shadow:
+      0 4px 6px -1px rgb(0, 0, 0, 0.1),
+      0 2px 4px -1px rgb(0, 0, 0, 0.06);
 
     .d-icon {
-      font-size: 14px;
+      width: 20px;
+      height: 20px;
     }
 
     &:hover {
-      background: var(--ft-primary-hover);
-      transform: translateY(-1px);
+      box-shadow:
+        0 10px 15px -3px rgb(0, 0, 0, 0.1),
+        0 4px 6px -2px rgb(0, 0, 0, 0.05);
+      transform: scale(1.05);
     }
 
-    @media (width <= 767px) {
-      padding: var(--ft-space-2) var(--ft-space-3);
+    @media (width >= 768px) {
+      padding: 12px 24px;
+    }
+
+    // Mobile: icon only, no text
+    @media (width <= 639px) {
+      padding: 10px;
+      border-radius: 9999px;
 
       span {
         display: none;
@@ -167,14 +244,14 @@ body.admin-interface {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: var(--ft-space-2) var(--ft-space-4);
-    font-size: var(--ft-font-small);
-    font-weight: var(--ft-font-weight-semibold);
+    padding: 8px 16px;
+    font-size: 14px;
+    font-weight: 600;
     text-decoration: none;
-    border-radius: var(--ft-radius-full);
-    border: 2px solid var(--ft-primary);
+    border-radius: 9999px;
+    border: 2px solid #ff1744;
     cursor: pointer;
-    transition: all var(--ft-transition-fast);
+    transition: all 200ms ease;
 
     @media (width <= 767px) {
       display: none;
@@ -182,22 +259,22 @@ body.admin-interface {
   }
 
   &__login-btn {
-    color: var(--ft-primary) !important;
-    background: transparent !important;
+    color: #ff1744;
+    background: transparent;
 
     &:hover {
-      color: var(--ft-white) !important;
-      background: var(--ft-primary) !important;
+      color: #fff;
+      background: #ff1744;
     }
   }
 
   &__signup-btn {
-    color: var(--ft-white) !important;
-    background: var(--ft-primary) !important;
+    color: #fff;
+    background: #ff1744;
 
     &:hover {
-      background: var(--ft-primary-hover) !important;
-      border-color: var(--ft-primary-hover) !important;
+      background: #e6143d;
+      border-color: #e6143d;
     }
   }
 
@@ -219,8 +296,8 @@ body.admin-interface {
     height: 40px;
     background: transparent;
     border: none;
-    border-radius: var(--ft-radius-full);
-    color: var(--ft-gray-600);
+    border-radius: 9999px;
+    color: #3d3b33;
     cursor: pointer;
 
     .d-icon {
@@ -228,27 +305,29 @@ body.admin-interface {
     }
 
     &:hover {
-      background: var(--ft-gray-100);
+      background: #f3f4f6;
     }
   }
 
   &__mobile-dropdown {
     position: fixed;
-    top: calc(64px + var(--ft-space-1));
-    left: var(--ft-space-2);
-    right: var(--ft-space-2);
-    background: var(--ft-white);
-    border-radius: var(--ft-radius-lg);
-    box-shadow: var(--ft-shadow-md);
+    top: calc(64px + 4px);
+    left: 8px;
+    right: 8px;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow:
+      0 4px 6px -1px rgb(0, 0, 0, 0.1),
+      0 2px 4px -1px rgb(0, 0, 0, 0.06);
     overflow: hidden;
-    z-index: var(--ft-z-dropdown);
+    z-index: 50;
   }
 
   &__mobile-dropdown-actions {
     display: flex;
     flex-direction: column;
-    gap: var(--ft-space-2);
-    padding: var(--ft-space-3);
+    gap: 8px;
+    padding: 12px;
   }
 
   &__mobile-login,
@@ -256,33 +335,33 @@ body.admin-interface {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: var(--ft-space-2) var(--ft-space-3);
-    font-size: var(--ft-font-small);
-    font-weight: var(--ft-font-weight-semibold);
-    border-radius: var(--ft-radius-lg);
+    padding: 8px 12px;
+    font-size: 14px;
+    font-weight: 600;
+    border-radius: 16px;
     cursor: pointer;
-    transition: all var(--ft-transition-fast);
+    transition: all 200ms ease;
   }
 
   &__mobile-login {
-    color: var(--ft-primary) !important;
-    background: transparent !important;
-    border: 2px solid var(--ft-primary);
+    color: #ff1744;
+    background: transparent;
+    border: 2px solid #ff1744;
 
     &:hover {
-      color: var(--ft-white) !important;
-      background: var(--ft-primary) !important;
+      color: #fff;
+      background: #ff1744;
     }
   }
 
   &__mobile-signup {
-    color: var(--ft-white) !important;
-    background: var(--ft-primary) !important;
-    border: 2px solid var(--ft-primary);
+    color: #fff;
+    background: #ff1744;
+    border: 2px solid #ff1744;
 
     &:hover {
-      background: var(--ft-primary-hover) !important;
-      border-color: var(--ft-primary-hover) !important;
+      background: #e6143d;
+      border-color: #e6143d;
     }
   }
 }

@@ -14,13 +14,16 @@ import { i18n } from "discourse-i18n";
 import FantribeEngagementBar from "./fantribe-engagement-bar";
 import FantribeMediaPhotoGrid from "./fantribe-media-photo-grid";
 import FantribeMediaSingleImage from "./fantribe-media-single-image";
+import FantribePostMenu from "./fantribe-post-menu";
 
 export default class FantribeFeedCard extends Component {
+  @service currentUser;
   @service router;
 
   @tracked expanded = false;
   @tracked expandedContent = null;
   @tracked loadingExpanded = false;
+  @tracked menuOpen = false;
 
   get topic() {
     return this.args.topic;
@@ -120,6 +123,24 @@ export default class FantribeFeedCard extends Component {
     return this.topic?.views || 0;
   }
 
+  get isOwnPost() {
+    if (!this.currentUser || !this.poster) {
+      return false;
+    }
+    return this.currentUser.username === this.poster.username;
+  }
+
+  @action
+  toggleMenu(event) {
+    event.stopPropagation();
+    this.menuOpen = !this.menuOpen;
+  }
+
+  @action
+  closeMenu() {
+    this.menuOpen = false;
+  }
+
   @action
   navigateToTopic() {
     if (this.topic?.id) {
@@ -186,17 +207,40 @@ export default class FantribeFeedCard extends Component {
           </button>
 
           <div class="fantribe-feed-card__meta">
-            <span
-              class="fantribe-feed-card__display-name"
-            >{{this.displayName}}</span>
-            <span
-              class="fantribe-feed-card__username-handle"
-            >@{{this.posterUsername}}</span>
-            <span class="fantribe-feed-card__separator">&middot;</span>
-            <span class="fantribe-feed-card__timestamp">{{formatDate
-                @topic.created_at
-                format="tiny"
-              }}</span>
+            <div class="fantribe-feed-card__meta-name-row">
+              <span
+                class="fantribe-feed-card__display-name"
+              >{{this.displayName}}</span>
+            </div>
+            <div class="fantribe-feed-card__meta-info-row">
+              <span
+                class="fantribe-feed-card__username-handle"
+              >@{{this.posterUsername}}</span>
+              <span class="fantribe-feed-card__separator">&middot;</span>
+              <span class="fantribe-feed-card__timestamp">{{formatDate
+                  @topic.created_at
+                  format="tiny"
+                }}</span>
+            </div>
+          </div>
+
+          <div class="fantribe-feed-card__more-wrapper">
+            <button
+              type="button"
+              class="fantribe-feed-card__more-btn"
+              {{on "click" this.toggleMenu}}
+            >
+              {{icon "ellipsis"}}
+            </button>
+
+            <FantribePostMenu
+              @isOpen={{this.menuOpen}}
+              @onClose={{this.closeMenu}}
+              @isOwnPost={{this.isOwnPost}}
+              @userName={{this.posterUsername}}
+              @topic={{@topic}}
+              @firstPostId={{this.firstPostId}}
+            />
           </div>
 
           <button

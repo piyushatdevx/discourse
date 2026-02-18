@@ -2,9 +2,9 @@
 .fantribe-trending-panel {
   background: var(--ft-white);
   border: 1px solid var(--ft-gray-200);
-  border-radius: 12px;
+  border-radius: var(--ft-radius-lg);
   overflow: hidden;
-  box-shadow: 0 1px 2px rgb(0 0 0 / 4%);
+  box-shadow: 0 1px 3px rgb(0 0 0 / 5%);
 
   // Panel header
   &__header {
@@ -65,17 +65,24 @@
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  padding: 10px 8px;
+  padding: 10px var(--ft-space-2);
   background: transparent;
   border: none;
-  border-radius: 8px;
+  border-radius: var(--ft-radius-md);
   cursor: pointer;
   text-align: left;
-  transition: background 0.1s ease;
-  gap: 8px;
+  transition:
+    background var(--ft-transition-fast),
+    transform var(--ft-transition-fast);
+  gap: var(--ft-space-2);
 
   &:hover {
-    background: #f8f8f8;
+    background: var(--ft-gray-50);
+    transform: translateX(2px);
+  }
+
+  &:active {
+    transform: scale(0.98);
   }
 
   &__info {

@@ -1,0 +1,86 @@
+// Avatar — Exact from FeedPage_UI_Master_Spec.md §6
+//
+// Small: 40x40px
+// Medium: 48x48px (PostCard)
+// Large: 52x52px (CreatePost)
+// Verification ring: 0.5px gradient padding
+body.fantribe-theme:not(.admin-interface) {
+  .fantribe-avatar {
+    position: relative;
+    display: inline-block;
+
+    &__container {
+      border-radius: var(--ft-radius-pill); // 9999px
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--ft-gradient-community);
+    }
+
+    // Avatar sizes (Spec §6)
+    &--sm &__container {
+      width: 40px;
+      height: 40px;
+    }
+
+    &--md &__container {
+      width: 48px;
+      height: 48px;
+    }
+
+    &--lg &__container {
+      width: 52px;
+      height: 52px;
+    }
+
+    &__image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    &__initials {
+      color: white;
+      font-weight: var(--ft-font-weight-semibold);
+      font-size: var(--ft-font-lg); // 18px
+    }
+
+    // Verification rings — 0.5px gradient padding (Spec §3.4)
+    &--gold &__container {
+      padding: 0.5px;
+      background: linear-gradient(
+        to right,
+        #facc15,
+        #f97316
+      ); // yellow-400 to orange-500
+    }
+
+    &--blue &__container {
+      padding: 0.5px;
+      background: linear-gradient(
+        to right,
+        #60a5fa,
+        #22d3ee
+      ); // blue-400 to cyan-500
+    }
+
+    &--silver &__container {
+      padding: 0.5px;
+      background: linear-gradient(
+        to right,
+        var(--ft-slate-300),
+        var(--ft-slate-400)
+      );
+    }
+
+    &--bronze &__container {
+      padding: 0.5px;
+      background: linear-gradient(
+        to right,
+        #d97706,
+        #c2410c
+      ); // amber-600 to orange-700
+    }
+  }
+}

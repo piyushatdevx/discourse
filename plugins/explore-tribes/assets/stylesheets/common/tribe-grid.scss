@@ -1,0 +1,23 @@
+// FanTribe Tribe Grid — Responsive grid for tribe cards
+// Values extracted from Cretor Tribe V1 ExploreTribes.tsx
+body.fantribe-theme:not(.admin-interface) {
+  .ft-tribe-grid {
+    display: grid;
+    grid-template-columns: 1fr; // grid-cols-1 (mobile)
+    gap: var(--ft-space-6); // gap-6 (24px)
+  }
+
+  // Tablet: 2 columns
+  @media (width >= 768px) {
+    .ft-tribe-grid {
+      grid-template-columns: repeat(2, 1fr); // md:grid-cols-2
+    }
+  }
+
+  // Desktop: 3 columns
+  @media (width >= 1024px) {
+    .ft-tribe-grid {
+      grid-template-columns: repeat(3, 1fr); // lg:grid-cols-3
+    }
+  }
+}

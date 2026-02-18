@@ -1,0 +1,4 @@
+explore_tribes:
+  explore_tribes_enabled:
+    default: true
+    client: true

@@ -4,8 +4,9 @@
   display: flex;
   flex-direction: column;
   height: 100%;
-  background: #fff;
-  padding: 12px 8px;
+  background: var(--ft-white);
+  padding: 24px 16px 0; // pt-6 px-4 (Figma: pt-6 px-4)
+  overflow: hidden;
 
   // Scrollable nav items — flex: 1 pushes user section to bottom
   &__items {
@@ -16,16 +17,11 @@
     gap: 4px;
     padding: 0;
     overflow-y: auto;
-    scrollbar-width: thin;
-    scrollbar-color: #d0d0d0 transparent;
+    overflow-x: hidden;
+    scrollbar-width: none;
 
     &::-webkit-scrollbar {
-      width: 6px;
-    }
-
-    &::-webkit-scrollbar-thumb {
-      background: #d0d0d0;
-      border-radius: 3px;
+      display: none;
     }
   }
 
@@ -35,38 +31,41 @@
     align-items: center;
     gap: 12px;
     width: 100%;
-    padding: 10px 12px;
+    min-height: 44px;
+    padding: 12px 16px; // py-3 px-4 (Figma: px-4 py-3)
     border: none;
-    border-radius: 10px;
+    border-radius: 16px;
     background: transparent;
-    color: #666;
-    font-size: 14px;
-    font-weight: 500;
+    color: var(--ft-gray-600);
+    font-size: var(--ft-font-sm);
+    font-weight: var(--ft-font-weight-medium);
     cursor: pointer;
-    transition:
-      background 0.15s ease,
-      color 0.15s ease;
+    transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
     text-align: left;
     position: relative;
 
     &:hover {
-      background: #f8f8f8;
-      color: #333;
+      background: var(--ft-gray-50);
+      color: var(--ft-dark);
+    }
+
+    &:active {
+      transform: scale(0.98);
     }
 
     // Active state - soft red/pink capsule
     &--active {
-      background: #fff0f0;
-      color: #e53946;
-      font-weight: 600;
+      background: var(--ft-pastel-pink);
+      color: var(--ft-primary);
+      font-weight: var(--ft-font-weight-semibold);
 
       .fantribe-sidebar-nav__item-icon .d-icon {
-        color: #e53946;
+        color: var(--ft-primary);
       }
 
       &:hover {
-        background: #ffe8e8;
-        color: #e53946;
+        background: var(--ft-pastel-red);
+        color: var(--ft-primary);
       }
     }
   }
@@ -80,7 +79,8 @@
 
     .d-icon {
       font-size: 18px;
-      color: #999;
+      color: var(--ft-gray-500);
+      transition: color var(--ft-transition-fast);
     }
   }
 
@@ -94,18 +94,6 @@
 
   // Chevron on active items (right side)
   &__item-chevron {
-    flex-shrink: 0;
-    display: flex;
-    align-items: center;
-    color: #e53946;
-
-    .d-icon {
-      font-size: 14px;
-    }
-  }
-
-  // Notification dot
-  &__item-dot {
     flex-shrink: 0;
     width: 6px;
     height: 6px;
@@ -122,49 +110,57 @@
     z-index: 10;
     display: flex;
     align-items: center;
-    justify-content: center;
-    width: 28px;
-    height: 28px;
-    border: 1px solid #e8e8e8;
-    border-radius: 50%;
-    background: #fff;
-    color: #999;
-    cursor: pointer;
-    box-shadow: 0 1px 4px rgb(0 0 0 / 10%);
-    transition:
-      background 0.15s ease,
-      color 0.15s ease;
+    color: var(--ft-primary);
 
     .d-icon {
-      font-size: 12px;
+      font-size: 14px;
     }
+  }
 
-    &:hover {
-      background: #f5f5f5;
-      color: #666;
-      box-shadow: 0 2px 6px rgb(0 0 0 / 14%);
-    }
+  // Notification dot (hidden by default, shown with --has-notification modifier)
+  &__item-dot {
+    display: none;
+    flex-shrink: 0;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--ft-error);
+  }
+
+  &__item--has-notification &__item-dot {
+    display: block;
+  }
+
+  // Collapse toggle — hide it (hamburger in header will control sidebar)
+  &__collapse {
+    display: none;
   }
 
   // User section pinned to bottom
   &__user {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 12px; // gap-3 (Figma: gap-3)
     width: 100%;
-    padding: 10px 8px;
+    padding: 30px 16px; // p-4 (Figma: p-4)
     margin-top: auto;
     border: none;
-    border-top: 1px solid #f0f0f0;
+    border-top: 1px solid var(--ft-gray-200);
     background: transparent;
     cursor: pointer;
     text-align: left;
-    transition: background 0.15s ease;
-    border-radius: 10px;
+    transition:
+      background var(--ft-transition-fast),
+      transform var(--ft-transition-fast);
+    border-radius: var(--ft-radius-md);
     flex-shrink: 0;
 
     &:hover {
-      background: #f8f8f8;
+      background: var(--ft-gray-50);
+    }
+
+    &:active {
+      transform: scale(0.98);
     }
   }
 
@@ -174,7 +170,7 @@
     height: 36px;
     border-radius: 50%;
     overflow: hidden;
-    border: 2px solid #e53946;
+    border: 2px solid var(--ft-primary);
 
     img {
       width: 100%;
@@ -193,16 +189,16 @@
 
   &__user-name {
     font-size: 13px;
-    font-weight: 600;
-    color: #333;
+    font-weight: var(--ft-font-weight-semibold);
+    color: var(--ft-dark);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
   }
 
   &__user-username {
-    font-size: 12px;
-    color: #999;
+    font-size: var(--ft-font-caption);
+    color: var(--ft-gray-500);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -210,7 +206,7 @@
 
   &__user-chevron {
     flex-shrink: 0;
-    color: #999;
+    color: var(--ft-gray-500);
 
     .d-icon {
       font-size: 14px;

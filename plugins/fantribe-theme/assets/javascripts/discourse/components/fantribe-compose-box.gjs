@@ -1,28 +1,19 @@
 import Component from "@glimmer/component";
 import { on } from "@ember/modifier";
-import { action } from "@ember/object";
 import { service } from "@ember/service";
 import avatar from "discourse/helpers/avatar";
 import icon from "discourse/helpers/d-icon";
 
 export default class FantribeComposeBox extends Component {
   @service currentUser;
-  @service composer;
-
-  @action
-  openComposer() {
-    this.composer.open({
-      action: "createTopic",
-      draftKey: "new_topic",
-      draftSequence: 0,
-      title: "",
-      body: "",
-    });
-  }
+  @service fantribeCreate;
 
   <template>
     {{! template-lint-disable no-invalid-interactive }}
-    <div class="fantribe-compose-box" {{on "click" this.openComposer}}>
+    <div
+      class="fantribe-compose-box"
+      {{on "click" this.fantribeCreate.openCreatePostModal}}
+    >
       <div class="fantribe-compose-box__input-area">
         <div class="fantribe-compose-box__avatar">
           {{#if this.currentUser}}
@@ -37,7 +28,7 @@ export default class FantribeComposeBox extends Component {
           <div class="fantribe-compose-box__actions">
             <button
               type="button"
-              class="fantribe-compose-box__media-btn"
+              class="fantribe-compose-box__media-btn fantribe-compose-box__media-btn--photo"
               title="Photo"
             >
               {{icon "image"}}
@@ -45,7 +36,7 @@ export default class FantribeComposeBox extends Component {
             </button>
             <button
               type="button"
-              class="fantribe-compose-box__media-btn"
+              class="fantribe-compose-box__media-btn fantribe-compose-box__media-btn--video"
               title="Video"
             >
               {{icon "video"}}
@@ -53,11 +44,19 @@ export default class FantribeComposeBox extends Component {
             </button>
             <button
               type="button"
-              class="fantribe-compose-box__media-btn"
+              class="fantribe-compose-box__media-btn fantribe-compose-box__media-btn--audio"
               title="Audio"
             >
-              {{icon "play"}}
+              {{icon "headphones"}}
               <span>Audio</span>
+            </button>
+            <button
+              type="button"
+              class="fantribe-compose-box__media-btn fantribe-compose-box__media-btn--tag-gear"
+              title="Tag Gear"
+            >
+              {{icon "tag"}}
+              <span>Tag Gear</span>
             </button>
           </div>
         </div>

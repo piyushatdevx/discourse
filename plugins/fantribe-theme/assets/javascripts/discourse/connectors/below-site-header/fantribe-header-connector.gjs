@@ -6,16 +6,17 @@ import FantribeMobileNav from "../../components/fantribe-mobile-nav";
 
 export default class FantribeHeaderConnector extends Component {
   @service siteSettings;
-
-  get isEnabled() {
-    return this.siteSettings.fantribe_theme_enabled;
-  }
+  @service fantribeSidebarState;
 
   <template>
     {{#if this.isEnabled}}
-      <FantribeHeader />
+      <FantribeHeader @onToggleSidebar={{this.fantribeSidebarState.toggle}} />
       <FantribeMobileNav />
       <FantribeFab />
     {{/if}}
   </template>
+
+  get isEnabled() {
+    return this.siteSettings.fantribe_theme_enabled;
+  }
 }

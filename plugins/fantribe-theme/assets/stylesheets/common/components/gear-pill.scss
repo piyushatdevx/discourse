@@ -1,0 +1,155 @@
+// Gear Pill — Exact values from FeedPage_UI_Master_Spec.md §3.4
+//
+// Container: bg from-teal-50 to-blue-50 (gradient), px-4 py-2, rounded-full
+// Icon: w-4 (16px) flex-shrink-0
+// Text: text-sm (14px), font-medium, slate-700
+// Hover card: w-72 (288px), bg white, rounded-3xl (24px), shadow-2xl
+// Transition: 200ms ease
+body.fantribe-theme:not(.admin-interface) {
+  .fantribe-gear-pill {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px; // gap-2
+    padding: 8px 16px; // py-2 px-4
+    border-radius: var(--ft-radius-pill); // rounded-full
+    background: linear-gradient(
+      135deg,
+      #f0fdfa,
+      #eff6ff
+    ); // from-teal-50 to-blue-50
+    font-size: var(--ft-font-sm); // 14px
+    font-weight: var(--ft-font-weight-medium); // 500
+    color: var(--ft-slate-700);
+    cursor: pointer;
+    transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
+    border: none;
+
+    &__icon {
+      width: 16px; // w-4
+      height: 16px; // h-4
+      flex-shrink: 0;
+      color: var(--ft-electric-blue);
+
+      svg,
+      .d-icon {
+        width: 16px;
+        height: 16px;
+      }
+    }
+
+    &__text {
+      white-space: nowrap;
+    }
+
+    &:hover {
+      transform: scale(1.05); // hover:scale-105
+      box-shadow: var(--ft-shadow-md);
+    }
+
+    // ==========================================
+    // HOVER CARD (Spec §3.4: w-72, rounded-3xl, shadow-2xl)
+    // ==========================================
+    &__hover-card {
+      display: none;
+      position: absolute;
+      bottom: calc(100% + 8px); // above pill with gap
+      left: 50%;
+      transform: translateX(-50%);
+      width: 288px; // w-72
+      background: white;
+      border-radius: 24px; // rounded-3xl (Spec §3.4: 24px)
+      border: 1px solid var(--ft-slate-200);
+      box-shadow: var(--ft-shadow-2xl);
+      overflow: hidden;
+      z-index: var(--ft-z-dropdown);
+      animation: ft-dropdown-enter 150ms cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    &:hover &__hover-card {
+      display: block;
+    }
+
+    &__hover-card-image {
+      width: 100%;
+      height: 112px; // h-28
+      object-fit: cover;
+    }
+
+    &__hover-card-content {
+      padding: 16px; // p-4
+    }
+
+    &__hover-card-title {
+      font-weight: var(--ft-font-weight-bold);
+      font-size: var(--ft-font-base); // 16px
+      color: var(--ft-slate-900);
+      margin-bottom: 4px; // mb-1
+    }
+
+    &__hover-card-price {
+      font-weight: var(--ft-font-weight-bold);
+      font-size: var(--ft-font-lg); // 18px
+      background: var(--ft-gradient-action);
+      background-clip: text;
+      color: transparent;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 8px; // mb-2
+    }
+
+    &__hover-card-desc {
+      font-size: var(--ft-font-xs); // 12px
+      color: var(--ft-slate-500);
+      line-height: var(--ft-line-height);
+      margin-bottom: 12px; // mb-3
+    }
+
+    &__hover-card-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px; // gap-2
+    }
+
+    &__hover-card-btn {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px; // gap-2
+      padding: 8px 12px; // py-2 px-3
+      border-radius: var(--ft-radius-pill);
+      font-size: var(--ft-font-xs); // 12px
+      font-weight: var(--ft-font-weight-semibold);
+      border: none;
+      cursor: pointer;
+      transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
+
+      svg,
+      .d-icon {
+        width: 12px; // w-3
+        height: 12px;
+      }
+
+      // Primary: gradient-action, text-white
+      &--primary {
+        background: var(--ft-gradient-action);
+        color: white;
+
+        &:hover {
+          box-shadow: var(--ft-shadow-md);
+          transform: scale(1.05);
+        }
+      }
+
+      // Secondary: bg-slate-100, text-slate-700
+      &--secondary {
+        background: var(--ft-slate-100);
+        color: var(--ft-slate-700);
+
+        &:hover {
+          background: var(--ft-slate-200);
+        }
+      }
+    }
+  }
+}

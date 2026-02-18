@@ -6,19 +6,19 @@
 // SURFACES & BACKGROUNDS
 // ═══════════════════════════════════════════════════════════════════
 body.admin-interface {
-  background: var(--ft-bg, #f5f5f5) !important;
+  background: var(--ft-bg, #f5f5f5);
 }
 
 body.admin-interface .admin-area {
   // Content background behind cards
   .admin-content,
   .admin-detail {
-    background: var(--ft-bg, #f5f5f5) !important;
+    background: var(--ft-bg, #f5f5f5);
   }
 
   // Content wrapper — give it breathing room
   .admin-contents {
-    background: transparent !important;
+    background: transparent;
     padding: var(--ft-space-6, 1.5rem) var(--ft-space-8, 2rem);
   }
 
@@ -102,14 +102,14 @@ body.admin-interface .admin-area {
   // Primary / CTA buttons
   .btn-primary,
   .btn.ok {
-    background: var(--ft-primary, #ff1744) !important;
-    border-color: var(--ft-primary, #ff1744) !important;
-    color: var(--ft-white, #fff) !important;
+    background: var(--ft-primary, #ff1744);
+    border-color: var(--ft-primary, #ff1744);
+    color: var(--ft-white, #fff);
     border-radius: var(--ft-radius-md, 8px);
 
     &:hover {
-      background: var(--ft-primary-hover, #e50030) !important;
-      border-color: var(--ft-primary-hover, #e50030) !important;
+      background: var(--ft-primary-hover, #e50030);
+      border-color: var(--ft-primary-hover, #e50030);
     }
   }
 
@@ -195,16 +195,16 @@ body.admin-interface .admin-area {
   textarea,
   select,
   .select-kit-header {
-    border-radius: var(--ft-radius-md, 8px) !important;
-    border-color: var(--ft-gray-300, #e0e0e0) !important;
+    border-radius: var(--ft-radius-md, 8px);
+    border-color: var(--ft-gray-300, #e0e0e0);
     font-size: var(--ft-font-small, 0.875rem);
     transition:
       border-color var(--ft-transition-fast, 150ms ease),
       box-shadow var(--ft-transition-fast, 150ms ease);
 
     &:focus {
-      border-color: var(--ft-primary, #ff1744) !important;
-      box-shadow: 0 0 0 3px rgb(255 23 68 / 8%) !important;
+      border-color: var(--ft-primary, #ff1744);
+      box-shadow: 0 0 0 3px rgb(255 23 68 / 8%);
       outline: none;
     }
   }
