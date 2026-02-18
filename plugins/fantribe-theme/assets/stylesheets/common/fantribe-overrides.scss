@@ -5,7 +5,7 @@
 // GLOBAL BACKGROUND & LAYOUT SYSTEM
 // ============================================================================
 body.fantribe-theme:not(.admin-interface) {
-  background: #f5f5f5;
+  background: #f0f0f2;
 
   // Force all page backgrounds to light gray
   #main-outlet,
@@ -13,7 +13,7 @@ body.fantribe-theme:not(.admin-interface) {
   #main,
   .container,
   .wrap {
-    background: #f5f5f5;
+    background: #f0f0f2;
     margin-left: 0;
     margin-right: 0;
   }

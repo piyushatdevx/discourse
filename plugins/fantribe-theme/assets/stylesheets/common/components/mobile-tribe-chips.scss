@@ -1,11 +1,14 @@
 // FanTribe Mobile Tribe Chips - My Tribes title + horizontal scrollable filter (mobile: below logo, above category)
 // Shown on mobile only (<768px)
-
 .fantribe-mobile-chips {
   display: flex;
   flex-direction: column;
   gap: var(--ft-space-2);
-  padding: 5px var(--ft-space-3);
+  padding: 8px 16px 0; // match feed content mobile padding
+
+  @media (width >= 768px) {
+    padding: 16px 32px 0; // match feed content desktop padding
+  }
 }
 
 .fantribe-mobile-chips__title {
@@ -13,7 +16,7 @@
   align-items: center;
   gap: var(--ft-space-2);
   font-size: var(--ft-font-small);
-  font-weight: var(--ft-font-weight-small);;
+  font-weight: var(--ft-font-weight-small);
   color: var(--ft-dark);
   margin: 0;
   flex-shrink: 0;
@@ -28,7 +31,7 @@
     flex-shrink: 0;
     color: var(--ft-primary);
     fill: none;
-    stroke: currentColor;
+    stroke: currentcolor;
   }
 }
 
@@ -38,7 +41,6 @@
   gap: var(--ft-space-2);
   overflow-x: auto;
   overflow-y: hidden;
-
   scrollbar-width: none;
   -ms-overflow-style: none;
 

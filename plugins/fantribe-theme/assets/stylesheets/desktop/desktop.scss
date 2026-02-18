@@ -1,93 +1,67 @@
 // FanTribe Desktop-Specific Styles
-// Layouts, sidebar visibility, hover states for desktop viewports
+// Loaded by Discourse for desktop user agents (in addition to common/ styles).
+// Core responsive layout is handled by media queries in common/ — this file
+// adds desktop user-agent overrides where needed.
 
-// Three-column layout visible on desktop
-.ft-layout__sidebar-left,
-.ft-layout__sidebar-right {
-  display: block;
-}
-
-// Desktop feed width constraint
-.ft-layout__main {
-  max-width: 680px;
-}
-
-// Wider modal on desktop
-.ft-modal--lg {
-  max-width: 900px;
-}
-
-// Grid columns for desktop
-.ft-grid--3 {
-  grid-template-columns: repeat(3, 1fr);
-}
-
-.ft-grid--4 {
-  grid-template-columns: repeat(4, 1fr);
-}
-
-// Desktop chat split view
-.ft-chat-layout {
-  display: flex;
-  height: calc(100vh - 56px);
-
-  .ft-chat-layout__list {
-    width: 320px;
-    flex-shrink: 0;
-    border-right: 1px solid var(--ft-gray-200);
-    overflow-y: auto;
-  }
-
-  .ft-chat-layout__conversation {
-    flex: 1;
+// Desktop chat: split-view layout
+body.fantribe-theme:not(.admin-interface) {
+  .ft-chat-layout {
     display: flex;
-    flex-direction: column;
-  }
-}
+    height: calc(100vh - 80px);
 
-// Desktop navbar center links visible
-.ft-navbar__center {
-  display: flex;
-}
+    .ft-chat-layout__list {
+      width: 320px;
+      flex-shrink: 0;
+      border-right: 1px solid var(--ft-gray-200);
+      overflow-y: auto;
+    }
 
-// Toast position on desktop
-.ft-toast {
-  top: var(--ft-space-4);
-  right: var(--ft-space-4);
-}
-
-// Hover-only interactions (desktop-friendly)
-.ft-hover-reveal {
-  opacity: 0;
-  transition: opacity var(--ft-transition-fast);
-}
-
-.ft-hover-parent:hover .ft-hover-reveal {
-  opacity: 1;
-}
-
-// Cover photo size on desktop
-.ft-cover--profile {
-  height: 280px;
-}
-
-.ft-cover--tribe {
-  height: 220px;
-}
-
-// Admin layout
-.ft-admin-layout {
-  display: flex;
-  min-height: 100vh;
-
-  .ft-admin-layout__sidebar {
-    width: 260px;
-    flex-shrink: 0;
+    .ft-chat-layout__conversation {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
   }
 
-  .ft-admin-layout__main {
-    flex: 1;
-    padding: var(--ft-space-6);
-    background-color: var(--ft-bg);
+  // Hover-only reveal interactions (no touch equivalent)
+  .ft-hover-reveal {
+    opacity: 0;
+    transition: opacity var(--ft-transition-fast);
+  }
+
+  .ft-hover-parent:hover .ft-hover-reveal {
+    opacity: 1;
+  }
+
+  // Taller cover photos on desktop
+  .ft-cover--profile {
+    height: 280px;
+  }
+
+  .ft-cover--tribe {
+    height: 220px;
+  }
+
+  // Toast position
+  .ft-toast {
+    top: var(--ft-space-4);
+    right: var(--ft-space-4);
+  }
+
+  // Admin layout
+  .ft-admin-layout {
+    display: flex;
+    min-height: 100vh;
+
+    .ft-admin-layout__sidebar {
+      width: 260px;
+      flex-shrink: 0;
+    }
+
+    .ft-admin-layout__main {
+      flex: 1;
+      padding: var(--ft-space-6);
+      background-color: var(--ft-bg);
+    }
   }
 }
