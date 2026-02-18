@@ -1,0 +1,17 @@
+// FanTribe Composer
+// Restyling for the post composer.
+:root {
+  --shadow-composer: 0 -2px 12px rgb(0 0 0 / 0.08);
+}
+
+// Composer border radius
+.d-editor-textarea-wrapper {
+  border-radius: var(--ft-radius-md);
+}
+
+// Toolbar button hover
+.d-editor-button-bar .btn:hover {
+  background-color: var(--ft-primary-light);
+}
+
+// Reply/create submit button inherits primary button styling from buttons.scss

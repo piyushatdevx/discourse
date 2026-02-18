@@ -1,90 +1,102 @@
 import Component from "@glimmer/component";
+import { tracked } from "@glimmer/tracking";
 import { fn } from "@ember/helper";
 import { on } from "@ember/modifier";
 import { action } from "@ember/object";
+import didInsert from "@ember/render-modifiers/modifiers/did-insert";
 import { service } from "@ember/service";
-import { htmlSafe } from "@ember/template";
 import icon from "discourse/helpers/d-icon";
-import { emojiUnescape } from "discourse/lib/text";
-import { escapeExpression } from "discourse/lib/utilities";
+import { ajax } from "discourse/lib/ajax";
 
 export default class FantribeTrendingPanel extends Component {
   @service router;
 
-  get trendingTopics() {
-    // Get hot/top topics from the store
-    // In production, this would fetch from a dedicated trending endpoint
-    const topics = this.args.topics || [];
-    return topics.slice(0, 5).map((topic) => ({
-      id: topic.id,
-      slug: topic.slug,
-      title: this.formatTitle(topic.title),
-      postCount: topic.posts_count || 0,
-      category: topic.category,
-      isHot: topic.like_count > 10 || topic.views > 100,
-    }));
-  }
+  @tracked groups = [];
+  @tracked isLoading = true;
 
-  formatTitle(title) {
-    // Remove common prefixes and clean up title for hashtag display
-    if (!title) {
-      return "";
+  @action
+  async loadGroups() {
+    try {
+      const result = await ajax("/groups.json");
+      const allGroups = result?.groups || [];
+      this.groups = allGroups
+        .filter(
+          (g) =>
+            g.visibility_level === 0 &&
+            !g.automatic &&
+            g.name !== "trust_level_0"
+        )
+        .slice(0, 6)
+        .map((g) => ({
+          id: g.id,
+          name: g.full_name || g.name,
+          slug: g.name,
+          memberCount: g.user_count || 0,
+        }));
+    } catch {
+      this.groups = [];
+    } finally {
+      this.isLoading = false;
     }
-    const cleaned = title
-      .replace(/^(Discussion:|Question:|Help:|Announcement:)\s*/i, "")
-      .substring(0, 30);
-    return htmlSafe(emojiUnescape(escapeExpression(cleaned)));
   }
 
   formatCount(count) {
     if (count >= 1000) {
-      return (count / 1000).toFixed(1) + "K posts";
+      return (count / 1000).toFixed(1) + "K members";
     }
-    return `${count} posts`;
+    return `${count} members`;
   }
 
   @action
-  navigateToTopic(topic) {
-    this.router.transitionTo("topic", topic.slug, topic.id);
+  navigateToGroup(group) {
+    this.router.transitionTo("group", group.slug);
   }
 
   @action
   viewAll() {
-    this.router.transitionTo("discovery.top");
+    this.router.transitionTo("groups");
   }
 
   <template>
-    <div class="fantribe-trending-panel">
+    <div class="fantribe-trending-panel" {{didInsert this.loadGroups}}>
       <div class="fantribe-trending-panel__header">
         <h3 class="fantribe-trending-panel__title">
-          {{icon "arrow-trend-up"}}
-          Trending Topics
+          {{icon "users"}}
+          Trending Tribes
         </h3>
       </div>
 
       <div class="fantribe-trending-panel__content">
-        {{#each this.trendingTopics as |topic|}}
-          <button
-            type="button"
-            class="fantribe-trending-item"
-            {{on "click" (fn this.navigateToTopic topic)}}
-          >
-            <div class="fantribe-trending-item__info">
-              <span class="fantribe-trending-item__title">{{topic.title}}</span>
-              <span class="fantribe-trending-item__count">
-                {{this.formatCount topic.postCount}}
-              </span>
-            </div>
+        {{#if this.isLoading}}
+          <div class="fantribe-trending-panel__empty">
+            <p>Loading...</p>
+          </div>
+        {{else if this.groups.length}}
+          {{#each this.groups as |group|}}
+            <button
+              type="button"
+              class="fantribe-trending-item"
+              {{on "click" (fn this.navigateToGroup group)}}
+            >
+              <div class="fantribe-trending-item__info">
+                <span
+                  class="fantribe-trending-item__title"
+                >{{group.name}}</span>
+                <span class="fantribe-trending-item__count">
+                  {{this.formatCount group.memberCount}}
+                </span>
+              </div>
 
-            <span class="fantribe-trending-item__indicator">
-              {{icon "arrow-trend-up"}}
-            </span>
-          </button>
+              <span class="fantribe-trending-item__indicator">
+                {{icon "chevron-right"}}
+              </span>
+            </button>
+          {{/each}}
         {{else}}
           <div class="fantribe-trending-panel__empty">
-            <p>No trending topics yet</p>
+            <p>No tribes yet</p>
           </div>
-        {{/each}}
+        {{/if}}
       </div>
 
       <div class="fantribe-trending-panel__footer">
@@ -93,7 +105,7 @@ export default class FantribeTrendingPanel extends Component {
           class="fantribe-trending-panel__view-all"
           {{on "click" this.viewAll}}
         >
-          View all
+          View all tribes
         </button>
       </div>
     </div>

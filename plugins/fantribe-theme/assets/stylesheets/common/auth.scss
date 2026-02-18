@@ -1,0 +1,136 @@
+// FanTribe Anonymous / Logged-Out UI
+// When login_required is true and the user is not authenticated,
+// hide the full app shell and let Discourse's login-required page
+// (or login/signup modals) take over.
+//
+// Body class `fantribe-anon` is added by fantribe-customizations.js
+// when there is no currentUser.
+
+// ---------------------------------------------------------------------------
+// 1. Hide fantribe app shell for anonymous visitors
+// ---------------------------------------------------------------------------
+body.fantribe-anon.fantribe-theme:not(.admin-interface) {
+  // Custom header (logo, search bar, create button)
+  .fantribe-header {
+    display: none;
+  }
+
+  // Left sidebar (tribes panel)
+  .fantribe-left-sidebar {
+    display: none;
+  }
+
+  // Feed layout wrapper
+  .fantribe-feed-layout {
+    display: none;
+  }
+
+  // Floating action button
+  .fantribe-fab {
+    display: none;
+  }
+
+  // Mobile bottom nav
+  .fantribe-mobile-nav {
+    display: none;
+  }
+
+  // Remove the two-column grid — single column for login content
+  #main-outlet-wrapper {
+    display: block;
+    max-width: 100%;
+    padding: 0;
+  }
+
+  // Remove extra top padding that compensates for the hidden header
+  padding-top: 0;
+
+  // Let the login-required page fill the viewport
+  #main-outlet {
+    max-width: 100%;
+    padding: 0;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// 2. Login-required landing page — non-scrollable, centered card
+// ---------------------------------------------------------------------------
+body.fantribe-anon.fantribe-theme.static-login:not(.admin-interface) {
+  // Lock viewport — no scroll
+  overflow: hidden;
+  height: 100vh;
+  background: linear-gradient(
+    135deg,
+    var(--ft-pastel-pink, #fce4ec) 0%,
+    var(--ft-pastel-lavender, #e8eaf6) 100%
+  );
+
+  // Strip backgrounds from wrappers so gradient shows through
+  #main-outlet-wrapper,
+  #main-outlet,
+  .ember-application,
+  .container {
+    background: transparent;
+  }
+
+  // Full-viewport centering for the card
+  .body-page {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+    padding: 0 var(--ft-space-4, 16px);
+    box-sizing: border-box;
+  }
+
+  // The card itself
+  .login-welcome {
+    background: rgb(255 255 255 / 85%);
+    backdrop-filter: blur(16px);
+    border: 1px solid rgb(255 255 255 / 40%);
+    border-radius: var(--ft-radius-xl, 16px);
+    box-shadow: 0 8px 32px rgb(0 0 0 / 8%);
+    padding: var(--ft-space-8, 32px) var(--ft-space-6, 24px);
+    max-width: 420px;
+    width: 100%;
+    text-align: center;
+  }
+
+  // Button row
+  .body-page-button-container {
+    display: flex;
+    flex-direction: column;
+    gap: var(--ft-space-3, 12px);
+    margin-top: var(--ft-space-4, 16px);
+    width: 100%;
+
+    .btn-primary {
+      width: 100%;
+      padding: 12px;
+      font-size: var(--ft-font-body, 15px);
+      font-weight: var(--ft-font-weight-semibold, 600);
+      border-radius: var(--ft-radius-md, 8px);
+    }
+
+    .sign-up-button {
+      background: var(--ft-primary, #e53935);
+      border-color: var(--ft-primary, #e53935);
+      color: #fff;
+
+      &:hover {
+        background: var(--ft-primary-dark, #d32f2f);
+      }
+    }
+
+    .login-button {
+      background: transparent;
+      border: 1px solid var(--ft-gray-300, #d0d0d0);
+      color: var(--ft-dark, #1a1a1a);
+
+      &:hover {
+        background: var(--ft-gray-100, #f5f5f5);
+      }
+    }
+  }
+}

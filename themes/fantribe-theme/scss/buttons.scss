@@ -1,0 +1,25 @@
+// FanTribe Buttons
+// Overrides Discourse button CSS variables for brand styling.
+:root {
+  // Primary buttons use brand red
+  --d-button-primary-bg-color: var(--ft-primary);
+  --d-button-primary-bg-color--hover: var(--ft-primary-hover);
+  --d-button-primary-bg-color--active: var(--ft-primary-active);
+
+  // Border radius
+  --d-button-border-radius: var(--ft-radius-md);
+}
+
+// Focus ring for all buttons
+.btn:focus-visible {
+  outline: none;
+  box-shadow: var(--ft-shadow-focus);
+}
+
+// Smooth transitions
+.btn {
+  transition:
+    background-color var(--ft-transition-fast),
+    box-shadow var(--ft-transition-fast),
+    color var(--ft-transition-fast);
+}

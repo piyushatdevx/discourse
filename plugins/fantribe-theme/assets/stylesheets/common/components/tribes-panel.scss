@@ -1,156 +1,172 @@
-// FanTribe Tribes Panel - Left Sidebar "My Tribes" Filter
-// Gradient buttons with online indicators
-
-.fantribe-tribes-panel {
+// FanTribe Left Sidebar — Match target design exactly
+// Clean nav pills with proper spacing, active state, notification dots
+.fantribe-sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
   background: var(--ft-white);
-  border: 1px solid var(--ft-gray-200);
-  border-radius: var(--ft-radius-xl);
+  padding: 24px 16px 0; // pt-6 px-4 (Figma: pt-6 px-4)
   overflow: hidden;
 
-  // Panel header
-  &__header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    padding: var(--ft-space-5) var(--ft-space-5) var(--ft-space-3);
-    border-bottom: 1px solid var(--ft-gray-100);
-    margin-bottom: var(--ft-space-4);
-  }
-
-  &__title-group {
+  // Scrollable nav items — flex: 1 pushes user section to bottom
+  &__items {
+    flex: 1 1 0;
+    min-height: 0;
     display: flex;
     flex-direction: column;
-    gap: var(--ft-space-1);
+    gap: 4px;
+    padding: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
   }
 
-  &__title {
+  // Individual nav item - rounded pill
+  &__item {
     display: flex;
     align-items: center;
-    gap: var(--ft-space-2);
-    font-size: var(--ft-font-h5);
-    font-weight: var(--ft-font-weight-semibold);
-    color: var(--ft-dark);
-    margin: 0;
-
-    .d-icon {
-      color: var(--ft-primary);
-      font-size: 16px;
-    }
-  }
-
-  &__filter-icon {
-    flex-shrink: 0;
-    color: var(--ft-primary);
-    fill: none;
-    stroke: currentColor;
-  }
-
-  &__subtitle {
-    font-size: var(--ft-font-caption);
-    color: var(--ft-gray-500);
-    margin: 0;
-  }
-
-  &__clear-btn,
-  &__all-btn {
-    font-size: var(--ft-font-caption);
-    color: var(--ft-primary);
-    background: none;
+    gap: 12px;
+    width: 100%;
+    min-height: 44px;
+    padding: 12px 16px; // py-3 px-4 (Figma: px-4 py-3)
     border: none;
-    padding: var(--ft-space-1) var(--ft-space-2);
+    border-radius: 16px;
+    background: transparent;
+    color: var(--ft-gray-600);
+    font-size: var(--ft-font-sm);
+    font-weight: var(--ft-font-weight-medium);
     cursor: pointer;
-    transition: all var(--ft-transition-fast);
+    transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
+    text-align: left;
+    position: relative;
 
     &:hover {
-      text-decoration: underline;
+      background: var(--ft-gray-50);
+      color: var(--ft-dark);
+    }
+
+    &:active {
+      transform: scale(0.98);
+    }
+
+    // Active state - soft red/pink capsule
+    &--active {
+      background: var(--ft-pastel-pink);
+      color: var(--ft-primary);
+      font-weight: var(--ft-font-weight-semibold);
+
+      .fantribe-sidebar-nav__item-icon .d-icon {
+        color: var(--ft-primary);
+      }
+
+      &:hover {
+        background: var(--ft-pastel-red);
+        color: var(--ft-primary);
+      }
     }
   }
 
-  // Panel content - tribe buttons container
-  &__content {
-    padding: var(--ft-space-5) var(--ft-space-6) var(--ft-space-5);
-    display: flex;
-    flex-direction: column;
-    gap: var(--ft-space-4);
-  }
-}
-
-// Individual Tribe Button (Figma: border border-gray-200 bg-white hover:bg-gray-50 hover:border-gray-300)
-.fantribe-tribe-button {
-  display: flex;
-  align-items: center;
-  gap: var(--ft-space-3);
-  padding: var(--ft-space-3);
-  border-radius: var(--ft-radius-xl);
-  border: 1px solid #e5e7eb;
-  cursor: pointer;
-  transition: all 200ms ease;
-  text-align: left;
-  width: 100%;
-  background: var(--ft-white);
-
-  &:hover:not(&--active) {
-    background: #f9f9f9;
-    border-color: #d1d5db;
-  }
-
-  // Active/selected state - light red border (no hover on selected)
-  &--active {
-    border: 1px solid #e04f5e;
-    background: linear-gradient(
-      to right,
-      #f8f4fa 0%,
-      #fdeff0 50%,
-      #fff0f5 100%
-    );
-    box-shadow: var(--ft-shadow-sm);
-  }
-
-  // Icon container
-  &__icon {
-    width: 44px;
-    height: 44px;
-    flex-shrink: 0;
+  &__item-icon {
     display: flex;
     align-items: center;
     justify-content: center;
-    background: var(--ft-white);
-    border-radius: var(--ft-radius-lg);
-    box-shadow: var(--ft-shadow-sm);
+    width: 20px;
+    flex-shrink: 0;
 
     .d-icon {
-      font-size: 20px;
-      color: var(--ft-gray-700);
-    }
-
-    // Category emoji
-    &-emoji {
-      font-size: 22px;
-      line-height: 1;
-
-      img.emoji {
-        width: 22px;
-        height: 22px;
-      }
-    }
-
-    // Category Font Awesome icon
-    &-fa {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    // Category color dot
-    &-dot {
-      width: 24px;
-      height: 24px;
-      border-radius: var(--ft-radius-full);
+      font-size: 18px;
+      color: var(--ft-gray-500);
+      transition: color var(--ft-transition-fast);
     }
   }
 
-  // Text content
-  &__info {
+  &__item-label {
+    flex: 1;
+    min-width: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  // Chevron on active items (right side)
+  &__item-chevron {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    color: var(--ft-primary);
+
+    .d-icon {
+      font-size: 14px;
+    }
+  }
+
+  // Notification dot (hidden by default, shown with --has-notification modifier)
+  &__item-dot {
+    display: none;
+    flex-shrink: 0;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--ft-error);
+  }
+
+  &__item--has-notification &__item-dot {
+    display: block;
+  }
+
+  // Collapse toggle — hide it (hamburger in header will control sidebar)
+  &__collapse {
+    display: none;
+  }
+
+  // User section pinned to bottom
+  &__user {
+    display: flex;
+    align-items: center;
+    gap: 12px; // gap-3 (Figma: gap-3)
+    width: 100%;
+    padding: 30px 16px; // p-4 (Figma: p-4)
+    margin-top: auto;
+    border: none;
+    border-top: 1px solid var(--ft-gray-200);
+    background: transparent;
+    cursor: pointer;
+    text-align: left;
+    transition:
+      background var(--ft-transition-fast),
+      transform var(--ft-transition-fast);
+    border-radius: var(--ft-radius-md);
+    flex-shrink: 0;
+
+    &:hover {
+      background: var(--ft-gray-50);
+    }
+
+    &:active {
+      transform: scale(0.98);
+    }
+  }
+
+  &__user-avatar {
+    flex-shrink: 0;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 2px solid var(--ft-primary);
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  &__user-info {
     flex: 1;
     min-width: 0;
     display: flex;
@@ -158,29 +174,60 @@
     gap: 2px;
   }
 
-  &__name {
-    font-size: var(--ft-font-small);
-    font-weight: var(--ft-font-weight-medium);
+  &__user-name {
+    font-size: 13px;
+    font-weight: var(--ft-font-weight-semibold);
     color: var(--ft-dark);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
   }
 
-  &__topic-count {
+  &__user-username {
     font-size: var(--ft-font-caption);
     color: var(--ft-gray-500);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
-  // Favorite heart indicator
-  &__favorite {
+  &__user-chevron {
     flex-shrink: 0;
-    color: var(--ft-primary);
-    font-size: 14px;
-    opacity: 0.7;
+    color: var(--ft-gray-500);
 
-    &--filled {
-      opacity: 1;
+    .d-icon {
+      font-size: 14px;
+    }
+  }
+}
+
+// Collapsed sidebar
+body.fantribe-sidebar-collapsed {
+  .fantribe-sidebar-nav {
+    &__item-label,
+    &__item-chevron,
+    &__item-dot,
+    &__user-info,
+    &__user-chevron {
+      display: none;
+    }
+
+    &__item {
+      justify-content: center;
+      padding: 10px;
+    }
+
+    &__item-icon {
+      width: auto;
+    }
+
+    &__user {
+      justify-content: center;
+      padding: 10px;
+    }
+
+    &__user-avatar {
+      border-width: 2px;
     }
   }
 }

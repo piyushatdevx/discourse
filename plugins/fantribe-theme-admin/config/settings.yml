@@ -1,0 +1,4 @@
+fantribe_theme_admin:
+  fantribe_theme_admin_enabled:
+    default: true
+    client: true

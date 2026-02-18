@@ -6,15 +6,14 @@ import { action } from "@ember/object";
 import { service } from "@ember/service";
 import icon from "discourse/helpers/d-icon";
 import closeOnClickOutside from "discourse/modifiers/close-on-click-outside";
-import FantribeNavItem from "./fantribe-nav-item";
-import FantribeNotifications from "./fantribe-notifications";
-import FantribeSearchButton from "./fantribe-search-button";
-import FantribeUserMenu from "./fantribe-user-menu";
+import FtCreateMenu from "./ft-create-menu";
+import FtCreatePostModal from "./ft-create-post-modal";
 
 export default class FantribeHeader extends Component {
   @service router;
   @service currentUser;
   @service siteSettings;
+  @service fantribeCreate;
 
   @tracked mobileMenuOpen = false;
 
@@ -28,23 +27,26 @@ export default class FantribeHeader extends Component {
     return !!this.currentUser;
   }
 
-  get currentPath() {
-    return this.router.currentRouteName;
-  }
-
-  get isHomePage() {
-    const route = this.router.currentRouteName;
-    return (
-      route === "discovery.latest" ||
-      route === "discovery.categories" ||
-      route === "discovery.top" ||
-      route === "index"
-    );
-  }
-
   @action
   navigateToHome() {
     this.router.transitionTo("discovery.latest");
+  }
+
+  @action
+  handleSearchFocus() {
+    this.router.transitionTo("full-page-search");
+  }
+
+  @action
+  handleSearchKeydown(event) {
+    if (event.key === "Enter") {
+      const q = event.target.value.trim();
+      if (q) {
+        this.router.transitionTo("full-page-search", { queryParams: { q } });
+      } else {
+        this.router.transitionTo("full-page-search");
+      }
+    }
   }
 
   @action
@@ -72,46 +74,59 @@ export default class FantribeHeader extends Component {
   <template>
     <header class="fantribe-header">
       <div class="fantribe-header__container">
-        {{! Logo }}
-        <button
-          class="fantribe-header__logo"
-          type="button"
-          {{on "click" this.navigateToHome}}
-        >
-          <img
-            src={{this.logoUrl}}
-            alt="FanTribe"
-            class="fantribe-header__logo-img"
-          />
-        </button>
+        {{! Left section: hamburger + logo }}
+        <div class="fantribe-header__left-group">
+          <button
+            class="fantribe-header__sidebar-toggle"
+            type="button"
+            {{on "click" @onToggleSidebar}}
+          >
+            {{icon "bars"}}
+          </button>
 
-        {{! Desktop Navigation - only show when logged in }}
-        {{#if this.isLoggedIn}}
-          <nav class="fantribe-header__nav fantribe-header__nav--desktop">
-            <FantribeNavItem
-              @route="discovery.latest"
-              @label="Feed"
-              @icon="house"
+          <button
+            class="fantribe-header__logo"
+            type="button"
+            {{on "click" this.navigateToHome}}
+          >
+            <img
+              src={{this.logoUrl}}
+              alt="CreatorTribe"
+              class="fantribe-header__logo-img"
             />
-            <FantribeNavItem
-              @route="discovery.categories"
-              @label="Tribes"
-              @icon="users"
-            />
-            <FantribeNavItem
-              @route="discovery.top"
-              @label="Trending"
-              @icon="fire"
-            />
-          </nav>
-        {{/if}}
+          </button>
+        </div>
+
+        {{! Center Search Bar }}
+        <div class="fantribe-header__search" role="search">
+          <span class="fantribe-header__search-icon">
+            {{icon "magnifying-glass"}}
+          </span>
+          <input
+            type="text"
+            id="fantribe-header_search-input"
+            class="fantribe-header__search-input"
+            placeholder="Search people, gear, or tribes..."
+            {{on "focus" this.handleSearchFocus}}
+            {{on "keydown" this.handleSearchKeydown}}
+          />
+        </div>
 
         {{! Right Side Actions }}
         <div class="fantribe-header__actions">
           {{#if this.isLoggedIn}}
-            <FantribeSearchButton />
-            <FantribeNotifications />
-            <FantribeUserMenu @user={{this.currentUser}} />
+            <button
+              type="button"
+              class="fantribe-header__create-btn"
+              {{on "click" this.fantribeCreate.toggleCreateMenu}}
+            >
+              {{icon "plus"}}
+              <span>Create</span>
+            </button>
+
+            {{#if this.fantribeCreate.isCreateMenuOpen}}
+              <FtCreateMenu />
+            {{/if}}
           {{else}}
             {{! Desktop: show buttons }}
             <a href="/login" class="fantribe-header__login-btn">Log In</a>
@@ -135,9 +150,6 @@ export default class FantribeHeader extends Component {
                     (hash targetSelector=".fantribe-header__hamburger")
                   }}
                 >
-                  <div class="fantribe-header__mobile-dropdown-header">
-                    <span>Welcome to FanTribe</span>
-                  </div>
                   <div class="fantribe-header__mobile-dropdown-actions">
                     <button
                       type="button"
@@ -157,5 +169,9 @@ export default class FantribeHeader extends Component {
         </div>
       </div>
     </header>
+
+    {{#if this.fantribeCreate.isCreatePostModalOpen}}
+      <FtCreatePostModal />
+    {{/if}}
   </template>
 }

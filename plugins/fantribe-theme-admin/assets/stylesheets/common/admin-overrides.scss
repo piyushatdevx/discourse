@@ -1,0 +1,279 @@
+// FanTribe Admin — Global Visual Overrides
+// Scoped to body.admin-interface so nothing leaks to public UI.
+// Covers: surfaces, typography, buttons, inputs, tables, breadcrumbs.
+
+// ═══════════════════════════════════════════════════════════════════
+// SURFACES & BACKGROUNDS
+// ═══════════════════════════════════════════════════════════════════
+body.admin-interface {
+  background: var(--ft-bg, #f5f5f5);
+}
+
+body.admin-interface .admin-area {
+  // Content background behind cards
+  .admin-content,
+  .admin-detail {
+    background: var(--ft-bg, #f5f5f5);
+  }
+
+  // Content wrapper — give it breathing room
+  .admin-contents {
+    background: transparent;
+    padding: var(--ft-space-6, 1.5rem) var(--ft-space-8, 2rem);
+  }
+
+  // Config area cards — consistent card treatment
+  .admin-config-area-card {
+    background: var(--ft-white, #fff);
+    border: 1px solid var(--ft-gray-200, #e8e6e3);
+    border-radius: var(--ft-radius-lg, 12px);
+    box-shadow: 0 1px 3px rgb(0 0 0 / 5%);
+    padding: var(--ft-space-5, 1.25rem);
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// TYPOGRAPHY — PAGE HEADERS & BREADCRUMBS
+// ═══════════════════════════════════════════════════════════════════
+body.admin-interface .admin-area {
+  // Page title (h1 in admin pages)
+  .d-page-header__title h1,
+  .admin-page-header h1,
+  .admin-contents > h1,
+  .dashboard-next > .section > .section-title h2:first-child {
+    font-size: 1.75rem;
+    font-weight: var(--ft-font-weight-bold, 700);
+    color: var(--ft-gray-900, #212121);
+    letter-spacing: -0.01em;
+    line-height: var(--ft-line-height-tight, 1.25);
+  }
+
+  // Subheadings
+  h2,
+  .section-title h2 {
+    font-size: 1.1rem;
+    font-weight: var(--ft-font-weight-semibold, 600);
+    color: var(--ft-gray-800, #424242);
+  }
+
+  // Page description
+  .d-page-header__description,
+  .admin-contents > p:first-of-type {
+    font-size: var(--ft-font-small, 0.875rem);
+    color: var(--ft-gray-500, #9e9e9e);
+    line-height: var(--ft-line-height-relaxed, 1.75);
+  }
+
+  // Breadcrumbs
+  .d-breadcrumb,
+  .d-breadcrumbs {
+    font-size: var(--ft-font-caption, 0.75rem);
+    color: var(--ft-gray-500, #9e9e9e);
+    margin-bottom: var(--ft-space-1, 0.25rem);
+
+    a {
+      color: var(--ft-gray-500, #9e9e9e);
+
+      &:hover {
+        color: var(--ft-primary, #ff1744);
+      }
+    }
+
+    .separator {
+      color: var(--ft-gray-400, #bdbdbd);
+    }
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// BUTTONS
+// ═══════════════════════════════════════════════════════════════════
+body.admin-interface .admin-area {
+  .btn {
+    border-radius: var(--ft-radius-md, 8px);
+    font-weight: var(--ft-font-weight-medium, 500);
+    font-size: var(--ft-font-small, 0.875rem);
+    transition:
+      background var(--ft-transition-fast, 150ms ease),
+      border-color var(--ft-transition-fast, 150ms ease),
+      box-shadow var(--ft-transition-fast, 150ms ease);
+  }
+
+  // Primary / CTA buttons
+  .btn-primary,
+  .btn.ok {
+    background: var(--ft-primary, #ff1744);
+    border-color: var(--ft-primary, #ff1744);
+    color: var(--ft-white, #fff);
+    border-radius: var(--ft-radius-md, 8px);
+
+    &:hover {
+      background: var(--ft-primary-hover, #e50030);
+      border-color: var(--ft-primary-hover, #e50030);
+    }
+  }
+
+  // Default / secondary buttons — softer
+  .btn-default,
+  .btn:not(.btn-primary, .btn-danger, .ok, .no-text) {
+    background: var(--ft-white, #fff);
+    border: 1px solid var(--ft-gray-300, #e0e0e0);
+    color: var(--ft-gray-700, #364153);
+
+    &:hover {
+      background: var(--ft-gray-50, #fafafa);
+      border-color: var(--ft-gray-400, #bdbdbd);
+    }
+  }
+
+  // Danger buttons
+  .btn-danger {
+    border-radius: var(--ft-radius-md, 8px);
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// TABLES
+// ═══════════════════════════════════════════════════════════════════
+body.admin-interface .admin-area {
+  table {
+    border-collapse: separate;
+    border-spacing: 0;
+  }
+
+  .admin-contents table {
+    background: var(--ft-white, #fff);
+    border: 1px solid var(--ft-gray-200, #e8e6e3);
+    border-radius: var(--ft-radius-lg, 12px);
+    overflow: hidden;
+
+    thead {
+      background: var(--ft-gray-50, #fafafa);
+
+      th {
+        font-size: var(--ft-font-caption, 0.75rem);
+        font-weight: var(--ft-font-weight-semibold, 600);
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        color: var(--ft-gray-500, #9e9e9e);
+        padding: 10px 12px;
+        border-bottom: 1px solid var(--ft-gray-200, #e8e6e3);
+      }
+    }
+
+    tbody tr {
+      transition: background var(--ft-transition-fast, 150ms ease);
+
+      &:hover {
+        background: var(--ft-gray-50, #fafafa);
+      }
+
+      td {
+        padding: 10px 12px;
+        font-size: var(--ft-font-small, 0.875rem);
+        color: var(--ft-gray-700, #364153);
+        border-bottom: 1px solid var(--ft-gray-200, #e8e6e3);
+      }
+
+      &:last-child td {
+        border-bottom: none;
+      }
+    }
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// INPUTS & SEARCH
+// ═══════════════════════════════════════════════════════════════════
+body.admin-interface .admin-area {
+  input[type="text"],
+  input[type="search"],
+  input[type="email"],
+  input[type="url"],
+  input[type="number"],
+  input[type="password"],
+  textarea,
+  select,
+  .select-kit-header {
+    border-radius: var(--ft-radius-md, 8px);
+    border-color: var(--ft-gray-300, #e0e0e0);
+    font-size: var(--ft-font-small, 0.875rem);
+    transition:
+      border-color var(--ft-transition-fast, 150ms ease),
+      box-shadow var(--ft-transition-fast, 150ms ease);
+
+    &:focus {
+      border-color: var(--ft-primary, #ff1744);
+      box-shadow: 0 0 0 3px rgb(255 23 68 / 8%);
+      outline: none;
+    }
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// NAV PILLS (sub-navigation tabs)
+// ═══════════════════════════════════════════════════════════════════
+body.admin-interface .admin-area {
+  .nav-pills > li > a {
+    border-radius: var(--ft-radius-md, 8px);
+    font-size: var(--ft-font-small, 0.875rem);
+    font-weight: var(--ft-font-weight-medium, 500);
+    color: var(--ft-gray-600, #757575);
+    padding: 6px 14px;
+    transition:
+      background var(--ft-transition-fast, 150ms ease),
+      color var(--ft-transition-fast, 150ms ease);
+
+    &:hover {
+      background: var(--ft-gray-100, #f5f5f5);
+      color: var(--ft-gray-800, #424242);
+    }
+
+    &.active {
+      background: var(--ft-primary-light, rgb(255 23 68 / 10%));
+      color: var(--ft-primary, #ff1744);
+      font-weight: var(--ft-font-weight-semibold, 600);
+    }
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// BADGES & STATUS PILLS
+// ═══════════════════════════════════════════════════════════════════
+body.admin-interface .admin-area {
+  .badge-notification {
+    border-radius: var(--ft-radius-full, 9999px);
+    font-size: 11px;
+    font-weight: var(--ft-font-weight-semibold, 600);
+    padding: 2px 7px;
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// MISC CLEAN-UPS
+// ═══════════════════════════════════════════════════════════════════
+body.admin-interface .admin-area {
+  // Softer horizontal rules
+  hr {
+    border-color: var(--ft-gray-200, #e8e6e3);
+  }
+
+  // Smoother scrollbars
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--ft-gray-300, #e0e0e0);
+    border-radius: 3px;
+
+    &:hover {
+      background: var(--ft-gray-400, #bdbdbd);
+    }
+  }
+}

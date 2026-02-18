@@ -1,183 +1,151 @@
-// FanTribe Compose Box - Post Creation Component (Figma: light gray card, white input, dark avatar, red Share)
-// Avatar + input + media buttons + share button
-
-.fantribe-compose-box {
-  background: #f8f8f8;
-  border: 1px solid var(--ft-gray-200);
-  border-radius: 12px;
-  overflow: hidden;
-  cursor: pointer;
-  transition: all var(--ft-transition-fast);
-  // box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
-
-  &:hover {
-    border-color: var(--ft-gray-300);
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-  }
-
-  &:focus {
-    outline: 2px solid var(--ft-primary);
-    outline-offset: 2px;
-  }
-
-  // Main input area - white inner content
-  &__input-area {
-    display: flex;
-    align-items: flex-start;
-    gap: var(--ft-space-3);
-    padding: var(--ft-space-4) var(--ft-space-5);
-    background: var(--ft-white);
-  }
-
-  // User avatar - dark gray/blue (Figma: #607d8b)
-  &__avatar {
-    width: 40px;
-    height: 40px;
-    flex-shrink: 0;
-    border-radius: var(--ft-radius-full);
-    overflow: hidden;
-    background: #607d8b;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    // Initials fallback - white text on dark bg
-    &-initials {
-      font-size: var(--ft-font-small);
-      font-weight: var(--ft-font-weight-semibold);
-      color: var(--ft-white);
-    }
-  }
-
-  // Content column - input + actions, aligns with Figma (media buttons below textbox, same left edge)
-  &__content {
-    flex: 1;
-    min-width: 0;
-    display: flex;
-    flex-direction: column;
-  }
-
-  // Text input container
-  &__input-wrapper {
-    min-width: 0;
-    font-weight: 300;
-  }
-
-  // Input area - very light gray bg, rounded corners, subtle border (Figma: taller for multi-line)
-  &__input-placeholder {
-    min-height: 70px;
-    padding: var(--ft-space-2) var(--ft-space-3);
-    font-size: var(--ft-font-body);
-    color: #888888;
-    line-height: var(--ft-line-height-normal);
-    display: flex;
-    align-items: flex-start;
-    pointer-events: none;
-    background: #f8f8f8;
-    border: 1px solid #e8e8e8;
-    border-radius: 8px;
-  }
-
-  // Action bar - white to match inner content (no border above icons)
-  &__actions {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-top: var(--ft-space-3);
-    padding: 0;
-  }
-
-  // Media buttons group
-  &__media-buttons {
-    display: flex;
-    align-items: center;
-    gap: var(--ft-space-2);
-  }
-
-  &__media-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 6px 8px;
-    background: transparent;
-    border: none;
-    border-radius: var(--ft-radius-full);
-    color: var(--ft-gray-600);
-    font-size: 1.125rem;
-    line-height: 1;
+// Compose Box — Exact from FeedPage_UI_Master_Spec.md §3.3
+//
+// Container: bg white, radius 16→24px, border 1px #D4D2CF, shadow-sm, hover shadow-md
+// Avatar: 52x52px, gradient ring, hidden on mobile
+// Input: bg #F0F0F2, border 1px #D4D2CF, radius pill, py 10-12px, px 16-20px
+// Media buttons — each has unique color:
+//   Photo: bg-slate-50 hover:bg-purple-light, text-purple
+//   Video: bg-slate-50 hover:bg-vibrant-red-light, text-vibrant-red
+//   Audio: bg-slate-50 hover:bg-electric-blue-light, text-electric-blue
+//   Tag Gear: bg-mint-light hover:bg-mint, text-mint hover:text-white
+body.fantribe-theme:not(.admin-interface) {
+  .fantribe-compose-box {
+    background: white;
+    border-radius: 16px; // mobile
+    border: 1px solid var(--ft-slate-200); // #D4D2CF
+    padding: 16px; // p-4 mobile
+    box-shadow: var(--ft-shadow-sm);
+    transition: box-shadow 200ms cubic-bezier(0.4, 0, 0.2, 1);
     cursor: pointer;
-    transition: background-color var(--ft-transition-fast), color var(--ft-transition-fast);
 
     &:hover {
-      background: var(--ft-gray-100);
+      box-shadow: var(--ft-shadow-md);
     }
-  }
 
-  // Share button - pill-shaped, bright red (Figma)
-  &__share-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: var(--ft-space-2) var(--ft-space-5);
-    background: var(--ft-primary);
-    color: var(--ft-white);
-    border: none;
-    border-radius: var(--ft-radius-full);
-    font-size: var(--ft-font-small);
-    font-weight: var(--ft-font-weight-small);
-    pointer-events: none;
-
-    .d-icon {
-      font-size: 14px;
+    // Desktop: radius 24px, padding 24px
+    @media (width >= 768px) {
+      border-radius: 24px;
+      padding: 24px;
     }
-  }
-}
 
-// md: p-2 (8px) for media buttons
-@media (min-width: 768px) {
-  .fantribe-compose-box__media-btn {
-    padding: 8px; // md:p-2
-  }
-}
-
-// Mobile: full width, no borders (Figma mobile: card edge-to-edge, no left/right border)
-@media (max-width: 767px) {
-  .fantribe-compose-box {
-    border: none;
-    border-radius: 0;
-    box-shadow: none;
-
+    // ---- Input Area (avatar + content) ----
     &__input-area {
-      padding: var(--ft-space-3) var(--ft-space-4);
+      display: flex;
+      align-items: flex-start;
+      gap: 16px; // gap-4
     }
 
+    // ---- Avatar: 52x52px, hidden on mobile ----
     &__avatar {
-      width: 36px;
-      height: 36px;
+      display: none;
+      flex-shrink: 0;
+
+      @media (width >= 768px) {
+        display: block;
+      }
+
+      img,
+      .avatar {
+        width: 52px;
+        height: 52px;
+        border-radius: 9999px;
+        object-fit: cover;
+      }
     }
 
+    // ---- Content area ----
+    &__content {
+      flex: 1;
+      min-width: 0;
+    }
+
+    // ---- Input placeholder pill ----
     &__input-placeholder {
-      font-size: var(--ft-font-caption);
+      background: var(--ft-slate-50); // #F0F0F2
+      border: 1px solid var(--ft-slate-200); // #D4D2CF
+      border-radius: 9999px; // rounded-full
+      padding: 10px 20px;
+      font-size: 0.875rem; // 14px mobile
+      color: var(--ft-slate-400);
+      pointer-events: none;
+      margin-bottom: 12px; // gap below input
+
+      @media (width >= 768px) {
+        font-size: 1rem; // 16px desktop
+        padding: 12px 20px;
+      }
     }
 
+    // ---- Media buttons row ----
     &__actions {
-      margin-top: var(--ft-space-2);
+      display: none; // hidden on mobile
+
+      @media (width >= 768px) {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px; // gap-2
+      }
     }
 
+    // ---- Individual media button ----
     &__media-btn {
-      padding: 6px 8px;
-      font-size: 1.125rem;
-    }
+      display: inline-flex;
+      align-items: center;
+      gap: 8px; // gap-2
+      padding: 8px 16px; // py-2 px-4
+      border-radius: 9999px; // rounded-full
+      border: none;
+      cursor: pointer;
+      font-size: 0.875rem; // 14px
+      font-weight: 500;
+      transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
 
-    &__share-btn {
-      padding: var(--ft-space-2) var(--ft-space-4);
-      font-size: var(--ft-font-caption);
+      svg,
+      .d-icon {
+        width: 16px; // w-4
+        height: 16px; // h-4
+      }
+
+      // ---- Photo: purple ----
+      &--photo {
+        background: var(--ft-slate-50);
+        color: var(--ft-purple);
+
+        &:hover {
+          background: var(--ft-purple-light);
+        }
+      }
+
+      // ---- Video: vibrant red ----
+      &--video {
+        background: var(--ft-slate-50);
+        color: var(--ft-vibrant-red);
+
+        &:hover {
+          background: var(--ft-vibrant-red-light);
+        }
+      }
+
+      // ---- Audio: electric blue ----
+      &--audio {
+        background: var(--ft-slate-50);
+        color: var(--ft-electric-blue);
+
+        &:hover {
+          background: var(--ft-electric-blue-light);
+        }
+      }
+
+      // ---- Tag Gear: mint (fill changes on hover) ----
+      &--tag-gear {
+        background: var(--ft-mint-light);
+        color: var(--ft-mint);
+
+        &:hover {
+          background: var(--ft-mint);
+          color: white;
+        }
+      }
     }
   }
 }

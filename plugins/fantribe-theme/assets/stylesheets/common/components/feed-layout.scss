@@ -1,285 +1,98 @@
-// FanTribe Feed Layout - Three-Section Responsive Grid
-// Desktop: Left sidebar (240px) | Feed (flex) | Right sidebar (300px)
-// Tablet: Left sidebar (220px) | Feed (flex)
-// Mobile: Single column with horizontal tribe chips
-
-body.fantribe-theme {
-  // Set consistent background across the entire page
-  background-color: var(--ft-bg) !important;
-
-  // Hide Discourse's default sidebar
-  .sidebar-wrapper {
-    display: none !important;
-  }
-
-  // Override Discourse core max-width and remove any white/pinkish backgrounds
-  #main-outlet-wrapper,
-  #main-outlet,
-  .wrap {
-    max-width: 100% !important;
-    box-sizing: border-box;
-    background: transparent !important;
-  }
-
-  // Adjust main outlet layout when sidebar is hidden
-  #main-outlet-wrapper {
-    display: block;
+// Feed Layout — Exact values from FeedPage_UI_Master_Spec.md §3.1, §3.2
+// Feed max-width: 1280px, Right Sidebar: 320px (xl only)
+body.fantribe-theme:not(.admin-interface) {
+  .fantribe-feed-layout {
+    display: flex;
+    flex-direction: column; // stack tribe chips above feed on mobile/tablet
+    min-height: 0;
     overflow: visible;
-    background: transparent !important;
 
-    &.wrap {
-      grid-template-columns: 1fr;
-      grid-template-areas: "main";
-      background: transparent !important;
-    }
-  }
-
-  // Hide default list controls (we use our own filtering)
-  .list-controls {
-    display: none;
-  }
-
-  // Hide welcome banner
-  .welcome-banner {
-    display: none !important;
-  }
-
-  // List container adjustments
-  .list-container {
-    max-width: 100%;
-    width: 100%;
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-
-    .row.full-width {
-      margin: 0;
-      padding: 0;
-    }
-  }
-
-  // Ensure topic list takes full width
-  .topic-list,
-  #list-area {
-    width: 100%;
-    max-width: 100%;
-  }
-  #main-outlet {
-    padding: 0 !important;
-  }
-
-  // Topic page: center main content so both sides have equal space (fix left-shifted content / extra right space)
-  #main-outlet .container.posts {
-    max-width: calc(var(--d-max-width, 1110px) + 280px); // content + timeline
-    margin-left: auto;
-    margin-right: auto;
-
-  }
-
-  // Topic navigation (settings icon, timeline): take only the width of its content
-  #main-outlet .container.posts .topic-navigation {
-    width: max-content;
-  }
-
-  // Center the topic post body (div.regular) when it's a direct child of #main-outlet (e.g. some theme layouts)
-  #main-outlet > .regular {
-    max-width: var(--d-max-width, 1110px);
-    margin-left: auto;
-    margin-right: auto;
-  }
-
-  // Mobile: full width like menu — remove left/right padding from main wrap and list container
-  @media (max-width: 767px) {
-    .wrap {
-      padding-left: 0 !important;
-      padding-right: 0 !important;
+    // Wide desktop: content + right sidebar side by side
+    @media (width >= 1280px) {
+      flex-direction: row;
+      align-items: flex-start;
     }
 
-    .container.list-container {
-      padding-left: 0 !important;
-      padding-right: 0 !important;
-      padding-inline: 0 !important;
-    }
-
-    // Topic page mobile: center content and add left/right space (title-wrapper stays centered; topic-post gets padding)
-    #main-outlet .container.posts {
-      width: 100%;
-      max-width: 100%;
-      padding-left: var(--ft-space-4);
-      padding-right: var(--ft-space-4);
-      box-sizing: border-box;
-    }
-
-    #main-outlet .container.posts .topic-post {
-      padding-left: 0;
-      padding-right: 0;
-      max-width: 100%;
-    }
-
-    // Topic title area: same horizontal padding so title aligns with post content
-    #topic-title.container {
-      padding-left: var(--ft-space-4);
-      padding-right: var(--ft-space-4);
-      box-sizing: border-box;
-    }
-
-    // Suggested topics ("New & Unread Topics", "Want to read more?"): same left/right spacing as topic content
-    // .more-topics__container {
-    //   margin-left: var(--ft-space-4);
-    //   margin-right: var(--ft-space-4);
-    //   box-sizing: border-box;
-    // }
-
-  }
-}
-
-// Main feed layout wrapper - Figma-style grid: lg:col-span-3 | lg:col-span-6 | lg:col-span-3
-.fantribe-feed-layout {
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: var(--ft-space-4) var(--ft-space-4); // gap-3 md:gap-6 equivalent vertical; modest horizontal
-  min-height: calc(100vh - 80px);
-  box-sizing: border-box;
-  background: oklch(.985 .002 247.839);
-
-  // Desktop lg: 12-col grid → 3 + 6 + 3 (25% + 50% + 25%)
-  display: grid;
-  grid-template-columns: 1fr 2fr 1fr; // 3 : 6 : 3
-  gap: var(--ft-space-4) var(--ft-space-6);
-
-  &__left-sidebar {
-    position: sticky;
-    top: 72px;
-    align-self: start;
-    min-width: 0;
-    max-height: calc(100vh - 80px);
-    overflow-y: auto;
-    padding: 0 0 var(--ft-space-4); // no top padding so card aligns with middle column
-    box-sizing: border-box;
-    background: transparent;
-
-    scrollbar-width: thin;
-    scrollbar-color: var(--ft-gray-300) transparent;
-
-    &::-webkit-scrollbar {
-      width: 4px;
-    }
-
-    &::-webkit-scrollbar-track {
-      background: transparent;
-    }
-
-    &::-webkit-scrollbar-thumb {
-      background: var(--ft-gray-300);
-      border-radius: var(--ft-radius-full);
-    }
-  }
-
-  // Main content area - Feed
-  &__content {
-    min-width: 0;
-    display: flex;
-    flex-direction: column;
-    gap: var(--ft-space-2);
-    padding: 0;
-    box-sizing: border-box;
-    background: transparent;
-
-    @media (min-width: 768px) {
-      gap: var(--ft-space-4);
-    }
-  }
-
-  // Period chooser (daily/weekly/monthly) on trending page
-  &__period-chooser {
-    margin-bottom: var(--ft-space-2);
-
-    &.top-lists .select-kit {
-      width: auto;
-      min-width: 100px;
-    }
-  }
-
-  // Right sidebar - Trending Topics (lg:col-span-3), sticky when middle scrolls
-  &__right-sidebar {
-    position: sticky;
-    top: 72px;
-    align-self: start;
-    min-width: 0;
-    max-height: calc(100vh - 80px);
-    overflow-y: auto;
-    padding: 0 0 var(--ft-space-4); // no top padding so card aligns with middle column
-    box-sizing: border-box;
-    background: transparent;
-
-    scrollbar-width: thin;
-    scrollbar-color: var(--ft-gray-300) transparent;
-
-    &::-webkit-scrollbar {
-      width: 4px;
-    }
-
-    &::-webkit-scrollbar-track {
-      background: transparent;
-    }
-
-    &::-webkit-scrollbar-thumb {
-      background: var(--ft-gray-300);
-      border-radius: var(--ft-radius-full);
-    }
-  }
-
-  // Mobile tribe chips (hidden on desktop)
-  &__mobile-chips {
-    display: none;
-  }
-}
-
-
-// Tablet: 2 columns - left sidebar + main feed (right sidebar hidden), same container padding
-@media (max-width: 1023px) {
-  .fantribe-feed-layout {
-    grid-template-columns: 1fr 2fr; // ~33% + ~67%
-
-    &__right-sidebar {
-      display: none;
-    }
-  }
-}
-
-// Mobile: Single column with tribe chips (<768px), chips touch menu (no top space)
-@media (max-width: 767px) {
-  .fantribe-feed-layout {
-    display: flex;
-    flex-direction: column;
-    padding: 0 0 var(--ft-space-3); // no top padding so mobile chips touch header
-    min-height: auto;
-    max-width: 100%;
-
+    // Tribe chips — hidden until Fantribe custom categories are set up
     &__mobile-chips {
-      display: block;
-      // position: sticky;
-      top: var(--header-offset, 60px);
-      z-index: 10;
-      background: var(--ft-white);
-      border-bottom: 1px solid var(--ft-gray-200);
-      padding: var(--ft-space-2) var(--ft-space-3);
-      margin: 0;
-    }
-
-    &__left-sidebar {
       display: none;
     }
 
+    // Main feed content area — scrollable
     &__content {
-      width: 100%;
-      max-width: 100%;
-      padding: 0;
-      gap: var(--ft-space-3);
+      flex: 1;
+      min-width: 0; // prevent flex item overflow
+      overflow-y: auto;
+
+      // Scrollbar hiding (Spec §6)
+      &::-webkit-scrollbar {
+        display: none;
+      }
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+
+      // Container with max-width and responsive padding (Spec §3.2)
+      max-width: 1280px; // max-w-7xl
+      margin-left: auto;
+      margin-right: auto;
+      padding: 12px 16px; // py-3 px-4 (mobile)
+
+      @media (width >= 768px) {
+        padding: 24px 32px; // py-6 px-8 (desktop)
+      }
+
+      // Vertical spacing between cards (Spec §3.2: space-y-6 = 24px)
+      > * + * {
+        margin-top: 24px;
+      }
     }
 
+    // Period chooser (top filter)
+    &__period-chooser {
+      margin-bottom: 16px;
+    }
+
+    // Empty state
+    &__empty {
+      text-align: center;
+      padding: 48px 24px;
+    }
+
+    &__empty-title {
+      font-size: var(--ft-font-lg); // 18px
+      font-weight: var(--ft-font-weight-semibold);
+      color: var(--ft-slate-900);
+      margin-bottom: 8px;
+    }
+
+    &__empty-text {
+      font-size: var(--ft-font-sm); // 14px
+      color: var(--ft-slate-500);
+    }
+
+    // Right Sidebar container
+    // Figma: visible at ≥1280px (xl), hidden below that
+    // Sticky: stays in place while feed scrolls
     &__right-sidebar {
-      display: none;
+      display: none; // hidden by default
+
+      @media (width >= 1280px) {
+        display: block;
+        width: 320px; // w-80
+        flex-shrink: 0;
+        position: sticky;
+        top: 80px; // below header
+        align-self: flex-start;
+        max-height: calc(100dvh - 80px);
+        overflow-y: auto;
+
+        // Hide scrollbar
+        &::-webkit-scrollbar {
+          display: none;
+        }
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+      }
     }
   }
 }

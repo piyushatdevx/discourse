@@ -1,0 +1,113 @@
+// Post Menu (Dropdown) — Values from Cretor Tribe V1 PostMenu.tsx
+//
+// Dropdown: absolute right-0 top-full mt-2, w-64 (256px), rounded-2xl (16px),
+//   bg-white, border slate-200, shadow-xl, z-50
+// Animation: scale 0.95→1, y -10→0, opacity 0→1, 150ms
+// Item: py-3 px-4 (12px 16px), flex gap-3, hover:bg-slate-50
+// Destructive: text-red-600, hover:bg-red-50
+// Backdrop: fixed inset-0 z-40
+body.fantribe-theme:not(.admin-interface) {
+  // Positioning wrapper on the feed card more button
+  .fantribe-feed-card__more-wrapper {
+    position: relative;
+  }
+
+  .fantribe-post-menu {
+    position: absolute;
+    right: 0;
+    top: 100%;
+    margin-top: 8px; // mt-2
+    width: 256px; // w-64
+    background: white;
+    border-radius: 16px; // rounded-2xl
+    border: 1px solid var(--ft-slate-200);
+    box-shadow: var(--ft-shadow-xl);
+    overflow: hidden;
+    z-index: var(--ft-z-dropdown); // 50
+    animation: ft-dropdown-enter 150ms cubic-bezier(0.4, 0, 0.2, 1);
+
+    &__backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: var(--ft-z-sticky); // 40
+      background: transparent;
+      border: none;
+      cursor: default;
+    }
+
+    &__items {
+      padding: 8px 0; // py-2
+    }
+
+    &__item {
+      width: 100%;
+      padding: 12px 16px; // py-3 px-4
+      display: flex;
+      align-items: center;
+      gap: 12px; // gap-3
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1);
+      text-align: left;
+      font-size: var(--ft-font-sm); // 14px
+      color: var(--ft-slate-700); // text-slate-700
+
+      &:hover {
+        background: var(--ft-slate-50); // hover:bg-slate-50
+      }
+
+      // Icon styling (direct child d-icon)
+      .d-icon {
+        width: 20px; // w-5
+        height: 20px; // h-5
+        color: var(--ft-slate-600); // text-slate-600
+        flex-shrink: 0;
+      }
+
+      // Destructive items (Delete Post, Block)
+      &--destructive {
+        color: #dc2626; // text-red-600
+        font-weight: var(--ft-font-weight-medium); // font-medium
+
+        .d-icon {
+          color: #dc2626; // text-red-600
+        }
+
+        &:hover {
+          background: #fef2f2; // hover:bg-red-50
+        }
+      }
+    }
+
+    // Multi-line item text
+    &__item-text {
+      display: flex;
+      flex-direction: column;
+    }
+
+    &__item-subtext {
+      font-size: var(--ft-font-xs); // 12px
+      color: var(--ft-slate-500); // text-slate-500
+    }
+
+    &__divider {
+      height: 1px;
+      background: var(--ft-slate-200);
+      margin: 8px 0; // my-2
+    }
+  }
+}
+
+// Dropdown enter animation
+@keyframes ft-dropdown-enter {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(-10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}

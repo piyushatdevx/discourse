@@ -76,6 +76,8 @@
 !/plugins/discourse-cakeday
 !/plugins/discourse-rewind
 !/plugins/fantribe-theme
+!/plugins/fantribe-theme-admin
+!/plugins/explore-tribes
 /plugins/*/auto_generated
 
 /spec/fixtures/plugins/my_plugin/auto_generated

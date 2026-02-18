@@ -1,0 +1,18 @@
+// FanTribe Topic List
+// Restyling for topic list items and the discovery view.
+
+// Row hover
+.topic-list-item:hover {
+  background-color: var(--d-hover);
+  transition: background-color var(--ft-transition-fast);
+}
+
+// Category badges: rounder
+.badge-category__wrapper .badge-category {
+  border-radius: var(--ft-radius-sm);
+}
+
+// Tags: rounder
+.discourse-tag {
+  border-radius: var(--ft-radius-full);
+}

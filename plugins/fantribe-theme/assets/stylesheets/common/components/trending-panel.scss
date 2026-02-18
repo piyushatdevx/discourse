@@ -1,89 +1,88 @@
-// FanTribe Trending Panel - Right Sidebar Widget (Figma: white card, red icons, no vertical line)
-// Shows trending topics with hashtags and red trend icon
-
+// FanTribe Trending Panel - Right Sidebar Widget
 .fantribe-trending-panel {
   background: var(--ft-white);
   border: 1px solid var(--ft-gray-200);
-  border-radius: 12px;
+  border-radius: var(--ft-radius-lg);
   overflow: hidden;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 1px 3px rgb(0 0 0 / 5%);
 
-  // Panel header - red trend icon + bold title, light grey separator (Figma: ~20-24px padding)
+  // Panel header
   &__header {
-    margin-bottom: 15px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 20px 24px 16px;
-    border-bottom: 1px solid #eee;
+    padding: 16px 16px 12px;
+    border-bottom: none;
   }
 
   &__title {
     display: flex;
     align-items: center;
-    gap: 10px;
-    font-size: 1.125rem;
+    gap: 8px;
+    font-size: 15px;
     font-weight: 600;
     color: var(--ft-dark);
     margin: 0;
 
     .d-icon {
-      color: #e03b3a;
-      font-size: 18px;
+      color: var(--ft-primary);
+      font-size: 16px;
     }
   }
 
-  // Panel content - generous padding, more space below each topic
+  // Panel content
   &__content {
-    padding: 20px 24px;
+    padding: 0 16px 16px;
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 2px;
   }
 
-  // Footer - "View all" centered, red, substantial spacing (Figma: ~24-30px above, ~20-24px below)
+  // Footer
   &__footer {
-    padding: 15px 24px 24px;
+    padding: 0 16px 16px;
     text-align: center;
   }
 
   &__view-all {
-    font-size: var(--ft-font-small);
-    font-weight: var(--ft-font-weight-medium);
-    color: #e03b3a;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--ft-primary);
     background: none;
     border: none;
     cursor: pointer;
-    transition: all var(--ft-transition-fast);
+    transition: opacity 0.15s ease;
 
     &:hover {
-      text-decoration: underline;
+      opacity: 0.8;
     }
   }
 }
 
-// Individual trending topic item - w-full text-left p-3 rounded-lg hover:bg-gray-50 (Figma)
+// Individual trending topic item
 .fantribe-trending-item {
   display: flex;
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  padding: 0.75rem;
+  padding: 10px var(--ft-space-2);
   background: transparent;
   border: none;
-  border-radius: 0.5rem;
+  border-radius: var(--ft-radius-md);
   cursor: pointer;
   text-align: left;
-  transition: background-color var(--ft-transition-fast), color var(--ft-transition-fast);
-  gap: var(--ft-space-3);
+  transition:
+    background var(--ft-transition-fast),
+    transform var(--ft-transition-fast);
+  gap: var(--ft-space-2);
 
   &:hover {
-    background-color: #f9f9f9;
+    background: var(--ft-gray-50);
+    transform: translateX(2px);
+  }
 
-    .fantribe-trending-item__title,
-    .fantribe-trending-item__title::before {
-      color: var(--ft-primary);
-    }
+  &:active {
+    transform: scale(0.98);
   }
 
   &__info {
@@ -91,18 +90,18 @@
     min-width: 0;
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 2px;
   }
 
   &__title {
-    font-size: 1rem;
-    font-weight: 400;
+    font-size: 14px;
+    font-weight: 500;
     color: var(--ft-dark);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 
-    // Hashtag prefix - black
+    // Hashtag prefix
     &::before {
       content: "#";
       color: var(--ft-dark);
@@ -111,22 +110,22 @@
   }
 
   &__count {
-    font-size: 0.8125rem;
+    font-size: 12px;
     color: var(--ft-gray-500);
   }
 
-  // Trending indicator - red upward arrow (Figma)
+  // Chevron indicator
   &__indicator {
     flex-shrink: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 24px;
-    height: 24px;
-    color: #e03b3a;
+    width: 20px;
+    height: 20px;
+    color: var(--ft-gray-400);
 
     .d-icon {
-      font-size: 16px;
+      font-size: 11px;
     }
   }
 }

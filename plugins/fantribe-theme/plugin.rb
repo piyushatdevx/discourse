@@ -31,6 +31,47 @@ register_svg_icon "gear"
 register_svg_icon "right-from-bracket"
 register_svg_icon "comment"
 register_svg_icon "share"
+register_svg_icon "share-nodes"
+register_svg_icon "compass"
+register_svg_icon "store"
+register_svg_icon "people-group"
+register_svg_icon "tower-broadcast"
+register_svg_icon "comments"
+register_svg_icon "table-columns"
+register_svg_icon "tv"
+register_svg_icon "wand-magic-sparkles"
+register_svg_icon "address-book"
+register_svg_icon "gift"
+register_svg_icon "dollar-sign"
+register_svg_icon "handshake"
+register_svg_icon "chevron-right"
+register_svg_icon "chevron-left"
+register_svg_icon "ellipsis"
+register_svg_icon "bookmark"
+register_svg_icon "far-bookmark"
+register_svg_icon "circle"
+register_svg_icon "users"
+register_svg_icon "sliders"
+register_svg_icon "chevron-down"
+register_svg_icon "check"
+register_svg_icon "lock"
+register_svg_icon "headphones"
+register_svg_icon "thumbtack"
+register_svg_icon "pencil-alt"
+register_svg_icon "link"
+register_svg_icon "comment-slash"
+register_svg_icon "trash-alt"
+register_svg_icon "eye-slash"
+register_svg_icon "eye"
+register_svg_icon "flag"
+register_svg_icon "ban"
+register_svg_icon "user-plus"
+register_svg_icon "xmark"
+register_svg_icon "clock"
+register_svg_icon "tag"
+register_svg_icon "music"
+register_svg_icon "calendar"
+register_svg_icon "circle-xmark"
 
 # Common styles (all viewports)
 register_asset "stylesheets/common/design-tokens.scss"
@@ -46,10 +87,14 @@ register_asset "stylesheets/common/overlays.scss"
 register_asset "stylesheets/common/feedback.scss"
 register_asset "stylesheets/common/layout.scss"
 register_asset "stylesheets/common/login-signup.scss"
+register_asset "stylesheets/common/auth.scss"
 
 # Component styles (Phase 2.1 - Header)
 register_asset "stylesheets/common/components/header.scss"
 register_asset "stylesheets/common/components/mobile-nav.scss"
+
+# App-level layout (persistent sidebar + main content grid)
+register_asset "stylesheets/common/components/app-layout.scss"
 
 # Component styles (Phase 2.2 - Feed View)
 register_asset "stylesheets/common/components/feed-layout.scss"
@@ -58,6 +103,21 @@ register_asset "stylesheets/common/components/trending-panel.scss"
 register_asset "stylesheets/common/components/mobile-tribe-chips.scss"
 register_asset "stylesheets/common/components/feed-card.scss"
 register_asset "stylesheets/common/components/compose-box.scss"
+
+# Component styles (Phase 2.3 - Feed V1 Components)
+register_asset "stylesheets/common/feed-animations.scss"
+register_asset "stylesheets/common/components/avatar.scss"
+register_asset "stylesheets/common/components/badge.scss"
+register_asset "stylesheets/common/components/gear-pill.scss"
+register_asset "stylesheets/common/components/reaction-bar.scss"
+register_asset "stylesheets/common/components/post-menu.scss"
+register_asset "stylesheets/common/components/right-sidebar.scss"
+register_asset "stylesheets/common/components/create-menu.scss"
+register_asset "stylesheets/common/components/create-post-modal.scss"
+register_asset "stylesheets/common/components/engagement-bar.scss"
+
+# Discourse overrides - MUST load last
+register_asset "stylesheets/common/fantribe-overrides.scss"
 
 # Desktop-specific styles
 register_asset "stylesheets/desktop/desktop.scss", :desktop
@@ -74,6 +134,27 @@ register_topic_preloader_associations({ first_post: :uploads }) do
 end
 
 after_initialize do
+  # Default-enable auth settings when FanTribe is active
+  if SiteSetting.fantribe_theme_enabled
+    SiteSetting.login_required = true unless SiteSetting.login_required
+
+    # Google OAuth
+    SiteSetting.enable_google_oauth2_logins = true unless SiteSetting.enable_google_oauth2_logins
+    if ENV["GOOGLE_OAUTH2_CLIENT_ID"].present?
+      SiteSetting.google_oauth2_client_id = ENV["GOOGLE_OAUTH2_CLIENT_ID"]
+    end
+    if ENV["GOOGLE_OAUTH2_CLIENT_SECRET"].present?
+      SiteSetting.google_oauth2_client_secret = ENV["GOOGLE_OAUTH2_CLIENT_SECRET"]
+    end
+
+    # Facebook OAuth
+    SiteSetting.enable_facebook_logins = true unless SiteSetting.enable_facebook_logins
+    SiteSetting.facebook_app_id = ENV["FACEBOOK_APP_ID"] if ENV["FACEBOOK_APP_ID"].present?
+    if ENV["FACEBOOK_APP_SECRET"].present?
+      SiteSetting.facebook_app_secret = ENV["FACEBOOK_APP_SECRET"]
+    end
+  end
+
   # Enable topic excerpts for feed cards
   module ::FantribeTheme
     module ListableTopicSerializerExtension

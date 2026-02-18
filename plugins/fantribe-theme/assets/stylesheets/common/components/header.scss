@@ -1,19 +1,33 @@
 // FanTribe Custom Header Styles
-// Replaces Discourse's native header with a social media style header
+// Matches Figma source: Header.tsx from Cretor Tribe V1
+// Responsive: h-16 mobile, h-20 desktop (64px / 80px)
 
 // Hide Discourse's native header when custom header is active
-body.fantribe-custom-header {
+body.fantribe-custom-header:not(.admin-interface) {
   .d-header {
-    display: none !important;
+    display: none;
   }
 
-  // Add padding to account for fixed header
   &.fantribe-theme {
     padding-top: 64px;
+
+    @media (width >= 768px) {
+      padding-top: 80px;
+    }
+  }
+}
+
+// Ensure fantribe components don't render visually on admin
+body.admin-interface {
+  .fantribe-header,
+  .fantribe-mobile-nav,
+  .fantribe-fab {
+    display: none;
   }
 }
 
 // Main header container
+// Figma: w-full h-16 md:h-20 bg-white border-b border-slate-200 z-50
 .fantribe-header {
   position: fixed;
   top: 0;
@@ -21,53 +35,149 @@ body.fantribe-custom-header {
   right: 0;
   z-index: var(--ft-z-sticky);
   height: 64px;
-  background: var(--ft-glass-card-bg);
-  backdrop-filter: blur(var(--ft-glass-card-blur)) saturate(180%);
-  -webkit-backdrop-filter: blur(var(--ft-glass-card-blur)) saturate(180%);
-  border-bottom: var(--ft-glass-border-subtle);
+  background: #fff;
+  border-bottom: 1px solid #d4d2cf;
 
+  @media (width >= 768px) {
+    height: 80px;
+  }
+
+  // Figma: h-full pl-4 pr-4 md:pl-6 md:pr-8 flex items-center justify-between
   &__container {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    gap: 16px;
     height: 100%;
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 0 var(--ft-space-4);
+    padding: 0 16px;
+
+    @media (width >= 768px) {
+      padding: 0 24px 0 32px;
+    }
   }
 
+  // Left section: hamburger + logo grouped
+  // Figma: flex items-center gap-3 md:gap-4
+  &__left-group {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-shrink: 0;
+
+    @media (width >= 768px) {
+      gap: 16px;
+    }
+  }
+
+  // Sidebar toggle hamburger
+  // Figma: p-2 hover:bg-slate-100 rounded-xl w-10 h-10
+  &__sidebar-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    padding: 8px;
+    background: transparent;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: background 200ms ease;
+    flex-shrink: 0;
+
+    .d-icon {
+      width: 24px;
+      height: 20px;
+      color: #2a2822;
+    }
+
+    &:hover {
+      background: #e8e6e3;
+    }
+  }
+
+  // Logo
   &__logo {
     display: flex;
     align-items: center;
-    gap: var(--ft-space-2);
+    flex-shrink: 0;
     background: none;
     border: none;
     cursor: pointer;
-    padding: var(--ft-space-1);
-    border-radius: var(--ft-radius-md);
-    transition: background-color var(--ft-transition-fast);
+    padding: 4px;
+    border-radius: 8px;
+    transition: opacity 200ms ease;
 
     &:hover {
-      background-color: var(--ft-pastel-cream);
+      opacity: 0.8;
     }
 
     &-img {
-      height: 20px;
+      height: 24px;
       width: auto;
       object-fit: contain;
     }
   }
 
-  // Desktop Navigation
-  &__nav {
+  // Center search bar
+  // Figma: flex-1 max-w-2xl hidden sm:block mx-6
+  &__search {
+    flex: 1;
+    max-width: 672px;
+    position: relative;
+    display: none;
+    align-items: center;
+    margin: 0 24px;
+
+    @media (width >= 640px) {
+      display: flex;
+    }
+  }
+
+  // Figma: absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400
+  &__search-icon {
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
     display: flex;
     align-items: center;
-    gap: var(--ft-space-2);
+    color: #78766f;
+    pointer-events: none;
+    z-index: 1;
 
-    &--desktop {
-      @media (max-width: 767px) {
-        display: none;
-      }
+    .d-icon {
+      width: 20px;
+      height: 20px;
+    }
+  }
+
+  // Figma: w-full pl-12 pr-4 py-3 bg-slate-50 border border-slate-200
+  //        rounded-full text-slate-900 placeholder-slate-400
+  // Using body selector for higher specificity to override Discourse defaults
+  &__search-input,
+  input[type="text"].fantribe-header__search-input {
+    width: 100%;
+    height: 48px;
+    padding: 12px 16px 12px 48px;
+    border: 1px solid #d4d2cf;
+    border-radius: 9999px;
+    background: #f0f0f2;
+    font-size: 16px;
+    color: #1a1916;
+    outline: none;
+    box-sizing: border-box;
+    transition: all 200ms ease;
+    appearance: none;
+
+    &::placeholder {
+      color: #78766f;
+    }
+
+    &:focus {
+      border-color: transparent;
+      background: #fff;
+      box-shadow: 0 0 0 2px #0080ff;
     }
   }
 
@@ -75,69 +185,109 @@ body.fantribe-custom-header {
   &__actions {
     display: flex;
     align-items: center;
-    gap: var(--ft-space-3);
+    gap: 8px;
+    flex-shrink: 0;
+    position: relative;
   }
 
-  // Login/Signup buttons for logged out users
+  // + Create button (logged in)
+  // Figma: gradient-action text-white px-4 md:px-6 py-2.5 md:py-3 rounded-full
+  //        font-medium shadow-lg hover:shadow-xl hover:scale-105
+  &__create-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    background: linear-gradient(135deg, #ff1744, #ff6b6b);
+    color: #fff;
+    border: none;
+    border-radius: 9999px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 200ms ease;
+    white-space: nowrap;
+    box-shadow:
+      0 4px 6px -1px rgb(0, 0, 0, 0.1),
+      0 2px 4px -1px rgb(0, 0, 0, 0.06);
+
+    .d-icon {
+      width: 20px;
+      height: 20px;
+    }
+
+    &:hover {
+      box-shadow:
+        0 10px 15px -3px rgb(0, 0, 0, 0.1),
+        0 4px 6px -2px rgb(0, 0, 0, 0.05);
+      transform: scale(1.05);
+    }
+
+    @media (width >= 768px) {
+      padding: 12px 24px;
+    }
+
+    // Mobile: icon only, no text
+    @media (width <= 639px) {
+      padding: 10px;
+      border-radius: 9999px;
+
+      span {
+        display: none;
+      }
+    }
+  }
+
+  // Login/Signup buttons (logged out)
   &__login-btn,
   &__signup-btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: var(--ft-space-2) var(--ft-space-4);
-    font-family: var(--ft-font-family);
-    font-size: var(--ft-font-small);
-    font-weight: var(--ft-font-weight-semibold);
+    padding: 8px 16px;
+    font-size: 14px;
+    font-weight: 600;
     text-decoration: none;
-    border-radius: var(--ft-radius-lg);
-    border: 2px solid var(--ft-primary);
+    border-radius: 9999px;
+    border: 2px solid #ff1744;
     cursor: pointer;
-    transition:
-      background-color var(--ft-transition-fast),
-      color var(--ft-transition-fast),
-      border-color var(--ft-transition-fast),
-      box-shadow var(--ft-transition-fast);
+    transition: all 200ms ease;
 
-    @media (max-width: 767px) {
+    @media (width <= 767px) {
       display: none;
     }
   }
 
-  // Login button - secondary/outline style
   &__login-btn {
-    color: var(--ft-primary) !important;
-    background: transparent !important;
+    color: #ff1744;
+    background: transparent;
 
     &:hover {
-      color: #ffffff !important;
-      background: var(--ft-primary) !important;
-      box-shadow: var(--ft-shadow-sm);
+      color: #fff;
+      background: #ff1744;
     }
   }
 
-  // Sign Up button - primary CTA style
   &__signup-btn {
-    color: #ffffff !important;
-    background: var(--ft-primary) !important;
+    color: #fff;
+    background: #ff1744;
 
     &:hover {
-      background: var(--ft-primary-hover) !important;
-      border-color: var(--ft-primary-hover) !important;
-      box-shadow: var(--ft-shadow-sm);
+      background: #e6143d;
+      border-color: #e6143d;
     }
   }
 
-  // Mobile menu container (only visible on mobile when logged out)
+  // Mobile menu (logged out only)
   &__mobile-menu {
     display: none;
     position: relative;
 
-    @media (max-width: 767px) {
+    @media (width <= 767px) {
       display: block;
     }
   }
 
-  // Hamburger button
   &__hamburger {
     display: flex;
     align-items: center;
@@ -146,528 +296,72 @@ body.fantribe-custom-header {
     height: 40px;
     background: transparent;
     border: none;
-    border-radius: var(--ft-radius-full);
-    color: var(--ft-gray-600);
+    border-radius: 9999px;
+    color: #3d3b33;
     cursor: pointer;
-    transition: all var(--ft-transition-fast);
 
     .d-icon {
       font-size: 20px;
     }
 
     &:hover {
-      background: var(--ft-pastel-cream);
-      color: var(--ft-dark);
+      background: #f3f4f6;
     }
   }
 
-  // Mobile dropdown (full-width box attached below header)
   &__mobile-dropdown {
     position: fixed;
-    top: calc(64px + var(--ft-space-1));
-    left: var(--ft-space-2);
-    right: var(--ft-space-2);
-    background: var(--ft-white);
-    border-radius: var(--ft-radius-lg);
-    box-shadow: var(--ft-shadow-md);
+    top: calc(64px + 4px);
+    left: 8px;
+    right: 8px;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow:
+      0 4px 6px -1px rgb(0, 0, 0, 0.1),
+      0 2px 4px -1px rgb(0, 0, 0, 0.06);
     overflow: hidden;
-    z-index: var(--ft-z-dropdown);
-  }
-
-  &__mobile-dropdown-header {
-    padding: var(--ft-space-3);
-    background: var(--ft-pastel-cream);
-    border-bottom: 1px solid var(--ft-gray-200);
-    font-size: var(--ft-font-small);
-    font-weight: var(--ft-font-weight-semibold);
-    color: var(--ft-dark);
-    text-align: center;
+    z-index: 50;
   }
 
   &__mobile-dropdown-actions {
     display: flex;
     flex-direction: column;
-    gap: var(--ft-space-2);
-    padding: var(--ft-space-3);
+    gap: 8px;
+    padding: 12px;
   }
 
-  // Mobile login button (outline style)
-  &__mobile-login {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: var(--ft-space-2) var(--ft-space-3);
-    font-family: var(--ft-font-family);
-    font-size: var(--ft-font-small);
-    font-weight: var(--ft-font-weight-semibold);
-    text-decoration: none;
-    color: var(--ft-primary) !important;
-    background: transparent !important;
-    border: 2px solid var(--ft-primary);
-    border-radius: var(--ft-radius-lg);
-    cursor: pointer;
-    transition: all var(--ft-transition-fast);
-
-    &:hover {
-      color: #ffffff !important;
-      background: var(--ft-primary) !important;
-    }
-  }
-
-  // Mobile signup button (primary CTA)
+  &__mobile-login,
   &__mobile-signup {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: var(--ft-space-2) var(--ft-space-3);
-    font-family: var(--ft-font-family);
-    font-size: var(--ft-font-small);
-    font-weight: var(--ft-font-weight-semibold);
-    text-decoration: none;
-    color: #ffffff !important;
-    background: var(--ft-primary) !important;
-    border: 2px solid var(--ft-primary);
-    border-radius: var(--ft-radius-lg);
+    padding: 8px 12px;
+    font-size: 14px;
+    font-weight: 600;
+    border-radius: 16px;
     cursor: pointer;
-    transition: all var(--ft-transition-fast);
-
-    &:hover {
-      background: var(--ft-primary-hover) !important;
-      border-color: var(--ft-primary-hover) !important;
-    }
-  }
-}
-
-// Navigation Item
-.fantribe-nav-item {
-  display: flex;
-  align-items: center;
-  gap: var(--ft-space-2);
-  padding: var(--ft-space-2) var(--ft-space-4);
-  background: transparent;
-  border: none;
-  border-radius: var(--ft-radius-full);
-  font-size: var(--ft-font-small);
-  font-weight: var(--ft-font-weight-small);
-  color: var(--ft-gray-600);
-  cursor: pointer;
-  transition: all var(--ft-transition-fast);
-
-  .d-icon {
-    font-size: 18px;
+    transition: all 200ms ease;
   }
 
-  &__icon {
-    width: 18px;
-    height: 18px;
-    flex-shrink: 0;
-  }
-
-  &:hover:not(.fantribe-nav-item--active) {
-    background: var(--ft-pastel-cream);
-    color: var(--ft-dark);
-  }
-
-  &--active {
-    background: var(--ft-primary);
-    color: var(--ft-white);
-
-    .d-icon,
-    .fantribe-nav-item__icon {
-      color: var(--ft-white);
-    }
-  }
-
-  &__label {
-    @media (max-width: 900px) {
-      display: none;
-    }
-  }
-}
-
-// Search button
-.fantribe-search-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
-  background: transparent;
-  border: none;
-  border-radius: var(--ft-radius-full);
-  color: var(--ft-gray-600);
-  cursor: pointer;
-  transition: all var(--ft-transition-fast);
-
-  &__icon {
-    width: 20px;
-    height: 20px;
-    flex-shrink: 0;
-    color: var(--ft-gray-700);
-  }
-
-  &:hover {
-    background: var(--ft-pastel-cream);
-    color: var(--ft-dark);
-
-    .fantribe-search-btn__icon {
-      color: var(--ft-dark);
-    }
-  }
-}
-
-// Notifications
-.fantribe-notifications {
-  position: relative;
-
-  &__btn {
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 40px;
-    height: 40px;
+  &__mobile-login {
+    color: #ff1744;
     background: transparent;
-    border: none;
-    border-radius: var(--ft-radius-full);
-    color: var(--ft-gray-600);
-    cursor: pointer;
-    transition: all var(--ft-transition-fast);
-
-    .fantribe-notifications__icon {
-      width: 20px;
-      height: 20px;
-      flex-shrink: 0;
-      color: var(--ft-gray-700);
-    }
+    border: 2px solid #ff1744;
 
     &:hover {
-      background: var(--ft-pastel-cream);
-      color: var(--ft-dark);
-
-      .fantribe-notifications__icon {
-        color: var(--ft-dark);
-      }
+      color: #fff;
+      background: #ff1744;
     }
   }
 
-  &__badge {
-    position: absolute;
-    top: 4px;
-    right: 4px;
-    width: 10px;
-    height: 10px;
-    background: var(--ft-primary);
-    border-radius: var(--ft-radius-full);
-    z-index: 1;
-    border: 2px solid var(--ft-white);
-    box-sizing: border-box;
-  }
-
-  &__dropdown {
-    position: absolute;
-    top: calc(100% + var(--ft-space-2));
-    right: 0;
-    width: 320px;
-    background: var(--ft-white);
-    border: 1px solid var(--ft-gray-200);
-    border-radius: var(--ft-radius-lg);
-    box-shadow: var(--ft-shadow-md);
-    overflow: hidden;
-    z-index: var(--ft-z-dropdown);
-
-    @media (max-width: 767px) {
-      position: fixed;
-      top: 65px;
-      left: var(--ft-space-16);
-      right: var(--ft-space-4);
-      width: auto;
-    }
-  }
-
-  &__header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: var(--ft-space-3) var(--ft-space-4);
-    border-bottom: 1px solid var(--ft-gray-200);
-    font-weight: var(--ft-font-weight-semibold);
-    color: var(--ft-dark);
-  }
-
-  &__mark-read {
-    background: none;
-    border: none;
-    color: var(--ft-primary);
-    font-size: var(--ft-font-small);
-    font-weight: var(--ft-font-weight-medium);
-    cursor: pointer;
+  &__mobile-signup {
+    color: #fff;
+    background: #ff1744;
+    border: 2px solid #ff1744;
 
     &:hover {
-      text-decoration: underline;
-    }
-  }
-
-  &__list {
-    max-height: 400px;
-    overflow-y: auto;
-  }
-
-  &__loading {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: var(--ft-space-6);
-  }
-
-  &__items {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-  }
-
-  &__item {
-    border-bottom: 1px solid var(--ft-gray-100);
-
-    &:last-child {
-      border-bottom: none;
-    }
-
-    &.unread {
-      background: var(--ft-pastel-cream);
-    }
-
-    &-link {
-      display: flex;
-      align-items: flex-start;
-      gap: var(--ft-space-3);
-      padding: var(--ft-space-3) var(--ft-space-4);
-      text-decoration: none;
-      color: inherit;
-      transition: background-color var(--ft-transition-fast);
-
-      &:hover {
-        background: var(--ft-gray-50);
-      }
-    }
-
-    &-icon {
-      flex-shrink: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 32px;
-      height: 32px;
-      background: var(--ft-pastel-pink);
-      border-radius: var(--ft-radius-full);
-      color: var(--ft-primary);
-
-      .d-icon {
-        font-size: 14px;
-      }
-    }
-
-    &-content {
-      flex: 1;
-      min-width: 0;
-      display: flex;
-      flex-direction: column;
-      gap: var(--ft-space-1);
-    }
-
-    &-label {
-      font-size: var(--ft-font-small);
-      font-weight: var(--ft-font-weight-normal);
-      color: var(--ft-gray-600);
-    }
-
-    &-description {
-      font-size: var(--ft-font-small);
-      color: var(--ft-gray-600);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    &-time {
-      flex-shrink: 0;
-      align-self: center;
-      font-size: 11px;
-      color: var(--ft-gray-500);
-    }
-  }
-
-  &__footer {
-    padding: var(--ft-space-3) var(--ft-space-4);
-    border-top: 1px solid var(--ft-gray-200);
-    background: var(--ft-white);
-    text-align: center;
-  }
-
-  &__view-all {
-    display: block;
-    width: 100%;
-    background: none;
-    border: none;
-    color: var(--ft-primary);
-    font-size: var(--ft-font-small);
-    font-weight: var(--ft-font-weight-medium);
-    cursor: pointer;
-    padding: 0;
-
-    &:hover {
-      text-decoration: underline;
-    }
-  }
-
-  &__empty {
-    padding: var(--ft-space-6) var(--ft-space-4);
-    text-align: center;
-    color: var(--ft-gray-600);
-
-    p {
-      margin: 0;
-    }
-  }
-}
-
-// User menu
-.fantribe-user-menu {
-  position: relative;
-
-  &__trigger {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 2px;
-    background: transparent;
-    border: 2px solid transparent;
-    border-radius: var(--ft-radius-full);
-    cursor: pointer;
-    transition: border-color var(--ft-transition-fast);
-
-    &:hover {
-      border-color: var(--ft-pastel-pink);
-    }
-
-    img {
-      width: 36px;
-      height: 36px;
-      border-radius: var(--ft-radius-full);
-      object-fit: cover;
-    }
-  }
-
-  &__dropdown {
-    position: absolute;
-    top: calc(100% + var(--ft-space-2));
-    right: 0;
-    width: 280px;
-    background: var(--ft-white);
-    border-radius: var(--ft-radius-lg);
-    box-shadow: var(--ft-shadow-lg);
-    overflow: hidden;
-    z-index: var(--ft-z-dropdown);
-
-    @media (max-width: 767px) {
-      position: fixed;
-      top: 64px;
-      left: var(--ft-space-2);
-      right: var(--ft-space-2);
-      width: auto;
-    }
-  }
-
-  &__header {
-    display: flex;
-    align-items: center;
-    gap: var(--ft-space-3);
-    padding: var(--ft-space-4);
-    border-bottom: 1px solid var(--ft-gray-200);
-
-    img {
-      width: 48px;
-      height: 48px;
-      border-radius: var(--ft-radius-full);
-      object-fit: cover;
-    }
-  }
-
-  &__info {
-    display: flex;
-    flex-direction: column;
-    min-width: 0;
-  }
-
-  &__name {
-    font-weight: var(--ft-font-weight-semibold);
-    color: var(--ft-dark);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  &__username {
-    font-size: var(--ft-font-small);
-    color: var(--ft-gray-600);
-  }
-
-  &__nav {
-    padding: var(--ft-space-2);
-
-    button {
-      display: flex;
-      align-items: center;
-      gap: var(--ft-space-3);
-      width: 100%;
-      padding: var(--ft-space-3);
-      background: transparent;
-      border: none;
-      border-radius: var(--ft-radius-md);
-      font-size: var(--ft-font-small);
-      font-weight: var(--ft-font-weight-small);
-      color: var(--ft-dark);
-      cursor: pointer;
-      transition: background-color var(--ft-transition-fast);
-
-      .d-icon {
-        width: 18px;
-        color: var(--ft-gray-600);
-      }
-
-      .fantribe-user-menu__profile-icon,
-      .fantribe-user-menu__settings-icon {
-        width: 18px;
-        height: 18px;
-        flex-shrink: 0;
-        color: var(--ft-gray-600);
-      }
-
-      &:hover {
-        background: var(--ft-pastel-cream);
-      }
-    }
-  }
-
-  &__divider {
-    margin: var(--ft-space-2) 0;
-    border: none;
-    border-top: 1px solid var(--ft-gray-200);
-  }
-
-  &__logout {
-    color: var(--ft-error) !important;
-
-    .d-icon,
-    &-icon {
-      width: 18px;
-      height: 18px;
-      flex-shrink: 0;
-      color: var(--ft-error) !important;
-    }
-
-    &:hover {
-      background: var(--ft-error-light) !important;
+      background: #e6143d;
+      border-color: #e6143d;
     }
   }
 }

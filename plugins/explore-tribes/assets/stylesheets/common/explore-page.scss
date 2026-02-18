@@ -1,0 +1,139 @@
+// FanTribe Explore Page — layout and sections
+// Matching Cretor Tribe V1 ExploreTribes.tsx design
+body.fantribe-theme:not(.admin-interface) {
+  .ft-explore-page {
+    min-height: 100vh;
+    background: linear-gradient(
+      to bottom right,
+      var(--ft-gray-50),
+      var(--ft-white),
+      rgb(255 228 236 / 30%)
+    );
+  }
+
+  .ft-explore-container {
+    max-width: 1280px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 12px 16px;
+  }
+
+  // Header section
+  .ft-explore-header {
+    margin-bottom: 24px;
+  }
+
+  .ft-explore-title {
+    font-size: 1.25rem;
+    font-weight: var(--ft-font-weight-semibold);
+    color: var(--ft-dark);
+    margin: 0 0 4px;
+    line-height: var(--ft-line-height-tight);
+  }
+
+  .ft-explore-subtitle {
+    font-size: 1rem;
+    color: var(--ft-gray-600);
+    margin: 0;
+    line-height: var(--ft-line-height-normal);
+  }
+
+  // Filter section
+  .ft-explore-filters {
+    margin-bottom: 24px;
+  }
+
+  // Results count
+  .ft-explore-results-count {
+    margin-bottom: 16px;
+
+    p {
+      font-size: var(--ft-font-caption);
+      color: var(--ft-gray-500);
+      margin: 0;
+    }
+
+    .ft-count-number {
+      font-weight: var(--ft-font-weight-semibold);
+      color: var(--ft-gray-700);
+    }
+
+    .ft-count-category {
+      font-weight: var(--ft-font-weight-semibold);
+      color: var(--ft-primary);
+    }
+  }
+
+  // Empty state
+  .ft-explore-empty {
+    text-align: center;
+    padding: 48px 0;
+  }
+
+  .ft-explore-empty-icon {
+    font-size: 2.25rem;
+    margin-bottom: 12px;
+  }
+
+  .ft-explore-empty-title {
+    font-size: 1.125rem;
+    font-weight: var(--ft-font-weight-semibold);
+    color: var(--ft-dark);
+    margin-bottom: 8px;
+  }
+
+  .ft-explore-empty-text {
+    font-size: var(--ft-font-small);
+    color: var(--ft-gray-500);
+    margin: 0;
+  }
+
+  // Responsive: md (768px+)
+  @media (width >= 768px) {
+    .ft-explore-container {
+      padding: 24px 32px;
+    }
+
+    .ft-explore-header {
+      margin-bottom: 40px;
+    }
+
+    .ft-explore-title {
+      font-size: 1.5rem;
+      margin-bottom: 8px;
+    }
+
+    .ft-explore-subtitle {
+      font-size: 1.125rem;
+    }
+
+    .ft-explore-filters {
+      margin-bottom: 40px;
+    }
+
+    .ft-explore-results-count {
+      margin-bottom: 24px;
+
+      p {
+        font-size: var(--ft-font-small);
+      }
+    }
+
+    .ft-explore-empty {
+      padding: 80px 0;
+    }
+
+    .ft-explore-empty-icon {
+      font-size: 3.75rem;
+      margin-bottom: 16px;
+    }
+
+    .ft-explore-empty-title {
+      font-size: 1.25rem;
+    }
+
+    .ft-explore-empty-text {
+      font-size: 1rem;
+    }
+  }
+}

@@ -9,9 +9,9 @@
 }
 
 .ft-layout__sidebar-left {
-  width: 260px;
+  width: 240px;
   flex-shrink: 0;
-  padding: var(--ft-space-4);
+  padding: var(--ft-space-2) var(--ft-space-2);
   position: sticky;
   top: 56px;
   height: calc(100vh - 56px);
@@ -23,13 +23,13 @@
   min-width: 0;
   max-width: 680px;
   margin: 0 auto;
-  padding: var(--ft-space-4);
+  padding: var(--ft-space-4) var(--ft-space-3);
 }
 
 .ft-layout__sidebar-right {
-  width: 320px;
+  width: 300px;
   flex-shrink: 0;
-  padding: var(--ft-space-4);
+  padding: var(--ft-space-4) var(--ft-space-3);
   position: sticky;
   top: 56px;
   height: calc(100vh - 56px);
@@ -193,16 +193,15 @@
     left: 0;
     right: 0;
     height: 50%;
-    background: linear-gradient(to top, rgba(0, 0, 0, 0.6), transparent);
+    background: linear-gradient(to top, rgb(0, 0, 0, 0.6), transparent);
   }
 
   .ft-cover__edit {
     position: absolute;
     bottom: var(--ft-space-3);
     right: var(--ft-space-3);
-    background: rgba(255, 255, 255, 0.2);
+    background: rgb(255, 255, 255, 0.2);
     backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
     border: none;
     color: var(--ft-white);
     padding: var(--ft-space-2) var(--ft-space-3);
@@ -211,7 +210,7 @@
     font-size: var(--ft-font-small);
 
     &:hover {
-      background: rgba(255, 255, 255, 0.3);
+      background: rgb(255, 255, 255, 0.3);
     }
   }
 }
@@ -248,24 +247,24 @@
 // Composer saving bar – red background, white text and loader (was blue)
 body.fantribe-theme {
   #reply-control.saving {
-    background: var(--ft-primary) !important;
-    color: var(--ft-white) !important;
+    background: var(--ft-primary);
+    color: var(--ft-white);
 
     .composer-controls .d-icon {
-      color: var(--ft-white) !important;
+      color: var(--ft-white);
     }
   }
 
   #reply-control.saving .saving-text {
-    color: var(--ft-white) !important;
+    color: var(--ft-white);
 
     .spinner {
-      border-color: var(--ft-white) !important;
-      border-right-color: transparent !important;
+      border-color: var(--ft-white);
+      border-right-color: transparent;
     }
 
     .d-icon {
-      color: var(--ft-white) !important;
+      color: var(--ft-white);
     }
   }
 }

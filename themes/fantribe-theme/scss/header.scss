@@ -1,0 +1,22 @@
+// FanTribe Header
+// Restyling for the Discourse header (`.d-header`).
+:root {
+  --shadow-header: 0 1px 4px rgb(0 0 0 / 0.06);
+}
+
+// Icon hover states
+.d-header-icons {
+  .d-icon {
+    transition: color var(--ft-transition-fast);
+  }
+
+  .btn:hover .d-icon,
+  .icon:hover .d-icon {
+    color: var(--ft-primary);
+  }
+}
+
+// Active header icon (notifications, user menu)
+.d-header-icons .btn.active .d-icon {
+  color: var(--ft-primary);
+}

@@ -1,0 +1,21 @@
+// FanTribe Mobile
+// Mobile-specific overrides for touch-friendly styling.
+
+// Larger touch targets for nav pills
+.nav-pills > li > a {
+  padding: var(--ft-space-2) var(--ft-space-4);
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+}
+
+// Topic list: tighter spacing on mobile
+.topic-list .topic-list-item .main-link {
+  padding: var(--ft-space-3) 0;
+}
+
+// Footer nav (mobile bottom bar)
+.d-footer-nav {
+  border-top: 1px solid var(--primary-very-low);
+  box-shadow: none;
+}

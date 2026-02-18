@@ -1,0 +1,29 @@
+// FanTribe Layout
+// Global layout, max-width, content area, and spacing.
+:root {
+  --d-max-width: 1100px;
+  --d-border-radius-large: 16px;
+  --d-border-radius: var(--ft-radius-md);
+}
+
+// Content area card-like background
+.d-content-background {
+  border-radius: var(--ft-radius-lg);
+}
+
+// Category cards
+.category-list .category {
+  border-radius: var(--ft-radius-md);
+}
+
+// User cards & group cards
+.user-card,
+.group-card {
+  border-radius: var(--ft-radius-lg);
+  box-shadow: var(--ft-shadow-md);
+}
+
+// Modal containers
+.d-modal__container {
+  border-radius: var(--ft-radius-lg);
+}

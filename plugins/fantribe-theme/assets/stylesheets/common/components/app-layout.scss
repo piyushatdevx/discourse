@@ -1,0 +1,152 @@
+// FanTribe App Layout — Persistent sidebar + main content grid
+// Applied globally on public routes via body.fantribe-theme
+// Admin UI excluded via :not(.admin-interface)
+//
+// Responsive behavior (from Figma source):
+// - Desktop ≥1024px: sidebar (288px) + content
+// - Below 1024px: single column (sidebar is fixed overlay)
+// - Header: 64px mobile, 80px desktop
+body.fantribe-theme:not(.admin-interface) {
+  background-color: #f0f0f2;
+
+  // Hide Discourse's built-in sidebar (we use our own)
+  .sidebar-wrapper {
+    display: none;
+  }
+
+  // Remove Discourse core max-width constraints and backgrounds
+  #main-outlet-wrapper,
+  #main-outlet {
+    box-sizing: border-box;
+    background: transparent;
+  }
+
+  // Layout grid: persistent left sidebar + main content
+  #main-outlet-wrapper {
+    display: grid;
+    grid-template-columns: 288px minmax(0, 1fr);
+    grid-template-rows: 1fr auto;
+    grid-template-areas:
+      "sidebar content"
+      "sidebar below-content";
+    max-width: 100%;
+    gap: 0;
+
+    // Below 1024px: single column (sidebar is fixed overlay, not in grid)
+    @media (width <= 1023px) {
+      display: block;
+      padding-top: 0;
+    }
+  }
+
+  // Persistent left sidebar (injected via before-main-outlet connector)
+  .fantribe-left-sidebar {
+    grid-area: sidebar;
+    position: sticky;
+    top: 80px;
+    align-self: start;
+    min-width: 0;
+    height: calc(100dvh - 80px);
+    overflow: visible;
+    box-sizing: border-box;
+
+    @media (width <= 1023px) {
+      // On mobile/tablet the sidebar is positioned fixed by left-sidebar.scss
+      // Remove grid area assignment
+      grid-area: unset;
+    }
+  }
+
+  // Main content area
+  #main-outlet {
+    min-width: 0;
+    overflow-x: clip;
+    padding: 0;
+  }
+
+  // Hide welcome banner (custom feed has its own)
+  .welcome-banner {
+    display: none;
+  }
+
+  // Hide default list controls (we use our own filtering)
+  .list-controls {
+    display: none;
+  }
+
+  // Topic page: respect grid column bounds
+  #main-outlet .container.posts {
+    max-width: 100%;
+    box-sizing: border-box;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  #main-outlet .container.posts .topic-navigation {
+    width: max-content;
+  }
+
+  #main-outlet > .regular {
+    max-width: var(--d-max-width, 1110px);
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+// Collapsed sidebar: icon-only column (80px)
+body.fantribe-theme:not(.admin-interface) {
+  .fantribe-left-sidebar--collapsed ~ #main-outlet,
+  #main-outlet-wrapper:has(.fantribe-left-sidebar--collapsed) {
+    @media (width >= 1024px) {
+      grid-template-columns: 80px minmax(0, 1fr);
+    }
+  }
+}
+
+// Mobile: extra spacing cleanup
+@media (width <= 767px) {
+  body.fantribe-theme:not(.admin-interface) {
+    .wrap {
+      padding-left: 0;
+      padding-right: 0;
+    }
+
+    .container.list-container {
+      padding-left: 0;
+      padding-right: 0;
+      padding-inline: 0;
+    }
+
+    // Topic page mobile spacing
+    #main-outlet .container.posts {
+      width: 100%;
+      max-width: 100%;
+      padding-left: 16px;
+      padding-right: 16px;
+      box-sizing: border-box;
+    }
+
+    #main-outlet .container.posts .topic-post {
+      padding-left: 0;
+      padding-right: 0;
+      max-width: 100%;
+    }
+
+    #topic-title.container {
+      padding-left: 16px;
+      padding-right: 16px;
+      box-sizing: border-box;
+    }
+  }
+}
+
+// Chat full-page: ensure proper height with fantribe's fixed header
+body.fantribe-theme.has-full-page-chat:not(.admin-interface) {
+  .full-page-chat {
+    height: calc(100vh - 64px);
+
+    @media (width >= 768px) {
+      height: calc(100vh - 80px);
+    }
+  }
+}

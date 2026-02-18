@@ -1,0 +1,39 @@
+{
+  "name": "FanTribe",
+  "authors": "FanTribe Team",
+  "theme_version": "1.0.0",
+  "minimum_discourse_version": null,
+  "maximum_discourse_version": null,
+  "assets": {},
+  "modifiers": {},
+  "color_schemes": {
+    "FanTribe": {
+      "primary": "1A1A1A",
+      "secondary": "FFFFFF",
+      "tertiary": "E6003A",
+      "quaternary": "FF6B81",
+      "header_background": "FFFFFF",
+      "header_primary": "1A1A1A",
+      "highlight": "FFF3CD",
+      "danger": "D32F2F",
+      "success": "2E7D32",
+      "love": "E6003A",
+      "selected": "FFE0E6",
+      "hover": "FFF0F3"
+    },
+    "FanTribe Dark": {
+      "primary": "F5F5F5",
+      "secondary": "121212",
+      "tertiary": "FF4D6D",
+      "quaternary": "FF8A9E",
+      "header_background": "1A1A1A",
+      "header_primary": "F5F5F5",
+      "highlight": "3D3520",
+      "danger": "EF5350",
+      "success": "66BB6A",
+      "love": "FF4D6D",
+      "selected": "3D1F2A",
+      "hover": "2A1520"
+    }
+  }
+}

@@ -1,0 +1,18 @@
+en:
+  admin_js:
+    admin:
+      site_settings:
+        categories:
+          fantribe_theme_admin: "FanTribe Admin Theme"
+  js:
+    fantribe_admin:
+      attention_panel:
+        title: "Attention Needed"
+        flagged_posts: "Flagged Posts"
+        pending_users: "Pending Users"
+        pending_reviewables: "Pending Reviews"
+        all_clear: "All clear — nothing needs your attention."
+        view_all: "View All"
+      stat_card:
+        vs_last_period: "vs last period"
+        no_change: "No change"

@@ -1,0 +1,37 @@
+// Badge — Exact from FeedPage_UI_Master_Spec.md §3.4
+//
+// Padding: px-3 py-1 (12px 4px)
+// Font: text-xs (12px), font-medium
+// Radius: rounded-full (9999px)
+// Default variant: gradient-action, text-white
+body.fantribe-theme:not(.admin-interface) {
+  .fantribe-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 12px; // py-1 px-3
+    border-radius: var(--ft-radius-pill); // 9999px
+    font-size: var(--ft-font-xs); // 12px
+    font-weight: var(--ft-font-weight-medium); // 500
+
+    &--action {
+      background: var(--ft-gradient-action);
+      color: white;
+    }
+
+    &--community {
+      background: var(--ft-gradient-community);
+      color: white;
+    }
+
+    &--commerce {
+      background: var(--ft-gradient-commerce);
+      color: white;
+    }
+
+    &--neutral {
+      background: var(--ft-slate-100);
+      color: var(--ft-slate-700);
+      border: 1px solid var(--ft-slate-300);
+    }
+  }
+}

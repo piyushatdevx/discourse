@@ -5,34 +5,32 @@
 // ==============================================
 // BODY BACKGROUND (Must override core Discourse)
 // ==============================================
-
-body.login-page,
-body.signup-page {
+body.fantribe-theme.login-page,
+body.fantribe-theme.signup-page {
   background: linear-gradient(
     135deg,
     var(--ft-pastel-pink) 0%,
     var(--ft-pastel-lavender) 100%
-  ) !important;
+  );
   min-height: 100vh;
 
   // Header should be transparent on login/signup pages
   .d-header {
-    background: transparent !important;
-    border: none !important;
-    box-shadow: none !important;
+    background: transparent;
+    border: none;
+    box-shadow: none;
   }
 
   // Hide any other background-colored elements
   #main-outlet-wrapper,
   #main-outlet {
-    background: transparent !important;
+    background: transparent;
   }
 }
 
 // ==============================================
 // PAGE CONTAINER
 // ==============================================
-
 .login-fullpage,
 .signup-fullpage {
   min-height: calc(100vh - var(--header-offset, 60px));
@@ -41,7 +39,7 @@ body.signup-page {
   align-items: center;
   justify-content: center;
   padding: var(--ft-space-6);
-  background: transparent !important;
+  background: transparent;
 }
 
 // ==============================================
@@ -70,14 +68,12 @@ body.signup-page {
 // ==============================================
 // FORM CONTAINER (GLASSMORPHISM CARD)
 // ==============================================
-
 .login-fullpage,
 .signup-fullpage {
   .login-body,
   .signup-body {
     background: var(--ft-glass-card-bg);
     backdrop-filter: blur(var(--ft-glass-card-blur));
-    -webkit-backdrop-filter: blur(var(--ft-glass-card-blur));
     border: var(--ft-glass-card-border);
     border-radius: var(--ft-radius-xl);
     box-shadow: var(--ft-shadow-lg);
@@ -125,7 +121,6 @@ body.signup-page {
 // ==============================================
 // WELCOME HEADER
 // ==============================================
-
 .login-fullpage,
 .signup-fullpage {
   .login-welcome-header {
@@ -155,7 +150,6 @@ body.signup-page {
 // ==============================================
 // FORM INPUTS
 // ==============================================
-
 .login-fullpage,
 .signup-fullpage {
   .login-form,
@@ -167,7 +161,7 @@ body.signup-page {
     margin-bottom: var(--ft-space-4);
     position: relative;
 
-    label:not(.alt-placeholder):not(.control-label) {
+    label:not(.alt-placeholder, .control-label) {
       display: block;
       font-family: var(--ft-font-family);
       font-size: var(--ft-font-small);
@@ -225,7 +219,7 @@ body.signup-page {
     // Floating label when focused/filled
     input:focus + label.alt-placeholder,
     input.value-entered + label.alt-placeholder {
-      background-color: var(--ft-white) !important;
+      background-color: var(--ft-white);
       color: var(--ft-primary);
       font-size: var(--ft-font-caption);
     }
@@ -323,9 +317,9 @@ body.signup-page {
     right: var(--ft-space-2);
     top: 50%;
     transform: translateY(-50%);
-    background: transparent !important;
-    border: none !important;
-    color: var(--ft-gray-500) !important;
+    background: transparent;
+    border: none;
+    color: var(--ft-gray-500);
     cursor: pointer;
     padding: var(--ft-space-2);
     border-radius: var(--ft-radius-md);
@@ -341,31 +335,31 @@ body.signup-page {
     }
 
     &:hover {
-      color: var(--ft-primary) !important;
-      background-color: var(--ft-primary-light) !important;
+      color: var(--ft-primary);
+      background-color: var(--ft-primary-light);
 
       .d-icon {
-        color: var(--ft-primary) !important;
+        color: var(--ft-primary);
       }
     }
 
     &:active {
-      color: var(--ft-gray-600) !important;
-      background-color: transparent !important;
+      color: var(--ft-gray-600);
+      background-color: transparent;
 
       .d-icon {
-        color: var(--ft-gray-600) !important;
+        color: var(--ft-gray-600);
       }
     }
 
     &:focus,
     &:focus-visible {
-      outline: none !important;
-      box-shadow: none !important;
-      background-color: transparent !important;
+      outline: none;
+      box-shadow: none;
+      background-color: transparent;
 
       .d-icon {
-        color: var(--ft-gray-500) !important;
+        color: var(--ft-gray-500);
       }
     }
 
@@ -389,9 +383,8 @@ body.signup-page {
 // ==============================================
 // ALL BUTTONS (Comprehensive Override)
 // ==============================================
-
-.login-fullpage,
-.signup-fullpage {
+body.fantribe-theme .login-fullpage,
+body.fantribe-theme .signup-fullpage {
   // Primary action buttons (Login, Create Account)
   .btn-primary,
   .login-page-cta__login,
@@ -404,11 +397,11 @@ body.signup-page {
     width: 100%;
     padding: var(--ft-space-3) var(--ft-space-4);
     font-family: var(--ft-font-family);
-    font-size: var(--ft-font-body) !important;
+    font-size: var(--ft-font-body);
     font-weight: var(--ft-font-weight-semibold);
-    color: #ffffff !important;
-    background-color: var(--ft-primary) !important;
-    border: 2px solid var(--ft-primary) !important;
+    color: #fff;
+    background-color: var(--ft-primary);
+    border: 2px solid var(--ft-primary);
     border-radius: var(--ft-radius-lg);
     cursor: pointer;
     text-decoration: none;
@@ -419,24 +412,24 @@ body.signup-page {
       box-shadow var(--ft-transition-fast);
 
     &:hover {
-      background-color: var(--ft-primary-hover) !important;
-      border-color: var(--ft-primary-hover) !important;
+      background-color: var(--ft-primary-hover);
+      border-color: var(--ft-primary-hover);
       box-shadow: var(--ft-shadow-md);
-      outline: none !important;
+      outline: none;
     }
 
     &:active {
-      background-color: var(--ft-primary-active) !important;
-      border-color: var(--ft-primary-active) !important;
+      background-color: var(--ft-primary-active);
+      border-color: var(--ft-primary-active);
       transform: scale(0.98);
-      outline: none !important;
+      outline: none;
     }
 
     &:focus,
     &:focus-visible {
-      outline: none !important;
+      outline: none;
       box-shadow: var(--ft-shadow-focus);
-      border-color: var(--ft-primary) !important;
+      border-color: var(--ft-primary);
     }
 
     &:disabled,
@@ -451,7 +444,7 @@ body.signup-page {
     &.is-loading,
     &.btn-primary.is-loading {
       position: relative;
-      color: transparent !important;
+      color: transparent;
 
       // Hide the core Discourse loading icon to prevent duplicate loaders
       .loading-icon {
@@ -467,8 +460,8 @@ body.signup-page {
         left: 50%;
         margin-top: -10px;
         margin-left: -10px;
-        border: 2px solid rgba(255, 255, 255, 0.3);
-        border-top-color: #ffffff;
+        border: 2px solid rgb(255, 255, 255, 0.3);
+        border-top-color: #fff;
         border-radius: 50%;
         animation: ft-login-spin 0.6s linear infinite;
       }
@@ -478,18 +471,18 @@ body.signup-page {
   // Secondary/Outline buttons (Sign Up link on login page, Login link on signup page)
   .login-page-cta__signup,
   .signup-page-cta__login {
-    display: inline-flex !important;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
     width: 100%;
     font-family: var(--ft-font-family);
-    font-size: var(--ft-font-body) !important;
+    font-size: var(--ft-font-body);
     font-weight: var(--ft-font-weight-semibold);
-    color: var(--ft-primary) !important;
-    background: transparent !important;
-    border: 2px solid var(--ft-primary) !important;
+    color: var(--ft-primary);
+    background: transparent;
+    border: 2px solid var(--ft-primary);
     border-radius: var(--ft-radius-lg);
-    padding: var(--ft-space-3) var(--ft-space-4) !important;
+    padding: var(--ft-space-3) var(--ft-space-4);
     margin-top: var(--ft-space-3);
     cursor: pointer;
     transition:
@@ -499,22 +492,22 @@ body.signup-page {
       box-shadow var(--ft-transition-fast);
 
     &:hover {
-      color: #ffffff !important;
-      background-color: var(--ft-primary) !important;
-      border-color: var(--ft-primary) !important;
+      color: #fff;
+      background-color: var(--ft-primary);
+      border-color: var(--ft-primary);
       box-shadow: var(--ft-shadow-md);
-      transform: none !important;
+      transform: none;
     }
 
     &:active {
-      color: #ffffff !important;
-      background-color: var(--ft-primary-active) !important;
-      border-color: var(--ft-primary-active) !important;
+      color: #fff;
+      background-color: var(--ft-primary-active);
+      border-color: var(--ft-primary-active);
     }
 
     &:focus,
     &:focus-visible {
-      outline: none !important;
+      outline: none;
       box-shadow: var(--ft-shadow-focus);
     }
   }
@@ -526,7 +519,7 @@ body.signup-page {
     color: var(--ft-gray-500);
 
     &::before {
-      background-color: var(--ft-gray-300) !important;
+      background-color: var(--ft-gray-300);
     }
   }
 }
@@ -540,7 +533,6 @@ body.signup-page {
 // ==============================================
 // CTA SECTION
 // ==============================================
-
 .login-fullpage,
 .signup-fullpage {
   .login-page-cta,
@@ -563,7 +555,7 @@ body.signup-page {
 
   // Ensure the signup button on login page is centered
   .login-page-cta__signup {
-    display: inline-flex !important;
+    display: inline-flex;
     justify-content: center;
     align-items: center;
     margin: 0 auto;
@@ -573,7 +565,6 @@ body.signup-page {
 // ==============================================
 // OR SEPARATOR
 // ==============================================
-
 .login-fullpage,
 .signup-fullpage {
   .login-or-separator {
@@ -603,9 +594,8 @@ body.signup-page {
 // ==============================================
 // OAUTH / EXTERNAL LOGIN BUTTONS
 // ==============================================
-
-.login-fullpage,
-.signup-fullpage {
+body.fantribe-theme .login-fullpage,
+body.fantribe-theme .signup-fullpage {
   #login-buttons {
     display: flex;
     flex-direction: column;
@@ -623,9 +613,9 @@ body.signup-page {
     font-family: var(--ft-font-family);
     font-size: var(--ft-font-body);
     font-weight: var(--ft-font-weight-medium);
-    color: var(--ft-dark) !important;
-    background-color: var(--ft-white) !important;
-    border: 1px solid var(--ft-gray-300) !important;
+    color: var(--ft-dark);
+    background-color: var(--ft-white);
+    border: 1px solid var(--ft-gray-300);
     border-radius: var(--ft-radius-lg);
     cursor: pointer;
     text-decoration: none;
@@ -635,8 +625,8 @@ body.signup-page {
       box-shadow var(--ft-transition-fast);
 
     &:hover {
-      background-color: var(--ft-pastel-pink) !important;
-      border-color: var(--ft-primary) !important;
+      background-color: var(--ft-pastel-pink);
+      border-color: var(--ft-primary);
       box-shadow: var(--ft-shadow-sm);
     }
 
@@ -675,11 +665,11 @@ body.signup-page {
 
     // Discourse ID button
     &.discourse_id {
-      border-color: var(--ft-gray-300) !important;
+      border-color: var(--ft-gray-300);
 
       &:hover {
-        background-color: var(--ft-pastel-pink) !important;
-        border-color: var(--ft-primary) !important;
+        background-color: var(--ft-pastel-pink);
+        border-color: var(--ft-primary);
       }
     }
   }
@@ -697,14 +687,13 @@ body.signup-page {
   .btn-passkey-login,
   button.passkey-login-button,
   .btn.passkey-login-button {
-    display: none !important;
+    display: none;
   }
 }
 
 // ==============================================
 // SIGNUP PROGRESS BAR
 // ==============================================
-
 .signup-fullpage {
   .signup-progress-bar {
     display: flex;
@@ -729,7 +718,6 @@ body.signup-page {
 // ==============================================
 // FLASH MESSAGES / ALERTS
 // ==============================================
-
 .login-fullpage,
 .signup-fullpage {
   .alert,
@@ -770,11 +758,11 @@ body.signup-page {
 // MOBILE RESPONSIVE (< 768px)
 // ==============================================
 
-@media (max-width: 767px) {
-  body.login-page,
-  body.signup-page {
+@media (width <= 767px) {
+  body.fantribe-theme.login-page,
+  body.fantribe-theme.signup-page {
     .d-header {
-      background: transparent !important;
+      background: transparent;
     }
   }
 
@@ -859,6 +847,7 @@ body.signup-page {
     .input-group:has(#login-account-password) {
       .toggle-password-mask {
         top: 2px;
+
         // bottom: auto;
         transform: none;
       }
@@ -904,16 +893,16 @@ body.signup-page {
 // ==============================================
 
 @media (prefers-color-scheme: dark) {
-  body.login-page:not(.ft-light-theme),
-  body.signup-page:not(.ft-light-theme) {
+  body.fantribe-theme.login-page:not(.ft-light-theme),
+  body.fantribe-theme.signup-page:not(.ft-light-theme) {
     background: linear-gradient(
       135deg,
       var(--ft-pastel-pink) 0%,
       var(--ft-pastel-lavender) 100%
-    ) !important;
+    );
 
     .d-header {
-      background: transparent !important;
+      background: transparent;
     }
   }
 
@@ -961,18 +950,18 @@ body.signup-page {
 
       input:focus + label.alt-placeholder,
       input.value-entered + label.alt-placeholder {
-        background-color: var(--ft-gray-100) !important;
+        background-color: var(--ft-gray-100);
       }
     }
 
     .btn-social,
     .btn-passkey-login {
-      background-color: var(--ft-gray-100) !important;
-      border-color: var(--ft-gray-300) !important;
-      color: var(--ft-gray-900) !important;
+      background-color: var(--ft-gray-100);
+      border-color: var(--ft-gray-300);
+      color: var(--ft-gray-900);
 
       &:hover {
-        background-color: var(--ft-gray-200) !important;
+        background-color: var(--ft-gray-200);
       }
     }
 
@@ -995,16 +984,16 @@ body.signup-page {
 }
 
 // Manual dark theme class override
-body.login-page.ft-dark-theme,
-body.signup-page.ft-dark-theme {
+body.fantribe-theme.login-page.ft-dark-theme,
+body.fantribe-theme.signup-page.ft-dark-theme {
   background: linear-gradient(
     135deg,
     var(--ft-pastel-pink) 0%,
     var(--ft-pastel-lavender) 100%
-  ) !important;
+  );
 
   .d-header {
-    background: transparent !important;
+    background: transparent;
   }
 
   .login-body,
@@ -1017,55 +1006,52 @@ body.signup-page.ft-dark-theme {
 // ==============================================
 // FORGOT PASSWORD MODAL
 // ==============================================
-
-.d-modal.forgot-password-modal,
-.forgot-password-modal {
+body.fantribe-theme .d-modal.forgot-password-modal,
+body.fantribe-theme .forgot-password-modal {
   // Modal backdrop with blur effect
   .modal-outer-container .modal-backdrop {
-    background-color: rgba(26, 26, 26, 0.5) !important;
-    backdrop-filter: blur(8px) !important;
-    -webkit-backdrop-filter: blur(8px) !important;
+    background-color: rgb(26, 26, 26, 0.5);
+    backdrop-filter: blur(8px);
   }
 
   // Modal container with glassmorphism
   .modal-inner-container {
-    background: var(--ft-glass-card-bg) !important;
-    backdrop-filter: blur(var(--ft-glass-card-blur)) !important;
-    -webkit-backdrop-filter: blur(var(--ft-glass-card-blur)) !important;
-    border: var(--ft-glass-card-border) !important;
-    border-radius: var(--ft-radius-xl) !important;
-    box-shadow: var(--ft-shadow-lg) !important;
-    font-family: var(--ft-font-family) !important;
+    background: var(--ft-glass-card-bg);
+    backdrop-filter: blur(var(--ft-glass-card-blur));
+    border: var(--ft-glass-card-border);
+    border-radius: var(--ft-radius-xl);
+    box-shadow: var(--ft-shadow-lg);
+    font-family: var(--ft-font-family);
     overflow: hidden;
   }
 
   // Modal header
   .modal-header {
-    border-bottom: 1px solid var(--ft-gray-200) !important;
-    padding: var(--ft-space-4) var(--ft-space-6) !important;
+    border-bottom: 1px solid var(--ft-gray-200);
+    padding: var(--ft-space-4) var(--ft-space-6);
 
     .title h3,
     .d-modal__title {
-      font-family: var(--ft-font-family) !important;
-      font-weight: var(--ft-font-weight-semibold) !important;
-      font-size: var(--ft-font-h4) !important;
-      color: var(--ft-dark) !important;
-      margin: 0 !important;
+      font-family: var(--ft-font-family);
+      font-weight: var(--ft-font-weight-semibold);
+      font-size: var(--ft-font-h4);
+      color: var(--ft-dark);
+      margin: 0;
     }
 
     .modal-close,
     .d-modal__dismiss {
-      color: var(--ft-gray-500) !important;
-      background: transparent !important;
-      border: none !important;
-      border-radius: var(--ft-radius-md) !important;
+      color: var(--ft-gray-500);
+      background: transparent;
+      border: none;
+      border-radius: var(--ft-radius-md);
       transition:
         color var(--ft-transition-fast),
-        background-color var(--ft-transition-fast) !important;
+        background-color var(--ft-transition-fast);
 
       &:hover {
-        color: var(--ft-primary) !important;
-        background-color: var(--ft-primary-light) !important;
+        color: var(--ft-primary);
+        background-color: var(--ft-primary-light);
       }
     }
   }
@@ -1073,102 +1059,102 @@ body.signup-page.ft-dark-theme {
   // Modal body
   .modal-body,
   .d-modal__body {
-    padding: var(--ft-space-6) !important;
+    padding: var(--ft-space-6);
 
     label {
-      font-family: var(--ft-font-family) !important;
-      font-size: var(--ft-font-small) !important;
-      font-weight: var(--ft-font-weight-medium) !important;
-      color: var(--ft-dark) !important;
-      margin-bottom: var(--ft-space-2) !important;
-      display: block !important;
+      font-family: var(--ft-font-family);
+      font-size: var(--ft-font-small);
+      font-weight: var(--ft-font-weight-medium);
+      color: var(--ft-dark);
+      margin-bottom: var(--ft-space-2);
+      display: block;
     }
 
     #username-or-email,
     input[type="text"],
     input[type="email"] {
-      width: 100% !important;
-      padding: var(--ft-space-3) !important;
-      font-family: var(--ft-font-family) !important;
-      font-size: var(--ft-font-body) !important;
-      color: var(--ft-dark) !important;
-      background-color: var(--ft-white) !important;
-      border: 1px solid var(--ft-gray-300) !important;
-      border-radius: var(--ft-radius-md) !important;
-      outline: none !important;
-      box-sizing: border-box !important;
+      width: 100%;
+      padding: var(--ft-space-3);
+      font-family: var(--ft-font-family);
+      font-size: var(--ft-font-body);
+      color: var(--ft-dark);
+      background-color: var(--ft-white);
+      border: 1px solid var(--ft-gray-300);
+      border-radius: var(--ft-radius-md);
+      outline: none;
+      box-sizing: border-box;
       transition:
         border-color var(--ft-transition-fast),
-        box-shadow var(--ft-transition-fast) !important;
+        box-shadow var(--ft-transition-fast);
 
       &::placeholder {
-        color: var(--ft-gray-400) !important;
+        color: var(--ft-gray-400);
       }
 
       &:focus {
-        border-color: var(--ft-primary) !important;
-        box-shadow: 0 0 0 3px var(--ft-primary-light) !important;
+        border-color: var(--ft-primary);
+        box-shadow: 0 0 0 3px var(--ft-primary-light);
       }
     }
 
     // Description text
     p {
-      font-family: var(--ft-font-family) !important;
-      font-size: var(--ft-font-small) !important;
-      color: var(--ft-gray-600) !important;
-      margin-bottom: var(--ft-space-4) !important;
+      font-family: var(--ft-font-family);
+      font-size: var(--ft-font-small);
+      color: var(--ft-gray-600);
+      margin-bottom: var(--ft-space-4);
     }
   }
 
   // Modal footer buttons
   .modal-footer,
   .d-modal__footer {
-    padding: var(--ft-space-4) var(--ft-space-6) !important;
-    border-top: 1px solid var(--ft-gray-200) !important;
-    display: flex !important;
-    gap: var(--ft-space-3) !important;
-    justify-content: flex-end !important;
+    padding: var(--ft-space-4) var(--ft-space-6);
+    border-top: 1px solid var(--ft-gray-200);
+    display: flex;
+    gap: var(--ft-space-3);
+    justify-content: flex-end;
 
     .btn,
     button {
-      font-family: var(--ft-font-family) !important;
-      font-weight: var(--ft-font-weight-medium) !important;
-      border-radius: var(--ft-radius-lg) !important;
-      padding: var(--ft-space-2) var(--ft-space-4) !important;
+      font-family: var(--ft-font-family);
+      font-weight: var(--ft-font-weight-medium);
+      border-radius: var(--ft-radius-lg);
+      padding: var(--ft-space-2) var(--ft-space-4);
       transition:
         background-color var(--ft-transition-fast),
         color var(--ft-transition-fast),
-        box-shadow var(--ft-transition-fast) !important;
+        box-shadow var(--ft-transition-fast);
 
       &:focus,
       &:focus-visible {
-        outline: none !important;
+        outline: none;
       }
     }
 
     // Primary reset button
     .btn-primary,
     .forgot-password-reset {
-      background-color: var(--ft-primary) !important;
-      color: #ffffff !important;
-      border: none !important;
+      background-color: var(--ft-primary);
+      color: #fff;
+      border: none;
 
       &:hover {
-        background-color: var(--ft-primary-hover) !important;
-        box-shadow: var(--ft-shadow-md) !important;
+        background-color: var(--ft-primary-hover);
+        box-shadow: var(--ft-shadow-md);
       }
 
       &:active {
-        background-color: var(--ft-primary-active) !important;
+        background-color: var(--ft-primary-active);
       }
 
       &:focus {
-        box-shadow: var(--ft-shadow-focus) !important;
+        box-shadow: var(--ft-shadow-focus);
       }
 
       &:disabled {
-        opacity: 0.5 !important;
-        cursor: not-allowed !important;
+        opacity: 0.5;
+        cursor: not-allowed;
       }
     }
 
@@ -1176,18 +1162,18 @@ body.signup-page.ft-dark-theme {
     .btn:not(.btn-primary),
     .btn-default,
     .btn-flat {
-      background-color: transparent !important;
-      color: var(--ft-gray-600) !important;
-      border: 1px solid var(--ft-gray-300) !important;
+      background-color: transparent;
+      color: var(--ft-gray-600);
+      border: 1px solid var(--ft-gray-300);
 
       &:hover {
-        background-color: var(--ft-pastel-pink) !important;
-        border-color: var(--ft-primary) !important;
-        color: var(--ft-primary) !important;
+        background-color: var(--ft-pastel-pink);
+        border-color: var(--ft-primary);
+        color: var(--ft-primary);
       }
 
       &:focus {
-        box-shadow: var(--ft-shadow-focus) !important;
+        box-shadow: var(--ft-shadow-focus);
       }
     }
   }
@@ -1195,32 +1181,31 @@ body.signup-page.ft-dark-theme {
   // Flash/error messages in modal
   .alert,
   .alert-error {
-    background-color: var(--ft-error-light) !important;
-    color: var(--ft-error) !important;
-    border: 1px solid var(--ft-error) !important;
-    border-radius: var(--ft-radius-md) !important;
-    padding: var(--ft-space-3) !important;
-    font-family: var(--ft-font-family) !important;
-    font-size: var(--ft-font-small) !important;
-    margin-bottom: var(--ft-space-4) !important;
+    background-color: var(--ft-error-light);
+    color: var(--ft-error);
+    border: 1px solid var(--ft-error);
+    border-radius: var(--ft-radius-md);
+    padding: var(--ft-space-3);
+    font-family: var(--ft-font-family);
+    font-size: var(--ft-font-small);
+    margin-bottom: var(--ft-space-4);
   }
 
   .alert-success {
-    background-color: var(--ft-success-light) !important;
-    color: var(--ft-success) !important;
-    border: 1px solid var(--ft-success) !important;
+    background-color: var(--ft-success-light);
+    color: var(--ft-success);
+    border: 1px solid var(--ft-success);
   }
 }
 
 // ==============================================
 // GENERAL MODAL STYLING (for login-related modals)
 // ==============================================
-
-body.login-page,
-body.signup-page {
+body.fantribe-theme.login-page,
+body.fantribe-theme.signup-page {
   .modal-outer-container {
     .modal-backdrop {
-      background-color: rgba(26, 26, 26, 0.5);
+      background-color: rgb(26, 26, 26, 0.5);
       backdrop-filter: blur(4px);
     }
   }
