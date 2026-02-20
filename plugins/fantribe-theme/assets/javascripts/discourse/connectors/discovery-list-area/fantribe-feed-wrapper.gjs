@@ -65,9 +65,19 @@ export default class FantribeFeedWrapper extends Component {
     return this.args.outletArgs?.model;
   }
 
+  // For discovery.category routes, the model includes the current category object.
+  get currentCategory() {
+    const model = this.args.outletArgs?.model;
+    return model?.category || null;
+  }
+
   <template>
     {{#if this.shouldShowFeedLayout}}
-      <FantribeFeedLayout @topics={{this.topics}} @model={{this.model}} />
+      <FantribeFeedLayout
+        @topics={{this.topics}}
+        @model={{this.model}}
+        @category={{this.currentCategory}}
+      />
     {{else}}
       {{yield}}
     {{/if}}

@@ -4,6 +4,7 @@ import { fn } from "@ember/helper";
 import { on } from "@ember/modifier";
 import { action } from "@ember/object";
 import { service } from "@ember/service";
+import { htmlSafe } from "@ember/template";
 import avatar from "discourse/helpers/avatar";
 import icon from "discourse/helpers/d-icon";
 import { ajax } from "discourse/lib/ajax";
@@ -19,6 +20,7 @@ export default class FtCreatePostModal extends Component {
   @service siteSettings;
   @service site;
   @service fantribeCreate;
+  @service fantribeMembership;
 
   @tracked postTitle = "";
   @tracked postText = "";
@@ -29,6 +31,34 @@ export default class FtCreatePostModal extends Component {
   @tracked scheduledDate = "";
   @tracked scheduledTime = "";
   @tracked isUploading = false;
+  @tracked _localCategory = undefined;
+
+  get localCategory() {
+    return this._localCategory !== undefined
+      ? this._localCategory
+      : this.fantribeCreate.postCategory;
+  }
+
+  get joinedTribes() {
+    if (!this.currentUser) {
+      return [];
+    }
+    return (this.site.categories || [])
+      .filter(
+        (cat) =>
+          !cat.isUncategorizedCategory &&
+          this.fantribeMembership.isMember(cat.id)
+      )
+      .slice(0, 8);
+  }
+
+  get hasTribeOptions() {
+    return this.joinedTribes.length > 0;
+  }
+
+  tribeDotStyle(category) {
+    return htmlSafe(`background-color: #${category.color || "0088cc"}`);
+  }
 
   get charCount() {
     return this.postText.length;
@@ -50,6 +80,11 @@ export default class FtCreatePostModal extends Component {
 
   get hasUploadedMedia() {
     return this.uploadedMedia.length > 0;
+  }
+
+  @action
+  selectTribe(category) {
+    this._localCategory = category;
   }
 
   @action
@@ -160,6 +195,7 @@ export default class FtCreatePostModal extends Component {
 
     try {
       const categoryId =
+        this.localCategory?.id ||
         parseInt(this.siteSettings.default_composer_category, 10) ||
         this.site.uncategorized_category_id;
 
@@ -230,6 +266,46 @@ export default class FtCreatePostModal extends Component {
             >@{{this.currentUser.username}}</div>
           </div>
         </div>
+
+        {{! Tribe selector }}
+        {{#if this.hasTribeOptions}}
+          <div class="ft-modal__tribe-selector">
+            <span class="ft-modal__tribe-selector-label">
+              {{icon "users"}}
+              <span>Post to:</span>
+            </span>
+            <div class="ft-modal__tribe-pills">
+              <button
+                type="button"
+                class="ft-modal__tribe-pill
+                  {{unless
+                    this.localCategory
+                    'ft-modal__tribe-pill--selected'
+                  }}"
+                {{on "click" (fn this.selectTribe null)}}
+              >
+                <span>General</span>
+              </button>
+              {{#each this.joinedTribes as |tribe|}}
+                <button
+                  type="button"
+                  class="ft-modal__tribe-pill
+                    {{if
+                      (eq this.localCategory.id tribe.id)
+                      'ft-modal__tribe-pill--selected'
+                    }}"
+                  {{on "click" (fn this.selectTribe tribe)}}
+                >
+                  <span
+                    class="ft-modal__tribe-dot"
+                    style={{this.tribeDotStyle tribe}}
+                  ></span>
+                  <span>{{tribe.name}}</span>
+                </button>
+              {{/each}}
+            </div>
+          </div>
+        {{/if}}
 
         {{! Body }}
         <div class="ft-modal__body">

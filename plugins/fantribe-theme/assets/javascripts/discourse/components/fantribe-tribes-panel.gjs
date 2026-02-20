@@ -57,7 +57,8 @@ export default class FantribeTribesPanel extends Component {
         route === "discovery.new" ||
         route === "discovery.unread" ||
         route === "discovery.hot" ||
-        route === "index"
+        route === "index" ||
+        route.startsWith("discovery.category")
       );
     }
     if (item.route === "explore") {

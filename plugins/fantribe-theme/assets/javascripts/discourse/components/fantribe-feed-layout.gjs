@@ -7,6 +7,7 @@ import FantribeComposeBox from "./fantribe-compose-box";
 import FantribeFeedCard from "./fantribe-feed-card";
 import FantribeMobileTribeChips from "./fantribe-mobile-tribe-chips";
 import FantribeRightSidebar from "./fantribe-right-sidebar";
+import FantribeTribePage from "./fantribe-tribe-page";
 
 export default class FantribeFeedLayout extends Component {
   @service fantribeFilter;
@@ -61,45 +62,54 @@ export default class FantribeFeedLayout extends Component {
   }
 
   <template>
-    <div class="fantribe-feed-layout">
-      {{! Mobile tribe chips }}
-      <div class="fantribe-feed-layout__mobile-chips">
-        <FantribeMobileTribeChips />
+    {{! When on a category route, show the dedicated tribe page (full-width, no sidebar) }}
+    {{#if @category}}
+      <FantribeTribePage
+        @category={{@category}}
+        @topics={{this.filteredTopics}}
+      />
+    {{else}}
+      {{! Home feed — two-column layout with right sidebar }}
+      <div class="fantribe-feed-layout">
+        {{! Mobile tribe chips }}
+        <div class="fantribe-feed-layout__mobile-chips">
+          <FantribeMobileTribeChips />
+        </div>
+
+        {{! Main content - Feed }}
+        <main class="fantribe-feed-layout__content">
+          {{#if this.currentUser}}
+            <FantribeComposeBox />
+          {{/if}}
+
+          {{#if this.showPeriodChooser}}
+            <div class="fantribe-feed-layout__period-chooser top-lists">
+              <PeriodChooser
+                @period={{this.period}}
+                @action={{this.changePeriod}}
+                @fullDay={{false}}
+              />
+            </div>
+          {{/if}}
+
+          {{#if this.hasTopics}}
+            {{#each this.filteredTopics as |topic|}}
+              <FantribeFeedCard @topic={{topic}} />
+            {{/each}}
+          {{else}}
+            <div class="fantribe-feed-layout__empty">
+              <p class="fantribe-feed-layout__empty-title">No posts yet</p>
+              <p class="fantribe-feed-layout__empty-text">Be the first to share
+                something</p>
+            </div>
+          {{/if}}
+        </main>
+
+        {{! Right sidebar - Trending }}
+        <aside class="fantribe-feed-layout__right-sidebar">
+          <FantribeRightSidebar />
+        </aside>
       </div>
-
-      {{! Main content - Feed }}
-      <main class="fantribe-feed-layout__content">
-        {{#if this.currentUser}}
-          <FantribeComposeBox />
-        {{/if}}
-
-        {{#if this.showPeriodChooser}}
-          <div class="fantribe-feed-layout__period-chooser top-lists">
-            <PeriodChooser
-              @period={{this.period}}
-              @action={{this.changePeriod}}
-              @fullDay={{false}}
-            />
-          </div>
-        {{/if}}
-
-        {{#if this.hasTopics}}
-          {{#each this.filteredTopics as |topic|}}
-            <FantribeFeedCard @topic={{topic}} />
-          {{/each}}
-        {{else}}
-          <div class="fantribe-feed-layout__empty">
-            <p class="fantribe-feed-layout__empty-title">No posts yet</p>
-            <p class="fantribe-feed-layout__empty-text">Be the first to share
-              something</p>
-          </div>
-        {{/if}}
-      </main>
-
-      {{! Right sidebar - Trending }}
-      <aside class="fantribe-feed-layout__right-sidebar">
-        <FantribeRightSidebar />
-      </aside>
-    </div>
+    {{/if}}
   </template>
 }

@@ -11,6 +11,7 @@ export default class FantribeLeftSidebar extends Component {
   @service site;
   @service fantribeFilter;
   @service fantribeSidebarState;
+  @service fantribeMembership;
 
   get isEnabled() {
     return this.siteSettings.fantribe_theme_enabled;
@@ -45,6 +46,7 @@ export default class FantribeLeftSidebar extends Component {
   @action
   initializeFilters() {
     this.fantribeFilter.initializeWithAllIfEmpty(this.categories);
+    this.fantribeMembership.initialize();
   }
 
   @action

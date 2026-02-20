@@ -72,6 +72,8 @@ register_svg_icon "tag"
 register_svg_icon "music"
 register_svg_icon "calendar"
 register_svg_icon "circle-xmark"
+register_svg_icon "circle-check"
+register_svg_icon "arrow-right-to-bracket"
 
 # Common styles (all viewports)
 register_asset "stylesheets/common/design-tokens.scss"
@@ -115,6 +117,8 @@ register_asset "stylesheets/common/components/right-sidebar.scss"
 register_asset "stylesheets/common/components/create-menu.scss"
 register_asset "stylesheets/common/components/create-post-modal.scss"
 register_asset "stylesheets/common/components/engagement-bar.scss"
+register_asset "stylesheets/common/components/tribe-header.scss"
+register_asset "stylesheets/common/components/tribe-page.scss"
 
 # Discourse overrides - MUST load last
 register_asset "stylesheets/common/fantribe-overrides.scss"
@@ -167,6 +171,20 @@ after_initialize do
 
   reloadable_patch do
     ListableTopicSerializer.prepend(FantribeTheme::ListableTopicSerializerExtension)
+  end
+
+  # Add member_count to categories so tribe cards can show real membership numbers.
+  # Uses Rails cache (15 min TTL) to avoid per-request DB hits since site.categories
+  # is serialized once per session and cached on the frontend.
+  add_to_serializer(:basic_category, :member_count) do
+    Rails
+      .cache
+      .fetch("ft_member_count_#{object.id}", expires_in: 15.minutes) do
+        CategoryUser
+          .where(category_id: object.id)
+          .where("notification_level >= ?", CategoryUser.notification_levels[:watching])
+          .count
+      end
   end
 
   # Add image_urls to topic list serializer for multi-image support in feed cards

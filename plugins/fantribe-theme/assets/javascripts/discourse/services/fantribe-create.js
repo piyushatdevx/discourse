@@ -5,6 +5,7 @@ import Service from "@ember/service";
 export default class FantribeCreate extends Service {
   @tracked isCreateMenuOpen = false;
   @tracked isCreatePostModalOpen = false;
+  @tracked postCategory = null;
 
   @action
   toggleCreateMenu() {
@@ -17,7 +18,8 @@ export default class FantribeCreate extends Service {
   }
 
   @action
-  openCreatePostModal() {
+  openCreatePostModal(category = null) {
+    this.postCategory = category;
     this.isCreateMenuOpen = false;
     this.isCreatePostModalOpen = true;
   }
@@ -25,5 +27,6 @@ export default class FantribeCreate extends Service {
   @action
   closeCreatePostModal() {
     this.isCreatePostModalOpen = false;
+    this.postCategory = null;
   }
 }

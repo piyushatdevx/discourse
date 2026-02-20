@@ -1,13 +1,20 @@
 import Component from "@glimmer/component";
+import { tracked } from "@glimmer/tracking";
 import { on } from "@ember/modifier";
 import { action } from "@ember/object";
 import { service } from "@ember/service";
 import { htmlSafe } from "@ember/template";
 import icon from "discourse/helpers/d-icon";
 import replaceEmoji from "discourse/helpers/replace-emoji";
+import { ajax } from "discourse/lib/ajax";
+import { popupAjaxError } from "discourse/lib/ajax-error";
 
 export default class FantribeTribeCard extends Component {
   @service router;
+  @service currentUser;
+  @service fantribeMembership;
+
+  @tracked isJoining = false;
 
   get category() {
     return this.args.category;
@@ -33,12 +40,11 @@ export default class FantribeTribeCard extends Component {
     );
   }
 
-  get topicCount() {
-    return this.category?.topic_count || 0;
-  }
-
-  get memberLabel() {
-    const count = this.topicCount;
+  get memberCount() {
+    const count = this.category?.member_count;
+    if (count == null) {
+      return null;
+    }
     if (count >= 1000) {
       return `${(count / 1000).toFixed(1)}K`;
     }
@@ -69,10 +75,6 @@ export default class FantribeTribeCard extends Component {
     return this.category?.parentCategory?.name;
   }
 
-  get subcategoryCount() {
-    return this.category?.subcategories?.length || 0;
-  }
-
   get hasEmoji() {
     return this.category?.emoji;
   }
@@ -85,21 +87,64 @@ export default class FantribeTribeCard extends Component {
     return !!this.category?.uploaded_logo?.url;
   }
 
+  get isMember() {
+    return this.fantribeMembership.isMember(this.category?.id);
+  }
+
+  get isPrivate() {
+    return this.category?.read_restricted;
+  }
+
   @action
   handleCardClick() {
-    if (this.category?.slug) {
-      this.router.transitionTo(
-        "discovery.category",
-        this.category.slug,
-        this.category.id
-      );
+    const cat = this.category;
+    if (cat?.slug && cat?.id) {
+      this.router.transitionTo("discovery.category", `${cat.slug}/${cat.id}`);
     }
   }
 
   @action
-  handleJoinClick(event) {
+  async handleJoinClick(event) {
     event.stopPropagation();
-    this.handleCardClick();
+
+    if (!this.currentUser) {
+      this.router.transitionTo("login");
+      return;
+    }
+
+    if (this.isJoining) {
+      return;
+    }
+
+    const categoryId = this.category?.id;
+    if (!categoryId) {
+      return;
+    }
+
+    const currentlyMember = this.isMember;
+    const newLevel = currentlyMember
+      ? this.fantribeMembership.regularLevel
+      : this.fantribeMembership.watchingLevel;
+
+    this.isJoining = true;
+    this.fantribeMembership.setLevel(categoryId, newLevel);
+
+    try {
+      await ajax(`/category/${categoryId}/notifications`, {
+        type: "POST",
+        data: { notification_level: newLevel },
+      });
+    } catch (error) {
+      this.fantribeMembership.setLevel(
+        categoryId,
+        currentlyMember
+          ? this.fantribeMembership.watchingLevel
+          : this.fantribeMembership.regularLevel
+      );
+      popupAjaxError(error);
+    } finally {
+      this.isJoining = false;
+    }
   }
 
   <template>
@@ -151,13 +196,18 @@ export default class FantribeTribeCard extends Component {
             </div>
             <div class="ft-tribe-card__meta">
               <span class="ft-tribe-card__meta-item">
-                {{icon "globe"}}
-                <span>Public</span>
+                {{#if this.isPrivate}}
+                  {{icon "lock"}}
+                  <span>Private</span>
+                {{else}}
+                  {{icon "globe"}}
+                  <span>Public</span>
+                {{/if}}
               </span>
               <span class="ft-tribe-card__meta-sep">&bull;</span>
               <span class="ft-tribe-card__meta-item">
                 {{icon "users"}}
-                <span>{{this.memberLabel}}</span>
+                <span>{{if this.memberCount this.memberCount "–"}}</span>
               </span>
             </div>
           </div>
@@ -170,7 +220,7 @@ export default class FantribeTribeCard extends Component {
           >{{this.truncatedDescription}}</p>
         {{/if}}
 
-        {{! Activity }}
+        {{! Activity dots }}
         <div class="ft-tribe-card__activity">
           <div class="ft-tribe-card__activity-dots">
             <div class="ft-tribe-card__dot ft-tribe-card__dot--1"></div>
@@ -178,18 +228,29 @@ export default class FantribeTribeCard extends Component {
             <div class="ft-tribe-card__dot ft-tribe-card__dot--3"></div>
           </div>
           <span class="ft-tribe-card__activity-text">
-            {{this.topicCount}}
+            {{@category.topic_count}}
             active today
           </span>
         </div>
 
-        {{! Enter Button }}
+        {{! Join / Joined button }}
         <button
           type="button"
-          class="ft-tribe-card__join-btn"
+          class="ft-tribe-card__join-btn
+            {{if this.isMember 'ft-tribe-card__join-btn--joined'}}
+            {{if this.isJoining 'ft-tribe-card__join-btn--loading'}}"
+          disabled={{this.isJoining}}
           {{on "click" this.handleJoinClick}}
         >
-          Join Tribe
+          {{#if this.isJoining}}
+            {{icon "circle"}}
+          {{else if this.isMember}}
+            {{icon "circle-check"}}
+            <span>Joined</span>
+          {{else}}
+            {{icon "user-plus"}}
+            <span>Join Tribe</span>
+          {{/if}}
         </button>
       </div>
     </div>

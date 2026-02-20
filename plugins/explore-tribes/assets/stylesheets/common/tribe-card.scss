@@ -218,24 +218,56 @@ body.fantribe-theme:not(.admin-interface) {
     margin-left: 4px;
   }
 
-  // Join button
+  // Join / Joined button
   .ft-tribe-card__join-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
     width: 100%;
-    padding: 12px 16px;
+    padding: 11px 16px;
     border-radius: var(--ft-radius-full);
     background: var(--ft-primary);
     color: var(--ft-white);
-    font-weight: var(--ft-font-weight-medium);
-    font-size: 1rem;
-    border: none;
+    font-weight: var(--ft-font-weight-semibold);
+    font-size: var(--ft-font-size-sm);
+    border: 2px solid transparent;
     cursor: pointer;
-    transition: all 200ms ease;
+    transition:
+      background-color var(--ft-transition-colors),
+      border-color var(--ft-transition-colors),
+      box-shadow var(--ft-transition-shadow);
     box-shadow: var(--ft-shadow-sm);
-    line-height: 1.5;
 
-    &:hover {
+    .d-icon {
+      width: 15px;
+      height: 15px;
+      flex-shrink: 0;
+    }
+
+    &:hover:not(:disabled) {
       background: var(--ft-primary-hover);
       box-shadow: var(--ft-shadow-md);
+    }
+
+    // Joined state — outlined green style
+    &--joined {
+      background: transparent;
+      border-color: var(--ft-primary);
+      color: var(--ft-primary);
+      box-shadow: none;
+
+      &:hover:not(:disabled) {
+        background: color-mix(in srgb, var(--ft-primary) 8%, transparent);
+        box-shadow: none;
+      }
+    }
+
+    // Loading / disabled state
+    &--loading,
+    &:disabled {
+      opacity: 0.65;
+      cursor: not-allowed;
     }
   }
 
