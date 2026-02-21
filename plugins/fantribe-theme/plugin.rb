@@ -137,7 +137,38 @@ register_topic_preloader_associations({ first_post: :uploads }) do
   SiteSetting.fantribe_theme_enabled
 end
 
+# Preload first_post reactions + reaction_users for the engagement bar
+# (only when discourse-reactions is active — guarded in the serializer too)
+register_topic_preloader_associations({ first_post: { reactions: :reaction_users } }) do
+  SiteSetting.fantribe_theme_enabled && SiteSetting.respond_to?(:discourse_reactions_enabled) &&
+    SiteSetting.discourse_reactions_enabled
+end
+
 after_initialize do
+  # Auto-configure discourse-reactions for FanTribe's engagement bar.
+  # Uses the same "unless already set" pattern as the OAuth settings below
+  # so admin changes made through the UI are never overwritten on reboot.
+  if SiteSetting.fantribe_theme_enabled && SiteSetting.respond_to?(:discourse_reactions_enabled)
+    SiteSetting.discourse_reactions_enabled = true unless SiteSetting.discourse_reactions_enabled
+
+    # Only replace the emoji set if it's still Discourse's factory default —
+    # meaning nobody has customised it yet.
+    discourse_default_reactions = "+1|laughing|open_mouth|clap|confetti_ball|hugs"
+    if SiteSetting.discourse_reactions_enabled_reactions == discourse_default_reactions
+      SiteSetting.discourse_reactions_enabled_reactions = "heart|fire|clap|musical_note"
+    end
+
+    # heart is already the default reaction_for_like but make it explicit
+    if SiteSetting.discourse_reactions_reaction_for_like.blank?
+      SiteSetting.discourse_reactions_reaction_for_like = "heart"
+    end
+
+    # Reactions use the like rate limiter. Raise the daily limit so users on
+    # an engagement-heavy platform aren't blocked after a few posts.
+    # Todo: Need to change this when going to prod
+    SiteSetting.max_likes_per_day = 500 if SiteSetting.max_likes_per_day < 500
+  end
+
   # Default-enable auth settings when FanTribe is active
   if SiteSetting.fantribe_theme_enabled
     SiteSetting.login_required = true unless SiteSetting.login_required
@@ -211,6 +242,30 @@ after_initialize do
     next nil unless onebox
 
     onebox.to_html
+  end
+
+  # Expose per-post emoji reactions on topic list items so the feed engagement
+  # bar can show real counts and current-user state without a separate request.
+  # Reactions are preloaded above — no N+1 here.
+  add_to_serializer(:topic_list_item, :reactions) do
+    return [] unless SiteSetting.respond_to?(:discourse_reactions_enabled)
+    return [] unless SiteSetting.discourse_reactions_enabled
+    return [] unless object.first_post
+
+    object.first_post.reactions.filter_map do |reaction|
+      count = reaction.reaction_users_count.to_i
+      current_user_used =
+        scope.current_user &&
+          reaction.reaction_users.any? { |ru| ru.user_id == scope.current_user.id }
+      { id: reaction.reaction_value, count:, current_user_used: }
+    end
+  rescue StandardError
+    []
+  end
+
+  add_to_serializer(:topic_list_item, :include_reactions?) do
+    SiteSetting.respond_to?(:discourse_reactions_enabled) &&
+      SiteSetting.discourse_reactions_enabled && object.first_post.present?
   end
 
   # Override SiteIconManager to use custom favicon and OG image

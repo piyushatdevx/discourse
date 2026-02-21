@@ -35,35 +35,76 @@ body.fantribe-theme:not(.admin-interface) {
       font-size: 0.875rem; // 14px
 
       &:hover {
-        background: var(--ft-slate-100); // hover:bg-slate-100
-        border-color: var(--ft-slate-300); // hover:border-slate-300
+        background: var(--ft-slate-100);
+        border-color: var(--ft-slate-300);
       }
 
-      // Active: bg-vibrant-red-light, border-2 vibrant-red, scale-105
-      &--active {
-        background: var(--ft-vibrant-red-light); // bg-vibrant-red-light
+      // ── Per-reaction active states aligned with platform design tokens ──
+      //
+      // heart   → vibrant-red  (brand primary — love)
+      // fire    → coral        (warm orange-red — energy)
+      // clap    → electric-blue (cool blue — appreciation)
+      // musical-note → purple  (creative — vibes)
+      &--heart-active {
+        background: var(--ft-vibrant-red-light);
         border: 2px solid var(--ft-vibrant-red);
         transform: scale(1.05);
+
+        .fantribe-engagement__reaction-count {
+          color: var(--ft-vibrant-red);
+        }
       }
 
-      &--active &-emoji {
-        animation: ft-bounce-once 400ms ease-out;
+      &--fire-active {
+        background: var(--ft-coral-light);
+        border: 2px solid var(--ft-coral);
+        transform: scale(1.05);
+
+        .fantribe-engagement__reaction-count {
+          color: var(--ft-coral);
+        }
+      }
+
+      &--clap-active {
+        background: var(--ft-electric-blue-light);
+        border: 2px solid var(--ft-electric-blue);
+        transform: scale(1.05);
+
+        .fantribe-engagement__reaction-count {
+          color: var(--ft-electric-blue);
+        }
+      }
+
+      &--musical-note-active {
+        background: var(--ft-purple-light);
+        border: 2px solid var(--ft-purple);
+        transform: scale(1.05);
+
+        .fantribe-engagement__reaction-count {
+          color: var(--ft-purple);
+        }
+      }
+
+      // Bounce animation fires on first activation
+      &--heart-active,
+      &--fire-active,
+      &--clap-active,
+      &--musical-note-active {
+        .fantribe-engagement__reaction-emoji {
+          animation: ft-bounce-once 400ms ease-out;
+        }
       }
     }
 
     &__reaction-emoji {
-      font-size: 1.125rem; // text-lg (18px)
+      font-size: 1.125rem; // 18px
       line-height: 1;
     }
 
     &__reaction-count {
-      font-weight: 500; // font-medium
-      color: var(--ft-slate-600); // text-slate-600
-      font-size: 0.875rem; // text-sm
-
-      .fantribe-engagement__reaction--active & {
-        color: var(--ft-vibrant-red); // text-vibrant-red when active
-      }
+      font-weight: 500;
+      color: var(--ft-slate-600);
+      font-size: 0.875rem;
     }
 
     // ==========================================
