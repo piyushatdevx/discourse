@@ -80,69 +80,183 @@ body.fantribe-theme:not(.admin-interface) {
       color: var(--ft-slate-500);
     }
 
-    // Tribe selector — "Post to" pills row
-    &__tribe-selector {
+    // ==========================================
+    // TRIBE DROPDOWN — "Posting to" selector
+    // ==========================================
+    &__tribe-dropdown-wrap {
       display: flex;
       align-items: center;
       gap: 10px;
       padding: 10px 24px;
       border-bottom: 1px solid var(--ft-slate-100, #f1f5f9);
-      flex-wrap: wrap;
     }
 
-    &__tribe-selector-label {
+    &__tribe-dropdown-label {
       display: inline-flex;
       align-items: center;
       gap: 5px;
       font-size: 0.75rem;
+      font-weight: var(--ft-font-weight-medium);
       color: var(--ft-slate-400);
       white-space: nowrap;
       flex-shrink: 0;
 
       .d-icon {
-        width: 12px;
-        height: 12px;
+        width: 11px;
+        height: 11px;
       }
     }
 
-    &__tribe-pills {
-      display: flex;
-      gap: 6px;
-      flex-wrap: wrap;
+    &__tribe-dropdown {
+      position: relative;
     }
 
-    &__tribe-pill {
+    &__tribe-dropdown-trigger {
       display: inline-flex;
       align-items: center;
-      gap: 5px;
-      padding: 4px 12px;
-      border-radius: 9999px;
+      gap: 6px;
+      padding: 5px 10px 5px 8px;
+      border-radius: 10px;
       border: 1.5px solid var(--ft-slate-200, #e2e8f0);
       background: var(--ft-slate-50, #f8fafc);
-      color: var(--ft-slate-600, #475569);
-      font-size: 0.75rem;
-      font-weight: 500;
+      color: var(--ft-slate-700, #374151);
+      font-size: 0.8125rem;
+      font-weight: var(--ft-font-weight-semibold);
       cursor: pointer;
-      transition: all 150ms ease;
+      transition:
+        border-color 150ms ease,
+        background 150ms ease,
+        box-shadow 150ms ease;
 
-      &:hover {
-        border-color: var(--ft-vibrant-red, #ff1744);
-        color: var(--ft-vibrant-red, #ff1744);
-        background: var(--ft-vibrant-red-tint, #fff5f7);
-      }
-
-      &--selected {
-        border-color: var(--ft-vibrant-red, #ff1744);
-        background: var(--ft-vibrant-red-light, #ffe5ec);
-        color: var(--ft-vibrant-red, #ff1744);
+      &:hover,
+      &--open {
+        border-color: var(--ft-dark, #1a1d23);
+        background: var(--ft-white, #fff);
+        box-shadow: 0 2px 6px rgb(0 0 0 / 8%);
       }
     }
 
-    &__tribe-dot {
-      width: 7px;
-      height: 7px;
+    &__tribe-dropdown-dot {
+      width: 9px;
+      height: 9px;
       border-radius: 50%;
       flex-shrink: 0;
+    }
+
+    &__tribe-dropdown-value {
+      max-width: 140px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    &__tribe-dropdown-chevron {
+      display: flex;
+      align-items: center;
+      color: var(--ft-slate-400);
+      transition: transform 200ms ease;
+      margin-left: 2px;
+
+      .d-icon {
+        width: 11px;
+        height: 11px;
+      }
+
+      .ft-modal__tribe-dropdown-trigger--open & {
+        transform: rotate(180deg);
+      }
+    }
+
+    &__tribe-dropdown-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 5;
+    }
+
+    &__tribe-dropdown-menu {
+      position: absolute;
+      top: calc(100% + 6px);
+      left: 0;
+      min-width: 200px;
+      background: var(--ft-white, #fff);
+      border: 1px solid var(--ft-slate-200, #e2e8f0);
+      border-radius: 14px;
+      box-shadow:
+        0 8px 24px rgb(0 0 0 / 12%),
+        0 2px 8px rgb(0 0 0 / 6%);
+      z-index: 10;
+      overflow: hidden;
+      padding: 4px;
+    }
+
+    &__tribe-dropdown-item {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      width: 100%;
+      padding: 9px 10px;
+      border: none;
+      border-radius: 10px;
+      background: transparent;
+      color: var(--ft-slate-700, #374151);
+      font-size: 0.8125rem;
+      font-weight: var(--ft-font-weight-medium);
+      cursor: pointer;
+      transition: background 120ms ease;
+      text-align: left;
+
+      &:hover {
+        background: var(--ft-slate-50, #f8fafc);
+      }
+
+      &--active {
+        background: rgb(26 29 35 / 5%);
+        color: var(--ft-dark, #1a1d23);
+        font-weight: var(--ft-font-weight-semibold);
+      }
+    }
+
+    &__tribe-dropdown-item-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 22px;
+      height: 22px;
+      border-radius: 6px;
+      background: var(--ft-slate-100, #f1f5f9);
+      flex-shrink: 0;
+
+      .d-icon {
+        width: 12px;
+        height: 12px;
+        color: var(--ft-slate-500);
+      }
+    }
+
+    &__tribe-dropdown-item-dot {
+      width: 22px;
+      height: 22px;
+      border-radius: 6px;
+      flex-shrink: 0;
+    }
+
+    &__tribe-dropdown-item-name {
+      flex: 1;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    &__tribe-dropdown-item-check {
+      display: flex;
+      align-items: center;
+      color: var(--ft-dark, #1a1d23);
+      margin-left: auto;
+
+      .d-icon {
+        width: 13px;
+        height: 13px;
+      }
     }
 
     // ==========================================
@@ -447,51 +561,6 @@ body.fantribe-theme:not(.admin-interface) {
       &:focus {
         border-color: var(--ft-electric-blue);
         box-shadow: 0 0 0 2px rgb(0 128 255 / 20%);
-      }
-    }
-
-    // ==========================================
-    // TAG GEAR
-    // ==========================================
-    &__tag-gear {
-      margin-top: 16px;
-    }
-
-    &__tag-gear-label {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-size: var(--ft-font-sm);
-      font-weight: var(--ft-font-weight-semibold);
-      color: var(--ft-slate-700);
-      margin-bottom: 8px;
-
-      .d-icon {
-        width: 14px;
-        height: 14px;
-      }
-    }
-
-    &__tag-gear-input {
-      width: 100%;
-      padding: 10px 14px;
-      border: 1px solid var(--ft-slate-200);
-      border-radius: 12px;
-      font-size: var(--ft-font-sm);
-      color: var(--ft-slate-900);
-      background: var(--ft-slate-50);
-      outline: none;
-      transition:
-        border-color 200ms ease,
-        box-shadow 200ms ease;
-
-      &::placeholder {
-        color: var(--ft-slate-400);
-      }
-
-      &:focus {
-        border-color: transparent;
-        box-shadow: 0 0 0 2px var(--ft-electric-blue);
       }
     }
 

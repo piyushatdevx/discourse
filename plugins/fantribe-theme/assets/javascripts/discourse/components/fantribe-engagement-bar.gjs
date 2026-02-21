@@ -24,10 +24,18 @@ export default class FantribeEngagementBar extends Component {
   @service modal;
 
   @tracked isLoading = false;
-  @tracked activeReactions = new Set(["heart"]);
+  @tracked _activeReactions = null; // null = use server state; Set = user has interacted
   @tracked _isLiked = null;
   @tracked _likeCountOffset = 0;
   @tracked _isBookmarked = false;
+
+  // Lazily initialized: reflects server opLiked state until the user interacts
+  get activeReactions() {
+    if (this._activeReactions !== null) {
+      return this._activeReactions;
+    }
+    return this.args.opLiked ? new Set(["heart"]) : new Set();
+  }
 
   get isLiked() {
     if (this._isLiked !== null) {
@@ -113,7 +121,7 @@ export default class FantribeEngagementBar extends Component {
     } else {
       newSet.add(key);
     }
-    this.activeReactions = newSet;
+    this._activeReactions = newSet;
   }
 
   @action
@@ -140,7 +148,7 @@ export default class FantribeEngagementBar extends Component {
     } else {
       newSet.add("heart");
     }
-    this.activeReactions = newSet;
+    this._activeReactions = newSet;
 
     try {
       if (wasLiked) {
@@ -166,7 +174,7 @@ export default class FantribeEngagementBar extends Component {
       } else {
         revertSet.delete("heart");
       }
-      this.activeReactions = revertSet;
+      this._activeReactions = revertSet;
     } finally {
       this.isLoading = false;
     }

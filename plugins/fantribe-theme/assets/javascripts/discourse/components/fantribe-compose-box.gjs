@@ -54,14 +54,6 @@ export default class FantribeComposeBox extends Component {
               {{icon "headphones"}}
               <span>Audio</span>
             </button>
-            <button
-              type="button"
-              class="fantribe-compose-box__media-btn fantribe-compose-box__media-btn--tag-gear"
-              title="Tag Gear"
-            >
-              {{icon "tag"}}
-              <span>Tag Gear</span>
-            </button>
           </div>
         </div>
       </div>

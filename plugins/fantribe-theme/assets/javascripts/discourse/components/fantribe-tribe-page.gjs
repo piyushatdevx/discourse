@@ -189,12 +189,10 @@ export default class FantribeTribePage extends Component {
                 <span>Public</span>
               {{/if}}
               {{#if this.memberCount}}
-                <span class="ft-tribe-page__meta-sep">&bull;</span>
                 {{icon "users"}}
                 <span>{{this.memberCount}} members</span>
               {{/if}}
               {{#if this.postCount}}
-                <span class="ft-tribe-page__meta-sep">&bull;</span>
                 {{icon "comment"}}
                 <span>{{this.postCount}} posts</span>
               {{/if}}

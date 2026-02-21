@@ -16,6 +16,7 @@ export default class FantribePostMenu extends Component {
   @service composer;
   @service modal;
   @service router;
+  @service store;
 
   @action
   async handleEdit(event) {
@@ -75,7 +76,8 @@ export default class FantribePostMenu extends Component {
       return;
     }
     try {
-      const post = await ajax(`/posts/${postId}.json`);
+      // Use the Discourse store to get a proper Post model for FlagModal
+      const post = await this.store.find("post", postId);
       this.modal.show(FlagModal, {
         model: {
           flagTarget: new PostFlag(),
@@ -83,6 +85,27 @@ export default class FantribePostMenu extends Component {
           setHidden: () => {},
         },
       });
+    } catch (error) {
+      popupAjaxError(error);
+    }
+  }
+
+  @action
+  async handleNotInterested(event) {
+    event.stopPropagation();
+    this.args.onClose?.();
+    const topicId = this.args.topic?.id;
+    if (!topicId) {
+      return;
+    }
+    try {
+      // Mute the topic so it's filtered from future feeds
+      await ajax(`/t/${topicId}/notifications`, {
+        type: "POST",
+        data: { notification_level: 0 },
+      });
+      // Signal the card to remove itself from the current view
+      this.args.onDismiss?.();
     } catch (error) {
       popupAjaxError(error);
     }
@@ -97,9 +120,10 @@ export default class FantribePostMenu extends Component {
       return;
     }
     try {
+      // Discourse uses "ignore" for user-level muting (no separate "mute" level)
       await ajax(`/u/${username}/notification_level.json`, {
         type: "PUT",
-        data: { notification_level: "mute" },
+        data: { notification_level: "ignore" },
       });
     } catch (error) {
       popupAjaxError(error);
@@ -234,7 +258,7 @@ export default class FantribePostMenu extends Component {
             <button
               type="button"
               class="fantribe-post-menu__item"
-              {{on "click" this.noop}}
+              {{on "click" this.handleNotInterested}}
             >
               {{icon "eye-slash"}}
               <div class="fantribe-post-menu__item-text">

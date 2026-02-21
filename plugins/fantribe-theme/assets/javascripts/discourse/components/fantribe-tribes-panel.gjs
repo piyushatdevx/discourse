@@ -51,14 +51,14 @@ export default class FantribeTribesPanel extends Component {
       return false;
     }
     if (item.route === "discovery.latest") {
+      // discovery.category routes are tribe pages — don't highlight Home Feed there
       return (
         route === "discovery.latest" ||
         route === "discovery.top" ||
         route === "discovery.new" ||
         route === "discovery.unread" ||
         route === "discovery.hot" ||
-        route === "index" ||
-        route.startsWith("discovery.category")
+        route === "index"
       );
     }
     if (item.route === "explore") {

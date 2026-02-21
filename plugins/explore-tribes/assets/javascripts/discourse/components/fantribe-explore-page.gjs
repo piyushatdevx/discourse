@@ -84,6 +84,10 @@ export default class FantribeExplorePage extends Component {
       if (!this.isAdmin && c.read_restricted) {
         return false;
       }
+      // Hide tribes the user has already joined — they belong in "My Tribes"
+      if (this.currentUser && this.fantribeMembership.isMember(c.id)) {
+        return false;
+      }
       return true;
     });
   }

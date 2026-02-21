@@ -7,7 +7,6 @@
 //   Photo: bg-slate-50 hover:bg-purple-light, text-purple
 //   Video: bg-slate-50 hover:bg-vibrant-red-light, text-vibrant-red
 //   Audio: bg-slate-50 hover:bg-electric-blue-light, text-electric-blue
-//   Tag Gear: bg-mint-light hover:bg-mint, text-mint hover:text-white
 body.fantribe-theme:not(.admin-interface) {
   .fantribe-compose-box {
     background: white;
@@ -133,17 +132,6 @@ body.fantribe-theme:not(.admin-interface) {
 
         &:hover {
           background: var(--ft-electric-blue-light);
-        }
-      }
-
-      // ---- Tag Gear: mint (fill changes on hover) ----
-      &--tag-gear {
-        background: var(--ft-mint-light);
-        color: var(--ft-mint);
-
-        &:hover {
-          background: var(--ft-mint);
-          color: white;
         }
       }
     }

@@ -16,7 +16,6 @@ const MAX_CHARS = 2000;
 
 export default class FtCreatePostModal extends Component {
   @service currentUser;
-  @service router;
   @service siteSettings;
   @service site;
   @service fantribeCreate;
@@ -31,6 +30,7 @@ export default class FtCreatePostModal extends Component {
   @tracked scheduledDate = "";
   @tracked scheduledTime = "";
   @tracked isUploading = false;
+  @tracked isTribeDropdownOpen = false;
   @tracked _localCategory = undefined;
 
   get localCategory() {
@@ -60,6 +60,19 @@ export default class FtCreatePostModal extends Component {
     return htmlSafe(`background-color: #${category.color || "0088cc"}`);
   }
 
+  get selectedTribeLabel() {
+    return this.localCategory?.name || "General";
+  }
+
+  get selectedTribeDotStyle() {
+    if (this.localCategory) {
+      return htmlSafe(
+        `background-color: #${this.localCategory.color || "0088cc"}`
+      );
+    }
+    return htmlSafe("background-color: #9ca3af");
+  }
+
   get charCount() {
     return this.postText.length;
   }
@@ -85,6 +98,22 @@ export default class FtCreatePostModal extends Component {
   @action
   selectTribe(category) {
     this._localCategory = category;
+  }
+
+  @action
+  toggleTribeDropdown() {
+    this.isTribeDropdownOpen = !this.isTribeDropdownOpen;
+  }
+
+  @action
+  selectTribeFromDropdown(category) {
+    this._localCategory = category;
+    this.isTribeDropdownOpen = false;
+  }
+
+  @action
+  closeTribeDropdown() {
+    this.isTribeDropdownOpen = false;
   }
 
   @action
@@ -215,13 +244,12 @@ export default class FtCreatePostModal extends Component {
 
       this.fantribeCreate.closeCreatePostModal();
 
-      if (result?.post?.topic_slug && result?.post?.topic_id) {
-        this.router.transitionTo(
-          "topic.fromParamsNear",
-          result.post.topic_slug,
-          result.post.topic_id,
-          result.post.post_number
-        );
+      if (result?.post?.topic_id) {
+        // Hard-navigate so the browser fully reloads the feed when the user
+        // presses back, ensuring the new post appears without a manual refresh.
+        const slug = result.post.topic_slug || String(result.post.topic_id);
+        const postNum = result.post.post_number || 1;
+        window.location.href = `/t/${slug}/${result.post.topic_id}/${postNum}`;
       }
     } catch (error) {
       popupAjaxError(error);
@@ -267,42 +295,89 @@ export default class FtCreatePostModal extends Component {
           </div>
         </div>
 
-        {{! Tribe selector }}
+        {{! Tribe selector dropdown }}
         {{#if this.hasTribeOptions}}
-          <div class="ft-modal__tribe-selector">
-            <span class="ft-modal__tribe-selector-label">
-              {{icon "users"}}
-              <span>Post to:</span>
+          <div class="ft-modal__tribe-dropdown-wrap">
+            <span class="ft-modal__tribe-dropdown-label">
+              {{icon "paper-plane"}}
+              <span>Posting to</span>
             </span>
-            <div class="ft-modal__tribe-pills">
+            <div class="ft-modal__tribe-dropdown">
               <button
                 type="button"
-                class="ft-modal__tribe-pill
-                  {{unless
-                    this.localCategory
-                    'ft-modal__tribe-pill--selected'
+                class="ft-modal__tribe-dropdown-trigger
+                  {{if
+                    this.isTribeDropdownOpen
+                    'ft-modal__tribe-dropdown-trigger--open'
                   }}"
-                {{on "click" (fn this.selectTribe null)}}
+                {{on "click" this.toggleTribeDropdown}}
               >
-                <span>General</span>
+                <span
+                  class="ft-modal__tribe-dropdown-dot"
+                  style={{this.selectedTribeDotStyle}}
+                ></span>
+                <span
+                  class="ft-modal__tribe-dropdown-value"
+                >{{this.selectedTribeLabel}}</span>
+                <span class="ft-modal__tribe-dropdown-chevron">
+                  {{icon "chevron-down"}}
+                </span>
               </button>
-              {{#each this.joinedTribes as |tribe|}}
-                <button
-                  type="button"
-                  class="ft-modal__tribe-pill
-                    {{if
-                      (eq this.localCategory.id tribe.id)
-                      'ft-modal__tribe-pill--selected'
-                    }}"
-                  {{on "click" (fn this.selectTribe tribe)}}
-                >
-                  <span
-                    class="ft-modal__tribe-dot"
-                    style={{this.tribeDotStyle tribe}}
-                  ></span>
-                  <span>{{tribe.name}}</span>
-                </button>
-              {{/each}}
+
+              {{#if this.isTribeDropdownOpen}}
+                {{! template-lint-disable no-invalid-interactive }}
+                <div
+                  class="ft-modal__tribe-dropdown-backdrop"
+                  {{on "click" this.closeTribeDropdown}}
+                ></div>
+                <div class="ft-modal__tribe-dropdown-menu">
+                  <button
+                    type="button"
+                    class="ft-modal__tribe-dropdown-item
+                      {{unless
+                        this.localCategory
+                        'ft-modal__tribe-dropdown-item--active'
+                      }}"
+                    {{on "click" (fn this.selectTribeFromDropdown null)}}
+                  >
+                    <span class="ft-modal__tribe-dropdown-item-icon">
+                      {{icon "globe"}}
+                    </span>
+                    <span
+                      class="ft-modal__tribe-dropdown-item-name"
+                    >General</span>
+                    {{#unless this.localCategory}}
+                      <span class="ft-modal__tribe-dropdown-item-check">
+                        {{icon "check"}}
+                      </span>
+                    {{/unless}}
+                  </button>
+                  {{#each this.joinedTribes as |tribe|}}
+                    <button
+                      type="button"
+                      class="ft-modal__tribe-dropdown-item
+                        {{if
+                          (eq this.localCategory.id tribe.id)
+                          'ft-modal__tribe-dropdown-item--active'
+                        }}"
+                      {{on "click" (fn this.selectTribeFromDropdown tribe)}}
+                    >
+                      <span
+                        class="ft-modal__tribe-dropdown-item-dot"
+                        style={{this.tribeDotStyle tribe}}
+                      ></span>
+                      <span
+                        class="ft-modal__tribe-dropdown-item-name"
+                      >{{tribe.name}}</span>
+                      {{#if (eq this.localCategory.id tribe.id)}}
+                        <span class="ft-modal__tribe-dropdown-item-check">
+                          {{icon "check"}}
+                        </span>
+                      {{/if}}
+                    </button>
+                  {{/each}}
+                </div>
+              {{/if}}
             </div>
           </div>
         {{/if}}
@@ -446,19 +521,6 @@ export default class FtCreatePostModal extends Component {
               </div>
             </div>
           {{/if}}
-
-          {{! Tag Gear }}
-          <div class="ft-modal__tag-gear">
-            <label class="ft-modal__tag-gear-label">
-              {{icon "tag"}}
-              <span>Tag Gear</span>
-            </label>
-            <input
-              type="text"
-              class="ft-modal__tag-gear-input"
-              placeholder="Search gear to tag..."
-            />
-          </div>
 
           {{! Visibility }}
           <div class="ft-modal__visibility-section">

@@ -24,6 +24,7 @@ export default class FantribeFeedCard extends Component {
   @tracked expandedContent = null;
   @tracked loadingExpanded = false;
   @tracked menuOpen = false;
+  @tracked dismissed = false;
 
   get topic() {
     return this.args.topic;
@@ -142,6 +143,11 @@ export default class FantribeFeedCard extends Component {
   }
 
   @action
+  dismissCard() {
+    this.dismissed = true;
+  }
+
+  @action
   navigateToTopic() {
     if (this.topic?.id) {
       this.router.transitionTo("topic", this.topic.slug, this.topic.id);
@@ -188,131 +194,134 @@ export default class FantribeFeedCard extends Component {
 
   <template>
     {{! template-lint-disable no-invalid-interactive }}
-    <article
-      class="fantribe-feed-card
-        {{if this.expanded 'fantribe-feed-card--expanded'}}"
-      {{on "click" this.navigateToTopic}}
-    >
-      <div class="fantribe-feed-card__content">
-        {{! Post Header }}
-        <header class="fantribe-feed-card__header">
-          <button
-            type="button"
-            class="fantribe-feed-card__avatar"
-            {{on "click" this.navigateToUser}}
-          >
-            {{#if this.poster}}
-              {{avatar this.poster imageSize="medium"}}
-            {{/if}}
-          </button>
-
-          <div class="fantribe-feed-card__meta">
-            <div class="fantribe-feed-card__meta-name-row">
-              <span
-                class="fantribe-feed-card__display-name"
-              >{{this.displayName}}</span>
-            </div>
-            <div class="fantribe-feed-card__meta-info-row">
-              <span
-                class="fantribe-feed-card__username-handle"
-              >@{{this.posterUsername}}</span>
-              <span class="fantribe-feed-card__separator">&middot;</span>
-              <span class="fantribe-feed-card__timestamp">{{formatDate
-                  @topic.created_at
-                  format="tiny"
-                }}</span>
-            </div>
-          </div>
-
-          <div class="fantribe-feed-card__more-wrapper">
+    {{#unless this.dismissed}}
+      <article
+        class="fantribe-feed-card
+          {{if this.expanded 'fantribe-feed-card--expanded'}}"
+        {{on "click" this.navigateToTopic}}
+      >
+        <div class="fantribe-feed-card__content">
+          {{! Post Header }}
+          <header class="fantribe-feed-card__header">
             <button
               type="button"
-              class="fantribe-feed-card__more-btn"
-              {{on "click" this.toggleMenu}}
+              class="fantribe-feed-card__avatar"
+              {{on "click" this.navigateToUser}}
             >
-              {{icon "ellipsis"}}
+              {{#if this.poster}}
+                {{avatar this.poster imageSize="medium"}}
+              {{/if}}
             </button>
 
-            <FantribePostMenu
-              @isOpen={{this.menuOpen}}
-              @onClose={{this.closeMenu}}
-              @isOwnPost={{this.isOwnPost}}
-              @userName={{this.posterUsername}}
-              @topic={{@topic}}
-              @firstPostId={{this.firstPostId}}
-            />
-          </div>
-        </header>
+            <div class="fantribe-feed-card__meta">
+              <div class="fantribe-feed-card__meta-name-row">
+                <span
+                  class="fantribe-feed-card__display-name"
+                >{{this.displayName}}</span>
+              </div>
+              <div class="fantribe-feed-card__meta-info-row">
+                <span
+                  class="fantribe-feed-card__username-handle"
+                >@{{this.posterUsername}}</span>
+                <span class="fantribe-feed-card__separator">&middot;</span>
+                <span class="fantribe-feed-card__timestamp">{{formatDate
+                    @topic.created_at
+                    format="tiny"
+                  }}</span>
+              </div>
+            </div>
 
-        <div class="fantribe-feed-card__body">
-          <div class="fantribe-feed-card__text">
-            <p><strong>{{@topic.title}}</strong></p>
-            {{#if this.excerpt}}
-              {{#if this.expanded}}
-                <div class="fantribe-feed-card__expanded-body">
-                  <DecoratedHtml @html={{this.expandedContentHtml}} />
-                  <button
-                    type="button"
-                    class="fantribe-feed-card__show-less"
-                    {{on "click" this.toggleExpandContent}}
-                  >
-                    {{i18n "review.show_less"}}
-                  </button>
-                </div>
-              {{else}}
-                <p>
-                  {{this.displayExcerpt}}
-                  {{#if this.excerptTruncated}}
+            <div class="fantribe-feed-card__more-wrapper">
+              <button
+                type="button"
+                class="fantribe-feed-card__more-btn"
+                {{on "click" this.toggleMenu}}
+              >
+                {{icon "ellipsis"}}
+              </button>
+
+              <FantribePostMenu
+                @isOpen={{this.menuOpen}}
+                @onClose={{this.closeMenu}}
+                @onDismiss={{this.dismissCard}}
+                @isOwnPost={{this.isOwnPost}}
+                @userName={{this.posterUsername}}
+                @topic={{@topic}}
+                @firstPostId={{this.firstPostId}}
+              />
+            </div>
+          </header>
+
+          <div class="fantribe-feed-card__body">
+            <div class="fantribe-feed-card__text">
+              <p><strong>{{@topic.title}}</strong></p>
+              {{#if this.excerpt}}
+                {{#if this.expanded}}
+                  <div class="fantribe-feed-card__expanded-body">
+                    <DecoratedHtml @html={{this.expandedContentHtml}} />
                     <button
                       type="button"
-                      class="fantribe-feed-card__read-more"
+                      class="fantribe-feed-card__show-less"
                       {{on "click" this.toggleExpandContent}}
-                      disabled={{this.loadingExpanded}}
                     >
-                      {{#if this.loadingExpanded}}
-                        {{i18n "loading"}}
-                      {{else}}
-                        {{i18n "read_more"}}
-                        ..
-                      {{/if}}
+                      {{i18n "review.show_less"}}
                     </button>
-                  {{/if}}
-                </p>
-              {{/if}}
-            {{/if}}
-          </div>
-
-          {{#if (or this.hasOnebox this.hasImages)}}
-            <div
-              class="fantribe-feed-card__media"
-              {{on "click" this.stopPropagation}}
-            >
-              {{#if this.hasOnebox}}
-                <div
-                  class="fantribe-feed-card__onebox fantribe-feed-card__onebox--in-media"
-                >
-                  <DecoratedHtml @html={{this.firstOneboxHtml}} />
-                </div>
-              {{else if this.hasMultipleImages}}
-                <FantribeMediaPhotoGrid @images={{this.images}} />
-              {{else}}
-                <FantribeMediaSingleImage @imageUrl={{this.imageUrl}} />
+                  </div>
+                {{else}}
+                  <p>
+                    {{this.displayExcerpt}}
+                    {{#if this.excerptTruncated}}
+                      <button
+                        type="button"
+                        class="fantribe-feed-card__read-more"
+                        {{on "click" this.toggleExpandContent}}
+                        disabled={{this.loadingExpanded}}
+                      >
+                        {{#if this.loadingExpanded}}
+                          {{i18n "loading"}}
+                        {{else}}
+                          {{i18n "read_more"}}
+                          ..
+                        {{/if}}
+                      </button>
+                    {{/if}}
+                  </p>
+                {{/if}}
               {{/if}}
             </div>
-          {{/if}}
 
-          <FantribeEngagementBar
-            @topic={{@topic}}
-            @likeCount={{this.likeCount}}
-            @commentCount={{this.replyCount}}
-            @shareCount={{this.viewCount}}
-            @topicId={{@topic.id}}
-            @firstPostId={{this.firstPostId}}
-            @opLiked={{this.opLiked}}
-            @opCanLike={{this.opCanLike}}
-          />
+            {{#if (or this.hasOnebox this.hasImages)}}
+              <div
+                class="fantribe-feed-card__media"
+                {{on "click" this.stopPropagation}}
+              >
+                {{#if this.hasOnebox}}
+                  <div
+                    class="fantribe-feed-card__onebox fantribe-feed-card__onebox--in-media"
+                  >
+                    <DecoratedHtml @html={{this.firstOneboxHtml}} />
+                  </div>
+                {{else if this.hasMultipleImages}}
+                  <FantribeMediaPhotoGrid @images={{this.images}} />
+                {{else}}
+                  <FantribeMediaSingleImage @imageUrl={{this.imageUrl}} />
+                {{/if}}
+              </div>
+            {{/if}}
+
+            <FantribeEngagementBar
+              @topic={{@topic}}
+              @likeCount={{this.likeCount}}
+              @commentCount={{this.replyCount}}
+              @shareCount={{this.viewCount}}
+              @topicId={{@topic.id}}
+              @firstPostId={{this.firstPostId}}
+              @opLiked={{this.opLiked}}
+              @opCanLike={{this.opCanLike}}
+            />
+          </div>
         </div>
-      </div>
-    </article>
+      </article>
+    {{/unless}}
   </template>
 }

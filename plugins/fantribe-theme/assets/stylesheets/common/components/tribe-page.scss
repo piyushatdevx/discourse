@@ -1,21 +1,23 @@
 // Dedicated Tribe Page — full-width layout replacing the feed when on a category route
 body.fantribe-theme:not(.admin-interface) {
-  // Outer wrapper — single column, constrained width
+  // Outer wrapper — full-width, no max-width constraint
   .ft-tribe-page {
-    max-width: 800px;
-    margin: 0 auto;
+    width: 100%;
     padding-bottom: var(--ft-space-8);
   }
 
   // ─────────────────────────────────────────
-  // HERO (cover image)
+  // HERO (cover image) — full viewport width
   // ─────────────────────────────────────────
   .ft-tribe-page__hero {
     position: relative;
-    height: 220px;
+    height: clamp(
+      160px,
+      28vw,
+      300px
+    ); // responsive: 160px mobile → 300px wide desktop
     background-size: cover;
     background-position: center;
-    border-radius: var(--ft-radius-card) var(--ft-radius-card) 0 0;
     overflow: visible; // logo overlaps bottom
   }
 
@@ -31,15 +33,16 @@ body.fantribe-theme:not(.admin-interface) {
   // ─────────────────────────────────────────
   .ft-tribe-page__logo-wrapper {
     position: absolute;
-    bottom: -44px;
-    left: var(--ft-space-6);
+    bottom: clamp(-36px, -5vw, -44px); // shifts with logo size
+    left: clamp(16px, 4vw, 32px);
     z-index: 2;
   }
 
   .ft-tribe-page__logo {
-    width: 88px;
-    height: 88px;
-    border-radius: 20px;
+    // Responsive size: 72px mobile → 96px wide desktop
+    width: clamp(72px, 11vw, 96px);
+    height: clamp(72px, 11vw, 96px);
+    border-radius: clamp(14px, 2vw, 20px);
     border: 4px solid var(--ft-white, #fff);
     box-shadow: var(--ft-shadow-lg);
     display: flex;
@@ -49,13 +52,13 @@ body.fantribe-theme:not(.admin-interface) {
     flex-shrink: 0;
 
     &--initial {
-      font-size: 2.25rem;
+      font-size: clamp(1.5rem, 4vw, 2.25rem);
       font-weight: var(--ft-font-weight-bold);
       color: var(--ft-white, #fff);
     }
 
     &--emoji {
-      font-size: 2.5rem;
+      font-size: clamp(2rem, 5vw, 2.5rem);
       background: var(--ft-white, #fff);
     }
   }
@@ -73,7 +76,9 @@ body.fantribe-theme:not(.admin-interface) {
     background: var(--ft-white, #fff);
     border: 1px solid var(--ft-gray-100, #f3f4f6);
     border-top: none;
-    padding: 60px var(--ft-space-6) var(--ft-space-6); // 60px top = room for logo
+
+    // Top padding accounts for logo overlap (half logo + 12px clearance)
+    padding: clamp(52px, 8vw, 68px) clamp(16px, 4vw, 32px) var(--ft-space-6);
     margin-bottom: var(--ft-space-4);
   }
 
@@ -101,7 +106,7 @@ body.fantribe-theme:not(.admin-interface) {
   .ft-tribe-page__meta {
     display: flex;
     align-items: center;
-    gap: var(--ft-space-1-5);
+    gap: var(--ft-space-2);
     flex-wrap: wrap;
     font-size: var(--ft-font-sm, 0.875rem);
     color: var(--ft-gray-500, #6b7280);
@@ -110,10 +115,6 @@ body.fantribe-theme:not(.admin-interface) {
       width: 13px;
       height: 13px;
     }
-  }
-
-  .ft-tribe-page__meta-sep {
-    opacity: 0.4;
   }
 
   .ft-tribe-page__description {
@@ -317,14 +318,6 @@ body.fantribe-theme:not(.admin-interface) {
   // RESPONSIVE
   // ─────────────────────────────────────────
   @media (width <= 640px) {
-    .ft-tribe-page__hero {
-      height: 160px;
-    }
-
-    .ft-tribe-page__info {
-      padding: 56px var(--ft-space-4) var(--ft-space-4);
-    }
-
     .ft-tribe-page__name {
       font-size: 1.25rem;
     }
