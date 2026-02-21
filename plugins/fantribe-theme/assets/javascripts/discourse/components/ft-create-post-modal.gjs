@@ -20,6 +20,7 @@ export default class FtCreatePostModal extends Component {
   @service site;
   @service fantribeCreate;
   @service fantribeMembership;
+  @service fantribeFeedState;
 
   @tracked postTitle = "";
   @tracked postText = "";
@@ -242,15 +243,33 @@ export default class FtCreatePostModal extends Component {
         },
       });
 
-      this.fantribeCreate.closeCreatePostModal();
-
       if (result?.post?.topic_id) {
-        // Hard-navigate so the browser fully reloads the feed when the user
-        // presses back, ensuring the new post appears without a manual refresh.
-        const slug = result.post.topic_slug || String(result.post.topic_id);
-        const postNum = result.post.post_number || 1;
-        window.location.href = `/t/${slug}/${result.post.topic_id}/${postNum}`;
+        // Construct a topic-shaped object from the API response so the new
+        // post appears at the top of the feed instantly — no navigation needed.
+        const newTopic = {
+          id: result.post.topic_id,
+          slug: result.post.topic_slug,
+          title: result.post.topic_title || this.postTitle,
+          excerpt: result.post.excerpt || this.postText.substring(0, 280),
+          excerpt_truncated: !result.post.excerpt && this.postText.length > 280,
+          created_at: result.post.created_at || new Date().toISOString(),
+          creator: this.currentUser,
+          posters: [{ extras: "latest", user: this.currentUser }],
+          category_id: categoryId,
+          like_count: 0,
+          op_like_count: 0,
+          op_liked: false,
+          op_can_like: false,
+          views: 0,
+          posts_count: 1,
+          first_post_id: result.post.id,
+          image_url: null,
+          image_urls: [],
+        };
+        this.fantribeFeedState.prependTopic(newTopic);
       }
+
+      this.fantribeCreate.closeCreatePostModal();
     } catch (error) {
       popupAjaxError(error);
     } finally {
@@ -295,59 +314,51 @@ export default class FtCreatePostModal extends Component {
           </div>
         </div>
 
-        {{! Tribe selector dropdown }}
+        {{! Tribe selector — full-width inline expand }}
         {{#if this.hasTribeOptions}}
-          <div class="ft-modal__tribe-dropdown-wrap">
-            <span class="ft-modal__tribe-dropdown-label">
-              {{icon "paper-plane"}}
-              <span>Posting to</span>
-            </span>
-            <div class="ft-modal__tribe-dropdown">
+          <div class="ft-modal__tribe-section">
+            <label class="ft-modal__tribe-section-label">Posting to</label>
+            <div class="ft-modal__tribe-select-wrap">
               <button
                 type="button"
-                class="ft-modal__tribe-dropdown-trigger
+                class="ft-modal__tribe-select-trigger
                   {{if
                     this.isTribeDropdownOpen
-                    'ft-modal__tribe-dropdown-trigger--open'
+                    'ft-modal__tribe-select-trigger--open'
                   }}"
                 {{on "click" this.toggleTribeDropdown}}
               >
                 <span
-                  class="ft-modal__tribe-dropdown-dot"
+                  class="ft-modal__tribe-select-dot"
                   style={{this.selectedTribeDotStyle}}
                 ></span>
                 <span
-                  class="ft-modal__tribe-dropdown-value"
+                  class="ft-modal__tribe-select-value"
                 >{{this.selectedTribeLabel}}</span>
-                <span class="ft-modal__tribe-dropdown-chevron">
+                <span class="ft-modal__tribe-select-chevron">
                   {{icon "chevron-down"}}
                 </span>
               </button>
 
               {{#if this.isTribeDropdownOpen}}
-                {{! template-lint-disable no-invalid-interactive }}
-                <div
-                  class="ft-modal__tribe-dropdown-backdrop"
-                  {{on "click" this.closeTribeDropdown}}
-                ></div>
-                <div class="ft-modal__tribe-dropdown-menu">
+                <div class="ft-modal__tribe-select-options">
                   <button
                     type="button"
-                    class="ft-modal__tribe-dropdown-item
+                    class="ft-modal__tribe-select-option
                       {{unless
                         this.localCategory
-                        'ft-modal__tribe-dropdown-item--active'
+                        'ft-modal__tribe-select-option--active'
                       }}"
                     {{on "click" (fn this.selectTribeFromDropdown null)}}
                   >
-                    <span class="ft-modal__tribe-dropdown-item-icon">
+                    <span class="ft-modal__tribe-select-option-icon">
                       {{icon "globe"}}
                     </span>
                     <span
-                      class="ft-modal__tribe-dropdown-item-name"
+                      class="ft-modal__tribe-select-option-name"
                     >General</span>
                     {{#unless this.localCategory}}
-                      <span class="ft-modal__tribe-dropdown-item-check">
+                      <span class="ft-modal__tribe-select-check">
                         {{icon "check"}}
                       </span>
                     {{/unless}}
@@ -355,22 +366,22 @@ export default class FtCreatePostModal extends Component {
                   {{#each this.joinedTribes as |tribe|}}
                     <button
                       type="button"
-                      class="ft-modal__tribe-dropdown-item
+                      class="ft-modal__tribe-select-option
                         {{if
                           (eq this.localCategory.id tribe.id)
-                          'ft-modal__tribe-dropdown-item--active'
+                          'ft-modal__tribe-select-option--active'
                         }}"
                       {{on "click" (fn this.selectTribeFromDropdown tribe)}}
                     >
                       <span
-                        class="ft-modal__tribe-dropdown-item-dot"
+                        class="ft-modal__tribe-select-option-dot"
                         style={{this.tribeDotStyle tribe}}
                       ></span>
                       <span
-                        class="ft-modal__tribe-dropdown-item-name"
+                        class="ft-modal__tribe-select-option-name"
                       >{{tribe.name}}</span>
                       {{#if (eq this.localCategory.id tribe.id)}}
-                        <span class="ft-modal__tribe-dropdown-item-check">
+                        <span class="ft-modal__tribe-select-check">
                           {{icon "check"}}
                         </span>
                       {{/if}}

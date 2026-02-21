@@ -81,181 +81,170 @@ body.fantribe-theme:not(.admin-interface) {
     }
 
     // ==========================================
-    // TRIBE DROPDOWN — "Posting to" selector
+    // TRIBE SELECTOR — "Posting to" full-width
     // ==========================================
-    &__tribe-dropdown-wrap {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 10px 24px;
+    &__tribe-section {
+      padding: 12px 24px 14px;
       border-bottom: 1px solid var(--ft-slate-100, #f1f5f9);
     }
 
-    &__tribe-dropdown-label {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      font-size: 0.75rem;
-      font-weight: var(--ft-font-weight-medium);
+    &__tribe-section-label {
+      display: block;
+      font-size: 11px;
+      font-weight: var(--ft-font-weight-semibold);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
       color: var(--ft-slate-400);
-      white-space: nowrap;
-      flex-shrink: 0;
-
-      .d-icon {
-        width: 11px;
-        height: 11px;
-      }
+      margin-bottom: 8px;
     }
 
-    &__tribe-dropdown {
+    &__tribe-select-wrap {
       position: relative;
     }
 
-    &__tribe-dropdown-trigger {
-      display: inline-flex;
+    &__tribe-select-trigger {
+      display: flex;
       align-items: center;
-      gap: 6px;
-      padding: 5px 10px 5px 8px;
-      border-radius: 10px;
+      gap: 10px;
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 12px;
       border: 1.5px solid var(--ft-slate-200, #e2e8f0);
       background: var(--ft-slate-50, #f8fafc);
       color: var(--ft-slate-700, #374151);
-      font-size: 0.8125rem;
+      font-size: 14px;
       font-weight: var(--ft-font-weight-semibold);
       cursor: pointer;
+      text-align: left;
       transition:
         border-color 150ms ease,
-        background 150ms ease,
-        box-shadow 150ms ease;
+        background 150ms ease;
 
       &:hover,
       &--open {
         border-color: var(--ft-dark, #1a1d23);
         background: var(--ft-white, #fff);
-        box-shadow: 0 2px 6px rgb(0 0 0 / 8%);
       }
     }
 
-    &__tribe-dropdown-dot {
-      width: 9px;
-      height: 9px;
+    &__tribe-select-dot {
+      width: 10px;
+      height: 10px;
       border-radius: 50%;
       flex-shrink: 0;
     }
 
-    &__tribe-dropdown-value {
-      max-width: 140px;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-
-    &__tribe-dropdown-chevron {
-      display: flex;
-      align-items: center;
-      color: var(--ft-slate-400);
-      transition: transform 200ms ease;
-      margin-left: 2px;
-
-      .d-icon {
-        width: 11px;
-        height: 11px;
-      }
-
-      .ft-modal__tribe-dropdown-trigger--open & {
-        transform: rotate(180deg);
-      }
-    }
-
-    &__tribe-dropdown-backdrop {
-      position: fixed;
-      inset: 0;
-      z-index: 5;
-    }
-
-    &__tribe-dropdown-menu {
-      position: absolute;
-      top: calc(100% + 6px);
-      left: 0;
-      min-width: 200px;
-      background: var(--ft-white, #fff);
-      border: 1px solid var(--ft-slate-200, #e2e8f0);
-      border-radius: 14px;
-      box-shadow:
-        0 8px 24px rgb(0 0 0 / 12%),
-        0 2px 8px rgb(0 0 0 / 6%);
-      z-index: 10;
-      overflow: hidden;
-      padding: 4px;
-    }
-
-    &__tribe-dropdown-item {
-      display: flex;
-      align-items: center;
-      gap: 9px;
-      width: 100%;
-      padding: 9px 10px;
-      border: none;
-      border-radius: 10px;
-      background: transparent;
-      color: var(--ft-slate-700, #374151);
-      font-size: 0.8125rem;
-      font-weight: var(--ft-font-weight-medium);
-      cursor: pointer;
-      transition: background 120ms ease;
-      text-align: left;
-
-      &:hover {
-        background: var(--ft-slate-50, #f8fafc);
-      }
-
-      &--active {
-        background: rgb(26 29 35 / 5%);
-        color: var(--ft-dark, #1a1d23);
-        font-weight: var(--ft-font-weight-semibold);
-      }
-    }
-
-    &__tribe-dropdown-item-icon {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 22px;
-      height: 22px;
-      border-radius: 6px;
-      background: var(--ft-slate-100, #f1f5f9);
-      flex-shrink: 0;
-
-      .d-icon {
-        width: 12px;
-        height: 12px;
-        color: var(--ft-slate-500);
-      }
-    }
-
-    &__tribe-dropdown-item-dot {
-      width: 22px;
-      height: 22px;
-      border-radius: 6px;
-      flex-shrink: 0;
-    }
-
-    &__tribe-dropdown-item-name {
+    &__tribe-select-value {
       flex: 1;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
     }
 
-    &__tribe-dropdown-item-check {
+    &__tribe-select-chevron {
+      display: flex;
+      align-items: center;
+      color: var(--ft-slate-400);
+      transition: transform 200ms ease;
+      margin-left: auto;
+
+      .d-icon {
+        width: 14px;
+        height: 14px;
+      }
+
+      .ft-modal__tribe-select-trigger--open & {
+        transform: rotate(180deg);
+      }
+    }
+
+    // Floating options list — absolutely positioned so it overlays content below
+    // without pushing other elements down
+    &__tribe-select-options {
+      position: absolute;
+      top: calc(100% + 6px);
+      left: 0;
+      right: 0;
+      z-index: 20;
+      border: 1.5px solid var(--ft-slate-200, #e2e8f0);
+      border-radius: 12px;
+      overflow: hidden;
+      background: var(--ft-white, #fff);
+      box-shadow:
+        0 8px 24px rgb(0 0 0 / 10%),
+        0 2px 8px rgb(0 0 0 / 6%);
+    }
+
+    &__tribe-select-option {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+      padding: 12px 14px;
+      border: none;
+      background: transparent;
+      color: var(--ft-slate-700, #374151);
+      font-size: 13px;
+      font-weight: var(--ft-font-weight-medium);
+      cursor: pointer;
+      text-align: left;
+      transition: background 120ms ease;
+
+      &:not(:last-child) {
+        border-bottom: 1px solid var(--ft-slate-100, #f1f5f9);
+      }
+
+      &:hover {
+        background: var(--ft-slate-50, #f8fafc);
+      }
+
+      &--active {
+        background: rgb(26 29 35 / 4%);
+        color: var(--ft-dark, #1a1d23);
+        font-weight: var(--ft-font-weight-semibold);
+      }
+    }
+
+    &__tribe-select-option-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 26px;
+      height: 26px;
+      border-radius: 8px;
+      background: var(--ft-slate-100, #f1f5f9);
+      flex-shrink: 0;
+
+      .d-icon {
+        width: 13px;
+        height: 13px;
+        color: var(--ft-slate-500);
+      }
+    }
+
+    &__tribe-select-option-dot {
+      width: 26px;
+      height: 26px;
+      border-radius: 8px;
+      flex-shrink: 0;
+    }
+
+    &__tribe-select-option-name {
+      flex: 1;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    &__tribe-select-check {
       display: flex;
       align-items: center;
       color: var(--ft-dark, #1a1d23);
       margin-left: auto;
 
       .d-icon {
-        width: 13px;
-        height: 13px;
+        width: 14px;
+        height: 14px;
       }
     }
 
