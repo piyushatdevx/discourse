@@ -16,6 +16,7 @@ const MAX_CHARS = 2000;
 
 export default class FtCreatePostModal extends Component {
   @service currentUser;
+  @service router;
   @service siteSettings;
   @service site;
   @service fantribeCreate;
@@ -270,6 +271,9 @@ export default class FtCreatePostModal extends Component {
       }
 
       this.fantribeCreate.closeCreatePostModal();
+      // Refresh the route model so the new post appears in the real topic list.
+      // Fire-and-forget — the pending topic above shows instantly while this loads.
+      this.router.refresh();
     } catch (error) {
       popupAjaxError(error);
     } finally {
