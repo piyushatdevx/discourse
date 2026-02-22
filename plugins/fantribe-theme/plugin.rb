@@ -74,6 +74,8 @@ register_svg_icon "calendar"
 register_svg_icon "circle-xmark"
 register_svg_icon "circle-check"
 register_svg_icon "arrow-right-to-bracket"
+register_svg_icon "location-dot"
+register_svg_icon "zap"
 
 # Common styles (all viewports)
 register_asset "stylesheets/common/design-tokens.scss"
@@ -119,6 +121,7 @@ register_asset "stylesheets/common/components/create-post-modal.scss"
 register_asset "stylesheets/common/components/engagement-bar.scss"
 register_asset "stylesheets/common/components/tribe-header.scss"
 register_asset "stylesheets/common/components/tribe-page.scss"
+register_asset "stylesheets/common/components/user-profile.scss"
 
 # Discourse overrides - MUST load last
 register_asset "stylesheets/common/fantribe-overrides.scss"
@@ -267,6 +270,29 @@ after_initialize do
     SiteSetting.respond_to?(:discourse_reactions_enabled) &&
       SiteSetting.discourse_reactions_enabled && object.first_post.present?
   end
+
+  # Expose the number of categories (Tribes) a user is actively watching.
+  # Using notification_level >= watching means only categories the user
+  # deliberately joined — not ones they were auto-added to.
+  # Cached at the HTTP layer; cheap single-table lookup with an index on
+  # (user_id, category_id, notification_level).
+  add_to_serializer(:user_card, :ft_tribe_count) do
+    return 0 unless SiteSetting.fantribe_theme_enabled
+    CategoryUser
+      .where(user_id: object.id)
+      .where("notification_level >= ?", CategoryUser.notification_levels[:watching])
+      .count
+  rescue StandardError
+    0
+  end
+
+  add_to_serializer(:user_card, :include_ft_tribe_count?) { SiteSetting.fantribe_theme_enabled }
+
+  # Expose user's post count directly on user_card (already in UserSerializer
+  # via staff_attributes :post_count, but we need it publicly available).
+  add_to_serializer(:user_card, :ft_post_count) { object.post_count }
+
+  add_to_serializer(:user_card, :include_ft_post_count?) { SiteSetting.fantribe_theme_enabled }
 
   # Override SiteIconManager to use custom favicon and OG image
   module ::SiteIconManager

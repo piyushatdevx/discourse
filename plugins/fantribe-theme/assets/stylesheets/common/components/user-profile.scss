@@ -1,0 +1,479 @@
+// ============================================================
+// FanTribe User Profile Page
+// Rendered via the `above-user-profile` outlet connector.
+// Scoped to body.fantribe-theme to avoid touching Discourse's
+// native profile on other Discourse instances.
+// ============================================================
+
+// ── Design tokens ──────────────────────────────────────────
+// (All --ft-* tokens come from design-tokens.scss)
+
+// Tier ring gradients — these match the FanTribe verification
+// ring system from the feed card avatar spec.
+$tier-bronze: linear-gradient(135deg, #cd7f32, #e6993d);
+$tier-silver: linear-gradient(135deg, #c0c0c0, #a8a6a3);
+$tier-gold: linear-gradient(135deg, #ffd700, #ffb84d);
+$tier-platinum: linear-gradient(135deg, #b197fc, #0080ff);
+
+// ── Hide Discourse's native profile header ─────────────────
+// We replace it wholesale with our FanTribe header injected
+// via the above-user-profile outlet. Discourse's tab nav
+// (UserNav) and content ({{outlet}}) remain intact.
+body.fantribe-theme:not(.admin-interface) {
+  // Hide native profile header sections only — keep the nav tabs
+  .user-main .about {
+    display: none;
+  }
+
+  // ── Cover image ──────────────────────────────────────────
+  .ft-profile {
+    margin-bottom: 0;
+  }
+
+  .ft-profile__cover {
+    position: relative;
+    height: 260px;
+    overflow: hidden;
+
+    &--gradient {
+      background: linear-gradient(
+        135deg,
+        var(--ft-vibrant-red) 0%,
+        var(--ft-purple) 60%,
+        var(--ft-electric-blue) 100%
+      );
+    }
+
+    &--has-image {
+      background-size: cover;
+      background-position: center;
+    }
+  }
+
+  .ft-profile__cover-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to bottom,
+      rgb(0 0 0 / 0.1) 0%,
+      rgb(0 0 0 / 0.35) 100%
+    );
+  }
+
+  .ft-profile__cover-actions {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    display: flex;
+    gap: 10px;
+  }
+
+  .ft-profile__cover-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgb(255 255 255 / 0.2);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgb(255 255 255 / 0.3);
+    color: #fff;
+    cursor: pointer;
+    transition: background 200ms;
+    text-decoration: none;
+
+    &:hover {
+      background: rgb(255 255 255 / 0.3);
+    }
+
+    svg,
+    .d-icon {
+      width: 18px;
+      height: 18px;
+    }
+  }
+
+  // ── Profile card ─────────────────────────────────────────
+  .ft-profile__card {
+    background: #fff;
+    border: 1px solid var(--ft-slate-200);
+    border-radius: 24px;
+    box-shadow: 0 20px 40px -8px rgb(0 0 0 / 0.1);
+    margin: -80px 24px 0;
+    padding: 28px;
+    position: relative;
+    z-index: 10;
+
+    @media (width<=768px) {
+      margin: -60px 12px 0;
+      padding: 20px;
+    }
+  }
+
+  .ft-profile__card-inner {
+    display: flex;
+    gap: 24px;
+    align-items: flex-start;
+
+    @media (width<= 640px) {
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+  }
+
+  // ── Avatar + tier ring ────────────────────────────────────
+  .ft-profile__avatar-wrap {
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .ft-profile__avatar-ring {
+    padding: 3px;
+    border-radius: 50%;
+    background: var(--ft-slate-200); // default: no tier
+
+    &--bronze {
+      background: #{$tier-bronze};
+    }
+
+    &--silver {
+      background: #{$tier-silver};
+    }
+
+    &--gold {
+      background: #{$tier-gold};
+      box-shadow: 0 0 20px rgb(255 215 0 / 0.4);
+    }
+
+    &--platinum {
+      background: #{$tier-platinum};
+      box-shadow: 0 0 20px rgb(177 151 252 / 0.4);
+    }
+
+    // Wrap the Discourse avatar img inside the ring
+    img,
+    .avatar {
+      width: 112px;
+      height: 112px;
+      border-radius: 50%;
+      display: block;
+      border: 3px solid #fff;
+
+      @media (width<=640px) {
+        width: 88px;
+        height: 88px;
+      }
+    }
+  }
+
+  .ft-profile__tier-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 12px;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+
+    svg,
+    .d-icon {
+      width: 12px;
+      height: 12px;
+    }
+
+    &--bronze {
+      background: #f5e6d3;
+      color: #7a4a1a;
+      border: 1px solid #cd7f32;
+    }
+
+    &--silver {
+      background: var(--ft-slate-100);
+      color: var(--ft-slate-600);
+      border: 1px solid var(--ft-slate-300);
+    }
+
+    &--gold {
+      background: linear-gradient(135deg, #ffd700, #ffb84d);
+      color: #7a4a00;
+    }
+
+    &--platinum {
+      background: linear-gradient(135deg, #b197fc, #0080ff);
+      color: #fff;
+    }
+  }
+
+  // ── Profile info ─────────────────────────────────────────
+  .ft-profile__info {
+    flex: 1;
+    min-width: 0; // prevent overflow
+  }
+
+  .ft-profile__name-row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+  }
+
+  .ft-profile__name {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--ft-slate-900);
+    margin: 0 0 4px;
+    line-height: 1.2;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .ft-profile__title-badge {
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 2px 10px;
+    border-radius: 9999px;
+    background: var(--gradient-action);
+    color: #fff;
+  }
+
+  .ft-profile__handle {
+    font-size: 1rem;
+    color: var(--ft-slate-500);
+    margin: 0;
+  }
+
+  // ── Follow / Edit buttons ─────────────────────────────────
+  .ft-profile__follow-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 24px;
+    border-radius: 9999px;
+    font-size: 0.9375rem;
+    font-weight: 700;
+    border: none;
+    cursor: pointer;
+    transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
+    white-space: nowrap;
+    background: var(--gradient-action);
+    color: #fff;
+    box-shadow: 0 4px 12px rgb(255 23 68 / 0.3);
+
+    svg,
+    .d-icon {
+      width: 16px;
+      height: 16px;
+    }
+
+    &:hover:not(:disabled) {
+      box-shadow: 0 8px 20px rgb(255 23 68 / 0.4);
+      transform: translateY(-1px);
+    }
+
+    &--following {
+      background: var(--ft-slate-100);
+      color: var(--ft-slate-700);
+      box-shadow: none;
+      border: 1px solid var(--ft-slate-200);
+
+      &:hover:not(:disabled) {
+        background: var(--ft-slate-200);
+        box-shadow: none;
+        transform: none;
+      }
+    }
+
+    &--loading {
+      opacity: 0.7;
+      cursor: not-allowed;
+    }
+  }
+
+  .ft-profile__edit-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 24px;
+    border-radius: 9999px;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    background: var(--ft-slate-100);
+    color: var(--ft-slate-700);
+    border: 1px solid var(--ft-slate-200);
+    text-decoration: none;
+    transition: all 200ms;
+    white-space: nowrap;
+
+    svg,
+    .d-icon {
+      width: 16px;
+      height: 16px;
+    }
+
+    &:hover {
+      background: var(--ft-slate-200);
+    }
+  }
+
+  // ── Bio ───────────────────────────────────────────────────
+  .ft-profile__bio {
+    font-size: 0.9375rem;
+    line-height: 1.65;
+    color: var(--ft-slate-700);
+    margin: 0 0 12px;
+  }
+
+  // ── Meta row ─────────────────────────────────────────────
+  .ft-profile__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    align-items: center;
+  }
+
+  .ft-profile__meta-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.875rem;
+    color: var(--ft-slate-500);
+
+    svg,
+    .d-icon {
+      width: 14px;
+      height: 14px;
+      flex-shrink: 0;
+    }
+
+    &--link {
+      color: var(--ft-electric-blue);
+      text-decoration: none;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+
+  // ── Stats row ─────────────────────────────────────────────
+  .ft-profile__stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    margin-top: 24px;
+    padding-top: 24px;
+    border-top: 1px solid var(--ft-slate-200);
+
+    @media (width<= 480px) {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+  }
+
+  .ft-profile__stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 0 8px;
+
+    &--divider {
+      border-left: 1px solid var(--ft-slate-200);
+    }
+
+    @media (width<= 480px) {
+      &--divider:nth-child(odd) {
+        border-left: none;
+      }
+    }
+  }
+
+  .ft-profile__stat-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--ft-slate-900);
+    line-height: 1.2;
+  }
+
+  .ft-profile__stat-label {
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: var(--ft-slate-500);
+    margin-top: 2px;
+  }
+
+  // ── Posts tab content ─────────────────────────────────────
+  .ft-user-posts {
+    padding: 16px 0;
+  }
+
+  .ft-user-posts__feed {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .ft-user-posts__empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 64px 24px;
+    color: var(--ft-slate-400);
+    gap: 12px;
+    text-align: center;
+
+    svg,
+    .d-icon {
+      width: 40px;
+      height: 40px;
+      opacity: 0.4;
+    }
+
+    p {
+      font-size: 1rem;
+      margin: 0;
+    }
+  }
+
+  // ── FanTribe user nav tab ──────────────────────────────────
+  // Style the connector-injected nav items to match the native tabs
+  .ft-user-nav__tab {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    border-radius: 8px;
+    color: var(--ft-slate-600);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.9375rem;
+    transition: all 200ms;
+
+    svg,
+    .d-icon {
+      width: 16px;
+      height: 16px;
+    }
+
+    &:hover {
+      color: var(--ft-slate-900);
+      background: var(--ft-slate-50);
+    }
+
+    &.active {
+      color: var(--ft-vibrant-red);
+      font-weight: 600;
+    }
+  }
+}
