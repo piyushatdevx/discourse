@@ -6,11 +6,11 @@ import { service } from "@ember/service";
 import { htmlSafe } from "@ember/template";
 import DecoratedHtml from "discourse/components/decorated-html";
 import avatar from "discourse/helpers/avatar";
-import icon from "discourse/helpers/d-icon";
 import formatDate from "discourse/helpers/format-date";
 import { ajax } from "discourse/lib/ajax";
 import { or } from "discourse/truth-helpers";
 import { i18n } from "discourse-i18n";
+import ftIcon from "../helpers/ft-icon";
 import FantribeEngagementBar from "./fantribe-engagement-bar";
 import FantribeMediaPhotoGrid from "./fantribe-media-photo-grid";
 import FantribeMediaSingleImage from "./fantribe-media-single-image";
@@ -237,7 +237,7 @@ export default class FantribeFeedCard extends Component {
                 class="fantribe-feed-card__more-btn"
                 {{on "click" this.toggleMenu}}
               >
-                {{icon "ellipsis"}}
+                {{ftIcon "more-horizontal"}}
               </button>
 
               <FantribePostMenu

@@ -1,7 +1,7 @@
 import Component from "@glimmer/component";
 import { on } from "@ember/modifier";
 import { action } from "@ember/object";
-import icon from "discourse/helpers/d-icon";
+import ftIcon from "../helpers/ft-icon";
 // import FantribeAvatar from "./fantribe-avatar";
 
 export default class FantribeRightSidebar extends Component {
@@ -66,7 +66,7 @@ export default class FantribeRightSidebar extends Component {
       {{! Trending Tribes Widget }}
       <div class="fantribe-right-sidebar__widget">
         <div class="fantribe-right-sidebar__widget-header">
-          {{icon "arrow-trend-up"}}
+          {{ftIcon "trending-up"}}
           <h3>Trending Tribes</h3>
         </div>
 
@@ -83,13 +83,13 @@ export default class FantribeRightSidebar extends Component {
                   {{/if}}
                 </div>
                 <div class="fantribe-right-sidebar__tribe-meta">
-                  {{icon "users"}}
+                  {{ftIcon "users"}}
                   <span>{{tribe.members}} members</span>
                   <span>·</span>
                   <span>{{tribe.category}}</span>
                 </div>
               </div>
-              {{icon "chevron-right"}}
+              {{ftIcon "chevron-right"}}
             </button>
           {{/each}}
         </div>
@@ -109,7 +109,7 @@ export default class FantribeRightSidebar extends Component {
       {{!-- <div class="fantribe-right-sidebar__widget">
         <div class="fantribe-right-sidebar__widget-header">
           <div class="fantribe-right-sidebar__live-icon-wrapper">
-            {{icon "broadcast-tower"}}
+            {{ftIcon "broadcast-tower"}}
             <span class="fantribe-right-sidebar__live-ping"></span>
             <span class="fantribe-right-sidebar__live-dot"></span>
           </div>
@@ -138,7 +138,7 @@ export default class FantribeRightSidebar extends Component {
                 <p>{{stream.title}}</p>
                 <div class="fantribe-right-sidebar__stream-viewers">
                   <div class="fantribe-right-sidebar__live-badge">
-                    {{icon "play"}}
+                    {{ftIcon "play"}}
                     <span>LIVE</span>
                   </div>
                   <span>{{stream.viewers}} watching</span>

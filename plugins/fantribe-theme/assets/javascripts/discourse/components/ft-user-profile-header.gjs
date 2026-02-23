@@ -11,6 +11,7 @@ import icon from "discourse/helpers/d-icon";
 import formatDate from "discourse/helpers/format-date";
 import { ajax } from "discourse/lib/ajax";
 import { popupAjaxError } from "discourse/lib/ajax-error";
+import ftIcon from "../helpers/ft-icon";
 
 // Maps Discourse trust level → FanTribe tier identity.
 // TL0 (new) has no ring; TL1+ earn their tier.
@@ -198,7 +199,7 @@ export default class FtUserProfileHeader extends Component {
               {{on "click" this.shareProfile}}
               aria-label="Share profile"
             >
-              {{icon "share-nodes"}}
+              {{ftIcon "share2"}}
             </button>
             {{#if this.isOwnProfile}}
               <LinkTo
@@ -206,7 +207,7 @@ export default class FtUserProfileHeader extends Component {
                 @model={{@user}}
                 class="ft-profile__cover-btn"
               >
-                {{icon "gear"}}
+                {{ftIcon "settings"}}
               </LinkTo>
             {{/if}}
           </div>
@@ -231,7 +232,7 @@ export default class FtUserProfileHeader extends Component {
                 <div
                   class="ft-profile__tier-badge ft-profile__tier-badge--{{this.tier.key}}"
                 >
-                  {{icon "zap"}}
+                  {{ftIcon "zap"}}
                   {{this.tier.label}}
                 </div>
               {{/if}}
@@ -269,10 +270,10 @@ export default class FtUserProfileHeader extends Component {
                     {{on "click" this.toggleFollow}}
                   >
                     {{#if this.isFollowing}}
-                      {{icon "check"}}
+                      {{ftIcon "check"}}
                       Following
                     {{else}}
-                      {{icon "user-plus"}}
+                      {{ftIcon "user-plus"}}
                       Subscribe
                     {{/if}}
                   </button>
@@ -282,7 +283,7 @@ export default class FtUserProfileHeader extends Component {
                     @model={{@user}}
                     class="ft-profile__edit-btn"
                   >
-                    {{icon "pencil"}}
+                    {{ftIcon "edit3"}}
                     Edit Profile
                   </LinkTo>
                 {{/if}}
@@ -303,7 +304,7 @@ export default class FtUserProfileHeader extends Component {
                 {{/if}}
                 {{#if this.joinedDate}}
                   <span class="ft-profile__meta-item">
-                    {{icon "calendar"}}
+                    {{ftIcon "calendar"}}
                     Joined
                     {{formatDate this.joinedDate leaveAgo=true}}
                   </span>
@@ -315,7 +316,7 @@ export default class FtUserProfileHeader extends Component {
                     rel="nofollowugc noopener noreferrer"
                     class="ft-profile__meta-item ft-profile__meta-item--link"
                   >
-                    {{icon "link"}}
+                    {{ftIcon "link2"}}
                     {{this.websiteName}}
                   </a>
                 {{/if}}

@@ -5,10 +5,10 @@ import { on } from "@ember/modifier";
 import { action } from "@ember/object";
 import { service } from "@ember/service";
 import { htmlSafe } from "@ember/template";
-import icon from "discourse/helpers/d-icon";
 import { ajax } from "discourse/lib/ajax";
 import { popupAjaxError } from "discourse/lib/ajax-error";
 import { eq } from "discourse/truth-helpers";
+import ftIcon from "discourse/plugins/fantribe-theme/discourse/helpers/ft-icon";
 
 const STEP_COUNT = 3;
 
@@ -213,7 +213,7 @@ export default class FantribeCreateTribeModal extends Component {
             class="ft-create-tribe-modal__close"
             {{on "click" @onClose}}
           >
-            {{icon "xmark"}}
+            {{ftIcon "x"}}
           </button>
         </div>
 
@@ -307,7 +307,7 @@ export default class FantribeCreateTribeModal extends Component {
                     {{on "click" (fn this.selectColor color)}}
                   >
                     {{#if (eq this.selectedColor color)}}
-                      {{icon "check"}}
+                      {{ftIcon "check"}}
                     {{/if}}
                   </button>
                 {{/each}}
@@ -330,7 +330,7 @@ export default class FantribeCreateTribeModal extends Component {
                 {{on "click" (fn this.setPrivate false)}}
               >
                 <div class="ft-create-tribe-modal__visibility-icon">
-                  {{icon "globe"}}
+                  {{ftIcon "globe"}}
                 </div>
                 <div class="ft-create-tribe-modal__visibility-text">
                   <strong>Public</strong>
@@ -339,7 +339,7 @@ export default class FantribeCreateTribeModal extends Component {
                 </div>
                 {{#unless this.isPrivate}}
                   <span class="ft-create-tribe-modal__visibility-check">
-                    {{icon "circle-check"}}
+                    {{ftIcon "check-circle"}}
                   </span>
                 {{/unless}}
               </button>
@@ -354,7 +354,7 @@ export default class FantribeCreateTribeModal extends Component {
                 {{on "click" (fn this.setPrivate true)}}
               >
                 <div class="ft-create-tribe-modal__visibility-icon">
-                  {{icon "lock"}}
+                  {{ftIcon "lock"}}
                 </div>
                 <div class="ft-create-tribe-modal__visibility-text">
                   <strong>Private</strong>
@@ -363,7 +363,7 @@ export default class FantribeCreateTribeModal extends Component {
                 </div>
                 {{#if this.isPrivate}}
                   <span class="ft-create-tribe-modal__visibility-check">
-                    {{icon "circle-check"}}
+                    {{ftIcon "check-circle"}}
                   </span>
                 {{/if}}
               </button>
@@ -385,7 +385,7 @@ export default class FantribeCreateTribeModal extends Component {
               class="ft-create-tribe-modal__btn ft-create-tribe-modal__btn--ghost"
               {{on "click" this.prevStep}}
             >
-              {{icon "chevron-left"}}
+              {{ftIcon "chevron-left"}}
               Back
             </button>
           {{/if}}
@@ -401,7 +401,7 @@ export default class FantribeCreateTribeModal extends Component {
               {{#if this.isSubmitting}}
                 Creating...
               {{else}}
-                {{icon "check"}}
+                {{ftIcon "check"}}
                 Create Tribe
               {{/if}}
             </button>
@@ -417,7 +417,7 @@ export default class FantribeCreateTribeModal extends Component {
               {{on "click" this.nextStep}}
             >
               Continue
-              {{icon "chevron-right"}}
+              {{ftIcon "chevron-right"}}
             </button>
           {{/if}}
         </div>

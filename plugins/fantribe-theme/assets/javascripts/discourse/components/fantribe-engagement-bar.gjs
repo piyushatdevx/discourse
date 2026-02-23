@@ -5,10 +5,10 @@ import { on } from "@ember/modifier";
 import { action } from "@ember/object";
 import { service } from "@ember/service";
 import ShareTopicModal from "discourse/components/modal/share-topic";
-import icon from "discourse/helpers/d-icon";
 import { ajax } from "discourse/lib/ajax";
 import { extractError, popupAjaxError } from "discourse/lib/ajax-error";
 import Composer from "discourse/models/composer";
+import ftIcon from "../helpers/ft-icon";
 
 // Keys must match discourse_reactions_enabled_reactions site setting values.
 // Configure: discourse_reactions_enabled_reactions = "heart|fire|clap|musical_note"
@@ -209,7 +209,7 @@ export default class FantribeEngagementBar extends Component {
           class="fantribe-engagement__action fantribe-engagement__action--comment"
           {{on "click" this.handleComment}}
         >
-          {{icon "comment"}}
+          {{ftIcon "message-circle"}}
           {{#if this.commentCount}}
             <span>{{this.commentCount}}</span>
           {{/if}}
@@ -220,7 +220,7 @@ export default class FantribeEngagementBar extends Component {
           class="fantribe-engagement__action fantribe-engagement__action--share"
           {{on "click" this.handleShare}}
         >
-          {{icon "share-nodes"}}
+          {{ftIcon "share2"}}
           <span>Share</span>
         </button>
 
@@ -231,9 +231,9 @@ export default class FantribeEngagementBar extends Component {
           {{on "click" this.handleBookmark}}
         >
           {{#if this.isBookmarked}}
-            {{icon "bookmark"}}
+            {{ftIcon "bookmark"}}
           {{else}}
-            {{icon "far-bookmark"}}
+            {{ftIcon "bookmark"}}
           {{/if}}
           <span>Save</span>
         </button>

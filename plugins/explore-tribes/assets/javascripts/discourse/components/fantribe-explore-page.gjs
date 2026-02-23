@@ -5,8 +5,8 @@ import { on } from "@ember/modifier";
 import { action } from "@ember/object";
 import didInsert from "@ember/render-modifiers/modifiers/did-insert";
 import { service } from "@ember/service";
-import icon from "discourse/helpers/d-icon";
 import { eq } from "discourse/truth-helpers";
+import ftIcon from "discourse/plugins/fantribe-theme/discourse/helpers/ft-icon";
 import FantribeCreateTribeModal from "./fantribe-create-tribe-modal";
 import FantribeTribeCard from "./fantribe-tribe-card";
 
@@ -137,7 +137,7 @@ export default class FantribeExplorePage extends Component {
               {{if (eq this.activeTab 'explore') 'ft-explore-tab--active'}}"
             {{on "click" (fn this.switchTab "explore")}}
           >
-            {{icon "compass"}}
+            {{ftIcon "compass"}}
             <span>Explore Tribes</span>
           </button>
           <button
@@ -146,7 +146,7 @@ export default class FantribeExplorePage extends Component {
               {{if (eq this.activeTab 'my-tribes') 'ft-explore-tab--active'}}"
             {{on "click" (fn this.switchTab "my-tribes")}}
           >
-            {{icon "users"}}
+            {{ftIcon "users"}}
             <span>My Tribes</span>
             {{#if this.hasJoinedTribes}}
               <span
@@ -171,7 +171,7 @@ export default class FantribeExplorePage extends Component {
                 class="ft-explore-create-btn"
                 {{on "click" this.openCreateTribe}}
               >
-                {{icon "plus"}}
+                {{ftIcon "plus"}}
                 <span>Create Tribe</span>
               </button>
             {{/if}}
@@ -185,7 +185,7 @@ export default class FantribeExplorePage extends Component {
                 type="button"
                 {{on "click" this.toggleFilter}}
               >
-                {{icon "sliders"}}
+                {{ftIcon "sliders-horizontal"}}
                 <span>Filter: {{this.activeFilter}}</span>
                 <span
                   class="ft-filter-dropdown__chevron
@@ -194,7 +194,7 @@ export default class FantribeExplorePage extends Component {
                       'ft-filter-dropdown__chevron--open'
                     }}"
                 >
-                  {{icon "chevron-down"}}
+                  {{ftIcon "chevron-down"}}
                 </span>
               </button>
 
@@ -218,7 +218,7 @@ export default class FantribeExplorePage extends Component {
                     >
                       <span>{{filter}}</span>
                       {{#if (this.isActiveFilter filter)}}
-                        {{icon "check"}}
+                        {{ftIcon "check"}}
                       {{/if}}
                     </button>
                   {{/each}}
@@ -286,7 +286,7 @@ export default class FantribeExplorePage extends Component {
                   style="margin-top: 16px;"
                   {{on "click" (fn this.switchTab "explore")}}
                 >
-                  {{icon "compass"}}
+                  {{ftIcon "compass"}}
                   <span>Explore Tribes</span>
                 </button>
               </div>

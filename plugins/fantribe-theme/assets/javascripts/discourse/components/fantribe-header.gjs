@@ -4,8 +4,8 @@ import { hash } from "@ember/helper";
 import { on } from "@ember/modifier";
 import { action } from "@ember/object";
 import { service } from "@ember/service";
-import icon from "discourse/helpers/d-icon";
 import closeOnClickOutside from "discourse/modifiers/close-on-click-outside";
+import ftIcon from "../helpers/ft-icon";
 import FtCreateMenu from "./ft-create-menu";
 import FtCreatePostModal from "./ft-create-post-modal";
 
@@ -81,7 +81,7 @@ export default class FantribeHeader extends Component {
             type="button"
             {{on "click" @onToggleSidebar}}
           >
-            {{icon "bars"}}
+            {{ftIcon "menu"}}
           </button>
 
           <button
@@ -100,7 +100,7 @@ export default class FantribeHeader extends Component {
         {{! Center Search Bar }}
         <div class="fantribe-header__search" role="search">
           <span class="fantribe-header__search-icon">
-            {{icon "magnifying-glass"}}
+            {{ftIcon "search"}}
           </span>
           <input
             type="text"
@@ -120,7 +120,7 @@ export default class FantribeHeader extends Component {
               class="fantribe-header__create-btn"
               {{on "click" this.fantribeCreate.toggleCreateMenu}}
             >
-              {{icon "plus"}}
+              {{ftIcon "plus"}}
               <span>Create</span>
             </button>
 
@@ -139,7 +139,7 @@ export default class FantribeHeader extends Component {
                 type="button"
                 {{on "click" this.toggleMobileMenu}}
               >
-                {{icon "bars"}}
+                {{ftIcon "menu"}}
               </button>
 
               {{#if this.mobileMenuOpen}}

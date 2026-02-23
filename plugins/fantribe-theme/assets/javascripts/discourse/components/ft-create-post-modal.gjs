@@ -6,11 +6,11 @@ import { action } from "@ember/object";
 import { service } from "@ember/service";
 import { htmlSafe } from "@ember/template";
 import avatar from "discourse/helpers/avatar";
-import icon from "discourse/helpers/d-icon";
 import { ajax } from "discourse/lib/ajax";
 import { popupAjaxError } from "discourse/lib/ajax-error";
 import { getUploadMarkdown } from "discourse/lib/uploads";
 import { eq } from "discourse/truth-helpers";
+import ftIcon from "../helpers/ft-icon";
 
 const MAX_CHARS = 2000;
 
@@ -299,7 +299,7 @@ export default class FtCreatePostModal extends Component {
             class="ft-modal__close-btn"
             {{on "click" this.fantribeCreate.closeCreatePostModal}}
           >
-            {{icon "xmark"}}
+            {{ftIcon "x"}}
           </button>
         </div>
 
@@ -340,7 +340,7 @@ export default class FtCreatePostModal extends Component {
                   class="ft-modal__tribe-select-value"
                 >{{this.selectedTribeLabel}}</span>
                 <span class="ft-modal__tribe-select-chevron">
-                  {{icon "chevron-down"}}
+                  {{ftIcon "chevron-down"}}
                 </span>
               </button>
 
@@ -356,14 +356,14 @@ export default class FtCreatePostModal extends Component {
                     {{on "click" (fn this.selectTribeFromDropdown null)}}
                   >
                     <span class="ft-modal__tribe-select-option-icon">
-                      {{icon "globe"}}
+                      {{ftIcon "globe"}}
                     </span>
                     <span
                       class="ft-modal__tribe-select-option-name"
                     >General</span>
                     {{#unless this.localCategory}}
                       <span class="ft-modal__tribe-select-check">
-                        {{icon "check"}}
+                        {{ftIcon "check"}}
                       </span>
                     {{/unless}}
                   </button>
@@ -386,7 +386,7 @@ export default class FtCreatePostModal extends Component {
                       >{{tribe.name}}</span>
                       {{#if (eq this.localCategory.id tribe.id)}}
                         <span class="ft-modal__tribe-select-check">
-                          {{icon "check"}}
+                          {{ftIcon "check"}}
                         </span>
                       {{/if}}
                     </button>
@@ -450,7 +450,7 @@ export default class FtCreatePostModal extends Component {
               disabled={{this.isUploading}}
               {{on "click" (fn this.triggerFileInput "image")}}
             >
-              {{icon "image"}}
+              {{ftIcon "image"}}
               <span>Photo</span>
             </button>
             <button
@@ -459,7 +459,7 @@ export default class FtCreatePostModal extends Component {
               disabled={{this.isUploading}}
               {{on "click" (fn this.triggerFileInput "video")}}
             >
-              {{icon "video"}}
+              {{ftIcon "video"}}
               <span>Video</span>
             </button>
             <button
@@ -468,7 +468,7 @@ export default class FtCreatePostModal extends Component {
               disabled={{this.isUploading}}
               {{on "click" (fn this.triggerFileInput "audio")}}
             >
-              {{icon "music"}}
+              {{ftIcon "music"}}
               <span>Audio</span>
             </button>
           </div>
@@ -485,11 +485,11 @@ export default class FtCreatePostModal extends Component {
                 <div class="ft-modal__uploaded-item">
                   <span class="ft-modal__uploaded-item-icon">
                     {{#if (eq media.type "image")}}
-                      {{icon "image"}}
+                      {{ftIcon "image"}}
                     {{else if (eq media.type "video")}}
-                      {{icon "video"}}
+                      {{ftIcon "video"}}
                     {{else}}
-                      {{icon "music"}}
+                      {{ftIcon "music"}}
                     {{/if}}
                   </span>
                   <span
@@ -500,7 +500,7 @@ export default class FtCreatePostModal extends Component {
                     class="ft-modal__uploaded-item-remove"
                     {{on "click" (fn this.removeMedia index)}}
                   >
-                    {{icon "xmark"}}
+                    {{ftIcon "x"}}
                   </button>
                 </div>
               {{/each}}
@@ -511,7 +511,7 @@ export default class FtCreatePostModal extends Component {
           {{#if this.showScheduler}}
             <div class="ft-modal__schedule-panel">
               <div class="ft-modal__schedule-panel-header">
-                {{icon "calendar"}}
+                {{ftIcon "calendar"}}
                 <span>Schedule Post</span>
               </div>
               <div class="ft-modal__schedule-grid">
@@ -550,7 +550,7 @@ export default class FtCreatePostModal extends Component {
                   }}"
                 {{on "click" (fn this.setVisibility "public")}}
               >
-                {{icon "globe"}}
+                {{ftIcon "globe"}}
                 <span>Public</span>
               </button>
               <button
@@ -562,7 +562,7 @@ export default class FtCreatePostModal extends Component {
                   }}"
                 {{on "click" (fn this.setVisibility "followers")}}
               >
-                {{icon "users"}}
+                {{ftIcon "users"}}
                 <span>Followers</span>
               </button>
               <button
@@ -574,7 +574,7 @@ export default class FtCreatePostModal extends Component {
                   }}"
                 {{on "click" (fn this.setVisibility "private")}}
               >
-                {{icon "lock"}}
+                {{ftIcon "lock"}}
                 <span>Private</span>
               </button>
             </div>
@@ -589,7 +589,7 @@ export default class FtCreatePostModal extends Component {
               {{if this.showScheduler 'ft-modal__schedule-toggle--active'}}"
             {{on "click" this.toggleScheduler}}
           >
-            {{icon "clock"}}
+            {{ftIcon "clock"}}
             <span>{{if
                 this.showScheduler
                 "Cancel Schedule"
@@ -610,7 +610,7 @@ export default class FtCreatePostModal extends Component {
               {{on "click" this.submitPost}}
             >
               {{#if this.showScheduler}}
-                {{icon "calendar"}}
+                {{ftIcon "calendar"}}
                 Schedule Post
               {{else}}
                 Publish Now

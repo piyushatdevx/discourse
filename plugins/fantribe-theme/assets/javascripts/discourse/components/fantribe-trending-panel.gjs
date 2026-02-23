@@ -5,8 +5,8 @@ import { on } from "@ember/modifier";
 import { action } from "@ember/object";
 import didInsert from "@ember/render-modifiers/modifiers/did-insert";
 import { service } from "@ember/service";
-import icon from "discourse/helpers/d-icon";
 import { ajax } from "discourse/lib/ajax";
+import ftIcon from "../helpers/ft-icon";
 
 export default class FantribeTrendingPanel extends Component {
   @service router;
@@ -61,7 +61,7 @@ export default class FantribeTrendingPanel extends Component {
     <div class="fantribe-trending-panel" {{didInsert this.loadGroups}}>
       <div class="fantribe-trending-panel__header">
         <h3 class="fantribe-trending-panel__title">
-          {{icon "users"}}
+          {{ftIcon "users"}}
           Trending Tribes
         </h3>
       </div>
@@ -88,7 +88,7 @@ export default class FantribeTrendingPanel extends Component {
               </div>
 
               <span class="fantribe-trending-item__indicator">
-                {{icon "chevron-right"}}
+                {{ftIcon "chevron-right"}}
               </span>
             </button>
           {{/each}}

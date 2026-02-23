@@ -9,6 +9,7 @@ import icon from "discourse/helpers/d-icon";
 import replaceEmoji from "discourse/helpers/replace-emoji";
 import { ajax } from "discourse/lib/ajax";
 import { popupAjaxError } from "discourse/lib/ajax-error";
+import ftIcon from "../helpers/ft-icon";
 import FantribeFeedCard from "./fantribe-feed-card";
 
 export default class FantribeTribePage extends Component {
@@ -182,18 +183,18 @@ export default class FantribeTribePage extends Component {
             <h1 class="ft-tribe-page__name">{{@category.name}}</h1>
             <div class="ft-tribe-page__meta">
               {{#if this.isPrivate}}
-                {{icon "lock"}}
+                {{ftIcon "lock"}}
                 <span>Private</span>
               {{else}}
-                {{icon "globe"}}
+                {{ftIcon "globe"}}
                 <span>Public</span>
               {{/if}}
               {{#if this.memberCount}}
-                {{icon "users"}}
+                {{ftIcon "users"}}
                 <span>{{this.memberCount}} members</span>
               {{/if}}
               {{#if this.postCount}}
-                {{icon "comment"}}
+                {{ftIcon "message-circle"}}
                 <span>{{this.postCount}} posts</span>
               {{/if}}
             </div>
@@ -202,7 +203,7 @@ export default class FantribeTribePage extends Component {
           <div class="ft-tribe-page__actions">
             {{#if this.isAdmin}}
               <a href={{this.editUrl}} class="ft-tribe-page__edit-btn">
-                {{icon "pencil"}}
+                {{ftIcon "edit3"}}
                 <span>Edit</span>
               </a>
             {{/if}}
@@ -216,9 +217,9 @@ export default class FantribeTribePage extends Component {
                 {{on "click" this.handleJoin}}
               >
                 {{#if this.isJoining}}
-                  {{icon "circle"}}
+                  {{ftIcon "circle"}}
                 {{else if this.isMember}}
-                  {{icon "circle-check"}}
+                  {{ftIcon "check-circle"}}
                   <span>Joined</span>
                 {{else}}
                   {{icon "arrow-right-to-bracket"}}
@@ -253,7 +254,7 @@ export default class FantribeTribePage extends Component {
             <strong>{{@category.name}}</strong>...
           </div>
           <button type="button" class="ft-tribe-page__compose-btn">
-            {{icon "paper-plane"}}
+            {{ftIcon "send"}}
             <span>Post</span>
           </button>
         </div>

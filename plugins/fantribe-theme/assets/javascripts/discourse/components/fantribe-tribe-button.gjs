@@ -4,6 +4,7 @@ import { htmlSafe } from "@ember/template";
 import icon from "discourse/helpers/d-icon";
 import replaceEmoji from "discourse/helpers/replace-emoji";
 import { eq } from "discourse/truth-helpers";
+import ftIcon from "../helpers/ft-icon";
 
 export default class FantribeTribeButton extends Component {
   get buttonClasses() {
@@ -67,7 +68,7 @@ export default class FantribeTribeButton extends Component {
         <span
           class="fantribe-tribe-button__favorite fantribe-tribe-button__favorite--filled"
         >
-          {{icon "heart"}}
+          {{ftIcon "heart"}}
         </span>
       {{/if}}
     </button>

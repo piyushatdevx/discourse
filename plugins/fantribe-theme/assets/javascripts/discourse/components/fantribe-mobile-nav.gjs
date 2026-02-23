@@ -3,6 +3,7 @@ import { on } from "@ember/modifier";
 import { action } from "@ember/object";
 import { service } from "@ember/service";
 import icon from "discourse/helpers/d-icon";
+import ftIcon from "../helpers/ft-icon";
 
 export default class FantribeMobileNav extends Component {
   @service router;
@@ -84,7 +85,7 @@ export default class FantribeMobileNav extends Component {
           type="button"
           {{on "click" this.goToFeed}}
         >
-          {{icon "house"}}
+          {{ftIcon "home"}}
           <span>Feed</span>
         </button>
 
@@ -93,7 +94,7 @@ export default class FantribeMobileNav extends Component {
           type="button"
           {{on "click" this.goToSearch}}
         >
-          {{icon "magnifying-glass"}}
+          {{ftIcon "search"}}
           <span>Search</span>
         </button>
 
@@ -102,7 +103,7 @@ export default class FantribeMobileNav extends Component {
           type="button"
           {{on "click" this.createPost}}
         >
-          {{icon "plus"}}
+          {{ftIcon "plus"}}
         </button>
 
         <button
@@ -111,7 +112,7 @@ export default class FantribeMobileNav extends Component {
           type="button"
           {{on "click" this.goToNotifications}}
         >
-          {{icon "bell"}}
+          {{ftIcon "bell"}}
           <span>Alerts</span>
         </button>
 

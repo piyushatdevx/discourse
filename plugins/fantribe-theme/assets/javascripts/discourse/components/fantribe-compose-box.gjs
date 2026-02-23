@@ -3,7 +3,7 @@ import { on } from "@ember/modifier";
 import { action } from "@ember/object";
 import { service } from "@ember/service";
 import avatar from "discourse/helpers/avatar";
-import icon from "discourse/helpers/d-icon";
+import ftIcon from "../helpers/ft-icon";
 
 export default class FantribeComposeBox extends Component {
   @service currentUser;
@@ -35,7 +35,7 @@ export default class FantribeComposeBox extends Component {
               class="fantribe-compose-box__media-btn fantribe-compose-box__media-btn--photo"
               title="Photo"
             >
-              {{icon "image"}}
+              {{ftIcon "image"}}
               <span>Photo</span>
             </button>
             <button
@@ -43,7 +43,7 @@ export default class FantribeComposeBox extends Component {
               class="fantribe-compose-box__media-btn fantribe-compose-box__media-btn--video"
               title="Video"
             >
-              {{icon "video"}}
+              {{ftIcon "video"}}
               <span>Video</span>
             </button>
             <button
@@ -51,7 +51,7 @@ export default class FantribeComposeBox extends Component {
               class="fantribe-compose-box__media-btn fantribe-compose-box__media-btn--audio"
               title="Audio"
             >
-              {{icon "headphones"}}
+              {{ftIcon "headphones"}}
               <span>Audio</span>
             </button>
           </div>

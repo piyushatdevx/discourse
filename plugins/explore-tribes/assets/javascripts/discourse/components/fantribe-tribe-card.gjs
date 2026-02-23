@@ -8,6 +8,7 @@ import icon from "discourse/helpers/d-icon";
 import replaceEmoji from "discourse/helpers/replace-emoji";
 import { ajax } from "discourse/lib/ajax";
 import { popupAjaxError } from "discourse/lib/ajax-error";
+import ftIcon from "discourse/plugins/fantribe-theme/discourse/helpers/ft-icon";
 
 export default class FantribeTribeCard extends Component {
   @service router;
@@ -197,16 +198,16 @@ export default class FantribeTribeCard extends Component {
             <div class="ft-tribe-card__meta">
               <span class="ft-tribe-card__meta-item">
                 {{#if this.isPrivate}}
-                  {{icon "lock"}}
+                  {{ftIcon "lock"}}
                   <span>Private</span>
                 {{else}}
-                  {{icon "globe"}}
+                  {{ftIcon "globe"}}
                   <span>Public</span>
                 {{/if}}
               </span>
               <span class="ft-tribe-card__meta-sep">&bull;</span>
               <span class="ft-tribe-card__meta-item">
-                {{icon "users"}}
+                {{ftIcon "users"}}
                 <span>{{if this.memberCount this.memberCount "–"}}</span>
               </span>
             </div>
@@ -243,12 +244,12 @@ export default class FantribeTribeCard extends Component {
           {{on "click" this.handleJoinClick}}
         >
           {{#if this.isJoining}}
-            {{icon "circle"}}
+            {{ftIcon "circle"}}
           {{else if this.isMember}}
-            {{icon "circle-check"}}
+            {{ftIcon "check-circle"}}
             <span>Joined</span>
           {{else}}
-            {{icon "user-plus"}}
+            {{ftIcon "user-plus"}}
             <span>Join Tribe</span>
           {{/if}}
         </button>

@@ -7,6 +7,7 @@ import { htmlSafe } from "@ember/template";
 import icon from "discourse/helpers/d-icon";
 import { ajax } from "discourse/lib/ajax";
 import { popupAjaxError } from "discourse/lib/ajax-error";
+import ftIcon from "../helpers/ft-icon";
 
 export default class FantribeTribeHeader extends Component {
   @service currentUser;
@@ -111,15 +112,15 @@ export default class FantribeTribeHeader extends Component {
             {{/if}}
             <div class="ft-tribe-header__meta">
               {{#if this.isPrivate}}
-                {{icon "lock"}}
+                {{ftIcon "lock"}}
                 <span>Private</span>
               {{else}}
-                {{icon "globe"}}
+                {{ftIcon "globe"}}
                 <span>Public</span>
               {{/if}}
               {{#if this.memberCount}}
                 <span class="ft-tribe-header__meta-sep">&bull;</span>
-                {{icon "users"}}
+                {{ftIcon "users"}}
                 <span>{{this.memberCount}} members</span>
               {{/if}}
             </div>
@@ -144,9 +145,9 @@ export default class FantribeTribeHeader extends Component {
               {{on "click" this.handleJoin}}
             >
               {{#if this.isJoining}}
-                {{icon "circle"}}
+                {{ftIcon "circle"}}
               {{else if this.isMember}}
-                {{icon "circle-check"}}
+                {{ftIcon "check-circle"}}
                 <span>Joined</span>
               {{else}}
                 {{icon "arrow-right-to-bracket"}}
