@@ -120,10 +120,9 @@ export default class FantribePostMenu extends Component {
       return;
     }
     try {
-      // Discourse uses "ignore" for user-level muting (no separate "mute" level)
       await ajax(`/u/${username}/notification_level.json`, {
         type: "PUT",
-        data: { notification_level: "ignore" },
+        data: { notification_level: "mute" },
       });
     } catch (error) {
       popupAjaxError(error);
@@ -139,9 +138,15 @@ export default class FantribePostMenu extends Component {
       return;
     }
     try {
+      // "ignore" requires an expiry date; use 100 years for a permanent block
+      const farFuture = new Date();
+      farFuture.setFullYear(farFuture.getFullYear() + 100);
       await ajax(`/u/${username}/notification_level.json`, {
         type: "PUT",
-        data: { notification_level: "ignore" },
+        data: {
+          notification_level: "ignore",
+          expiring_at: farFuture.toISOString(),
+        },
       });
     } catch (error) {
       popupAjaxError(error);

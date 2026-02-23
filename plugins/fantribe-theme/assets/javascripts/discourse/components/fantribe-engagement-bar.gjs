@@ -8,6 +8,7 @@ import ShareTopicModal from "discourse/components/modal/share-topic";
 import { ajax } from "discourse/lib/ajax";
 import { extractError, popupAjaxError } from "discourse/lib/ajax-error";
 import Composer from "discourse/models/composer";
+import { not, or } from "discourse/truth-helpers";
 import ftIcon from "../helpers/ft-icon";
 
 // Keys must match discourse_reactions_enabled_reactions site setting values.
@@ -69,7 +70,12 @@ export default class FantribeEngagementBar extends Component {
   }
 
   get canReact() {
-    return !!(this.currentUser && this.args.firstPostId);
+    // opCanLike is false when viewing your own post (Discourse prevents self-reactions)
+    return !!(
+      this.currentUser &&
+      this.args.firstPostId &&
+      this.args.opCanLike !== false
+    );
   }
 
   get isBookmarked() {
@@ -187,7 +193,7 @@ export default class FantribeEngagementBar extends Component {
           <button
             type="button"
             class="fantribe-engagement__reaction {{reaction.activeClass}}"
-            disabled={{this.isLoading}}
+            disabled={{or this.isLoading (not this.canReact)}}
             {{on "click" (fn this.toggleReaction reaction.key)}}
           >
             <span
