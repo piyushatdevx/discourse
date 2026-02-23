@@ -25,9 +25,14 @@ function initializeFantribe(api) {
   if (router && siteSettings.fantribe_theme_enabled) {
     router.on("routeDidChange", (transition) => {
       const name = transition.to?.name ?? "";
-      // Match the bare userActivity index. The full Ember route name is
-      // "user.user-activity.index" but we guard loosely for any variation.
-      if (name.includes("user-activity") && name.endsWith(".index")) {
+      // Redirect any "default" profile landing route to our Posts tab so it
+      // is always the active tab when visiting a user profile:
+      //   - user.summary  → Discourse's default landing page (/u/:username)
+      //   - userActivity.index → bare /u/:username/activity URL
+      const isProfileDefault =
+        name === "user.summary" ||
+        (name.includes("user-activity") && name.endsWith(".index"));
+      if (isProfileDefault) {
         router.replaceWith("userActivity.ftPosts");
       }
     });

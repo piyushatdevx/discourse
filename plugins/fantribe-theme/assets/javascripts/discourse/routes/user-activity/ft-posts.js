@@ -10,7 +10,22 @@ export default class UserActivityFtPostsRoute extends DiscourseRoute {
     const username = this.modelFor("user").username;
     try {
       const response = await ajax(`/topics/created-by/${username}.json`);
-      return new TrackedArray(response.topic_list?.topics || []);
+      // The topic-list API returns users in a top-level array keyed by id.
+      // Each topic's `posters` array only contains user_id references, not
+      // embedded user objects. Build a lookup map and attach user objects so
+      // the feed card can render the poster's name/avatar correctly.
+      const users = response.users || [];
+      const usersById = Object.fromEntries(users.map((u) => [u.id, u]));
+      const topics = (response.topic_list?.topics || []).map((topic) => {
+        if (topic.posters) {
+          topic.posters = topic.posters.map((p) => ({
+            ...p,
+            user: usersById[p.user_id] || p.user,
+          }));
+        }
+        return topic;
+      });
+      return new TrackedArray(topics);
     } catch {
       return new TrackedArray([]);
     }

@@ -295,29 +295,29 @@ export default class FtUserProfileHeader extends Component {
           {{! ── Stats row ── Followers | Tribes | Co-Creations }}
           <div class="ft-profile__stats">
             <div class="ft-profile__stat">
-              {{ftIcon "users" size=18}}
-              <div class="ft-profile__stat-text">
+              <div class="ft-profile__stat-top">
+                {{ftIcon "users" size=20}}
                 <span
                   class="ft-profile__stat-value"
                 >{{this.followerCount}}</span>
-                <span class="ft-profile__stat-label">Followers</span>
               </div>
+              <span class="ft-profile__stat-label">Followers</span>
             </div>
             <div class="ft-profile__stat ft-profile__stat--divider">
-              {{ftIcon "heart" size=18}}
-              <div class="ft-profile__stat-text">
+              <div class="ft-profile__stat-top">
+                {{ftIcon "heart" size=20}}
                 <span class="ft-profile__stat-value">{{this.tribeCount}}</span>
-                <span class="ft-profile__stat-label">Tribes</span>
               </div>
+              <span class="ft-profile__stat-label">Tribes</span>
             </div>
             <div class="ft-profile__stat ft-profile__stat--divider">
-              {{ftIcon "zap" size=18}}
-              <div class="ft-profile__stat-text">
+              <div class="ft-profile__stat-top">
+                {{ftIcon "zap" size=20}}
                 <span
                   class="ft-profile__stat-value"
                 >{{this.coCreationCount}}</span>
-                <span class="ft-profile__stat-label">Co-Creations</span>
               </div>
+              <span class="ft-profile__stat-label">Co-Creations</span>
             </div>
           </div>
         </div>

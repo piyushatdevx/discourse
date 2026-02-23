@@ -25,10 +25,16 @@ body.fantribe-theme:not(.admin-interface) {
   }
 
   // ── Page layout resets ───────────────────────────────────────
-  // Warm slate background so the tab card and content cards "float".
+  // Subtle gradient background so the tab card and content cards "float"
+  // (matches Figma: from-slate-50 via-white to-indigo-50/20).
   .user-main {
     padding: 0;
-    background: var(--ft-slate-50, #f8fafc);
+    background: linear-gradient(
+      135deg,
+      #f8fafc 0%,
+      #fff 50%,
+      rgb(238 242 255 / 0.3) 100%
+    );
     min-height: 100vh;
   }
 
@@ -54,11 +60,19 @@ body.fantribe-theme:not(.admin-interface) {
   // ── Tab bar — floating pill card (matches Figma) ─────────────
   // The .user-navigation-primary wrapper becomes transparent;
   // the inner nav.user-nav becomes the visible rounded card.
+  // Tabs use natural content width (no flex:1 stretch) to match
+  // the Figma inline-flex design. The wrapper handles overflow scroll.
   .user-navigation.user-navigation-primary {
     background: transparent;
     border-bottom: none;
     padding: 16px 24px 0;
     box-shadow: none;
+    overflow-x: auto;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
 
     @media (width <= 768px) {
       padding: 12px 12px 0;
@@ -74,13 +88,6 @@ body.fantribe-theme:not(.admin-interface) {
       border-radius: 16px;
       border: 1px solid var(--ft-slate-200);
       box-shadow: 0 2px 8px rgb(0 0 0 / 6%);
-      overflow-x: auto;
-      scrollbar-width: none;
-      width: 100%;
-
-      &::-webkit-scrollbar {
-        display: none;
-      }
     }
 
     li {
@@ -90,7 +97,7 @@ body.fantribe-theme:not(.admin-interface) {
 
   .ft-profile__cover {
     position: relative;
-    height: 260px;
+    height: 280px;
     overflow: hidden;
 
     &--gradient {
@@ -444,53 +451,70 @@ body.fantribe-theme:not(.admin-interface) {
 
   .ft-profile__stat {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 10px;
-    padding: 12px 8px;
-    text-align: left;
-
-    // Icon colour per stat
-    &:nth-child(1) svg {
-      color: var(--ft-electric-blue);
-    }
-
-    &:nth-child(2) svg {
-      color: var(--ft-vibrant-red);
-    }
-
-    &:nth-child(3) svg {
-      color: #7c3aed;
-    } // purple for co-creations
+    padding: 16px 8px;
+    text-align: center;
+    gap: 4px;
 
     &--divider {
       border-left: 1px solid var(--ft-slate-200);
     }
   }
 
-  .ft-profile__stat-text {
+  // Icon + value on the same row, centered (matches Figma)
+  .ft-profile__stat-top {
     display: flex;
-    flex-direction: column;
-    gap: 1px;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+
+    // Icon colour per stat
+    &:nth-child(1) svg {
+      color: var(--ft-electric-blue);
+    }
+
+    svg {
+      flex-shrink: 0;
+    }
+  }
+
+  // Stat icon colour by parent position
+  .ft-profile__stat:nth-child(1) .ft-profile__stat-top svg {
+    color: var(--ft-electric-blue);
+  }
+
+  .ft-profile__stat:nth-child(2) .ft-profile__stat-top svg {
+    color: var(--ft-vibrant-red);
+  }
+
+  .ft-profile__stat:nth-child(3) .ft-profile__stat-top svg {
+    color: #7c3aed;
   }
 
   .ft-profile__stat-value {
-    font-size: 1.375rem;
+    font-size: 1.5rem;
     font-weight: 700;
     color: var(--ft-slate-900);
     line-height: 1.2;
   }
 
   .ft-profile__stat-label {
-    font-size: 0.8rem;
+    font-size: 0.8125rem;
     font-weight: 500;
     color: var(--ft-slate-500);
   }
 
-  // ── Posts tab content ─────────────────────────────────────
+  // ── Posts / Bookmarks tab content ────────────────────────────
+  // Horizontal padding matches the profile card (24px) so cards
+  // sit flush within the same visual column as the card above.
   .ft-user-posts {
-    padding: 16px 0;
+    padding: 20px 24px 32px;
+
+    @media (width <= 768px) {
+      padding: 16px 12px 24px;
+    }
   }
 
   .ft-user-posts__feed {
@@ -528,7 +552,7 @@ body.fantribe-theme:not(.admin-interface) {
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    padding: 9px 18px;
+    padding: 9px 20px;
     border-radius: 12px;
     color: var(--ft-slate-600);
     text-decoration: none;
@@ -537,8 +561,6 @@ body.fantribe-theme:not(.admin-interface) {
     transition: all 150ms ease;
     white-space: nowrap;
     background: transparent;
-    flex: 1;
-    justify-content: center;
 
     svg,
     .ft-icon {
@@ -552,12 +574,12 @@ body.fantribe-theme:not(.admin-interface) {
       background: var(--ft-slate-100);
     }
 
-    // Active: purple → blue gradient pill — matches Figma
+    // Active: indigo → purple gradient pill — matches Figma
     &.active {
-      background: linear-gradient(135deg, #7c3aed, #0080ff);
+      background: linear-gradient(135deg, #6366f1, #7c3aed);
       color: #fff;
       font-weight: 600;
-      box-shadow: 0 2px 10px rgb(124 58 237 / 0.35);
+      box-shadow: 0 2px 10px rgb(99 102 241 / 0.35);
 
       svg,
       .ft-icon {
