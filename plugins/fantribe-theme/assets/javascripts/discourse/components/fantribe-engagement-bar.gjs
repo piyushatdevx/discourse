@@ -27,9 +27,13 @@ export default class FantribeEngagementBar extends Component {
   @service modal;
 
   @tracked isLoading = false;
+  @tracked isBookmarkLoading = false;
   // null = use server state; array = user has interacted (optimistic update)
   @tracked _localReactions = null;
-  @tracked _isBookmarked = false;
+  // null = use server state; true/false = optimistic update
+  @tracked _isBookmarked = null;
+  // Store the bookmark ID returned by POST so DELETE can reference it
+  @tracked _bookmarkId = null;
 
   get serverReactions() {
     return this.args.topic?.reactions || [];
@@ -79,7 +83,10 @@ export default class FantribeEngagementBar extends Component {
   }
 
   get isBookmarked() {
-    return this._isBookmarked || this.args.topic?.bookmarked || false;
+    if (this._isBookmarked !== null) {
+      return this._isBookmarked;
+    }
+    return this.args.topic?.bookmarked || false;
   }
 
   @action
@@ -180,9 +187,46 @@ export default class FantribeEngagementBar extends Component {
   }
 
   @action
-  handleBookmark(event) {
+  async handleBookmark(event) {
     event.stopPropagation();
-    this._isBookmarked = !this.isBookmarked;
+
+    if (!this.currentUser || this.isBookmarkLoading) {
+      return;
+    }
+
+    const wasBookmarked = this.isBookmarked;
+
+    // Optimistic update
+    this._isBookmarked = !wasBookmarked;
+    this.isBookmarkLoading = true;
+
+    try {
+      if (wasBookmarked) {
+        // Need the bookmark ID to delete — prefer cached value, fallback to
+        // the serialized bookmark_id from the topic list item.
+        const bookmarkId = this._bookmarkId || this.args.topic?.bookmark_id;
+        if (bookmarkId) {
+          await ajax(`/bookmarks/${bookmarkId}`, { type: "DELETE" });
+        }
+        this._bookmarkId = null;
+      } else {
+        const result = await ajax("/bookmarks", {
+          type: "POST",
+          data: {
+            bookmarkable_id: this.args.firstPostId,
+            bookmarkable_type: "Post",
+          },
+        });
+        // Store the ID so we can delete it later without another lookup
+        this._bookmarkId = result?.id ?? null;
+      }
+    } catch (error) {
+      // Revert optimistic update on failure
+      this._isBookmarked = wasBookmarked;
+      popupAjaxError(error);
+    } finally {
+      this.isBookmarkLoading = false;
+    }
   }
 
   <template>
@@ -234,10 +278,11 @@ export default class FantribeEngagementBar extends Component {
           type="button"
           class="fantribe-engagement__action fantribe-engagement__action--bookmark
             {{if this.isBookmarked 'fantribe-engagement__action--active'}}"
+          disabled={{this.isBookmarkLoading}}
           {{on "click" this.handleBookmark}}
         >
           {{#if this.isBookmarked}}
-            {{ftIcon "bookmark"}}
+            {{ftIcon "bookmark-fill"}}
           {{else}}
             {{ftIcon "bookmark"}}
           {{/if}}

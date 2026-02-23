@@ -17,17 +17,75 @@ $tier-platinum: linear-gradient(135deg, #b197fc, #0080ff);
 
 // ── Hide Discourse's native profile header ─────────────────
 // We replace it wholesale with our FanTribe header injected
-// via the above-user-profile outlet. Discourse's tab nav
-// (UserNav) and content ({{outlet}}) remain intact.
+// via the above-user-profile outlet.
 body.fantribe-theme:not(.admin-interface) {
-  // Hide native profile header sections only — keep the nav tabs
+  // Hide native profile header
   .user-main .about {
     display: none;
   }
 
-  // ── Cover image ──────────────────────────────────────────
-  .ft-profile {
-    margin-bottom: 0;
+  // ── Page layout resets ───────────────────────────────────────
+  // Warm slate background so the tab card and content cards "float".
+  .user-main {
+    padding: 0;
+    background: var(--ft-slate-50, #f8fafc);
+    min-height: 100vh;
+  }
+
+  .new-user-wrapper {
+    padding-top: 0;
+  }
+
+  // ── Hide ALL native secondary nav + activity content ─────────
+  // The secondary filter nav ("All | Topics | Replies | Read…") must
+  // never show. Neither should the native activity stream list.
+  .user-navigation.user-navigation-secondary {
+    display: none !important;
+  }
+
+  // Native activity stream items shown while routeDidChange redirect
+  // is in-flight or when navigating via URL to a native subroute.
+  .user-main .user-stream,
+  .user-main .user-activity-list,
+  .user-main .activity-stream {
+    display: none !important;
+  }
+
+  // ── Tab bar — floating pill card (matches Figma) ─────────────
+  // The .user-navigation-primary wrapper becomes transparent;
+  // the inner nav.user-nav becomes the visible rounded card.
+  .user-navigation.user-navigation-primary {
+    background: transparent;
+    border-bottom: none;
+    padding: 16px 24px 0;
+    box-shadow: none;
+
+    @media (width <= 768px) {
+      padding: 12px 12px 0;
+    }
+
+    nav.user-nav {
+      display: inline-flex;
+      gap: 4px;
+      padding: 6px;
+      list-style: none;
+      margin: 0;
+      background: #fff;
+      border-radius: 16px;
+      border: 1px solid var(--ft-slate-200);
+      box-shadow: 0 2px 8px rgb(0 0 0 / 6%);
+      overflow-x: auto;
+      scrollbar-width: none;
+      width: 100%;
+
+      &::-webkit-scrollbar {
+        display: none;
+      }
+    }
+
+    li {
+      display: flex;
+    }
   }
 
   .ft-profile__cover {
@@ -225,25 +283,23 @@ body.fantribe-theme:not(.admin-interface) {
     flex-wrap: wrap;
   }
 
+  // Vertical group: name (h1) + handle (p) stacked
+  .ft-profile__name-group {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
   .ft-profile__name {
     font-size: 1.75rem;
     font-weight: 700;
     color: var(--ft-slate-900);
-    margin: 0 0 4px;
+    margin: 0;
     line-height: 1.2;
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
     flex-wrap: wrap;
-  }
-
-  .ft-profile__title-badge {
-    font-size: 0.75rem;
-    font-weight: 600;
-    padding: 2px 10px;
-    border-radius: 9999px;
-    background: var(--gradient-action);
-    color: #fff;
   }
 
   .ft-profile__handle {
@@ -253,11 +309,12 @@ body.fantribe-theme:not(.admin-interface) {
   }
 
   // ── Follow / Edit buttons ─────────────────────────────────
+  // Subscribe button: purple/blue gradient (matching Figma)
   .ft-profile__follow-btn {
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    padding: 10px 24px;
+    padding: 10px 28px;
     border-radius: 9999px;
     font-size: 0.9375rem;
     font-weight: 700;
@@ -265,9 +322,13 @@ body.fantribe-theme:not(.admin-interface) {
     cursor: pointer;
     transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
     white-space: nowrap;
-    background: var(--gradient-action);
+    background: linear-gradient(
+      135deg,
+      #7c3aed,
+      #0080ff
+    ); // purple → electric blue
     color: #fff;
-    box-shadow: 0 4px 12px rgb(255 23 68 / 0.3);
+    box-shadow: 0 4px 14px rgb(124 58 237 / 0.35);
 
     svg,
     .d-icon {
@@ -365,51 +426,66 @@ body.fantribe-theme:not(.admin-interface) {
     }
   }
 
-  // ── Stats row ─────────────────────────────────────────────
+  // ── Stats row ─────────────────────────────────────────
+  // Figma: Followers | Tribes | Co-Creations
+  // Each stat is: [icon] [value bold] [label small] in a row
   .ft-profile__stats {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: 0;
     margin-top: 24px;
-    padding-top: 24px;
+    padding-top: 20px;
     border-top: 1px solid var(--ft-slate-200);
 
-    @media (width<= 480px) {
-      grid-template-columns: repeat(2, 1fr);
-      gap: 16px;
+    @media (width <= 480px) {
+      grid-template-columns: repeat(3, 1fr);
     }
   }
 
   .ft-profile__stat {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
-    text-align: center;
-    padding: 0 8px;
+    justify-content: center;
+    gap: 10px;
+    padding: 12px 8px;
+    text-align: left;
+
+    // Icon colour per stat
+    &:nth-child(1) svg {
+      color: var(--ft-electric-blue);
+    }
+
+    &:nth-child(2) svg {
+      color: var(--ft-vibrant-red);
+    }
+
+    &:nth-child(3) svg {
+      color: #7c3aed;
+    } // purple for co-creations
 
     &--divider {
       border-left: 1px solid var(--ft-slate-200);
     }
+  }
 
-    @media (width<= 480px) {
-      &--divider:nth-child(odd) {
-        border-left: none;
-      }
-    }
+  .ft-profile__stat-text {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
   }
 
   .ft-profile__stat-value {
-    font-size: 1.5rem;
+    font-size: 1.375rem;
     font-weight: 700;
     color: var(--ft-slate-900);
     line-height: 1.2;
   }
 
   .ft-profile__stat-label {
-    font-size: 0.8125rem;
+    font-size: 0.8rem;
     font-weight: 500;
     color: var(--ft-slate-500);
-    margin-top: 2px;
   }
 
   // ── Posts tab content ─────────────────────────────────────
@@ -446,34 +522,86 @@ body.fantribe-theme:not(.admin-interface) {
     }
   }
 
-  // ── FanTribe user nav tab ──────────────────────────────────
-  // Style the connector-injected nav items to match the native tabs
+  // ── FanTribe custom profile tabs (injected via connector) ─────────────────
+  // Rendered inside the pill-card nav.user-nav container above.
   .ft-user-nav__tab {
-    display: flex;
+    display: inline-flex;
     align-items: center;
     gap: 6px;
-    padding: 8px 16px;
-    border-radius: 8px;
+    padding: 9px 18px;
+    border-radius: 12px;
     color: var(--ft-slate-600);
     text-decoration: none;
+    font-size: 0.875rem;
     font-weight: 500;
-    font-size: 0.9375rem;
-    transition: all 200ms;
+    transition: all 150ms ease;
+    white-space: nowrap;
+    background: transparent;
+    flex: 1;
+    justify-content: center;
 
     svg,
-    .d-icon {
-      width: 16px;
-      height: 16px;
+    .ft-icon {
+      width: 15px;
+      height: 15px;
+      flex-shrink: 0;
     }
 
     &:hover {
       color: var(--ft-slate-900);
-      background: var(--ft-slate-50);
+      background: var(--ft-slate-100);
     }
 
+    // Active: purple → blue gradient pill — matches Figma
     &.active {
-      color: var(--ft-vibrant-red);
+      background: linear-gradient(135deg, #7c3aed, #0080ff);
+      color: #fff;
       font-weight: 600;
+      box-shadow: 0 2px 10px rgb(124 58 237 / 0.35);
+
+      svg,
+      .ft-icon {
+        color: #fff;
+      }
+    }
+  }
+
+  // ── Hide ALL native Discourse tabs ───────────────────────────────────────
+  // CSS fallback guarantees tabs are hidden even if the JS modifyClass
+  // override doesn't fire (e.g. during hot-reload or on first paint).
+  // The Summary tab is always rendered unconditionally in user-nav.gjs;
+  // the others are flag-controlled but we hide both ways for robustness.
+  .user-nav__summary,
+  .user-nav__activity,
+  .user-nav__notifications,
+  .user-nav__personal-messages,
+  .user-nav__invites,
+  .user-nav__badges,
+  .user-nav__preferences {
+    display: none !important;
+  }
+
+  // ── Stub tab empty state ───────────────────────────────────
+  .ft-user-tab-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 64px 24px;
+    color: var(--ft-slate-400);
+    gap: 12px;
+    text-align: center;
+
+    svg,
+    .d-icon {
+      width: 40px;
+      height: 40px;
+      opacity: 0.4;
+    }
+
+    p {
+      font-size: 1rem;
+      margin: 0;
     }
   }
 }

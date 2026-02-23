@@ -13,7 +13,7 @@ import { ajax } from "discourse/lib/ajax";
 import { popupAjaxError } from "discourse/lib/ajax-error";
 import ftIcon from "../helpers/ft-icon";
 
-// Maps Discourse trust level → FanTribe tier identity.
+// Maps Discourse trust level → FanTribe tier.
 // TL0 (new) has no ring; TL1+ earn their tier.
 const TRUST_LEVEL_TIERS = [
   null, // TL0 — no tier yet
@@ -26,15 +26,11 @@ const TRUST_LEVEL_TIERS = [
 export default class FtUserProfileHeader extends Component {
   @service currentUser;
 
-  // null = use server value
   @tracked followLoading = false;
-  @tracked _isFollowing = null; // null = use server value
+  @tracked _isFollowing = null;
   @tracked _followerCount = null;
 
-  // ----------------------------------------------------------------
-  // Tier helpers
-  // ----------------------------------------------------------------
-
+  // ── Tier ──────────────────────────────────────────────────────
   get tier() {
     const tl = this.args.user?.trust_level ?? 0;
     return (
@@ -42,10 +38,7 @@ export default class FtUserProfileHeader extends Component {
     );
   }
 
-  // ----------------------------------------------------------------
-  // Follow state — optimistic with server fallback
-  // ----------------------------------------------------------------
-
+  // ── Follow state (optimistic with server fallback) ─────────────
   get isFollowing() {
     return this._isFollowing !== null
       ? this._isFollowing
@@ -58,10 +51,6 @@ export default class FtUserProfileHeader extends Component {
       : (this.args.user?.ft_follower_count ?? 0);
   }
 
-  get followingCount() {
-    return this.args.user?.ft_following_count ?? 0;
-  }
-
   get isOwnProfile() {
     return this.currentUser && this.currentUser.id === this.args.user?.id;
   }
@@ -70,19 +59,16 @@ export default class FtUserProfileHeader extends Component {
     return !!(this.currentUser && !this.isOwnProfile);
   }
 
-  // ----------------------------------------------------------------
-  // Tribe count — categories the user is watching (joined tribes)
-  // ----------------------------------------------------------------
-
+  // ── Stats ──────────────────────────────────────────────────────
   get tribeCount() {
-    // ft_tribe_count = CategoryUser.watching count, added by fantribe-theme serializer.
     return this.args.user?.ft_tribe_count ?? 0;
   }
 
-  // ----------------------------------------------------------------
-  // Cover image
-  // ----------------------------------------------------------------
+  get coCreationCount() {
+    return this.args.user?.ft_co_creation_count ?? 0;
+  }
 
+  // ── Cover ──────────────────────────────────────────────────────
   get coverStyle() {
     const url = this.args.user?.profile_background_upload_url;
     if (url) {
@@ -95,10 +81,7 @@ export default class FtUserProfileHeader extends Component {
     return !!this.args.user?.profile_background_upload_url;
   }
 
-  // ----------------------------------------------------------------
-  // Meta
-  // ----------------------------------------------------------------
-
+  // ── Meta ───────────────────────────────────────────────────────
   get joinedDate() {
     return this.args.user?.created_at;
   }
@@ -116,19 +99,10 @@ export default class FtUserProfileHeader extends Component {
   }
 
   get bio() {
-    return this.args.user?.bio_excerpt;
+    return this.args.user?.bio_cooked;
   }
 
-  get postCount() {
-    // ft_post_count added by fantribe-theme serializer extension (public).
-    // post_count is staff-only in Discourse's native serializer.
-    return this.args.user?.ft_post_count ?? this.args.user?.post_count ?? 0;
-  }
-
-  // ----------------------------------------------------------------
-  // Actions
-  // ----------------------------------------------------------------
-
+  // ── Actions ────────────────────────────────────────────────────
   @action
   async toggleFollow() {
     if (!this.canFollow || this.followLoading) {
@@ -138,7 +112,6 @@ export default class FtUserProfileHeader extends Component {
     const wasFollowing = this.isFollowing;
     const username = this.args.user?.username;
 
-    // Optimistic update
     this._isFollowing = !wasFollowing;
     this._followerCount = wasFollowing
       ? Math.max(0, this.followerCount - 1)
@@ -149,11 +122,9 @@ export default class FtUserProfileHeader extends Component {
       const result = await ajax(`/u/${username}/follow`, {
         type: wasFollowing ? "DELETE" : "PUT",
       });
-      // Reconcile with server counts
       this._followerCount = result.ft_follower_count ?? this._followerCount;
       this._isFollowing = result.ft_is_following ?? !wasFollowing;
     } catch (error) {
-      // Revert optimistic update on error
       this._isFollowing = wasFollowing;
       this._followerCount = wasFollowing
         ? this.followerCount + 1
@@ -166,7 +137,6 @@ export default class FtUserProfileHeader extends Component {
 
   @action
   shareProfile() {
-    // Use native share if available, otherwise copy URL
     const url = window.location.href;
     if (navigator.share) {
       navigator.share({
@@ -181,6 +151,7 @@ export default class FtUserProfileHeader extends Component {
   <template>
     {{#if @user}}
       <div class="ft-profile">
+
         {{! ── Cover image ── }}
         <div
           class="ft-profile__cover
@@ -217,7 +188,7 @@ export default class FtUserProfileHeader extends Component {
         <div class="ft-profile__card">
           <div class="ft-profile__card-inner">
 
-            {{! ── Left: avatar + tier ring ── }}
+            {{! Avatar }}
             <div class="ft-profile__avatar-wrap">
               <div
                 class="ft-profile__avatar-ring
@@ -228,32 +199,30 @@ export default class FtUserProfileHeader extends Component {
               >
                 {{avatar @user imageSize="large" class="ft-profile__avatar"}}
               </div>
-              {{#if this.tier}}
-                <div
-                  class="ft-profile__tier-badge ft-profile__tier-badge--{{this.tier.key}}"
-                >
-                  {{ftIcon "zap"}}
-                  {{this.tier.label}}
-                </div>
-              {{/if}}
             </div>
 
-            {{! ── Right: name + info + actions ── }}
+            {{! Name, tier badge, handle, bio, meta }}
             <div class="ft-profile__info">
+
+              {{! Name row: name + tier badge inline + action button }}
               <div class="ft-profile__name-row">
-                <div>
+                <div class="ft-profile__name-group">
                   <h1 class="ft-profile__name">
                     {{@user.name}}
-                    {{#if @user.title}}
+                    {{#if this.tier}}
                       <span
-                        class="ft-profile__title-badge"
-                      >{{@user.title}}</span>
+                        class="ft-profile__tier-badge ft-profile__tier-badge--{{this.tier.key}}"
+                      >
+                        {{ftIcon "zap" size=12}}
+                        {{this.tier.label}}
+                        Tier
+                      </span>
                     {{/if}}
                   </h1>
                   <p class="ft-profile__handle">@{{@user.username}}</p>
                 </div>
 
-                {{! Subscribe / Edit buttons }}
+                {{! Subscribe / Edit Profile button }}
                 {{#if this.canFollow}}
                   <button
                     type="button"
@@ -270,10 +239,9 @@ export default class FtUserProfileHeader extends Component {
                     {{on "click" this.toggleFollow}}
                   >
                     {{#if this.isFollowing}}
-                      {{ftIcon "check"}}
+                      {{ftIcon "check" size=16}}
                       Following
                     {{else}}
-                      {{ftIcon "user-plus"}}
                       Subscribe
                     {{/if}}
                   </button>
@@ -283,7 +251,7 @@ export default class FtUserProfileHeader extends Component {
                     @model={{@user}}
                     class="ft-profile__edit-btn"
                   >
-                    {{ftIcon "edit3"}}
+                    {{icon "pencil"}}
                     Edit Profile
                   </LinkTo>
                 {{/if}}
@@ -291,10 +259,10 @@ export default class FtUserProfileHeader extends Component {
 
               {{! Bio }}
               {{#if this.bio}}
-                <p class="ft-profile__bio">{{this.bio}}</p>
+                <div class="ft-profile__bio">{{htmlSafe this.bio}}</div>
               {{/if}}
 
-              {{! Meta row: location · joined · website }}
+              {{! Meta: location · joined · website }}
               <div class="ft-profile__meta">
                 {{#if this.location}}
                   <span class="ft-profile__meta-item">
@@ -304,7 +272,7 @@ export default class FtUserProfileHeader extends Component {
                 {{/if}}
                 {{#if this.joinedDate}}
                   <span class="ft-profile__meta-item">
-                    {{ftIcon "calendar"}}
+                    {{icon "calendar"}}
                     Joined
                     {{formatDate this.joinedDate leaveAgo=true}}
                   </span>
@@ -313,7 +281,7 @@ export default class FtUserProfileHeader extends Component {
                   <a
                     href={{this.website}}
                     target="_blank"
-                    rel="nofollowugc noopener noreferrer"
+                    rel="nofollow ugc noopener noreferrer"
                     class="ft-profile__meta-item ft-profile__meta-item--link"
                   >
                     {{ftIcon "link2"}}
@@ -324,25 +292,32 @@ export default class FtUserProfileHeader extends Component {
             </div>
           </div>
 
-          {{! ── Stats row ── }}
+          {{! ── Stats row ── Followers | Tribes | Co-Creations }}
           <div class="ft-profile__stats">
             <div class="ft-profile__stat">
-              <span class="ft-profile__stat-value">{{this.followerCount}}</span>
-              <span class="ft-profile__stat-label">Followers</span>
+              {{ftIcon "users" size=18}}
+              <div class="ft-profile__stat-text">
+                <span
+                  class="ft-profile__stat-value"
+                >{{this.followerCount}}</span>
+                <span class="ft-profile__stat-label">Followers</span>
+              </div>
             </div>
             <div class="ft-profile__stat ft-profile__stat--divider">
-              <span
-                class="ft-profile__stat-value"
-              >{{this.followingCount}}</span>
-              <span class="ft-profile__stat-label">Following</span>
+              {{ftIcon "heart" size=18}}
+              <div class="ft-profile__stat-text">
+                <span class="ft-profile__stat-value">{{this.tribeCount}}</span>
+                <span class="ft-profile__stat-label">Tribes</span>
+              </div>
             </div>
             <div class="ft-profile__stat ft-profile__stat--divider">
-              <span class="ft-profile__stat-value">{{this.tribeCount}}</span>
-              <span class="ft-profile__stat-label">Tribes</span>
-            </div>
-            <div class="ft-profile__stat ft-profile__stat--divider">
-              <span class="ft-profile__stat-value">{{this.postCount}}</span>
-              <span class="ft-profile__stat-label">Posts</span>
+              {{ftIcon "zap" size=18}}
+              <div class="ft-profile__stat-text">
+                <span
+                  class="ft-profile__stat-value"
+                >{{this.coCreationCount}}</span>
+                <span class="ft-profile__stat-label">Co-Creations</span>
+              </div>
             </div>
           </div>
         </div>

@@ -1,46 +1,27 @@
 import Component from "@glimmer/component";
-import { tracked } from "@glimmer/tracking";
 import { fn } from "@ember/helper";
 import { on } from "@ember/modifier";
 import { action } from "@ember/object";
-import didInsert from "@ember/render-modifiers/modifiers/did-insert";
 import { service } from "@ember/service";
-import { ajax } from "discourse/lib/ajax";
+import { htmlSafe } from "@ember/template";
 import ftIcon from "../helpers/ft-icon";
+
+function dotStyle(color) {
+  return htmlSafe(`background-color: #${color}`);
+}
 
 export default class FantribeTrendingPanel extends Component {
   @service router;
+  @service site;
 
-  @tracked groups = [];
-  @tracked isLoading = true;
-
-  @action
-  async loadGroups() {
-    try {
-      const result = await ajax("/groups.json");
-      const allGroups = result?.groups || [];
-      this.groups = allGroups
-        .filter(
-          (g) =>
-            g.visibility_level === 0 &&
-            !g.automatic &&
-            g.name !== "trust_level_0"
-        )
-        .slice(0, 6)
-        .map((g) => ({
-          id: g.id,
-          name: g.full_name || g.name,
-          slug: g.name,
-          memberCount: g.user_count || 0,
-        }));
-    } catch {
-      this.groups = [];
-    } finally {
-      this.isLoading = false;
-    }
+  get tribes() {
+    return this.site.trending_tribes || [];
   }
 
-  formatCount(count) {
+  formatMemberCount(count) {
+    if (!count) {
+      return "0 members";
+    }
     if (count >= 1000) {
       return (count / 1000).toFixed(1) + "K members";
     }
@@ -48,64 +29,80 @@ export default class FantribeTrendingPanel extends Component {
   }
 
   @action
-  navigateToGroup(group) {
-    this.router.transitionTo("group", group.slug);
+  navigateToTribe(tribe) {
+    this.router.transitionTo("discovery.category", tribe.slug);
   }
 
   @action
   viewAll() {
-    this.router.transitionTo("groups");
+    this.router.transitionTo("explore");
   }
 
   <template>
-    <div class="fantribe-trending-panel" {{didInsert this.loadGroups}}>
-      <div class="fantribe-trending-panel__header">
-        <h3 class="fantribe-trending-panel__title">
-          {{ftIcon "users"}}
-          Trending Tribes
-        </h3>
+    <div class="ft-trending-panel">
+      {{! Header }}
+      <div class="ft-trending-panel__header">
+        <div class="ft-trending-panel__header-inner">
+          {{ftIcon "trending-up" size=20}}
+          <h3 class="ft-trending-panel__title">Trending Tribes</h3>
+        </div>
       </div>
 
-      <div class="fantribe-trending-panel__content">
-        {{#if this.isLoading}}
-          <div class="fantribe-trending-panel__empty">
-            <p>Loading...</p>
-          </div>
-        {{else if this.groups.length}}
-          {{#each this.groups as |group|}}
+      {{! Tribe list — styled to match Figma RightSidebar.tsx }}
+      <div class="ft-trending-panel__list">
+        {{#if this.tribes.length}}
+          {{#each this.tribes as |tribe|}}
             <button
               type="button"
-              class="fantribe-trending-item"
-              {{on "click" (fn this.navigateToGroup group)}}
+              class="ft-trending-panel__item"
+              {{on "click" (fn this.navigateToTribe tribe)}}
             >
-              <div class="fantribe-trending-item__info">
-                <span
-                  class="fantribe-trending-item__title"
-                >{{group.name}}</span>
-                <span class="fantribe-trending-item__count">
-                  {{this.formatCount group.memberCount}}
-                </span>
+              {{! Logo or colour dot }}
+              <div class="ft-trending-panel__item-lead">
+                {{#if tribe.logo_url}}
+                  <img
+                    src={{tribe.logo_url}}
+                    class="ft-trending-panel__item-logo"
+                    alt=""
+                  />
+                {{else}}
+                  <span
+                    class="ft-trending-panel__item-dot"
+                    style={{dotStyle tribe.color}}
+                  ></span>
+                {{/if}}
               </div>
 
-              <span class="fantribe-trending-item__indicator">
-                {{ftIcon "chevron-right"}}
+              {{! Tribe info }}
+              <div class="ft-trending-panel__item-body">
+                <span class="ft-trending-panel__item-name">{{tribe.name}}</span>
+                <div class="ft-trending-panel__item-meta">
+                  {{ftIcon "users" size=12}}
+                  <span>{{this.formatMemberCount tribe.member_count}}</span>
+                </div>
+              </div>
+
+              {{! Chevron — animates on hover via CSS }}
+              <span class="ft-trending-panel__item-chevron">
+                {{ftIcon "chevron-right" size=16}}
               </span>
             </button>
           {{/each}}
         {{else}}
-          <div class="fantribe-trending-panel__empty">
-            <p>No tribes yet</p>
+          <div class="ft-trending-panel__empty">
+            <p>No active tribes yet</p>
           </div>
         {{/if}}
       </div>
 
-      <div class="fantribe-trending-panel__footer">
+      {{! Footer }}
+      <div class="ft-trending-panel__footer">
         <button
           type="button"
-          class="fantribe-trending-panel__view-all"
+          class="ft-trending-panel__see-all"
           {{on "click" this.viewAll}}
         >
-          View all tribes
+          See all tribes
         </button>
       </div>
     </div>

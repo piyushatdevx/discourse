@@ -62,8 +62,22 @@ export default class FtCreatePostModal extends Component {
     return htmlSafe(`background-color: #${category.color || "0088cc"}`);
   }
 
+  // Returns the first letter of a category name for use as a letter-avatar
+  // fallback when the tribe has no uploaded logo.
+  tribeLetter(category) {
+    return (category?.name || "?").charAt(0).toUpperCase();
+  }
+
   get selectedTribeLabel() {
     return this.localCategory?.name || "General";
+  }
+
+  get selectedTribeLogo() {
+    return (
+      this.localCategory?.uploaded_logo_url ||
+      this.localCategory?.uploaded_logo?.url ||
+      null
+    );
   }
 
   get selectedTribeDotStyle() {
@@ -73,6 +87,10 @@ export default class FtCreatePostModal extends Component {
       );
     }
     return htmlSafe("background-color: #9ca3af");
+  }
+
+  tribeLogo(category) {
+    return category?.uploaded_logo_url || category?.uploaded_logo?.url || null;
   }
 
   get charCount() {
@@ -332,10 +350,25 @@ export default class FtCreatePostModal extends Component {
                   }}"
                 {{on "click" this.toggleTribeDropdown}}
               >
-                <span
-                  class="ft-modal__tribe-select-dot"
-                  style={{this.selectedTribeDotStyle}}
-                ></span>
+                {{! Trigger: logo img → letter avatar → globe icon (for General) }}
+                {{#if this.localCategory}}
+                  {{#if this.selectedTribeLogo}}
+                    <img
+                      src={{this.selectedTribeLogo}}
+                      class="ft-modal__tribe-logo ft-modal__tribe-logo--trigger"
+                      alt=""
+                    />
+                  {{else}}
+                    <span
+                      class="ft-modal__tribe-letter-avatar"
+                      style={{this.selectedTribeDotStyle}}
+                    >{{this.tribeLetter this.localCategory}}</span>
+                  {{/if}}
+                {{else}}
+                  <span class="ft-modal__tribe-select-option-icon">
+                    {{ftIcon "globe"}}
+                  </span>
+                {{/if}}
                 <span
                   class="ft-modal__tribe-select-value"
                 >{{this.selectedTribeLabel}}</span>
@@ -377,10 +410,19 @@ export default class FtCreatePostModal extends Component {
                         }}"
                       {{on "click" (fn this.selectTribeFromDropdown tribe)}}
                     >
-                      <span
-                        class="ft-modal__tribe-select-option-dot"
-                        style={{this.tribeDotStyle tribe}}
-                      ></span>
+                      {{! Option: logo img → letter avatar }}
+                      {{#if (this.tribeLogo tribe)}}
+                        <img
+                          src={{this.tribeLogo tribe}}
+                          class="ft-modal__tribe-logo ft-modal__tribe-logo--option"
+                          alt=""
+                        />
+                      {{else}}
+                        <span
+                          class="ft-modal__tribe-letter-avatar ft-modal__tribe-letter-avatar--option"
+                          style={{this.tribeDotStyle tribe}}
+                        >{{this.tribeLetter tribe}}</span>
+                      {{/if}}
                       <span
                         class="ft-modal__tribe-select-option-name"
                       >{{tribe.name}}</span>

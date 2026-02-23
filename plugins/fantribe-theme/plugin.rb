@@ -12,6 +12,10 @@ enabled_site_setting :fantribe_theme_enabled
 register_svg_icon "user"
 register_svg_icon "arrow-right-to-bracket"
 register_svg_icon "location-dot"
+# Icons for new features (trending panel, profile tabs, bookmark fill)
+register_svg_icon "trending-up"
+register_svg_icon "shopping-bag"
+register_svg_icon "package"
 
 # Common styles (all viewports)
 register_asset "stylesheets/common/design-tokens.scss"
@@ -157,6 +161,14 @@ after_initialize do
       end
   end
 
+  # Expose the category (Tribe) logo URL on each topic so feed cards can
+  # show the tribe badge with a logo image rather than just a colour dot.
+  add_to_serializer(:topic_list_item, :category_logo_url) { object.category&.uploaded_logo&.url }
+
+  add_to_serializer(:topic_list_item, :include_category_logo_url?) do
+    SiteSetting.fantribe_theme_enabled
+  end
+
   # Add image_urls to topic list serializer for multi-image support in feed cards
   add_to_serializer(:topic_list_item, :image_urls) do
     next [] unless object.first_post
@@ -207,6 +219,42 @@ after_initialize do
       SiteSetting.discourse_reactions_enabled && object.first_post.present?
   end
 
+  # Expose the bookmark ID on topic list items so the engagement bar can call
+  # DELETE /bookmarks/:id when un-bookmarking (Discourse requires the ID).
+  # Discourse core already includes `bookmarked` (boolean) on TopicListItem;
+  # we only need the ID for the DELETE call.
+  #
+  # Performance: first_post is preloaded via register_topic_preloader_associations,
+  # so object.first_post&.id avoids a per-topic Post query. All Post-type bookmarks
+  # for the current user are loaded in a single query on the first call per request
+  # and cached in RequestStore, eliminating the N+1 Bookmark lookup.
+  add_to_serializer(:topic_list_item, :bookmark_id) do
+    return nil unless scope.current_user
+
+    # Use the preloaded first_post (no extra DB query).
+    post_id = object.first_post&.id
+    return nil unless post_id
+
+    # Cache the full bookmark map on the Guardian (scope) instance.
+    # Guardian is constructed once per request, so this gives us a
+    # per-request cache without any external gem dependency.
+    unless scope.instance_variable_defined?(:@ft_post_bookmarks_cache)
+      scope.instance_variable_set(
+        :@ft_post_bookmarks_cache,
+        Bookmark
+          .where(user: scope.current_user, bookmarkable_type: "Post")
+          .pluck(:bookmarkable_id, :id)
+          .to_h,
+      )
+    end
+
+    scope.instance_variable_get(:@ft_post_bookmarks_cache)[post_id]
+  end
+
+  add_to_serializer(:topic_list_item, :include_bookmark_id?) do
+    SiteSetting.fantribe_theme_enabled && scope.current_user.present?
+  end
+
   # Expose the number of categories (Tribes) a user is actively watching.
   # Using notification_level >= watching means only categories the user
   # deliberately joined — not ones they were auto-added to.
@@ -223,6 +271,68 @@ after_initialize do
   end
 
   add_to_serializer(:user_card, :include_ft_tribe_count?) { SiteSetting.fantribe_theme_enabled }
+
+  # Trending Tribes — scored by recent activity in the last 7 days.
+  # Score = (topic_count_7d × 2) + new_member_joins_7d
+  # Cached for 10 minutes to avoid per-request DB hits.
+  add_to_serializer(:site, :trending_tribes) do
+    return [] unless SiteSetting.fantribe_theme_enabled
+
+    Rails
+      .cache
+      .fetch("ft_trending_tribes", expires_in: 10.minutes) do
+        since = 7.days.ago
+
+        post_counts =
+          Topic
+            .where("topics.created_at > ?", since)
+            .where.not(category_id: nil)
+            .where(archetype: "regular")
+            .group(:category_id)
+            .count
+
+        member_counts =
+          CategoryUser
+            .where("created_at > ?", since)
+            .where("notification_level >= ?", CategoryUser.notification_levels[:watching])
+            .group(:category_id)
+            .count
+
+        all_ids = (post_counts.keys | member_counts.keys).uniq
+        next [] if all_ids.empty?
+
+        # Batch-load total member counts for all candidate tribes in one query
+        # instead of issuing a separate COUNT per tribe inside the map loop.
+        total_member_counts =
+          CategoryUser
+            .where(category_id: all_ids)
+            .where("notification_level >= ?", CategoryUser.notification_levels[:watching])
+            .group(:category_id)
+            .count
+
+        Category
+          .where(id: all_ids)
+          .reject { |c| c.uncategorized? || c.read_restricted }
+          .map do |cat|
+            score = (post_counts[cat.id].to_i * 2) + member_counts[cat.id].to_i
+            {
+              id: cat.id,
+              name: cat.name,
+              slug: cat.slug,
+              color: cat.color,
+              logo_url: cat.uploaded_logo&.url,
+              member_count: total_member_counts[cat.id].to_i,
+              score: score,
+            }
+          end
+          .sort_by { |t| -t[:score] }
+          .first(8)
+      end
+  rescue StandardError
+    []
+  end
+
+  add_to_serializer(:site, :include_trending_tribes?) { SiteSetting.fantribe_theme_enabled }
 
   # Expose user's post count directly on user_card (already in UserSerializer
   # via staff_attributes :post_count, but we need it publicly available).

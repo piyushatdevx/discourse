@@ -19,6 +19,7 @@ import FantribePostMenu from "./fantribe-post-menu";
 export default class FantribeFeedCard extends Component {
   @service currentUser;
   @service router;
+  @service site;
 
   @tracked expanded = false;
   @tracked expandedContent = null;
@@ -116,6 +117,29 @@ export default class FantribeFeedCard extends Component {
     return this.topic?.op_can_like ?? true;
   }
 
+  // Tribe (category) helpers — used for the tribe badge chip on feed cards
+  get tribeCategory() {
+    const catId = this.topic?.category_id;
+    if (!catId) {
+      return null;
+    }
+    return (this.site.categories || []).find((c) => c.id === catId) || null;
+  }
+
+  get tribeLogo() {
+    // Prefer the serialized logo URL (avoids extra lookup), fall back to site data
+    return (
+      this.topic?.category_logo_url ||
+      this.tribeCategory?.uploaded_logo_url ||
+      null
+    );
+  }
+
+  get tribeDotStyle() {
+    const color = this.tribeCategory?.color || "9ca3af";
+    return htmlSafe(`background-color: #${color}`);
+  }
+
   get replyCount() {
     return this.topic?.posts_count ? this.topic.posts_count - 1 : 0;
   }
@@ -159,6 +183,15 @@ export default class FantribeFeedCard extends Component {
     event.stopPropagation();
     if (this.poster?.username) {
       this.router.transitionTo("user", this.poster.username);
+    }
+  }
+
+  @action
+  navigateToTribe(event) {
+    event.stopPropagation();
+    const cat = this.tribeCategory;
+    if (cat?.slug) {
+      this.router.transitionTo("discovery.category", cat.slug);
     }
   }
 
@@ -228,6 +261,30 @@ export default class FantribeFeedCard extends Component {
                     @topic.created_at
                     format="tiny"
                   }}</span>
+                {{#if this.tribeCategory}}
+                  <span class="fantribe-feed-card__separator">&middot;</span>
+                  <button
+                    type="button"
+                    class="fantribe-feed-card__tribe-badge"
+                    {{on "click" this.navigateToTribe}}
+                  >
+                    {{#if this.tribeLogo}}
+                      <img
+                        src={{this.tribeLogo}}
+                        class="fantribe-feed-card__tribe-logo"
+                        alt=""
+                      />
+                    {{else}}
+                      <span
+                        class="fantribe-feed-card__tribe-dot"
+                        style={{this.tribeDotStyle}}
+                      ></span>
+                    {{/if}}
+                    <span
+                      class="fantribe-feed-card__tribe-name"
+                    >{{this.tribeCategory.name}}</span>
+                  </button>
+                {{/if}}
               </div>
             </div>
 

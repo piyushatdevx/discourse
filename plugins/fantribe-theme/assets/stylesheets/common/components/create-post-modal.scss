@@ -134,6 +134,49 @@ body.fantribe-theme:not(.admin-interface) {
       flex-shrink: 0;
     }
 
+    // Tribe logo in the selector trigger and dropdown options
+    &__tribe-logo {
+      width: 26px;
+      height: 26px;
+      border-radius: 8px;
+      object-fit: cover;
+      flex-shrink: 0;
+
+      &--trigger {
+        width: 28px;
+        height: 28px;
+        border-radius: 8px;
+      }
+
+      &--option {
+        width: 32px;
+        height: 32px;
+        border-radius: 10px;
+      }
+    }
+
+    // Letter-avatar fallback: a colored circle showing the first letter of the
+    // tribe name, used when the tribe has no uploaded logo image.
+    &__tribe-letter-avatar {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 700;
+      color: #fff;
+      flex-shrink: 0;
+
+      &--option {
+        width: 32px;
+        height: 32px;
+        border-radius: 10px;
+        font-size: 14px;
+      }
+    }
+
     &__tribe-select-value {
       flex: 1;
       overflow: hidden;

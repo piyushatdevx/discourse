@@ -152,6 +152,57 @@ body.fantribe-theme:not(.admin-interface) {
       font-size: 13px;
     }
 
+    // ── Tribe badge — shows which Tribe the post belongs to ───────────────
+    // Rendered as a <button> so it's properly interactive and accessible.
+    &__tribe-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 3px 10px 3px 5px;
+      border-radius: 9999px;
+      background: var(--ft-slate-50);
+      border: 1px solid var(--ft-slate-200);
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--ft-slate-700);
+      white-space: nowrap;
+      cursor: pointer;
+      transition:
+        background 150ms ease,
+        border-color 150ms ease,
+        color 150ms ease;
+
+      &:hover {
+        background: var(--ft-electric-blue-light, #e5f3ff);
+        border-color: var(--ft-electric-blue);
+        color: var(--ft-electric-blue);
+      }
+    }
+
+    &__tribe-logo {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      object-fit: cover;
+      flex-shrink: 0;
+    }
+
+    &__tribe-dot {
+      display: inline-block;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    &__tribe-name {
+      // truncate long tribe names
+      max-width: 120px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
     // More button
     &__more-btn {
       flex-shrink: 0;
