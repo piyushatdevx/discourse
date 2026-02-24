@@ -29,12 +29,7 @@ body.fantribe-theme:not(.admin-interface) {
   // (matches Figma: from-slate-50 via-white to-indigo-50/20).
   .user-main {
     padding: 0;
-    background: linear-gradient(
-      135deg,
-      #f8fafc 0%,
-      #fff 50%,
-      rgb(238 242 255 / 0.3) 100%
-    );
+    background: rgb(241, 241, 242);
     min-height: 100vh;
   }
 
@@ -63,7 +58,7 @@ body.fantribe-theme:not(.admin-interface) {
   // Tabs use natural content width (no flex:1 stretch) to match
   // the Figma inline-flex design. The wrapper handles overflow scroll.
   .user-navigation.user-navigation-primary {
-    background: transparent;
+    background: rgb(241, 241, 242);
     border-bottom: none;
     padding: 16px 24px 0;
     box-shadow: none;
@@ -511,6 +506,7 @@ body.fantribe-theme:not(.admin-interface) {
   // sit flush within the same visual column as the card above.
   .ft-user-posts {
     padding: 20px 24px 32px;
+    background: rgb(241, 241, 242);
 
     @media (width <= 768px) {
       padding: 16px 12px 24px;
