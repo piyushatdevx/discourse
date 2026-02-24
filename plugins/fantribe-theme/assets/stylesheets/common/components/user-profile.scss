@@ -601,6 +601,7 @@ body.fantribe-theme:not(.admin-interface) {
 
   // ── Stub tab empty state ───────────────────────────────────
   .ft-user-tab-empty {
+    background: rgb(241, 241, 242);
     display: flex;
     flex-direction: column;
     align-items: center;

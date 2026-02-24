@@ -1,4 +1,5 @@
 import { withPluginApi } from "discourse/lib/plugin-api";
+import DiscourseURL from "discourse/lib/url";
 
 function initializeFantribe(api) {
   const siteSettings = api.container.lookup("service:site-settings");
@@ -7,35 +8,40 @@ function initializeFantribe(api) {
   // Force body class for FanTribe styling
   document.body.classList.add("fantribe-theme");
 
-  // Add glassmorphism class if enabled
   if (siteSettings.fantribe_enable_glassmorphism) {
     document.body.classList.add("fantribe-glassmorphism");
   }
 
-  // Mark anonymous state for CSS-only UI gating
   if (!currentUser) {
     document.body.classList.add("fantribe-anon");
   }
 
-  // Redirect the bare userActivity index (/u/:username/activity) to our FT
-  // Posts tab. Using routeDidChange on the router service is safe — it fires
-  // after the transition completes and triggers a fresh replaceWith, so it
-  // never conflicts with Discourse's route lifecycle hooks.
-  const router = api.container.lookup("service:router");
-  if (router && siteSettings.fantribe_theme_enabled) {
-    router.on("routeDidChange", (transition) => {
-      const name = transition.to?.name ?? "";
-      // Redirect any "default" profile landing route to our Posts tab so it
-      // is always the active tab when visiting a user profile:
-      //   - user.summary  → Discourse's default landing page (/u/:username)
-      //   - userActivity.index → bare /u/:username/activity URL
-      const isProfileDefault =
-        name === "user.summary" ||
-        (name.includes("user-activity") && name.endsWith(".index"));
-      if (isProfileDefault) {
-        router.replaceWith("userActivity.ftPosts");
-      }
-    });
+  if (siteSettings.fantribe_theme_enabled) {
+    const router = api.container.lookup("service:router");
+    if (router) {
+      router.on("routeDidChange", () => {
+        const url = router.currentURL;
+        if (!url) {
+          return;
+        }
+
+        // Redirect bare profile / summary / activity URLs to the Posts tab.
+        // Matches:  /u/:username
+        //           /u/:username/summary
+        //           /u/:username/activity   (no ft-posts sub-path yet)
+        const isProfileDefault =
+          /^\/u\/[^/]+\/?$/.test(url) ||
+          /^\/u\/[^/]+\/summary\/?$/.test(url) ||
+          /^\/u\/[^/]+\/activity\/?$/.test(url);
+
+        if (isProfileDefault) {
+          const username = url.match(/^\/u\/([^/]+)/)?.[1];
+          if (username) {
+            DiscourseURL.routeTo(`/u/${username}/activity/ft-posts`);
+          }
+        }
+      });
+    }
   }
 }
 
