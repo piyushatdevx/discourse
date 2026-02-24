@@ -145,9 +145,7 @@ export default class ChatChannelRow extends Component {
 
   get shouldRenderLastMessage() {
     return (
-      this.site.mobileView &&
-      this.args.channel.isDirectMessageChannel &&
-      this.args.channel.lastMessage
+      this.args.channel.isDirectMessageChannel && this.args.channel.lastMessage
     );
   }
 
@@ -177,6 +175,7 @@ export default class ChatChannelRow extends Component {
         (if (eq this.chat.activeChannel.id @channel.id) "active")
         (if this.channelHasUnread "has-unread")
       }}
+      style="display: flex; min-height: 60px; width: 100%; padding: 12px 16px; align-items: center; gap: 12px; text-decoration: none; border-left: 4px solid transparent; transition: background-color 150ms ease, border-color 150ms ease;"
       tabindex="0"
       data-chat-channel-id={{@channel.id}}
       {{didInsert this.startTrackingStatus}}
@@ -189,17 +188,21 @@ export default class ChatChannelRow extends Component {
           (if @channel.isCategoryChannel "is-category" "is-dm")
           (if this.shouldReset "-animate-reset")
         }}
+        style={{this.rowStyle}}
         {{(if this.shouldHandleSwipe (modifier this.registerSwipableRow))}}
         {{(if this.shouldHandleSwipe (modifier this.handleSwipe))}}
         {{(if this.shouldReset (modifier this.onReset))}}
-        style={{this.rowStyle}}
       >
-        <ChannelIcon @channel={{@channel}} />
+        <div class="chat-channel-row__avatar">
+          <ChannelIcon @channel={{@channel}} />
+        </div>
         <div class="chat-channel-row__info">
-          <div class="chat-channel-row__name-container">
-            <ChannelName @channel={{@channel}} @unreadIndicator={{true}} />
+          <div class="chat-channel-row__top-line">
+            <div class="chat-channel-row__name-container">
+              <ChannelName @channel={{@channel}} @unreadIndicator={{true}} />
+            </div>
+            <ChatChannelMetadata @channel={{@channel}} />
           </div>
-          <ChatChannelMetadata @channel={{@channel}} />
           {{#if this.shouldRenderLastMessage}}
             <div class="chat-channel__last-message">
               {{replaceEmoji (htmlSafe @channel.lastMessage.excerpt)}}

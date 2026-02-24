@@ -72,6 +72,9 @@ register_svg_icon "tag"
 register_svg_icon "music"
 register_svg_icon "calendar"
 register_svg_icon "circle-xmark"
+register_svg_icon "microphone"
+register_svg_icon "paperclip"
+register_svg_icon "bolt"
 
 # Common styles (all viewports)
 register_asset "stylesheets/common/design-tokens.scss"
@@ -115,6 +118,9 @@ register_asset "stylesheets/common/components/right-sidebar.scss"
 register_asset "stylesheets/common/components/create-menu.scss"
 register_asset "stylesheets/common/components/create-post-modal.scss"
 register_asset "stylesheets/common/components/engagement-bar.scss"
+
+# Chat theme customization (Phase 3 - Chat UI)
+register_asset "stylesheets/common/chat.scss"
 
 # Discourse overrides - MUST load last
 register_asset "stylesheets/common/fantribe-overrides.scss"

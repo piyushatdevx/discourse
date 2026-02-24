@@ -48,11 +48,9 @@ import preventScrollOnFocus from "discourse/modifiers/prevent-scroll-on-focus";
 import { not, or } from "discourse/truth-helpers";
 import { i18n } from "discourse-i18n";
 import DButton from "discourse/plugins/chat/discourse/components/chat/composer/button";
-import ChatComposerDropdown from "discourse/plugins/chat/discourse/components/chat-composer-dropdown";
 import ChatComposerMessageDetails from "discourse/plugins/chat/discourse/components/chat-composer-message-details";
 import ChatComposerUploads from "discourse/plugins/chat/discourse/components/chat-composer-uploads";
 import ChatReplyingIndicator from "discourse/plugins/chat/discourse/components/chat-replying-indicator";
-import { chatComposerButtons } from "discourse/plugins/chat/discourse/lib/chat-composer-buttons";
 import ChatMessageInteractor from "discourse/plugins/chat/discourse/lib/chat-message-interactor";
 import TextareaInteractor from "discourse/plugins/chat/discourse/lib/textarea-interactor";
 
@@ -82,14 +80,6 @@ export default class ChatComposer extends Component {
       this.draft?.editing ||
       (this.context === "channel" && this.draft?.inReplyTo)
     );
-  }
-
-  get inlineButtons() {
-    return chatComposerButtons(this, "inline", this.context);
-  }
-
-  get dropdownButtons() {
-    return chatComposerButtons(this, "dropdown", this.context);
   }
 
   get fileUploadElementId() {
@@ -462,6 +452,28 @@ export default class ChatComposer extends Component {
   }
 
   @action
+  async openEmojiPicker(event) {
+    event?.preventDefault();
+
+    const menuOptions = {
+      identifier: "emoji-picker",
+      groupIdentifier: "emoji-picker",
+      component: EmojiPickerDetached,
+      context: "chat",
+      modalForMobile: true,
+      data: {
+        didSelectEmoji: (emoji) => {
+          this.onSelectEmoji(emoji);
+        },
+        context: "chat",
+      },
+    };
+
+    await waitForClosedKeyboard(this.site, this.capabilities);
+    this.menuInstance = await this.menu.show(event.target, menuOptions);
+  }
+
+  @action
   captureMentions(opts = { skipDebounce: false }) {
     if (this.hasContent) {
       this.chatComposerWarningsTracker.trackMentions(
@@ -753,24 +765,17 @@ export default class ChatComposer extends Component {
         {{willDestroy this.teardown}}
         {{willDestroy this.cancelPersistDraft}}
       >
-        <div class="chat-composer__outer-container">
-          {{#if this.site.mobileView}}
-            <ChatComposerDropdown
-              @buttons={{this.dropdownButtons}}
-              @isDisabled={{this.disabled}}
-            />
-          {{/if}}
-
-          <div class="chat-composer__inner-container">
-            {{#if this.site.desktopView}}
-              <ChatComposerDropdown
-                @buttons={{this.dropdownButtons}}
-                @isDisabled={{this.disabled}}
-              />
-            {{/if}}
-
+        <div
+          class="chat-composer__outer-container"
+          style="display: flex; align-items: flex-end; gap: 12px; padding: 12px 16px;"
+        >
+          <div
+            class="chat-composer__inner-container"
+            style="flex: 1; display: flex; flex-direction: column; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 16px; padding: 12px 16px; transition: all 0.15s ease;"
+          >
             <div
               class="chat-composer__input-container"
+              style="width: 100%; margin-bottom: 8px;"
               {{on "click" this.composer.focus}}
             >
               <DTextarea
@@ -780,6 +785,7 @@ export default class ChatComposer extends Component {
                 value={{readonly this.draft.message}}
                 type="text"
                 class="chat-composer__input"
+                style="width: 100%; border: none; background: transparent; outline: none; resize: none; font-size: 14px; line-height: 1.5; color: #1e293b; padding: 0;"
                 disabled={{this.disabled}}
                 autocorrect="on"
                 autocapitalize="sentences"
@@ -795,50 +801,57 @@ export default class ChatComposer extends Component {
               />
             </div>
 
-            {{#each this.inlineButtons as |button|}}
-              <DButton
-                @icon={{button.icon}}
-                class="-{{button.id}}"
-                disabled={{or this.disabled button.disabled}}
-                tabindex={{if button.disabled -1 0}}
-                {{on "click" (fn this.handleInlineButtonAction button.action)}}
-                {{on "focus" (fn this.computeIsFocused true)}}
-                {{on "blur" (fn this.computeIsFocused false)}}
-              />
-            {{/each}}
+            <div
+              class="chat-composer__button-row"
+              style="display: flex; align-items: center; gap: 8px; align-self: flex-start;"
+            >
+              <div
+                class="chat-composer__button-group"
+                style="display: flex; align-items: center; gap: 4px;"
+              >
+                <DButton
+                  @icon="face-smile"
+                  class="chat-composer__btn -emoji btn-flat"
+                  style="width: 36px; height: 36px; padding: 0; border: none; background: transparent; border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; cursor: pointer;"
+                  title={{i18n "chat.emoji"}}
+                  disabled={{this.disabled}}
+                  {{on "click" this.openEmojiPicker}}
+                  {{on "focus" (fn this.computeIsFocused true)}}
+                  {{on "blur" (fn this.computeIsFocused false)}}
+                />
+                {{#if this.canAttachUploads}}
+                  <DButton
+                    @icon="paperclip"
+                    class="chat-composer__btn -attach btn-flat"
+                    style="width: 36px; height: 36px; padding: 0; border: none; background: transparent; border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; color: #64748b;"
+                    title={{i18n "chat.upload"}}
+                    disabled={{this.disabled}}
+                    {{on "click" this.uploadClicked}}
+                    {{on "focus" (fn this.computeIsFocused true)}}
+                    {{on "blur" (fn this.computeIsFocused false)}}
+                  />
+                {{/if}}
+              </div>
 
-            <PluginOutlet
-              @name="chat-composer-inline-buttons"
-              @outletArgs={{lazyHash composer=this channel=@channel}}
-            />
-
-            {{#if this.site.desktopView}}
-              <DButton
-                @icon="paper-plane"
-                class="-send"
-                title={{i18n "chat.composer.send"}}
-                disabled={{or this.disabled (not this.sendEnabled)}}
-                tabindex={{if this.sendEnabled 0 -1}}
-                {{on "click" this.onSend}}
-                {{on "mousedown" this.trapMouseDown}}
-                {{on "focus" (fn this.computeIsFocused true)}}
-                {{on "blur" (fn this.computeIsFocused false)}}
+              <PluginOutlet
+                @name="chat-composer-inline-buttons"
+                @outletArgs={{lazyHash composer=this channel=@channel}}
               />
-            {{/if}}
+            </div>
           </div>
-          {{#if this.site.mobileView}}
-            <DButton
-              @icon="paper-plane"
-              class="-send"
-              title={{i18n "chat.composer.send"}}
-              disabled={{or this.disabled (not this.sendEnabled)}}
-              tabindex={{if this.sendEnabled 0 -1}}
-              {{on "click" this.onSend}}
-              {{on "mousedown" this.trapMouseDown}}
-              {{on "focus" (fn this.computeIsFocused true)}}
-              {{on "blur" (fn this.computeIsFocused false)}}
-            />
-          {{/if}}
+
+          <DButton
+            @icon="paper-plane"
+            class="chat-composer__btn -send"
+            style="width: 44px; height: 44px; padding: 0; border: none; background: #ff1744; border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0;"
+            title={{i18n "chat.composer.send"}}
+            disabled={{or this.disabled (not this.sendEnabled)}}
+            tabindex={{if this.sendEnabled 0 -1}}
+            {{on "click" this.onSend}}
+            {{on "mousedown" this.trapMouseDown}}
+            {{on "focus" (fn this.computeIsFocused true)}}
+            {{on "blur" (fn this.computeIsFocused false)}}
+          />
         </div>
       </div>
 

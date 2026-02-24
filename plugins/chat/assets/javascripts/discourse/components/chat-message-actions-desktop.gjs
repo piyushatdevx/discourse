@@ -59,6 +59,21 @@ export default class ChatMessageActionsDesktop extends Component {
     return chatMessageContainer(this.message.id, this.context);
   }
 
+  get isOwnMessage() {
+    return this.messageContainer?.classList.contains("is-by-current-user");
+  }
+
+  get referenceElement() {
+    if (this.isOwnMessage) {
+      return this.messageContainer;
+    }
+    // For received messages, use the message bubble directly for closer positioning
+    return (
+      this.messageContainer?.querySelector(".chat-message-text") ||
+      this.messageContainer
+    );
+  }
+
   @action
   openEmojiPicker(_, event) {
     event.preventDefault();
@@ -74,17 +89,20 @@ export default class ChatMessageActionsDesktop extends Component {
     const boundary = this.messageContainer.closest(".chat-messages-scroller");
     this.size = boundary.clientWidth < REDUCED_WIDTH_THRESHOLD ? REDUCED : FULL;
 
-    computePosition(this.messageContainer, element, {
-      placement: "top-end",
+    const placement = this.isOwnMessage ? "top-end" : "top-start";
+    const fallbackPlacement = this.isOwnMessage ? "bottom-end" : "bottom-start";
+
+    computePosition(this.referenceElement, element, {
+      placement,
       strategy: "fixed",
       middleware: [
         offset({
-          mainAxis: MSG_ACTIONS_VERTICAL_PADDING,
-          crossAxis: -2,
+          mainAxis: this.isOwnMessage ? MSG_ACTIONS_VERTICAL_PADDING : 20,
+          crossAxis: this.isOwnMessage ? -12 : 42,
         }),
         flip({
           boundary,
-          fallbackPlacements: ["bottom-end"],
+          fallbackPlacements: [fallbackPlacement],
         }),
         shift({ limiter: limitShift() }),
         hide({ strategy: "referenceHidden" }),

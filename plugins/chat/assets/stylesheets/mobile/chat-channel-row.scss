@@ -7,12 +7,12 @@
   border-radius: 0;
   border-bottom: 1px solid var(--content-border-color);
   transition:
-    height 0.25s ease-in-out,
+    min-height 0.25s ease-in-out,
     opacity 0.25s ease-out;
   transform-origin: top center;
-  will-change: height, opacity, left;
+  will-change: min-height, opacity, left;
   position: relative;
-  height: 4em;
+  min-height: 4em;
 
   &.-fade-out {
     .chat-channel-row__content {
@@ -24,7 +24,7 @@
   }
 
   &__content {
-    padding-inline: 1.5rem;
+    // padding-inline: 1.5rem;
     padding-block: 0.5rem;
     z-index: 2;
     box-sizing: border-box;
@@ -54,13 +54,20 @@
     }
 
     .is-dm & {
-      display: grid;
-      grid-template-areas:
-        "name metadata"
-        "msg msg";
-      grid-template-columns: auto 1fr;
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
       width: 100%;
+      gap: 0.25rem;
+    }
+  }
+
+  &__top-line {
+    .is-dm & {
+      display: flex;
+      justify-content: space-between;
       align-items: center;
+      width: 100%;
     }
   }
 
@@ -98,13 +105,8 @@
   }
 
   .chat-channel {
-    &__user-info,
-    &__channel-info {
-      grid-area: name;
-    }
-
     &__metadata {
-      grid-area: metadata;
+      flex-shrink: 0;
 
       .chat-channel-unread-indicator {
         font-size: var(--font-down-2);
@@ -118,8 +120,8 @@
 
     &__last-message {
       @include ellipsis;
-      grid-area: msg;
       color: var(--primary-high);
+      width: 100%;
 
       .emoji {
         width: 1em;

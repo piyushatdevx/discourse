@@ -42,3 +42,36 @@ body.fantribe-theme:not(.admin-interface) {
   padding: var(--ft-space-3);
   color: var(--ft-gray-400);
 }
+
+// =============================================
+// MOBILE CHAT OVERRIDES
+// Chat has its own footer/navigation, so we adjust layout accordingly
+// =============================================
+body.fantribe-theme.has-full-page-chat:not(.admin-interface) {
+  // Chat has its own footer, remove default body padding
+  padding-bottom: 0;
+
+  // Override main outlet for chat - full viewport height minus header
+  #main-outlet {
+    padding: 0;
+    height: calc(100vh - var(--header-offset, 56px));
+    overflow: hidden;
+  }
+
+  // Full page chat container
+  .full-page-chat {
+    height: 100%;
+  }
+
+  // Main chat outlet - flex column for proper layout
+  #main-chat-outlet {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  // Hide FanTribe mobile bottom nav when in chat (chat has its own footer)
+  .fantribe-mobile-nav {
+    display: none;
+  }
+}

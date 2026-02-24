@@ -1,7 +1,7 @@
 import Component from "@glimmer/component";
 import { tracked } from "@glimmer/tracking";
 import { Input } from "@ember/component";
-import { fn } from "@ember/helper";
+import { fn, hash } from "@ember/helper";
 import { on } from "@ember/modifier";
 import { action } from "@ember/object";
 import { getOwner } from "@ember/owner";
@@ -32,6 +32,7 @@ import ChatMessageReaction from "discourse/plugins/chat/discourse/components/cha
 import ChatMessageSeparator from "discourse/plugins/chat/discourse/components/chat-message-separator";
 import ChatMessageText from "discourse/plugins/chat/discourse/components/chat-message-text";
 import ChatMessageThreadIndicator from "discourse/plugins/chat/discourse/components/chat-message-thread-indicator";
+import formatChatDate from "discourse/plugins/chat/discourse/helpers/format-chat-date";
 import ChatMessageInteractor from "discourse/plugins/chat/discourse/lib/chat-message-interactor";
 import ChatOnLongPress from "discourse/plugins/chat/discourse/modifiers/chat/on-long-press";
 
@@ -662,6 +663,13 @@ export default class ChatMessage extends Component {
                     </div>
                   {{/if}}
                 </ChatMessageText>
+
+                <span class="chat-message-timestamp">
+                  {{formatChatDate
+                    @message
+                    (hash threadContext=this.threadContext)
+                  }}
+                </span>
 
                 {{#if this.shouldRenderStopMessageStreamingButton}}
                   <div class="stop-streaming-btn-container">

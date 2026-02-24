@@ -91,6 +91,7 @@ export default class ChatNavbarChannelTitle extends Component {
                 "c-navbar__star-channel-button"
                 (if this.isStarred "--starred")
               }}
+              style="outline: none; box-shadow: none;"
             />
           </:trigger>
           <:content>

@@ -1018,7 +1018,7 @@ export default class SelectKit extends Component {
 
           return size({
             apply({ rects }) {
-              minWidth = `${Math.max(Math.round(rects.reference.width), 220)}px`;
+              minWidth = `${Math.max(Math.round(rects.reference.width), 160)}px`;
             },
           }).fn(state);
         },
