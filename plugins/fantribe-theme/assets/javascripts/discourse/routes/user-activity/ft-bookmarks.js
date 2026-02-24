@@ -12,6 +12,7 @@ import DiscourseRoute from "discourse/routes/discourse";
 export default class UserActivityFtBookmarksRoute extends DiscourseRoute {
   async model() {
     const username = this.modelFor("user").username;
+    const currentUserId = this.currentUser?.id;
     try {
       const response = await ajax(`/u/${username}/bookmarks.json`);
       const bookmarks =
@@ -37,6 +38,10 @@ export default class UserActivityFtBookmarksRoute extends DiscourseRoute {
             bookmark_id: b.id,
             first_post_id:
               b.bookmarkable_type === "Post" ? b.bookmarkable_id : null,
+            // Prevent self-reactions: disable the reaction bar when the
+            // bookmarked post was authored by the current user.
+            op_can_like:
+              !b.user?.id || !currentUserId || b.user.id !== currentUserId,
             // Synthesise a minimal posters array so the feed card can show
             // the author's avatar and name (bookmark serializer embeds user).
             posters: b.user ? [{ user_id: b.user.id, user: b.user }] : [],

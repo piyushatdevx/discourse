@@ -181,8 +181,16 @@ export default class FantribeEngagementBar extends Component {
       return;
     }
 
+    // ShareTopicModal reads topic.shareUrl — a computed property that only
+    // exists on full Discourse Topic model instances. Our feed topics are plain
+    // JS objects, so we inject shareUrl directly before passing to the modal.
+    const topicWithUrl = {
+      ...topic,
+      shareUrl: `/t/${topic.slug}/${topic.id}`,
+    };
+
     this.modal.show(ShareTopicModal, {
-      model: { topic, category: topic.category },
+      model: { topic: topicWithUrl, category: topic.category },
     });
   }
 
