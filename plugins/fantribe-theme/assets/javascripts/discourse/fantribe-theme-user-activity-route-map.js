@@ -6,5 +6,6 @@ export default {
     this.route("ftCoCreations", { path: "co-creations" });
     this.route("ftShop", { path: "shop" });
     this.route("ftBookmarks", { path: "ft-bookmarks" });
+    this.route("ftSettings", { path: "ft-settings" });
   },
 };

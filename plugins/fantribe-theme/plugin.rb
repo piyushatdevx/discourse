@@ -62,6 +62,8 @@ register_asset "stylesheets/common/components/engagement-bar.scss"
 register_asset "stylesheets/common/components/tribe-header.scss"
 register_asset "stylesheets/common/components/tribe-page.scss"
 register_asset "stylesheets/common/components/user-profile.scss"
+register_asset "stylesheets/common/components/profile-modals.scss"
+register_asset "stylesheets/common/components/preferences.scss"
 
 # Discourse overrides - MUST load last
 register_asset "stylesheets/common/fantribe-overrides.scss"

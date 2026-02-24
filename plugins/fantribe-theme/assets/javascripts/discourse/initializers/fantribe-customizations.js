@@ -29,6 +29,13 @@ function initializeFantribe(api) {
         // Matches:  /u/:username
         //           /u/:username/summary
         //           /u/:username/activity   (no ft-posts sub-path yet)
+        const isPrefs = url.startsWith("/u/") && url.includes("/preferences");
+        document.body.classList.toggle("ft-on-preferences", isPrefs);
+
+        const isSettingsHub =
+          url.startsWith("/u/") && url.includes("/activity/ft-settings");
+        document.body.classList.toggle("ft-on-settings-hub", isSettingsHub);
+
         const isProfileDefault =
           /^\/u\/[^/]+\/?$/.test(url) ||
           /^\/u\/[^/]+\/summary\/?$/.test(url) ||

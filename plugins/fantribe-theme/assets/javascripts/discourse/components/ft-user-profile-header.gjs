@@ -3,7 +3,6 @@ import { tracked } from "@glimmer/tracking";
 import { concat } from "@ember/helper";
 import { on } from "@ember/modifier";
 import { action } from "@ember/object";
-import { LinkTo } from "@ember/routing";
 import { service } from "@ember/service";
 import { htmlSafe } from "@ember/template";
 import avatar from "discourse/helpers/avatar";
@@ -12,6 +11,8 @@ import formatDate from "discourse/helpers/format-date";
 import { ajax } from "discourse/lib/ajax";
 import { popupAjaxError } from "discourse/lib/ajax-error";
 import ftIcon from "../helpers/ft-icon";
+import FtEditProfileModal from "./ft-edit-profile-modal";
+import FtShareProfileModal from "./ft-share-profile-modal";
 
 // Maps Discourse trust level → FanTribe tier.
 // TL0 (new) has no ring; TL1+ earn their tier.
@@ -25,8 +26,11 @@ const TRUST_LEVEL_TIERS = [
 
 export default class FtUserProfileHeader extends Component {
   @service currentUser;
+  @service router;
 
   @tracked followLoading = false;
+  @tracked showShareModal = false;
+  @tracked showEditModal = false;
   @tracked _isFollowing = null;
   @tracked _followerCount = null;
 
@@ -102,7 +106,33 @@ export default class FtUserProfileHeader extends Component {
     return this.args.user?.bio_cooked;
   }
 
-  // ── Actions ────────────────────────────────────────────────────
+  // ── Modal actions ──────────────────────────────────────────────
+  @action
+  openShareModal() {
+    this.showShareModal = true;
+  }
+
+  @action
+  closeShareModal() {
+    this.showShareModal = false;
+  }
+
+  @action
+  openEditModal() {
+    this.showEditModal = true;
+  }
+
+  @action
+  closeEditModal() {
+    this.showEditModal = false;
+  }
+
+  @action
+  goToSettings() {
+    this.router.transitionTo("userActivity.ftSettings", this.args.user);
+  }
+
+  // ── Follow ─────────────────────────────────────────────────────
   @action
   async toggleFollow() {
     if (!this.canFollow || this.followLoading) {
@@ -135,19 +165,6 @@ export default class FtUserProfileHeader extends Component {
     }
   }
 
-  @action
-  shareProfile() {
-    const url = window.location.href;
-    if (navigator.share) {
-      navigator.share({
-        url,
-        title: this.args.user?.name || this.args.user?.username,
-      });
-    } else {
-      navigator.clipboard?.writeText(url);
-    }
-  }
-
   <template>
     {{#if @user}}
       <div class="ft-profile">
@@ -167,19 +184,20 @@ export default class FtUserProfileHeader extends Component {
             <button
               type="button"
               class="ft-profile__cover-btn"
-              {{on "click" this.shareProfile}}
+              {{on "click" this.openShareModal}}
               aria-label="Share profile"
             >
               {{ftIcon "share2"}}
             </button>
             {{#if this.isOwnProfile}}
-              <LinkTo
-                @route="preferences.profile"
-                @model={{@user}}
+              <button
+                type="button"
                 class="ft-profile__cover-btn"
+                {{on "click" this.goToSettings}}
+                aria-label="Settings"
               >
                 {{ftIcon "settings"}}
-              </LinkTo>
+              </button>
             {{/if}}
           </div>
         </div>
@@ -246,14 +264,14 @@ export default class FtUserProfileHeader extends Component {
                     {{/if}}
                   </button>
                 {{else if this.isOwnProfile}}
-                  <LinkTo
-                    @route="preferences.profile"
-                    @model={{@user}}
+                  <button
+                    type="button"
                     class="ft-profile__edit-btn"
+                    {{on "click" this.openEditModal}}
                   >
                     {{icon "pencil"}}
                     Edit Profile
-                  </LinkTo>
+                  </button>
                 {{/if}}
               </div>
 
@@ -322,6 +340,19 @@ export default class FtUserProfileHeader extends Component {
           </div>
         </div>
       </div>
+
+      {{! ── Modals ── }}
+      {{#if this.showShareModal}}
+        <FtShareProfileModal
+          @user={{@user}}
+          @onClose={{this.closeShareModal}}
+        />
+      {{/if}}
+
+      {{#if this.showEditModal}}
+        <FtEditProfileModal @user={{@user}} @onClose={{this.closeEditModal}} />
+      {{/if}}
+
     {{/if}}
   </template>
 }

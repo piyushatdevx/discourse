@@ -39,9 +39,12 @@ body.fantribe-theme:not(.admin-interface) {
 
   // ── Hide ALL native secondary nav + activity content ─────────
   // The secondary filter nav ("All | Topics | Replies | Read…") must
-  // never show. Neither should the native activity stream list.
-  .user-navigation.user-navigation-secondary {
-    display: none !important;
+  // never show on profile tab pages. On preference pages it is shown
+  // and FT-styled via preferences.scss (body.ft-on-preferences).
+  &:not(.ft-on-preferences) {
+    .user-navigation.user-navigation-secondary {
+      display: none !important;
+    }
   }
 
   // Native activity stream items shown while routeDidChange redirect

@@ -3,7 +3,7 @@ import { LinkTo } from "@ember/routing";
 import { service } from "@ember/service";
 import ftIcon from "../../helpers/ft-icon";
 
-// Injects FanTribe's 5 profile tabs into the user-main-nav outlet.
+// Injects FanTribe's profile tabs into the user-main-nav outlet.
 // All native Discourse tabs (Activity, Notifications, etc.) are hidden
 // via CSS in user-profile.scss using display:none !important, and the
 // default userActivity route is redirected to ftPosts in the initializer.

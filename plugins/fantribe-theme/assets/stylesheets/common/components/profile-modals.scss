@@ -1,0 +1,496 @@
+// ============================================================
+// FanTribe Profile Modals
+// Share Profile · Edit Profile · Settings
+// All three use the shared .ft-modal-backdrop / .ft-modal shell
+// from create-post-modal.scss — only modal-specific parts live here.
+// ============================================================
+body.fantribe-theme:not(.admin-interface) {
+  // ── Share Profile Modal ─────────────────────────────────────
+  .ft-share-modal {
+    width: min(480px, 94vw);
+    gap: 0;
+  }
+
+  .ft-share-modal__preview {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 20px 24px;
+    background: linear-gradient(
+      135deg,
+      var(--ft-vibrant-red-tint),
+      var(--ft-electric-blue-tint)
+    );
+    border-bottom: 1px solid var(--ft-neutral-200);
+  }
+
+  .ft-share-modal__preview-avatar {
+    flex-shrink: 0;
+
+    img,
+    .avatar {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      border: 3px solid #fff;
+      box-shadow: var(--ft-shadow-md);
+    }
+  }
+
+  .ft-share-modal__preview-name {
+    font-size: var(--ft-font-lg);
+    font-weight: var(--ft-font-weight-bold);
+    color: var(--ft-slate-900);
+    line-height: 1.3;
+  }
+
+  .ft-share-modal__preview-handle {
+    font-size: var(--ft-font-sm);
+    color: var(--ft-slate-500);
+    margin-top: 2px;
+  }
+
+  .ft-share-modal__section {
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--ft-neutral-200);
+
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+
+  .ft-share-modal__section-label {
+    font-size: var(--ft-font-xs);
+    font-weight: var(--ft-font-weight-semibold);
+    color: var(--ft-slate-400);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin: 0 0 10px;
+  }
+
+  .ft-share-modal__link-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .ft-share-modal__link-display {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;
+    background: var(--ft-neutral-100);
+    border: 1px solid var(--ft-neutral-200);
+    border-radius: var(--ft-radius-lg);
+    min-width: 0;
+
+    svg {
+      flex-shrink: 0;
+      color: var(--ft-slate-400);
+    }
+  }
+
+  .ft-share-modal__link-text {
+    font-size: var(--ft-font-sm);
+    color: var(--ft-slate-600);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .ft-share-modal__copy-btn {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 16px;
+    border-radius: var(--ft-radius-lg);
+    font-size: var(--ft-font-sm);
+    font-weight: var(--ft-font-weight-semibold);
+    border: none;
+    cursor: pointer;
+    transition: var(--ft-transition-all);
+    background: var(--ft-deep-charcoal);
+    color: #fff;
+    white-space: nowrap;
+
+    svg {
+      width: 14px;
+      height: 14px;
+    }
+
+    &:hover {
+      background: var(--ft-deep-charcoal-light);
+    }
+
+    &--copied {
+      background: var(--ft-success);
+      color: #fff;
+
+      &:hover {
+        background: var(--ft-success);
+      }
+    }
+  }
+
+  .ft-share-modal__socials-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  .ft-share-modal__social-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 16px;
+    border-radius: var(--ft-radius-lg);
+    font-size: var(--ft-font-sm);
+    font-weight: var(--ft-font-weight-semibold);
+    border: none;
+    cursor: pointer;
+    transition: var(--ft-transition-all);
+    color: #fff;
+
+    span {
+      white-space: nowrap;
+    }
+
+    &--twitter {
+      background: #000;
+
+      &:hover {
+        background: #111;
+      }
+    }
+
+    &--whatsapp {
+      background: #25d366;
+
+      &:hover {
+        background: #1db954;
+      }
+    }
+  }
+
+  .ft-share-modal__social-icon {
+    flex-shrink: 0;
+  }
+
+  // ── Edit Profile Modal ───────────────────────────────────────
+  .ft-edit-modal {
+    width: min(520px, 94vw);
+    max-height: 88vh;
+    overflow-y: auto;
+    gap: 0;
+  }
+
+  .ft-edit-modal__avatar-section {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 20px 24px;
+    background: var(--ft-neutral-100);
+    border-bottom: 1px solid var(--ft-neutral-200);
+  }
+
+  .ft-edit-modal__avatar-wrap {
+    flex-shrink: 0;
+
+    img,
+    .avatar {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      border: 3px solid #fff;
+      box-shadow: var(--ft-shadow-md);
+    }
+  }
+
+  .ft-edit-modal__avatar-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .ft-edit-modal__avatar-hint {
+    font-size: var(--ft-font-sm);
+    color: var(--ft-slate-500);
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  .ft-edit-modal__avatar-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: var(--ft-font-sm);
+    font-weight: var(--ft-font-weight-semibold);
+    color: var(--ft-electric-blue);
+    text-decoration: none;
+    transition: color 150ms;
+
+    .d-icon {
+      width: 13px;
+      height: 13px;
+    }
+
+    &:hover {
+      color: var(--ft-electric-blue-hover);
+      text-decoration: underline;
+    }
+  }
+
+  .ft-edit-modal__fields {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 24px;
+  }
+
+  .ft-edit-modal__field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .ft-edit-modal__label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: var(--ft-font-sm);
+    font-weight: var(--ft-font-weight-semibold);
+    color: var(--ft-slate-700);
+
+    .d-icon,
+    svg {
+      width: 14px;
+      height: 14px;
+      color: var(--ft-slate-400);
+    }
+  }
+
+  .ft-edit-modal__input {
+    width: 100%;
+    padding: 10px 14px;
+    background: var(--ft-neutral-50);
+    border: 1.5px solid var(--ft-neutral-200);
+    border-radius: var(--ft-radius-lg);
+    font-size: var(--ft-font-base);
+    color: var(--ft-slate-900);
+    font-family: var(--ft-font-family);
+    transition:
+      border-color 150ms,
+      box-shadow 150ms;
+    box-sizing: border-box;
+
+    &::placeholder {
+      color: var(--ft-slate-400);
+    }
+
+    &:focus {
+      outline: none;
+      border-color: var(--ft-electric-blue);
+      box-shadow: 0 0 0 3px rgb(0 128 255 / 0.12);
+      background: #fff;
+    }
+  }
+
+  .ft-edit-modal__textarea {
+    @extend .ft-edit-modal__input;
+    min-height: 96px;
+    resize: vertical;
+    line-height: var(--ft-line-height);
+  }
+
+  .ft-edit-modal__save-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 11px 28px;
+    border-radius: var(--ft-radius-pill);
+    font-size: var(--ft-font-base);
+    font-weight: var(--ft-font-weight-bold);
+    border: none;
+    cursor: pointer;
+    transition: var(--ft-transition-all);
+    background: var(--ft-gradient-action);
+    color: #fff;
+    box-shadow: 0 4px 12px rgb(255 23 68 / 0.3);
+
+    &:hover:not(:disabled) {
+      box-shadow: 0 8px 20px rgb(255 23 68 / 0.4);
+      transform: translateY(-1px);
+    }
+
+    &--disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+  }
+
+  // ── Settings Modal ───────────────────────────────────────────
+  .ft-settings-modal {
+    width: min(460px, 94vw);
+    gap: 0;
+    overflow: hidden;
+  }
+
+  .ft-settings-modal__title-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--ft-slate-800);
+
+    svg {
+      color: var(--ft-slate-500);
+    }
+  }
+
+  .ft-settings-modal__nav {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    padding: 8px;
+  }
+
+  .ft-settings-modal__section {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 16px;
+    border-radius: var(--ft-radius-small);
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    transition: background 150ms;
+    text-align: left;
+    width: 100%;
+
+    &:hover {
+      background: var(--ft-neutral-100);
+    }
+
+    // Chevron at end
+    > svg:last-child {
+      margin-left: auto;
+      flex-shrink: 0;
+      color: var(--ft-slate-300);
+    }
+  }
+
+  .ft-settings-modal__section-icon-wrap {
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+    border-radius: var(--ft-radius-lg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .d-icon,
+    svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    // Colour per section
+    .ft-settings-modal__section--blue & {
+      background: var(--ft-electric-blue-light);
+      color: var(--ft-electric-blue);
+    }
+
+    .ft-settings-modal__section--purple & {
+      background: var(--ft-purple-light);
+      color: var(--ft-purple);
+    }
+
+    .ft-settings-modal__section--green & {
+      background: var(--ft-mint-light);
+      color: var(--ft-mint);
+    }
+
+    .ft-settings-modal__section--amber & {
+      background: var(--ft-amber-light);
+      color: var(--ft-amber);
+    }
+
+    .ft-settings-modal__section--coral & {
+      background: var(--ft-coral-light);
+      color: var(--ft-coral);
+    }
+
+    &--danger {
+      background: var(--ft-error-light);
+      color: var(--ft-error);
+    }
+  }
+
+  .ft-settings-modal__section-text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+  }
+
+  .ft-settings-modal__section-label {
+    font-size: var(--ft-font-sm);
+    font-weight: var(--ft-font-weight-semibold);
+    color: var(--ft-slate-800);
+    line-height: 1.3;
+  }
+
+  .ft-settings-modal__section-desc {
+    font-size: var(--ft-font-xs);
+    color: var(--ft-slate-400);
+    line-height: 1.4;
+  }
+
+  .ft-settings-modal__danger-zone {
+    padding: 8px 8px 16px;
+    border-top: 1px solid var(--ft-neutral-200);
+    margin-top: 4px;
+  }
+
+  .ft-settings-modal__danger-label {
+    font-size: var(--ft-font-xs);
+    font-weight: var(--ft-font-weight-semibold);
+    color: var(--ft-error);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding: 8px 16px 4px;
+    margin: 0;
+  }
+
+  .ft-settings-modal__danger-btn {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 16px;
+    border-radius: var(--ft-radius-small);
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    transition: background 150ms;
+    text-align: left;
+    width: 100%;
+
+    &:hover {
+      background: var(--ft-error-light);
+    }
+
+    // Chevron at end
+    > svg:last-child {
+      margin-left: auto;
+      flex-shrink: 0;
+      color: var(--ft-slate-300);
+    }
+
+    .ft-settings-modal__section-label {
+      color: var(--ft-error);
+    }
+  }
+}
