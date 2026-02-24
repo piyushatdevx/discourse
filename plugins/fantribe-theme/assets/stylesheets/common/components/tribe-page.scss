@@ -1,0 +1,338 @@
+// Dedicated Tribe Page — full-width layout replacing the feed when on a category route
+body.fantribe-theme:not(.admin-interface) {
+  // Outer wrapper — full-width, no max-width constraint
+  .ft-tribe-page {
+    width: 100%;
+    padding-bottom: var(--ft-space-8);
+  }
+
+  // ─────────────────────────────────────────
+  // HERO (cover image) — full viewport width
+  // ─────────────────────────────────────────
+  .ft-tribe-page__hero {
+    position: relative;
+    height: clamp(
+      160px,
+      28vw,
+      300px
+    ); // responsive: 160px mobile → 300px wide desktop
+    background-size: cover;
+    background-position: center;
+    overflow: visible; // logo overlaps bottom
+  }
+
+  .ft-tribe-page__hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, transparent 30%, rgb(0 0 0 / 50%));
+    border-radius: inherit;
+  }
+
+  // ─────────────────────────────────────────
+  // TRIBE LOGO — overlaps hero bottom
+  // ─────────────────────────────────────────
+  .ft-tribe-page__logo-wrapper {
+    position: absolute;
+    bottom: clamp(-36px, -5vw, -44px); // shifts with logo size
+    left: clamp(16px, 4vw, 32px);
+    z-index: 2;
+  }
+
+  .ft-tribe-page__logo {
+    // Responsive size: 72px mobile → 96px wide desktop
+    width: clamp(72px, 11vw, 96px);
+    height: clamp(72px, 11vw, 96px);
+    border-radius: clamp(14px, 2vw, 20px);
+    border: 4px solid var(--ft-white, #fff);
+    box-shadow: var(--ft-shadow-lg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    flex-shrink: 0;
+
+    &--initial {
+      font-size: clamp(1.5rem, 4vw, 2.25rem);
+      font-weight: var(--ft-font-weight-bold);
+      color: var(--ft-white, #fff);
+    }
+
+    &--emoji {
+      font-size: clamp(2rem, 5vw, 2.5rem);
+      background: var(--ft-white, #fff);
+    }
+  }
+
+  .ft-tribe-page__logo-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  // ─────────────────────────────────────────
+  // INFO CARD
+  // ─────────────────────────────────────────
+  .ft-tribe-page__info {
+    background: var(--ft-white, #fff);
+    border: 1px solid var(--ft-gray-100, #f3f4f6);
+    border-top: none;
+
+    // Top padding accounts for logo overlap (half logo + 12px clearance)
+    padding: clamp(52px, 8vw, 68px) clamp(16px, 4vw, 32px) var(--ft-space-6);
+    margin-bottom: var(--ft-space-4);
+  }
+
+  .ft-tribe-page__info-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--ft-space-4);
+    margin-bottom: var(--ft-space-3);
+  }
+
+  .ft-tribe-page__info-text {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .ft-tribe-page__name {
+    font-size: 1.5rem;
+    font-weight: var(--ft-font-weight-bold);
+    color: var(--ft-deep-charcoal, #1a1d23);
+    margin: 0 0 var(--ft-space-2);
+    line-height: 1.2;
+  }
+
+  .ft-tribe-page__meta {
+    display: flex;
+    align-items: center;
+    gap: var(--ft-space-2);
+    flex-wrap: wrap;
+    font-size: var(--ft-font-sm, 0.875rem);
+    color: var(--ft-gray-500, #6b7280);
+
+    .d-icon {
+      width: 13px;
+      height: 13px;
+    }
+  }
+
+  .ft-tribe-page__description {
+    font-size: var(--ft-font-sm, 0.875rem);
+    color: var(--ft-gray-600, #4b5563);
+    line-height: 1.625;
+    margin: 0;
+  }
+
+  // ─────────────────────────────────────────
+  // ACTION BUTTONS (join + edit)
+  // ─────────────────────────────────────────
+  .ft-tribe-page__actions {
+    display: flex;
+    align-items: center;
+    gap: var(--ft-space-2);
+    flex-shrink: 0;
+  }
+
+  .ft-tribe-page__edit-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--ft-space-1-5);
+    padding: 8px 14px;
+    border-radius: var(--ft-radius-small, 12px);
+    font-size: var(--ft-font-sm, 0.875rem);
+    font-weight: var(--ft-font-weight-medium);
+    color: var(--ft-gray-600, #4b5563);
+    background: var(--ft-gray-50, #f9fafb);
+    border: 1px solid var(--ft-gray-200, #e5e7eb);
+    text-decoration: none;
+    transition: background var(--ft-transition-fast);
+
+    .d-icon {
+      width: 13px;
+      height: 13px;
+    }
+
+    &:hover {
+      background: var(--ft-gray-100, #f3f4f6);
+      color: var(--ft-deep-charcoal, #1a1d23);
+    }
+  }
+
+  .ft-tribe-page__join-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--ft-space-2);
+    padding: 10px 20px;
+    border-radius: var(--ft-radius-pill, 9999px);
+    font-size: var(--ft-font-sm, 0.875rem);
+    font-weight: var(--ft-font-weight-semibold);
+    cursor: pointer;
+    border: 2px solid transparent;
+    white-space: nowrap;
+    background: var(--ft-vibrant-red, #ff1744);
+    color: var(--ft-white, #fff);
+    box-shadow: var(--ft-shadow-sm);
+    transition:
+      background var(--ft-transition-colors),
+      box-shadow var(--ft-transition-shadow),
+      border-color var(--ft-transition-colors),
+      color var(--ft-transition-colors);
+
+    .d-icon {
+      width: 14px;
+      height: 14px;
+    }
+
+    &:hover:not(:disabled) {
+      background: var(--ft-vibrant-red-hover, #e6143d);
+      box-shadow: var(--ft-shadow-md);
+    }
+
+    &--joined {
+      background: transparent;
+      border-color: var(--ft-vibrant-red, #ff1744);
+      color: var(--ft-vibrant-red, #ff1744);
+      box-shadow: none;
+
+      &:hover:not(:disabled) {
+        background: var(--ft-vibrant-red-light, #ffe5ec);
+      }
+    }
+
+    &--loading,
+    &:disabled {
+      opacity: 0.65;
+      cursor: not-allowed;
+    }
+  }
+
+  // ─────────────────────────────────────────
+  // COMPOSE BOX (members only)
+  // ─────────────────────────────────────────
+  .ft-tribe-page__compose {
+    display: flex;
+    align-items: center;
+    gap: var(--ft-space-3);
+    background: var(--ft-white, #fff);
+    border: 1px solid var(--ft-gray-100, #f3f4f6);
+    border-radius: var(--ft-radius-medium, 16px);
+    padding: 14px var(--ft-space-6);
+    margin-bottom: var(--ft-space-4);
+    cursor: pointer;
+    transition:
+      border-color var(--ft-transition-fast),
+      box-shadow var(--ft-transition-shadow);
+
+    &:hover {
+      border-color: var(--ft-vibrant-red-border, rgb(255 23 68 / 30%));
+      box-shadow: var(--ft-shadow-sm);
+    }
+  }
+
+  .ft-tribe-page__compose-avatar {
+    flex-shrink: 0;
+
+    img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+  }
+
+  .ft-tribe-page__compose-placeholder {
+    flex: 1;
+    min-width: 0;
+    font-size: var(--ft-font-sm, 0.875rem);
+    color: var(--ft-gray-400, #9ca3af);
+
+    strong {
+      color: var(--ft-gray-600, #4b5563);
+      font-weight: var(--ft-font-weight-medium);
+    }
+  }
+
+  .ft-tribe-page__compose-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 14px;
+    background: var(--ft-vibrant-red-light, #ffe5ec);
+    color: var(--ft-vibrant-red, #ff1744);
+    border: none;
+    border-radius: var(--ft-radius-pill, 9999px);
+    font-size: var(--ft-font-xs, 0.75rem);
+    font-weight: var(--ft-font-weight-semibold);
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: background var(--ft-transition-fast);
+
+    .d-icon {
+      width: 12px;
+      height: 12px;
+    }
+
+    &:hover {
+      background: var(--ft-vibrant-red-border, rgb(255 23 68 / 20%));
+    }
+  }
+
+  // ─────────────────────────────────────────
+  // POSTS SECTION
+  // ─────────────────────────────────────────
+  .ft-tribe-page__posts {
+    display: flex;
+    flex-direction: column;
+    gap: var(--ft-space-4);
+  }
+
+  // Empty state
+  .ft-tribe-page__empty {
+    text-align: center;
+    padding: 56px var(--ft-space-6);
+    background: var(--ft-white, #fff);
+    border-radius: var(--ft-radius-medium, 16px);
+    border: 1px solid var(--ft-gray-100, #f3f4f6);
+  }
+
+  .ft-tribe-page__empty-icon {
+    font-size: 3rem;
+    margin-bottom: var(--ft-space-3);
+  }
+
+  .ft-tribe-page__empty-title {
+    font-size: 1.125rem;
+    font-weight: var(--ft-font-weight-semibold);
+    color: var(--ft-deep-charcoal, #1a1d23);
+    margin: 0 0 var(--ft-space-2);
+  }
+
+  .ft-tribe-page__empty-text {
+    font-size: var(--ft-font-sm, 0.875rem);
+    color: var(--ft-gray-500, #6b7280);
+    margin: 0;
+  }
+
+  // ─────────────────────────────────────────
+  // RESPONSIVE
+  // ─────────────────────────────────────────
+  @media (width <= 640px) {
+    .ft-tribe-page__name {
+      font-size: 1.25rem;
+    }
+
+    .ft-tribe-page__info-header {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .ft-tribe-page__compose {
+      padding: 12px var(--ft-space-4);
+    }
+
+    .ft-tribe-page__compose-btn span {
+      display: none;
+    }
+  }
+}

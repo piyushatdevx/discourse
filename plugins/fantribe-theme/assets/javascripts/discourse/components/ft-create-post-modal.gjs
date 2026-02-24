@@ -4,12 +4,13 @@ import { fn } from "@ember/helper";
 import { on } from "@ember/modifier";
 import { action } from "@ember/object";
 import { service } from "@ember/service";
+import { htmlSafe } from "@ember/template";
 import avatar from "discourse/helpers/avatar";
-import icon from "discourse/helpers/d-icon";
 import { ajax } from "discourse/lib/ajax";
 import { popupAjaxError } from "discourse/lib/ajax-error";
 import { getUploadMarkdown } from "discourse/lib/uploads";
 import { eq } from "discourse/truth-helpers";
+import ftIcon from "../helpers/ft-icon";
 
 const MAX_CHARS = 2000;
 
@@ -19,6 +20,8 @@ export default class FtCreatePostModal extends Component {
   @service siteSettings;
   @service site;
   @service fantribeCreate;
+  @service fantribeMembership;
+  @service fantribeFeedState;
 
   @tracked postTitle = "";
   @tracked postText = "";
@@ -29,6 +32,66 @@ export default class FtCreatePostModal extends Component {
   @tracked scheduledDate = "";
   @tracked scheduledTime = "";
   @tracked isUploading = false;
+  @tracked isTribeDropdownOpen = false;
+  @tracked _localCategory = undefined;
+
+  get localCategory() {
+    return this._localCategory !== undefined
+      ? this._localCategory
+      : this.fantribeCreate.postCategory;
+  }
+
+  get joinedTribes() {
+    if (!this.currentUser) {
+      return [];
+    }
+    return (this.site.categories || [])
+      .filter(
+        (cat) =>
+          !cat.isUncategorizedCategory &&
+          this.fantribeMembership.isMember(cat.id)
+      )
+      .slice(0, 8);
+  }
+
+  get hasTribeOptions() {
+    return this.joinedTribes.length > 0;
+  }
+
+  tribeDotStyle(category) {
+    return htmlSafe(`background-color: #${category.color || "0088cc"}`);
+  }
+
+  // Returns the first letter of a category name for use as a letter-avatar
+  // fallback when the tribe has no uploaded logo.
+  tribeLetter(category) {
+    return (category?.name || "?").charAt(0).toUpperCase();
+  }
+
+  get selectedTribeLabel() {
+    return this.localCategory?.name || "General";
+  }
+
+  get selectedTribeLogo() {
+    return (
+      this.localCategory?.uploaded_logo_url ||
+      this.localCategory?.uploaded_logo?.url ||
+      null
+    );
+  }
+
+  get selectedTribeDotStyle() {
+    if (this.localCategory) {
+      return htmlSafe(
+        `background-color: #${this.localCategory.color || "0088cc"}`
+      );
+    }
+    return htmlSafe("background-color: #9ca3af");
+  }
+
+  tribeLogo(category) {
+    return category?.uploaded_logo_url || category?.uploaded_logo?.url || null;
+  }
 
   get charCount() {
     return this.postText.length;
@@ -50,6 +113,27 @@ export default class FtCreatePostModal extends Component {
 
   get hasUploadedMedia() {
     return this.uploadedMedia.length > 0;
+  }
+
+  @action
+  selectTribe(category) {
+    this._localCategory = category;
+  }
+
+  @action
+  toggleTribeDropdown() {
+    this.isTribeDropdownOpen = !this.isTribeDropdownOpen;
+  }
+
+  @action
+  selectTribeFromDropdown(category) {
+    this._localCategory = category;
+    this.isTribeDropdownOpen = false;
+  }
+
+  @action
+  closeTribeDropdown() {
+    this.isTribeDropdownOpen = false;
   }
 
   @action
@@ -160,6 +244,7 @@ export default class FtCreatePostModal extends Component {
 
     try {
       const categoryId =
+        this.localCategory?.id ||
         parseInt(this.siteSettings.default_composer_category, 10) ||
         this.site.uncategorized_category_id;
 
@@ -177,16 +262,36 @@ export default class FtCreatePostModal extends Component {
         },
       });
 
-      this.fantribeCreate.closeCreatePostModal();
-
-      if (result?.post?.topic_slug && result?.post?.topic_id) {
-        this.router.transitionTo(
-          "topic.fromParamsNear",
-          result.post.topic_slug,
-          result.post.topic_id,
-          result.post.post_number
-        );
+      if (result?.post?.topic_id) {
+        // Construct a topic-shaped object from the API response so the new
+        // post appears at the top of the feed instantly — no navigation needed.
+        const newTopic = {
+          id: result.post.topic_id,
+          slug: result.post.topic_slug,
+          title: result.post.topic_title || this.postTitle,
+          excerpt: result.post.excerpt || this.postText.substring(0, 280),
+          excerpt_truncated: !result.post.excerpt && this.postText.length > 280,
+          created_at: result.post.created_at || new Date().toISOString(),
+          creator: this.currentUser,
+          posters: [{ extras: "latest", user: this.currentUser }],
+          category_id: categoryId,
+          like_count: 0,
+          op_like_count: 0,
+          op_liked: false,
+          op_can_like: false,
+          views: 0,
+          posts_count: 1,
+          first_post_id: result.post.id,
+          image_url: null,
+          image_urls: [],
+        };
+        this.fantribeFeedState.prependTopic(newTopic);
       }
+
+      this.fantribeCreate.closeCreatePostModal();
+      // Refresh the route model so the new post appears in the real topic list.
+      // Fire-and-forget — the pending topic above shows instantly while this loads.
+      this.router.refresh();
     } catch (error) {
       popupAjaxError(error);
     } finally {
@@ -212,7 +317,7 @@ export default class FtCreatePostModal extends Component {
             class="ft-modal__close-btn"
             {{on "click" this.fantribeCreate.closeCreatePostModal}}
           >
-            {{icon "xmark"}}
+            {{ftIcon "x"}}
           </button>
         </div>
 
@@ -230,6 +335,109 @@ export default class FtCreatePostModal extends Component {
             >@{{this.currentUser.username}}</div>
           </div>
         </div>
+
+        {{! Tribe selector — full-width inline expand }}
+        {{#if this.hasTribeOptions}}
+          <div class="ft-modal__tribe-section">
+            <label class="ft-modal__tribe-section-label">Posting to</label>
+            <div class="ft-modal__tribe-select-wrap">
+              <button
+                type="button"
+                class="ft-modal__tribe-select-trigger
+                  {{if
+                    this.isTribeDropdownOpen
+                    'ft-modal__tribe-select-trigger--open'
+                  }}"
+                {{on "click" this.toggleTribeDropdown}}
+              >
+                {{! Trigger: logo img → letter avatar → globe icon (for General) }}
+                {{#if this.localCategory}}
+                  {{#if this.selectedTribeLogo}}
+                    <img
+                      src={{this.selectedTribeLogo}}
+                      class="ft-modal__tribe-logo ft-modal__tribe-logo--trigger"
+                      alt=""
+                    />
+                  {{else}}
+                    <span
+                      class="ft-modal__tribe-letter-avatar"
+                      style={{this.selectedTribeDotStyle}}
+                    >{{this.tribeLetter this.localCategory}}</span>
+                  {{/if}}
+                {{else}}
+                  <span class="ft-modal__tribe-select-option-icon">
+                    {{ftIcon "globe"}}
+                  </span>
+                {{/if}}
+                <span
+                  class="ft-modal__tribe-select-value"
+                >{{this.selectedTribeLabel}}</span>
+                <span class="ft-modal__tribe-select-chevron">
+                  {{ftIcon "chevron-down"}}
+                </span>
+              </button>
+
+              {{#if this.isTribeDropdownOpen}}
+                <div class="ft-modal__tribe-select-options">
+                  <button
+                    type="button"
+                    class="ft-modal__tribe-select-option
+                      {{unless
+                        this.localCategory
+                        'ft-modal__tribe-select-option--active'
+                      }}"
+                    {{on "click" (fn this.selectTribeFromDropdown null)}}
+                  >
+                    <span class="ft-modal__tribe-select-option-icon">
+                      {{ftIcon "globe"}}
+                    </span>
+                    <span
+                      class="ft-modal__tribe-select-option-name"
+                    >General</span>
+                    {{#unless this.localCategory}}
+                      <span class="ft-modal__tribe-select-check">
+                        {{ftIcon "check"}}
+                      </span>
+                    {{/unless}}
+                  </button>
+                  {{#each this.joinedTribes as |tribe|}}
+                    <button
+                      type="button"
+                      class="ft-modal__tribe-select-option
+                        {{if
+                          (eq this.localCategory.id tribe.id)
+                          'ft-modal__tribe-select-option--active'
+                        }}"
+                      {{on "click" (fn this.selectTribeFromDropdown tribe)}}
+                    >
+                      {{! Option: logo img → letter avatar }}
+                      {{#if (this.tribeLogo tribe)}}
+                        <img
+                          src={{this.tribeLogo tribe}}
+                          class="ft-modal__tribe-logo ft-modal__tribe-logo--option"
+                          alt=""
+                        />
+                      {{else}}
+                        <span
+                          class="ft-modal__tribe-letter-avatar ft-modal__tribe-letter-avatar--option"
+                          style={{this.tribeDotStyle tribe}}
+                        >{{this.tribeLetter tribe}}</span>
+                      {{/if}}
+                      <span
+                        class="ft-modal__tribe-select-option-name"
+                      >{{tribe.name}}</span>
+                      {{#if (eq this.localCategory.id tribe.id)}}
+                        <span class="ft-modal__tribe-select-check">
+                          {{ftIcon "check"}}
+                        </span>
+                      {{/if}}
+                    </button>
+                  {{/each}}
+                </div>
+              {{/if}}
+            </div>
+          </div>
+        {{/if}}
 
         {{! Body }}
         <div class="ft-modal__body">
@@ -284,7 +492,7 @@ export default class FtCreatePostModal extends Component {
               disabled={{this.isUploading}}
               {{on "click" (fn this.triggerFileInput "image")}}
             >
-              {{icon "image"}}
+              {{ftIcon "image"}}
               <span>Photo</span>
             </button>
             <button
@@ -293,7 +501,7 @@ export default class FtCreatePostModal extends Component {
               disabled={{this.isUploading}}
               {{on "click" (fn this.triggerFileInput "video")}}
             >
-              {{icon "video"}}
+              {{ftIcon "video"}}
               <span>Video</span>
             </button>
             <button
@@ -302,7 +510,7 @@ export default class FtCreatePostModal extends Component {
               disabled={{this.isUploading}}
               {{on "click" (fn this.triggerFileInput "audio")}}
             >
-              {{icon "music"}}
+              {{ftIcon "music"}}
               <span>Audio</span>
             </button>
           </div>
@@ -319,11 +527,11 @@ export default class FtCreatePostModal extends Component {
                 <div class="ft-modal__uploaded-item">
                   <span class="ft-modal__uploaded-item-icon">
                     {{#if (eq media.type "image")}}
-                      {{icon "image"}}
+                      {{ftIcon "image"}}
                     {{else if (eq media.type "video")}}
-                      {{icon "video"}}
+                      {{ftIcon "video"}}
                     {{else}}
-                      {{icon "music"}}
+                      {{ftIcon "music"}}
                     {{/if}}
                   </span>
                   <span
@@ -334,7 +542,7 @@ export default class FtCreatePostModal extends Component {
                     class="ft-modal__uploaded-item-remove"
                     {{on "click" (fn this.removeMedia index)}}
                   >
-                    {{icon "xmark"}}
+                    {{ftIcon "x"}}
                   </button>
                 </div>
               {{/each}}
@@ -345,7 +553,7 @@ export default class FtCreatePostModal extends Component {
           {{#if this.showScheduler}}
             <div class="ft-modal__schedule-panel">
               <div class="ft-modal__schedule-panel-header">
-                {{icon "calendar"}}
+                {{ftIcon "calendar"}}
                 <span>Schedule Post</span>
               </div>
               <div class="ft-modal__schedule-grid">
@@ -371,19 +579,6 @@ export default class FtCreatePostModal extends Component {
             </div>
           {{/if}}
 
-          {{! Tag Gear }}
-          <div class="ft-modal__tag-gear">
-            <label class="ft-modal__tag-gear-label">
-              {{icon "tag"}}
-              <span>Tag Gear</span>
-            </label>
-            <input
-              type="text"
-              class="ft-modal__tag-gear-input"
-              placeholder="Search gear to tag..."
-            />
-          </div>
-
           {{! Visibility }}
           <div class="ft-modal__visibility-section">
             <span class="ft-modal__section-label">Who can see this?</span>
@@ -397,7 +592,7 @@ export default class FtCreatePostModal extends Component {
                   }}"
                 {{on "click" (fn this.setVisibility "public")}}
               >
-                {{icon "globe"}}
+                {{ftIcon "globe"}}
                 <span>Public</span>
               </button>
               <button
@@ -409,7 +604,7 @@ export default class FtCreatePostModal extends Component {
                   }}"
                 {{on "click" (fn this.setVisibility "followers")}}
               >
-                {{icon "users"}}
+                {{ftIcon "users"}}
                 <span>Followers</span>
               </button>
               <button
@@ -421,7 +616,7 @@ export default class FtCreatePostModal extends Component {
                   }}"
                 {{on "click" (fn this.setVisibility "private")}}
               >
-                {{icon "lock"}}
+                {{ftIcon "lock"}}
                 <span>Private</span>
               </button>
             </div>
@@ -436,7 +631,7 @@ export default class FtCreatePostModal extends Component {
               {{if this.showScheduler 'ft-modal__schedule-toggle--active'}}"
             {{on "click" this.toggleScheduler}}
           >
-            {{icon "clock"}}
+            {{ftIcon "clock"}}
             <span>{{if
                 this.showScheduler
                 "Cancel Schedule"
@@ -457,7 +652,7 @@ export default class FtCreatePostModal extends Component {
               {{on "click" this.submitPost}}
             >
               {{#if this.showScheduler}}
-                {{icon "calendar"}}
+                {{ftIcon "calendar"}}
                 Schedule Post
               {{else}}
                 Publish Now

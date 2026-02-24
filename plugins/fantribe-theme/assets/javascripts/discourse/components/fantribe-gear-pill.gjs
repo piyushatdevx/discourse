@@ -2,7 +2,7 @@ import Component from "@glimmer/component";
 import { tracked } from "@glimmer/tracking";
 import { on } from "@ember/modifier";
 import { action } from "@ember/object";
-import icon from "discourse/helpers/d-icon";
+import ftIcon from "../helpers/ft-icon";
 
 export default class FantribeGearPill extends Component {
   @tracked isHovered = false;
@@ -25,7 +25,7 @@ export default class FantribeGearPill extends Component {
         {{on "mouseenter" this.handleMouseEnter}}
         {{on "mouseleave" this.handleMouseLeave}}
       >
-        {{icon "tag"}}
+        {{ftIcon "tag"}}
         <span>{{@gearName}}</span>
       </button>
 
@@ -41,7 +41,7 @@ export default class FantribeGearPill extends Component {
               {{#if @gearImage}}
                 <img src={{@gearImage}} alt={{@gearName}} />
               {{else}}
-                {{icon "tag"}}
+                {{ftIcon "tag"}}
               {{/if}}
             </div>
 
@@ -49,7 +49,7 @@ export default class FantribeGearPill extends Component {
             <div class="fantribe-gear-pill__card-info">
               <div class="fantribe-gear-pill__card-header">
                 <h4>{{@gearName}}</h4>
-                {{icon "external-link-alt"}}
+                {{ftIcon "external-link"}}
               </div>
 
               {{#if @gearCategory}}

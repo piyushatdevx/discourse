@@ -2,7 +2,7 @@ import Component from "@glimmer/component";
 import { tracked } from "@glimmer/tracking";
 import { on } from "@ember/modifier";
 import { action } from "@ember/object";
-import icon from "discourse/helpers/d-icon";
+import ftIcon from "../helpers/ft-icon";
 
 export default class FantribeMediaVideo extends Component {
   @tracked isPlaying = false;
@@ -44,7 +44,7 @@ export default class FantribeMediaVideo extends Component {
           {{on "click" this.handlePlay}}
         >
           <div class="fantribe-media-video__play-btn">
-            {{icon "play"}}
+            {{ftIcon "play"}}
           </div>
         </button>
 

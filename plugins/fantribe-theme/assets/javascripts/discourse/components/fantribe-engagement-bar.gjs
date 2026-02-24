@@ -5,17 +5,20 @@ import { on } from "@ember/modifier";
 import { action } from "@ember/object";
 import { service } from "@ember/service";
 import ShareTopicModal from "discourse/components/modal/share-topic";
-import icon from "discourse/helpers/d-icon";
 import { ajax } from "discourse/lib/ajax";
+import { extractError, popupAjaxError } from "discourse/lib/ajax-error";
 import Composer from "discourse/models/composer";
+import { not, or } from "discourse/truth-helpers";
+import ftIcon from "../helpers/ft-icon";
 
-const LIKE_ACTION_TYPE_ID = 2;
-
+// Keys must match discourse_reactions_enabled_reactions site setting values.
+// Configure: discourse_reactions_enabled_reactions = "heart|fire|clap|musical_note"
+//            discourse_reactions_reaction_for_like  = "heart"
 const REACTIONS = [
   { emoji: "❤️", key: "heart" },
   { emoji: "🔥", key: "fire" },
   { emoji: "👏", key: "clap" },
-  { emoji: "🎵", key: "music" },
+  { emoji: "🎵", key: "musical_note" },
 ];
 
 export default class FantribeEngagementBar extends Component {
@@ -24,149 +27,129 @@ export default class FantribeEngagementBar extends Component {
   @service modal;
 
   @tracked isLoading = false;
-  @tracked activeReactions = new Set(["heart"]);
-  @tracked _isLiked = null;
-  @tracked _likeCountOffset = 0;
-  @tracked _isBookmarked = false;
+  @tracked isBookmarkLoading = false;
+  // null = use server state; array = user has interacted (optimistic update)
+  @tracked _localReactions = null;
+  // null = use server state; true/false = optimistic update
+  @tracked _isBookmarked = null;
+  // Store the bookmark ID returned by POST so DELETE can reference it
+  @tracked _bookmarkId = null;
 
-  get isLiked() {
-    if (this._isLiked !== null) {
-      return this._isLiked;
-    }
-    return this.args.opLiked || false;
+  get serverReactions() {
+    return this.args.topic?.reactions || [];
   }
 
-  get likeCount() {
-    return (this.args.likeCount || 0) + this._likeCountOffset;
+  get reactions() {
+    return REACTIONS.map((r) => {
+      const server = this.serverReactions.find((sr) => sr.id === r.key);
+      let count, isActive;
+
+      if (this._localReactions !== null) {
+        const local = this._localReactions.find((lr) => lr.id === r.key);
+        count = local ? local.count : (server?.count ?? 0);
+        isActive = local
+          ? local.current_user_used
+          : (server?.current_user_used ?? false);
+      } else {
+        count = server?.count ?? 0;
+        isActive = server?.current_user_used ?? false;
+      }
+
+      // Convert key to CSS-safe class fragment (musical_note → musical-note)
+      const cssKey = r.key.replace(/_/g, "-");
+
+      return {
+        ...r,
+        count,
+        isActive,
+        activeClass: isActive
+          ? `fantribe-engagement__reaction--${cssKey}-active`
+          : "",
+      };
+    });
   }
 
   get commentCount() {
     return this.args.commentCount || 0;
   }
 
-  get topicAuthor() {
-    const topic = this.args.topic;
-    return topic?.posters?.[0]?.user ?? topic?.creator ?? null;
-  }
-
-  get isOwnPost() {
-    if (!this.currentUser || !this.topicAuthor) {
-      return false;
-    }
-    const author = this.topicAuthor;
-    return (
-      this.currentUser.id === author.id ||
-      this.currentUser.username === author.username
-    );
-  }
-
-  get canLike() {
-    return (
+  get canReact() {
+    // opCanLike is false when viewing your own post (Discourse prevents self-reactions)
+    return !!(
       this.currentUser &&
       this.args.firstPostId &&
-      this.args.opCanLike &&
-      !this.isOwnPost
+      this.args.opCanLike !== false
     );
   }
 
   get isBookmarked() {
-    return this._isBookmarked || this.args.topic?.bookmarked || false;
-  }
-
-  get reactions() {
-    return REACTIONS.map((r) => ({
-      ...r,
-      count: this.getReactionCount(r.key),
-      isActive: this.activeReactions.has(r.key),
-    }));
-  }
-
-  getReactionCount(key) {
-    if (key === "heart") {
-      return this.likeCount;
+    if (this._isBookmarked !== null) {
+      return this._isBookmarked;
     }
-    // Simulated counts for other reactions
-    const topic = this.args.topic;
-    const seed = topic?.id || 0;
-    switch (key) {
-      case "fire":
-        return Math.max(0, Math.floor((seed * 7) % 120));
-      case "clap":
-        return Math.max(0, Math.floor((seed * 3) % 80));
-      case "music":
-        return Math.max(0, Math.floor((seed * 11) % 100));
-      default:
-        return 0;
-    }
+    return this.args.topic?.bookmarked || false;
   }
 
   @action
   async toggleReaction(key, event) {
     event?.stopPropagation();
-    if (key === "heart") {
-      await this.handleLike();
-      return;
-    }
-    const newSet = new Set(this.activeReactions);
-    if (newSet.has(key)) {
-      newSet.delete(key);
-    } else {
-      newSet.add(key);
-    }
-    this.activeReactions = newSet;
-  }
 
-  @action
-  async handleLike() {
-    if (
-      !this.canLike ||
-      !this.currentUser ||
-      !this.args.firstPostId ||
-      this.isLoading
-    ) {
+    if (!this.canReact || this.isLoading) {
       return;
     }
+
+    const currentReactions = this.reactions;
+    const clickedReaction = currentReactions.find((r) => r.key === key);
+    const wasActive = clickedReaction?.isActive ?? false;
+    // The reaction the user is switching away from (if any)
+    const previouslyActive = currentReactions.find(
+      (r) => r.isActive && r.key !== key
+    );
+
+    // Optimistic update — reflect change immediately in the UI
+    this._localReactions = REACTIONS.map((r) => {
+      const server = this.serverReactions.find((sr) => sr.id === r.key);
+      const baseCount = server?.count ?? 0;
+      const baseActive = server?.current_user_used ?? false;
+
+      if (r.key === key) {
+        return {
+          id: r.key,
+          count: wasActive ? Math.max(0, baseCount - 1) : baseCount + 1,
+          current_user_used: !wasActive,
+        };
+      }
+
+      if (!wasActive && previouslyActive && r.key === previouslyActive.key) {
+        // Switching from another reaction — remove it optimistically
+        return {
+          id: r.key,
+          count: Math.max(0, baseCount - 1),
+          current_user_used: false,
+        };
+      }
+
+      return { id: r.key, count: baseCount, current_user_used: baseActive };
+    });
 
     this.isLoading = true;
-    const wasLiked = this.isLiked;
-
-    this._isLiked = !wasLiked;
-    this._likeCountOffset += wasLiked ? -1 : 1;
-
-    // Update activeReactions set
-    const newSet = new Set(this.activeReactions);
-    if (wasLiked) {
-      newSet.delete("heart");
-    } else {
-      newSet.add("heart");
-    }
-    this.activeReactions = newSet;
-
     try {
-      if (wasLiked) {
-        await ajax(`/post_actions/${this.args.firstPostId}`, {
-          type: "DELETE",
-          data: { post_action_type_id: LIKE_ACTION_TYPE_ID },
-        });
-      } else {
-        await ajax("/post_actions", {
-          type: "POST",
-          data: {
-            id: this.args.firstPostId,
-            post_action_type_id: LIKE_ACTION_TYPE_ID,
-          },
-        });
+      await ajax(
+        `/discourse-reactions/posts/${this.args.firstPostId}/custom-reactions/${key}/toggle`,
+        { type: "PUT" }
+      );
+    } catch (error) {
+      // Always revert the optimistic update
+      this._localReactions = null;
+      // Rate-limit errors are expected behaviour — silently revert rather than
+      // showing a disruptive dialog. All other errors surface normally.
+      const message = extractError(error) || "";
+      const isRateLimit =
+        error?.jqXHR?.status === 429 ||
+        message.toLowerCase().includes("too many") ||
+        message.toLowerCase().includes("wait");
+      if (!isRateLimit) {
+        popupAjaxError(error);
       }
-    } catch {
-      this._isLiked = wasLiked;
-      this._likeCountOffset += wasLiked ? 1 : -1;
-      const revertSet = new Set(this.activeReactions);
-      if (wasLiked) {
-        revertSet.add("heart");
-      } else {
-        revertSet.delete("heart");
-      }
-      this.activeReactions = revertSet;
     } finally {
       this.isLoading = false;
     }
@@ -198,29 +181,71 @@ export default class FantribeEngagementBar extends Component {
       return;
     }
 
+    // ShareTopicModal reads topic.shareUrl — a computed property that only
+    // exists on full Discourse Topic model instances. Our feed topics are plain
+    // JS objects, so we inject shareUrl directly before passing to the modal.
+    const topicWithUrl = {
+      ...topic,
+      shareUrl: `/t/${topic.slug}/${topic.id}`,
+    };
+
     this.modal.show(ShareTopicModal, {
-      model: {
-        topic,
-        category: topic.category,
-      },
+      model: { topic: topicWithUrl, category: topic.category },
     });
   }
 
   @action
-  handleBookmark(event) {
+  async handleBookmark(event) {
     event.stopPropagation();
-    this._isBookmarked = !this.isBookmarked;
+
+    if (!this.currentUser || this.isBookmarkLoading) {
+      return;
+    }
+
+    const wasBookmarked = this.isBookmarked;
+
+    // Optimistic update
+    this._isBookmarked = !wasBookmarked;
+    this.isBookmarkLoading = true;
+
+    try {
+      if (wasBookmarked) {
+        // Need the bookmark ID to delete — prefer cached value, fallback to
+        // the serialized bookmark_id from the topic list item.
+        const bookmarkId = this._bookmarkId || this.args.topic?.bookmark_id;
+        if (bookmarkId) {
+          await ajax(`/bookmarks/${bookmarkId}`, { type: "DELETE" });
+        }
+        this._bookmarkId = null;
+      } else {
+        const result = await ajax("/bookmarks", {
+          type: "POST",
+          data: {
+            bookmarkable_id: this.args.firstPostId,
+            bookmarkable_type: "Post",
+          },
+        });
+        // Store the ID so we can delete it later without another lookup
+        this._bookmarkId = result?.id ?? null;
+      }
+    } catch (error) {
+      // Revert optimistic update on failure
+      this._isBookmarked = wasBookmarked;
+      popupAjaxError(error);
+    } finally {
+      this.isBookmarkLoading = false;
+    }
   }
 
   <template>
     <div class="fantribe-engagement">
-      {{! Reaction Row — emoji pills with counts }}
+      {{! Reaction row — one active reaction per user at a time }}
       <div class="fantribe-engagement__reactions">
         {{#each this.reactions as |reaction|}}
           <button
             type="button"
-            class="fantribe-engagement__reaction
-              {{if reaction.isActive 'fantribe-engagement__reaction--active'}}"
+            class="fantribe-engagement__reaction {{reaction.activeClass}}"
+            disabled={{or this.isLoading (not this.canReact)}}
             {{on "click" (fn this.toggleReaction reaction.key)}}
           >
             <span
@@ -235,14 +260,14 @@ export default class FantribeEngagementBar extends Component {
         {{/each}}
       </div>
 
-      {{! Action Bar — comment, share, save }}
+      {{! Action bar — comment, share, save }}
       <div class="fantribe-engagement__actions">
         <button
           type="button"
           class="fantribe-engagement__action fantribe-engagement__action--comment"
           {{on "click" this.handleComment}}
         >
-          {{icon "comment"}}
+          {{ftIcon "message-circle"}}
           {{#if this.commentCount}}
             <span>{{this.commentCount}}</span>
           {{/if}}
@@ -253,7 +278,7 @@ export default class FantribeEngagementBar extends Component {
           class="fantribe-engagement__action fantribe-engagement__action--share"
           {{on "click" this.handleShare}}
         >
-          {{icon "share-nodes"}}
+          {{ftIcon "share2"}}
           <span>Share</span>
         </button>
 
@@ -261,12 +286,13 @@ export default class FantribeEngagementBar extends Component {
           type="button"
           class="fantribe-engagement__action fantribe-engagement__action--bookmark
             {{if this.isBookmarked 'fantribe-engagement__action--active'}}"
+          disabled={{this.isBookmarkLoading}}
           {{on "click" this.handleBookmark}}
         >
           {{#if this.isBookmarked}}
-            {{icon "bookmark"}}
+            {{ftIcon "bookmark-fill"}}
           {{else}}
-            {{icon "far-bookmark"}}
+            {{ftIcon "bookmark"}}
           {{/if}}
           <span>Save</span>
         </button>

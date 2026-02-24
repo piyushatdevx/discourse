@@ -18,9 +18,191 @@ body.fantribe-theme:not(.admin-interface) {
     padding: 12px 16px;
   }
 
+  // Tab switcher
+  .ft-explore-tabs {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 28px;
+    background: var(--ft-gray-100, #f3f4f6);
+    border-radius: 18px;
+    padding: 5px;
+    box-shadow: inset 0 1px 3px rgb(0 0 0 / 6%);
+  }
+
+  .ft-explore-tab {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    flex: 1;
+    justify-content: center;
+    padding: 9px 18px;
+    border: none;
+    border-radius: 14px;
+    background: transparent;
+    color: var(--ft-gray-500, #6b7280);
+    font-size: 0.875rem;
+    font-weight: var(--ft-font-weight-medium);
+    cursor: pointer;
+    transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
+
+    .d-icon {
+      width: 15px;
+      height: 15px;
+      transition: transform 200ms ease;
+    }
+
+    &:hover:not(.ft-explore-tab--active) {
+      color: var(--ft-gray-700, #374151);
+      background: rgb(255 255 255 / 50%);
+    }
+
+    // Active: deep charcoal bg with white text — matches platform branding
+    &--active {
+      background: var(--ft-vibrant-red);
+      color: var(--ft-white, #fff);
+      font-weight: var(--ft-font-weight-semibold);
+      box-shadow:
+        0 2px 8px rgb(26 29 35 / 20%),
+        0 1px 3px rgb(26 29 35 / 12%);
+
+      .d-icon {
+        transform: scale(1.05);
+      }
+    }
+  }
+
+  .ft-explore-tab__badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 5px;
+    border-radius: 9999px;
+    background: var(--ft-vibrant-red, #ff1744);
+    color: var(--ft-white);
+    font-size: 0.6875rem;
+    font-weight: var(--ft-font-weight-bold);
+    line-height: 1;
+
+    // When tab is active (dark bg), keep badge vibrant
+    .ft-explore-tab--active & {
+      background: var(--ft-vibrant-red, #ff1744);
+    }
+  }
+
+  // My Tribes tab content wrapper
+  .ft-my-tribes-tab {
+    // no extra layout needed, children provide spacing
+  }
+
+  // My Tribes section (joined tribes, shown at top of explore page)
+  .ft-my-tribes-section {
+    margin-bottom: 32px;
+  }
+
+  .ft-section-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 16px;
+  }
+
+  .ft-section-header__text {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .ft-section-title {
+    font-size: 1.125rem;
+    font-weight: var(--ft-font-weight-semibold);
+    color: var(--ft-dark);
+    margin: 0 0 4px;
+  }
+
+  .ft-section-subtitle {
+    font-size: var(--ft-font-sm, 0.875rem);
+    color: var(--ft-gray-500);
+    margin: 0;
+  }
+
+  .ft-my-tribes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 16px;
+  }
+
+  // Section divider between My Tribes and Discover Tribes
+  .ft-section-divider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 32px 0;
+  }
+
+  .ft-section-divider__line {
+    flex: 1;
+    height: 1px;
+    background: var(--ft-gray-200, #e5e7eb);
+  }
+
+  .ft-section-divider__label {
+    font-size: var(--ft-font-xs, 0.75rem);
+    font-weight: var(--ft-font-weight-medium);
+    color: var(--ft-gray-400, #9ca3af);
+    white-space: nowrap;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  // Discover section wrapper
+  .ft-discover-section {
+    // inherits from parent, no extra wrapper needed
+  }
+
   // Header section
   .ft-explore-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
     margin-bottom: 24px;
+  }
+
+  .ft-explore-header__text {
+    flex: 1;
+    min-width: 0;
+  }
+
+  // Admin "Create Tribe" button
+  .ft-explore-create-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    background: var(--ft-primary);
+    color: var(--ft-white);
+    border: none;
+    border-radius: var(--ft-radius-full);
+    font-size: var(--ft-font-size-sm);
+    font-weight: var(--ft-font-weight-semibold);
+    cursor: pointer;
+    white-space: nowrap;
+    flex-shrink: 0;
+    box-shadow: var(--ft-shadow-sm);
+    transition:
+      background-color var(--ft-transition-colors),
+      box-shadow var(--ft-transition-shadow);
+
+    .d-icon {
+      width: 14px;
+      height: 14px;
+    }
+
+    &:hover {
+      background: var(--ft-primary-hover);
+      box-shadow: var(--ft-shadow-md);
+    }
   }
 
   .ft-explore-title {

@@ -81,6 +81,217 @@ body.fantribe-theme:not(.admin-interface) {
     }
 
     // ==========================================
+    // TRIBE SELECTOR — "Posting to" full-width
+    // ==========================================
+    &__tribe-section {
+      padding: 12px 24px 14px;
+      border-bottom: 1px solid var(--ft-slate-100, #f1f5f9);
+    }
+
+    &__tribe-section-label {
+      display: block;
+      font-size: 11px;
+      font-weight: var(--ft-font-weight-semibold);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--ft-slate-400);
+      margin-bottom: 8px;
+    }
+
+    &__tribe-select-wrap {
+      position: relative;
+    }
+
+    &__tribe-select-trigger {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 12px;
+      border: 1.5px solid var(--ft-slate-200, #e2e8f0);
+      background: var(--ft-slate-50, #f8fafc);
+      color: var(--ft-slate-700, #374151);
+      font-size: 14px;
+      font-weight: var(--ft-font-weight-semibold);
+      cursor: pointer;
+      text-align: left;
+      transition:
+        border-color 150ms ease,
+        background 150ms ease;
+
+      &:hover,
+      &--open {
+        border-color: var(--ft-dark, #1a1d23);
+        background: var(--ft-white, #fff);
+      }
+    }
+
+    &__tribe-select-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    // Tribe logo in the selector trigger and dropdown options
+    &__tribe-logo {
+      width: 26px;
+      height: 26px;
+      border-radius: 8px;
+      object-fit: cover;
+      flex-shrink: 0;
+
+      &--trigger {
+        width: 28px;
+        height: 28px;
+        border-radius: 8px;
+      }
+
+      &--option {
+        width: 32px;
+        height: 32px;
+        border-radius: 10px;
+      }
+    }
+
+    // Letter-avatar fallback: a colored circle showing the first letter of the
+    // tribe name, used when the tribe has no uploaded logo image.
+    &__tribe-letter-avatar {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 700;
+      color: #fff;
+      flex-shrink: 0;
+
+      &--option {
+        width: 32px;
+        height: 32px;
+        border-radius: 10px;
+        font-size: 14px;
+      }
+    }
+
+    &__tribe-select-value {
+      flex: 1;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    &__tribe-select-chevron {
+      display: flex;
+      align-items: center;
+      color: var(--ft-slate-400);
+      transition: transform 200ms ease;
+      margin-left: auto;
+
+      .d-icon {
+        width: 14px;
+        height: 14px;
+      }
+
+      .ft-modal__tribe-select-trigger--open & {
+        transform: rotate(180deg);
+      }
+    }
+
+    // Floating options list — absolutely positioned so it overlays content below
+    // without pushing other elements down
+    &__tribe-select-options {
+      position: absolute;
+      top: calc(100% + 6px);
+      left: 0;
+      right: 0;
+      z-index: 20;
+      border: 1.5px solid var(--ft-slate-200, #e2e8f0);
+      border-radius: 12px;
+      overflow: hidden;
+      background: var(--ft-white, #fff);
+      box-shadow:
+        0 8px 24px rgb(0 0 0 / 10%),
+        0 2px 8px rgb(0 0 0 / 6%);
+    }
+
+    &__tribe-select-option {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+      padding: 12px 14px;
+      border: none;
+      background: transparent;
+      color: var(--ft-slate-700, #374151);
+      font-size: 13px;
+      font-weight: var(--ft-font-weight-medium);
+      cursor: pointer;
+      text-align: left;
+      transition: background 120ms ease;
+
+      &:not(:last-child) {
+        border-bottom: 1px solid var(--ft-slate-100, #f1f5f9);
+      }
+
+      &:hover {
+        background: var(--ft-slate-50, #f8fafc);
+      }
+
+      &--active {
+        background: rgb(26 29 35 / 4%);
+        color: var(--ft-dark, #1a1d23);
+        font-weight: var(--ft-font-weight-semibold);
+      }
+    }
+
+    &__tribe-select-option-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 26px;
+      height: 26px;
+      border-radius: 8px;
+      background: var(--ft-slate-100, #f1f5f9);
+      flex-shrink: 0;
+
+      .d-icon {
+        width: 13px;
+        height: 13px;
+        color: var(--ft-slate-500);
+      }
+    }
+
+    &__tribe-select-option-dot {
+      width: 26px;
+      height: 26px;
+      border-radius: 8px;
+      flex-shrink: 0;
+    }
+
+    &__tribe-select-option-name {
+      flex: 1;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    &__tribe-select-check {
+      display: flex;
+      align-items: center;
+      color: var(--ft-dark, #1a1d23);
+      margin-left: auto;
+
+      .d-icon {
+        width: 14px;
+        height: 14px;
+      }
+    }
+
+    // ==========================================
     // CLOSE BUTTON
     // ==========================================
     &__close-btn {
@@ -382,51 +593,6 @@ body.fantribe-theme:not(.admin-interface) {
       &:focus {
         border-color: var(--ft-electric-blue);
         box-shadow: 0 0 0 2px rgb(0 128 255 / 20%);
-      }
-    }
-
-    // ==========================================
-    // TAG GEAR
-    // ==========================================
-    &__tag-gear {
-      margin-top: 16px;
-    }
-
-    &__tag-gear-label {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-size: var(--ft-font-sm);
-      font-weight: var(--ft-font-weight-semibold);
-      color: var(--ft-slate-700);
-      margin-bottom: 8px;
-
-      .d-icon {
-        width: 14px;
-        height: 14px;
-      }
-    }
-
-    &__tag-gear-input {
-      width: 100%;
-      padding: 10px 14px;
-      border: 1px solid var(--ft-slate-200);
-      border-radius: 12px;
-      font-size: var(--ft-font-sm);
-      color: var(--ft-slate-900);
-      background: var(--ft-slate-50);
-      outline: none;
-      transition:
-        border-color 200ms ease,
-        box-shadow 200ms ease;
-
-      &::placeholder {
-        color: var(--ft-slate-400);
-      }
-
-      &:focus {
-        border-color: transparent;
-        box-shadow: 0 0 0 2px var(--ft-electric-blue);
       }
     }
 

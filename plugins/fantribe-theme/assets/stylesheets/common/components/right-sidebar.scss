@@ -140,6 +140,26 @@ body.fantribe-theme:not(.admin-interface) {
       }
     }
 
+    &__tribe-lead {
+      flex-shrink: 0;
+      width: 32px;
+      height: 32px;
+    }
+
+    &__tribe-logo {
+      width: 32px;
+      height: 32px;
+      border-radius: var(--ft-radius-pill);
+      object-fit: cover;
+    }
+
+    &__tribe-dot {
+      display: block;
+      width: 32px;
+      height: 32px;
+      border-radius: var(--ft-radius-pill);
+    }
+
     &__tribe-info {
       flex: 1;
       min-width: 0;
