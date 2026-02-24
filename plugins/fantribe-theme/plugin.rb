@@ -274,61 +274,43 @@ after_initialize do
 
   add_to_serializer(:user_card, :include_ft_tribe_count?) { SiteSetting.fantribe_theme_enabled }
 
-  # Trending Tribes — scored by recent activity in the last 7 days.
-  # Score = (topic_count_7d × 2) + new_member_joins_7d
-  # Cached for 10 minutes to avoid per-request DB hits.
+  # Top Tribes — ranked by all-time post count (highest posts first), top 5.
+  # Uses the indexed post_count column on categories — no joins or aggregation
+  # needed. Cached for 10 minutes to avoid per-request DB hits.
   add_to_serializer(:site, :trending_tribes) do
     return [] unless SiteSetting.fantribe_theme_enabled
 
     Rails
       .cache
-      .fetch("ft_trending_tribes", expires_in: 10.minutes) do
-        since = 7.days.ago
+      .fetch("ft_top_tribes_by_posts", expires_in: 10.minutes) do
+        top_categories =
+          Category
+            .where(read_restricted: false)
+            .where.not(id: SiteSetting.uncategorized_category_id)
+            .order(post_count: :desc)
+            .limit(5)
 
-        post_counts =
-          Topic
-            .where("topics.created_at > ?", since)
-            .where.not(category_id: nil)
-            .where(archetype: "regular")
-            .group(:category_id)
-            .count
+        next [] if top_categories.empty?
 
+        # Batch-load member counts (watchers) for the selected tribes in one query.
         member_counts =
           CategoryUser
-            .where("created_at > ?", since)
+            .where(category_id: top_categories.map(&:id))
             .where("notification_level >= ?", CategoryUser.notification_levels[:watching])
             .group(:category_id)
             .count
 
-        all_ids = (post_counts.keys | member_counts.keys).uniq
-        next [] if all_ids.empty?
-
-        # Batch-load total member counts for all candidate tribes in one query
-        # instead of issuing a separate COUNT per tribe inside the map loop.
-        total_member_counts =
-          CategoryUser
-            .where(category_id: all_ids)
-            .where("notification_level >= ?", CategoryUser.notification_levels[:watching])
-            .group(:category_id)
-            .count
-
-        Category
-          .where(id: all_ids)
-          .reject { |c| c.uncategorized? || c.read_restricted }
-          .map do |cat|
-            score = (post_counts[cat.id].to_i * 2) + member_counts[cat.id].to_i
-            {
-              id: cat.id,
-              name: cat.name,
-              slug: cat.slug,
-              color: cat.color,
-              logo_url: cat.uploaded_logo&.url,
-              member_count: total_member_counts[cat.id].to_i,
-              score: score,
-            }
-          end
-          .sort_by { |t| -t[:score] }
-          .first(8)
+        top_categories.map do |cat|
+          {
+            id: cat.id,
+            name: cat.name,
+            slug: cat.slug,
+            color: cat.color,
+            logo_url: cat.uploaded_logo&.url,
+            member_count: member_counts[cat.id].to_i,
+            post_count: cat.post_count,
+          }
+        end
       end
   rescue StandardError
     []
