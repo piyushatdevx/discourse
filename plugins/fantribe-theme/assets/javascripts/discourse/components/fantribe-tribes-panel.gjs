@@ -20,21 +20,7 @@ const NAV_ITEMS = [
     icon: "compass",
     route: "explore",
   },
-  { id: "marketplace", label: "Marketplace", icon: "shopping-bag" },
-  { id: "co-create", label: "Co-Create", icon: "users" },
-  { id: "live-events", label: "Live Events", icon: "radio" },
   { id: "chat", label: "Chat", icon: "message-circle", route: "chat.index" },
-  { id: "dashboard", label: "Dashboard", icon: "layout-dashboard" },
-  { id: "content-studio", label: "Content Studio", icon: "monitor" },
-  {
-    id: "product-discovery",
-    label: "Product Discovery",
-    icon: "sparkles",
-  },
-  { id: "fan-crm", label: "Fan CRM", icon: "book-user" },
-  { id: "rewards", label: "Rewards", icon: "gift" },
-  { id: "revenue", label: "Revenue", icon: "dollar-sign" },
-  { id: "partnerships", label: "Partnerships", icon: "handshake" },
 ];
 
 export default class FantribeTribesPanel extends Component {
