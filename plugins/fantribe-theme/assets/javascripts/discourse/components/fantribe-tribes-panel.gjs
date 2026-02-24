@@ -40,6 +40,7 @@ const NAV_ITEMS = [
 export default class FantribeTribesPanel extends Component {
   @service router;
   @service currentUser;
+  @service chatTrackingStateManager;
 
   @tracked isCollapsed = document.body.classList.contains(
     "fantribe-sidebar-collapsed"
@@ -70,8 +71,22 @@ export default class FantribeTribesPanel extends Component {
     return route === item.route;
   };
 
+  hasNotification = (item) => {
+    return item.id === "chat" && this.hasUnreadChat;
+  };
+
   get navItems() {
     return NAV_ITEMS;
+  }
+
+  get hasUnreadChat() {
+    const manager = this.chatTrackingStateManager;
+    if (!manager) {
+      return false;
+    }
+    return (
+      manager.allChannelUrgentCount > 0 || manager.publicChannelUnreadCount > 0
+    );
   }
 
   @action
@@ -106,7 +121,11 @@ export default class FantribeTribesPanel extends Component {
           <button
             type="button"
             class="fantribe-sidebar-nav__item
-              {{if (this.isActive item) 'fantribe-sidebar-nav__item--active'}}"
+              {{if (this.isActive item) 'fantribe-sidebar-nav__item--active'}}
+              {{if
+                (this.hasNotification item)
+                'fantribe-sidebar-nav__item--has-notification'
+              }}"
             {{on "click" (fn this.navigateTo item)}}
           >
             <span class="fantribe-sidebar-nav__item-icon">

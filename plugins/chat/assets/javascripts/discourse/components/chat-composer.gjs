@@ -765,6 +765,12 @@ export default class ChatComposer extends Component {
         {{willDestroy this.teardown}}
         {{willDestroy this.cancelPersistDraft}}
       >
+        <div class="chat-replying-indicator-container">
+          <ChatReplyingIndicator
+            @presenceChannelName={{this.presenceChannelName}}
+          />
+        </div>
+
         <div
           class="chat-composer__outer-container"
           style="display: flex; align-items: flex-end; gap: 12px; padding: 12px 16px;"
@@ -864,12 +870,6 @@ export default class ChatComposer extends Component {
           @composerInputEl={{this.composer.textarea.element}}
         />
       {{/if}}
-
-      <div class="chat-replying-indicator-container">
-        <ChatReplyingIndicator
-          @presenceChannelName={{this.presenceChannelName}}
-        />
-      </div>
     </div>
   </template>
 }

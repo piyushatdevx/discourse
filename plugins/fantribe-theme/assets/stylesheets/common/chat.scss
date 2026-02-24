@@ -806,9 +806,10 @@ body.fantribe-theme {
   }
 
   // =============================================
-  // MESSAGE AVATAR - Hidden for cleaner modern look
+  // MESSAGE AVATAR & LEFT GUTTER - Hidden for cleaner modern look
   // =============================================
-  .chat-message-avatar {
+  .chat-message-avatar,
+  .chat-message-left-gutter {
     display: none;
   }
 
@@ -1568,22 +1569,34 @@ body.fantribe-theme {
     }
   }
 
-  .chat-replying-indicator {
-    color: var(--ft-neutral-500);
-    font-size: var(--ft-font-xs);
-    padding: var(--ft-space-2) var(--ft-space-4);
+  .chat-replying-indicator-container {
+    padding: var(--ft-space-1) var(--ft-space-4);
 
-    &__wave {
+    .chat-replying-indicator {
       display: inline-flex;
       align-items: center;
-      gap: 3px;
+      font-size: var(--ft-font-sm);
+      color: var(--ft-neutral-500);
     }
 
-    &__dot {
-      width: 6px;
-      height: 6px;
+    .chat-replying-indicator__text {
+      color: var(--ft-neutral-600);
+      margin-right: 4px;
+    }
+
+    .chat-replying-indicator__wave {
+      display: inline-flex;
+      align-items: center;
+    }
+
+    .chat-replying-indicator__dot {
+      display: inline-block;
+      width: 7px;
+      height: 7px;
       background: var(--ft-neutral-400);
       border-radius: 50%;
+      font-size: 0;
+      line-height: 0;
 
       @media (prefers-reduced-motion: no-preference) {
         animation: ft-typing-bounce 1.4s ease-in-out infinite;
@@ -1600,11 +1613,6 @@ body.fantribe-theme {
       &:nth-child(3) {
         animation-delay: 0.4s;
       }
-    }
-
-    &__text {
-      color: var(--ft-neutral-600);
-      font-style: italic;
     }
   }
 
@@ -2875,12 +2883,6 @@ body.fantribe-theme {
   body.fantribe-theme .chat-composer__btn.-emoji .d-button-label,
   body.fantribe-theme .chat-composer__btn.-attach .d-button-label {
     display: none;
-  }
-
-  // --- Replying indicator ---
-  body.fantribe-theme .chat-replying-indicator {
-    padding: var(--ft-space-2) var(--ft-space-3);
-    font-size: var(--ft-font-xs);
   }
 
   // --- Chat Footer (bottom nav) ---
