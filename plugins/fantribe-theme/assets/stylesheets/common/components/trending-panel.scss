@@ -1,131 +1,176 @@
-// FanTribe Trending Panel - Right Sidebar Widget
-.fantribe-trending-panel {
-  background: var(--ft-white);
-  border: 1px solid var(--ft-gray-200);
-  border-radius: var(--ft-radius-lg);
-  overflow: hidden;
-  box-shadow: 0 1px 3px rgb(0 0 0 / 5%);
-
-  // Panel header
-  &__header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 16px 16px 12px;
-    border-bottom: none;
-  }
-
-  &__title {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 15px;
-    font-weight: 600;
-    color: var(--ft-dark);
-    margin: 0;
-
-    .d-icon {
-      color: var(--ft-primary);
-      font-size: 16px;
-    }
-  }
-
-  // Panel content
-  &__content {
-    padding: 0 16px 16px;
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-  }
-
-  // Footer
-  &__footer {
-    padding: 0 16px 16px;
-    text-align: center;
-  }
-
-  &__view-all {
-    font-size: 13px;
-    font-weight: 500;
-    color: var(--ft-primary);
-    background: none;
-    border: none;
-    cursor: pointer;
-    transition: opacity 0.15s ease;
-
-    &:hover {
-      opacity: 0.8;
-    }
-  }
-}
-
-// Individual trending topic item
-.fantribe-trending-item {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-  padding: 10px var(--ft-space-2);
-  background: transparent;
-  border: none;
-  border-radius: var(--ft-radius-md);
-  cursor: pointer;
-  text-align: left;
-  transition:
-    background var(--ft-transition-fast),
-    transform var(--ft-transition-fast);
-  gap: var(--ft-space-2);
-
-  &:hover {
-    background: var(--ft-gray-50);
-    transform: translateX(2px);
-  }
-
-  &:active {
-    transform: scale(0.98);
-  }
-
-  &__info {
-    flex: 1;
-    min-width: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-  }
-
-  &__title {
-    font-size: 14px;
-    font-weight: 500;
-    color: var(--ft-dark);
-    white-space: nowrap;
+// FanTribe Trending Panel — Right Sidebar Widget
+// Matches Figma RightSidebar.tsx design:
+//   - rounded-3xl card with border + shadow-sm
+//   - divide-y divide-slate-100 between items
+//   - hover:bg-electric-blue-light on each row
+//   - tribe name hover:text-electric-blue
+//   - ChevronRight with group-hover:translate-x-1
+body.fantribe-theme {
+  .ft-trending-panel {
+    background: var(--ft-white);
+    border-radius: 24px; // rounded-3xl
+    border: 1px solid var(--ft-slate-200);
+    box-shadow: 0 1px 2px rgb(0 0 0 / 5%); // shadow-sm
     overflow: hidden;
-    text-overflow: ellipsis;
 
-    // Hashtag prefix
-    &::before {
-      content: "#";
-      color: var(--ft-dark);
-      margin-right: 2px;
+    // ── Header ────────────────────────────────────────────
+    &__header {
+      padding: 20px; // p-5
+      border-bottom: 1px solid var(--ft-slate-200);
     }
-  }
 
-  &__count {
-    font-size: 12px;
-    color: var(--ft-gray-500);
-  }
+    &__header-inner {
+      display: flex;
+      align-items: center;
+      gap: 8px;
 
-  // Chevron indicator
-  &__indicator {
-    flex-shrink: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 20px;
-    height: 20px;
-    color: var(--ft-gray-400);
+      svg,
+      .ft-icon {
+        color: var(--ft-electric-blue);
+        flex-shrink: 0;
+      }
+    }
 
-    .d-icon {
-      font-size: 11px;
+    &__title {
+      font-size: 0.9375rem;
+      font-weight: 600;
+      color: var(--ft-slate-900);
+      margin: 0;
+    }
+
+    // ── List — divide-y ────────────────────────────────────
+    &__list {
+      // Each child except the first gets a top border (divide-y effect)
+      & > * + * {
+        border-top: 1px solid var(--ft-slate-100);
+      }
+    }
+
+    &__item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+      padding: 16px; // p-4
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      text-align: left;
+      transition: all 200ms ease;
+
+      &:hover {
+        background: var(
+          --ft-electric-blue-light,
+          #e5f3ff
+        ); // hover:bg-electric-blue-light
+
+        .ft-trending-panel__item-name {
+          color: var(--ft-electric-blue); // hover:text-electric-blue
+        }
+
+        .ft-trending-panel__item-chevron svg {
+          transform: translateX(4px); // group-hover:translate-x-1
+          color: var(--ft-electric-blue);
+        }
+      }
+    }
+
+    // ── Logo / Dot ─────────────────────────────────────────
+    &__item-lead {
+      flex-shrink: 0;
+    }
+
+    &__item-logo {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      object-fit: cover;
+    }
+
+    &__item-dot {
+      display: block;
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+    }
+
+    // ── Text ───────────────────────────────────────────────
+    &__item-body {
+      flex: 1;
+      min-width: 0;
+    }
+
+    &__item-name {
+      font-size: 0.875rem; // text-sm
+      font-weight: 500;
+      color: var(--ft-slate-900);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin: 0 0 4px;
+      transition: color 200ms ease;
+    }
+
+    &__item-meta {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.75rem; // text-xs
+      color: var(--ft-slate-500);
+
+      svg,
+      .ft-icon {
+        flex-shrink: 0;
+        opacity: 0.7;
+      }
+    }
+
+    // ── Chevron ────────────────────────────────────────────
+    &__item-chevron {
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      color: var(--ft-slate-400);
+
+      svg,
+      .ft-icon {
+        transition:
+          transform 200ms ease,
+          color 200ms ease;
+      }
+    }
+
+    // ── Empty state ────────────────────────────────────────
+    &__empty {
+      padding: 24px 16px;
+      text-align: center;
+      color: var(--ft-slate-400);
+      font-size: 0.875rem;
+    }
+
+    // ── Footer ────────────────────────────────────────────
+    &__footer {
+      padding: 16px;
+      border-top: 1px solid var(--ft-slate-200);
+      text-align: center;
+    }
+
+    &__see-all {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--ft-electric-blue);
+      background: none;
+      border: none;
+      cursor: pointer;
+      transition: color 150ms ease;
+      width: 100%;
+
+      &:hover {
+        color: var(
+          --ft-electric-blue-hover,
+          #006dd9
+        ); // hover:text-electric-blue-hover
+      }
     }
   }
 }

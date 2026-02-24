@@ -3,8 +3,8 @@ import { hash } from "@ember/helper";
 import { on } from "@ember/modifier";
 import { action } from "@ember/object";
 import { service } from "@ember/service";
-import icon from "discourse/helpers/d-icon";
 import closeOnClickOutside from "discourse/modifiers/close-on-click-outside";
+import ftIcon from "../helpers/ft-icon";
 
 export default class FtCreateMenu extends Component {
   @service fantribeCreate;
@@ -33,7 +33,7 @@ export default class FtCreateMenu extends Component {
           {{on "click" this.handleCreatePost}}
         >
           <span class="ft-create-menu__icon ft-create-menu__icon--blue">
-            {{icon "pencil"}}
+            {{ftIcon "edit3"}}
           </span>
           <div class="ft-create-menu__item-content">
             <span class="ft-create-menu__item-label">Create Post</span>
@@ -45,7 +45,7 @@ export default class FtCreateMenu extends Component {
 
         <button type="button" class="ft-create-menu__item">
           <span class="ft-create-menu__icon ft-create-menu__icon--green">
-            {{icon "store"}}
+            {{ftIcon "shopping-bag"}}
           </span>
           <div class="ft-create-menu__item-content">
             <span class="ft-create-menu__item-label">Sell Gear</span>
@@ -55,7 +55,7 @@ export default class FtCreateMenu extends Component {
 
         <button type="button" class="ft-create-menu__item">
           <span class="ft-create-menu__icon ft-create-menu__icon--purple">
-            {{icon "people-group"}}
+            {{ftIcon "users"}}
           </span>
           <div class="ft-create-menu__item-content">
             <span class="ft-create-menu__item-label">Co-Create Request</span>
@@ -65,7 +65,7 @@ export default class FtCreateMenu extends Component {
 
         <button type="button" class="ft-create-menu__item">
           <span class="ft-create-menu__icon ft-create-menu__icon--red">
-            {{icon "tower-broadcast"}}
+            {{ftIcon "radio"}}
           </span>
           <div class="ft-create-menu__item-content">
             <span class="ft-create-menu__item-label">Start Event</span>
@@ -75,7 +75,7 @@ export default class FtCreateMenu extends Component {
 
         <button type="button" class="ft-create-menu__item">
           <span class="ft-create-menu__icon ft-create-menu__icon--orange">
-            {{icon "video"}}
+            {{ftIcon "video"}}
           </span>
           <div class="ft-create-menu__item-content">
             <span class="ft-create-menu__item-label">Create Video</span>
@@ -85,7 +85,7 @@ export default class FtCreateMenu extends Component {
 
         <button type="button" class="ft-create-menu__item">
           <span class="ft-create-menu__icon ft-create-menu__icon--pink">
-            {{icon "gift"}}
+            {{ftIcon "gift"}}
           </span>
           <div class="ft-create-menu__item-content">
             <span class="ft-create-menu__item-label">Create Reward</span>

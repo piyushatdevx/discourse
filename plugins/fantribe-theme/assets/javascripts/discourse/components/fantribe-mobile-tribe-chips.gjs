@@ -4,7 +4,7 @@ import { on } from "@ember/modifier";
 import { action } from "@ember/object";
 import { service } from "@ember/service";
 import { htmlSafe } from "@ember/template";
-import icon from "discourse/helpers/d-icon";
+import ftIcon from "../helpers/ft-icon";
 
 export default class FantribeMobileTribeChips extends Component {
   @service fantribeFilter;
@@ -73,14 +73,22 @@ export default class FantribeMobileTribeChips extends Component {
           height="16"
           viewBox="0 0 24 24"
           fill="none"
-          stroke="red"
+          stroke="currentColor"
           stroke-width="2"
           stroke-linecap="round"
           stroke-linejoin="round"
           aria-hidden="true"
-        ><path
-            d="M10 20a1 1 0 0 0 .553.895l2 1A1 1 0 0 0 14 21v-7a2 2 0 0 1 .517-1.341L21.74 4.67A1 1 0 0 0 21 3H3a1 1 0 0 0-.742 1.67l7.225 7.989A2 2 0 0 1 10 14z"
-          ></path></svg>
+        >
+          <path d="M10 8h4" />
+          <path d="M12 21v-9" />
+          <path d="M12 8V3" />
+          <path d="M17 16h4" />
+          <path d="M19 12V3" />
+          <path d="M19 21v-5" />
+          <path d="M3 14h4" />
+          <path d="M5 10V3" />
+          <path d="M5 21v-7" />
+        </svg>
         <span>My Tribes</span>
       </h3>
       <div class="fantribe-mobile-chips__row">
@@ -110,7 +118,7 @@ export default class FantribeMobileTribeChips extends Component {
             </span>
             {{#if category.is_favorite}}
               <span class="fantribe-chip__favorite">
-                {{icon "heart"}}
+                {{ftIcon "heart"}}
               </span>
             {{/if}}
           </button>

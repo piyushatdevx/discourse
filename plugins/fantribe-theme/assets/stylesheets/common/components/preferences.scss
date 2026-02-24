@@ -1,0 +1,515 @@
+// ============================================================
+// FanTribe Settings — Hub Page + Preference Sub-Page Overrides
+//
+// Two distinct scopes:
+//   1. .ft-settings-hub — the full-page settings hub template
+//      (rendered at /u/:username/activity/ft-settings)
+//   2. body.ft-on-preferences — overrides for all /preferences/*
+//      pages (body class toggled by the fantribe-customizations
+//      initializer on routeDidChange)
+//
+// Both are scoped to body.fantribe-theme:not(.admin-interface)
+// so they never affect other Discourse instances or the admin UI.
+// ============================================================
+
+// ── Hide profile chrome on the settings hub ─────────────────
+// When the user navigates to /activity/ft-settings the profile cover,
+// profile card, and primary tab bar are hidden so the hub fills the
+// viewport as a standalone full page.
+body.fantribe-theme:not(.admin-interface).ft-on-settings-hub {
+  // Hide the profile header (cover + card) injected via outlet
+  .ft-profile {
+    display: none !important;
+  }
+
+  // Hide the tab bar pill card
+  .user-navigation.user-navigation-primary {
+    display: none !important;
+  }
+
+  // Let the content area fill the full width without extra top padding
+  .user-main {
+    padding-top: 0;
+  }
+
+  .new-user-wrapper {
+    padding-top: 0;
+  }
+}
+
+// ── Settings Hub Page ───────────────────────────────────────
+body.fantribe-theme:not(.admin-interface) {
+  .ft-settings-hub {
+    padding: 0 24px 32px;
+    background: rgb(241, 241, 242);
+    min-height: 100vh;
+
+    @media (width <= 768px) {
+      padding: 0 12px 24px;
+    }
+  }
+
+  // Top bar: back button + page title
+  .ft-settings-hub__topbar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 20px 0 16px;
+  }
+
+  .ft-settings-hub__back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    border-radius: 9999px;
+    background: #fff;
+    border: 1px solid var(--ft-slate-200);
+    color: var(--ft-slate-700);
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 150ms ease;
+    box-shadow: 0 1px 4px rgb(0 0 0 / 6%);
+
+    svg,
+    .ft-icon {
+      flex-shrink: 0;
+    }
+
+    &:hover {
+      background: var(--ft-slate-100);
+      border-color: var(--ft-slate-300);
+    }
+  }
+
+  .ft-settings-hub__topbar-title {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--ft-slate-700);
+    margin-left: auto;
+
+    svg,
+    .ft-icon {
+      color: var(--ft-slate-400);
+    }
+  }
+
+  // Hero row: avatar + name/handle
+  .ft-settings-hub__hero {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    border: 1px solid var(--ft-slate-200);
+    border-radius: 20px;
+    padding: 24px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 8px rgb(0 0 0 / 5%);
+    background: linear-gradient(
+      135deg,
+      var(--ft-vibrant-red) 0%,
+      var(--ft-purple) 60%,
+      var(--ft-electric-blue) 100%
+    );
+  }
+
+  .ft-settings-hub__avatar {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    border: 3px solid rgb(255 255 255 / 0.5);
+    display: block;
+  }
+
+  .ft-settings-hub__hero-info {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .ft-settings-hub__hero-name {
+    font-size: 1.375rem;
+    font-weight: 700;
+    color: #fff;
+    margin: 0 0 2px;
+    line-height: 1.2;
+  }
+
+  .ft-settings-hub__hero-handle {
+    font-size: 0.9375rem;
+    color: rgb(255 255 255 / 0.75);
+    margin: 0;
+  }
+
+  // 2-column card grid (1-column on mobile)
+  .ft-settings-hub__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 16px;
+
+    @media (width <= 640px) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  // Individual section card
+  .ft-settings-hub__section {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: #fff;
+    border: 1px solid var(--ft-slate-200);
+    border-radius: 16px;
+    padding: 18px 16px;
+    box-shadow: 0 2px 8px rgb(0 0 0 / 5%);
+    cursor: pointer;
+    text-align: left;
+    transition: all 180ms ease;
+    color: var(--ft-slate-900);
+    width: 100%;
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgb(0 0 0 / 10%);
+    }
+
+    // Chevron
+    > .ft-icon--chevron-right {
+      margin-left: auto;
+      flex-shrink: 0;
+      color: var(--ft-slate-400);
+    }
+  }
+
+  // Icon square
+  .ft-settings-hub__section-icon-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    flex-shrink: 0;
+
+    svg,
+    .d-icon {
+      width: 20px;
+      height: 20px;
+    }
+  }
+
+  // Color variants for icon squares
+  .ft-settings-hub__section--blue .ft-settings-hub__section-icon-wrap {
+    background: #eff6ff;
+    color: #3b82f6;
+  }
+
+  .ft-settings-hub__section--purple .ft-settings-hub__section-icon-wrap {
+    background: #f5f3ff;
+    color: #7c3aed;
+  }
+
+  .ft-settings-hub__section--green .ft-settings-hub__section-icon-wrap {
+    background: #f0fdf4;
+    color: #16a34a;
+  }
+
+  .ft-settings-hub__section--amber .ft-settings-hub__section-icon-wrap {
+    background: #fffbeb;
+    color: #d97706;
+  }
+
+  .ft-settings-hub__section--coral .ft-settings-hub__section-icon-wrap {
+    background: #fff1f2;
+    color: #e11d48;
+  }
+
+  .ft-settings-hub__section--teal .ft-settings-hub__section-icon-wrap {
+    background: #f0fdfa;
+    color: #0d9488;
+  }
+
+  .ft-settings-hub__section-text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+  }
+
+  .ft-settings-hub__section-label {
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--ft-slate-900);
+    line-height: 1.3;
+  }
+
+  .ft-settings-hub__section-desc {
+    font-size: 0.8125rem;
+    color: var(--ft-slate-500);
+    line-height: 1.4;
+  }
+
+  // Danger zone
+  .ft-settings-hub__danger-zone {
+    margin-top: 8px;
+  }
+
+  .ft-settings-hub__danger-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--ft-slate-400);
+    margin: 0 0 8px 4px;
+  }
+
+  .ft-settings-hub__danger-btn {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: #fff;
+    border: 1px solid #fecdd3;
+    border-radius: 16px;
+    padding: 18px 16px;
+    box-shadow: 0 2px 8px rgb(225 29 72 / 0.05);
+    cursor: pointer;
+    text-align: left;
+    transition: all 180ms ease;
+    width: 100%;
+
+    &:hover {
+      border-color: #fda4af;
+      box-shadow: 0 6px 16px rgb(225 29 72 / 0.1);
+    }
+
+    .ft-settings-hub__section-label {
+      color: #e11d48;
+    }
+
+    > .ft-icon--chevron-right {
+      margin-left: auto;
+      flex-shrink: 0;
+      color: #fca5a5;
+    }
+  }
+
+  .ft-settings-hub__section-icon-wrap--danger {
+    background: #fff1f2;
+    color: #e11d48;
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+}
+
+// ── Preference Sub-Pages ─────────────────────────────────────
+body.fantribe-theme:not(.admin-interface).ft-on-preferences {
+  // Hide profile chrome (cover, card, primary tab bar) so preferences
+  // render as a standalone full page, not embedded in the profile layout.
+  .ft-profile,
+  .user-navigation.user-navigation-primary {
+    display: none !important;
+  }
+
+  .new-user-wrapper {
+    padding-top: 0;
+  }
+
+  // Page background
+  .user-main {
+    background: rgb(241, 241, 242);
+    min-height: 100vh;
+  }
+
+  // Show & FT-style the secondary nav (preference page tab bar)
+  .user-navigation.user-navigation-secondary {
+    display: block !important;
+    background: rgb(241, 241, 242);
+    border-bottom: none;
+    padding: 16px 24px 0;
+    box-shadow: none;
+    overflow-x: auto;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+
+    // Inner pill card container
+    nav.user-nav {
+      display: inline-flex;
+      gap: 4px;
+      padding: 6px;
+      list-style: none;
+      margin: 0;
+      background: #fff;
+      border-radius: 16px;
+      border: 1px solid var(--ft-slate-200);
+      box-shadow: 0 2px 8px rgb(0 0 0 / 6%);
+    }
+
+    li {
+      display: flex;
+    }
+
+    li a {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 9px 16px;
+      border-radius: 12px;
+      color: var(--ft-slate-600);
+      text-decoration: none;
+      font-size: 0.875rem;
+      font-weight: 500;
+      transition: all 150ms ease;
+      white-space: nowrap;
+      background: transparent;
+
+      &:hover {
+        color: var(--ft-slate-900);
+        background: var(--ft-slate-100);
+      }
+
+      &.active {
+        background: linear-gradient(135deg, #6366f1, #7c3aed);
+        color: #fff;
+        font-weight: 600;
+        box-shadow: 0 2px 10px rgb(99 102 241 / 0.35);
+      }
+    }
+  }
+
+  // Content area: constrained width + spacing
+  .user-content.user-preferences {
+    margin: 24px;
+    background: transparent;
+
+    @media (width <= 768px) {
+      margin: 16px 12px;
+    }
+  }
+
+  // Override Discourse core's fixed 500px width on .form-vertical
+  .form-vertical {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  // Each setting section → white card
+  .control-group {
+    background: #fff;
+    border: 1px solid var(--ft-slate-200);
+    border-radius: 16px;
+    box-shadow: 0 2px 8px rgb(0 0 0 / 5%);
+    padding: 24px;
+    margin-bottom: 16px;
+  }
+
+  // Tracking section: Categories + Tags sit in a two-column grid wrapper.
+  // Card the wrapper as one unit and strip the card style from the inner columns.
+  .user-preferences__tracking-categories-tags-wrapper {
+    background: #fff;
+    border: 1px solid var(--ft-slate-200);
+    border-radius: 16px;
+    box-shadow: 0 2px 8px rgb(0 0 0 / 5%);
+    padding: 24px;
+    margin-bottom: 16px;
+
+    .control-group {
+      background: transparent;
+      border: none;
+      border-radius: 0;
+      box-shadow: none;
+      padding: 0;
+      margin-bottom: 0;
+    }
+  }
+
+  // Labels above inputs
+  .control-label {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--ft-slate-500);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  // Section sub-headers inside a preference page
+  h3 {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--ft-slate-900);
+    margin: 0 0 16px;
+  }
+
+  // Text inputs / selects
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  input[type="url"],
+  textarea,
+  select {
+    border: 1.5px solid var(--ft-slate-200);
+    border-radius: 8px;
+    background: #f8f9fa;
+    font-size: 0.9375rem;
+    color: var(--ft-slate-900);
+    padding: 10px 14px;
+    transition:
+      border-color 150ms,
+      box-shadow 150ms;
+
+    &:focus {
+      outline: none;
+      border-color: var(--ft-electric-blue);
+      box-shadow: 0 0 0 3px rgb(0 128 255 / 0.12);
+    }
+  }
+
+  // Save button → FT gradient
+  .btn.btn-primary,
+  .save-changes {
+    background: linear-gradient(
+      135deg,
+      var(--ft-vibrant-red),
+      #e63b6f
+    ) !important;
+    color: #fff !important;
+    border: none !important;
+    border-radius: 9999px !important;
+    padding: 10px 28px !important;
+    font-weight: 700 !important;
+    box-shadow: 0 4px 14px rgb(255 23 68 / 0.3) !important;
+    transition: all 200ms !important;
+
+    &:hover:not(:disabled) {
+      box-shadow: 0 8px 20px rgb(255 23 68 / 0.45) !important;
+      transform: translateY(-1px) !important;
+    }
+  }
+
+  // Cancel / secondary buttons → neutral
+  .btn.btn-default:not(.btn-primary),
+  .btn-flat:not(.btn-primary) {
+    background: var(--ft-slate-100) !important;
+    color: var(--ft-slate-700) !important;
+    border: 1px solid var(--ft-slate-200) !important;
+    border-radius: 9999px !important;
+    padding: 10px 24px !important;
+    font-weight: 600 !important;
+    box-shadow: none !important;
+    transition: background 200ms !important;
+
+    &:hover:not(:disabled) {
+      background: var(--ft-slate-200) !important;
+    }
+  }
+}

@@ -1,19 +1,22 @@
 import Component from "@glimmer/component";
 import { on } from "@ember/modifier";
+import { action } from "@ember/object";
 import { service } from "@ember/service";
 import avatar from "discourse/helpers/avatar";
-import icon from "discourse/helpers/d-icon";
+import ftIcon from "../helpers/ft-icon";
 
 export default class FantribeComposeBox extends Component {
   @service currentUser;
   @service fantribeCreate;
 
+  @action
+  openModal() {
+    this.fantribeCreate.openCreatePostModal();
+  }
+
   <template>
     {{! template-lint-disable no-invalid-interactive }}
-    <div
-      class="fantribe-compose-box"
-      {{on "click" this.fantribeCreate.openCreatePostModal}}
-    >
+    <div class="fantribe-compose-box" {{on "click" this.openModal}}>
       <div class="fantribe-compose-box__input-area">
         <div class="fantribe-compose-box__avatar">
           {{#if this.currentUser}}
@@ -22,8 +25,9 @@ export default class FantribeComposeBox extends Component {
         </div>
 
         <div class="fantribe-compose-box__content">
-          <div class="fantribe-compose-box__input-placeholder">Share your
-            sound...</div>
+          <div class="fantribe-compose-box__input-placeholder">
+            Share your sound...
+          </div>
 
           <div class="fantribe-compose-box__actions">
             <button
@@ -31,7 +35,7 @@ export default class FantribeComposeBox extends Component {
               class="fantribe-compose-box__media-btn fantribe-compose-box__media-btn--photo"
               title="Photo"
             >
-              {{icon "image"}}
+              {{ftIcon "image"}}
               <span>Photo</span>
             </button>
             <button
@@ -39,7 +43,7 @@ export default class FantribeComposeBox extends Component {
               class="fantribe-compose-box__media-btn fantribe-compose-box__media-btn--video"
               title="Video"
             >
-              {{icon "video"}}
+              {{ftIcon "video"}}
               <span>Video</span>
             </button>
             <button
@@ -47,16 +51,8 @@ export default class FantribeComposeBox extends Component {
               class="fantribe-compose-box__media-btn fantribe-compose-box__media-btn--audio"
               title="Audio"
             >
-              {{icon "headphones"}}
+              {{ftIcon "headphones"}}
               <span>Audio</span>
-            </button>
-            <button
-              type="button"
-              class="fantribe-compose-box__media-btn fantribe-compose-box__media-btn--tag-gear"
-              title="Tag Gear"
-            >
-              {{icon "tag"}}
-              <span>Tag Gear</span>
             </button>
           </div>
         </div>

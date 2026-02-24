@@ -4,18 +4,19 @@ import { on } from "@ember/modifier";
 import { action } from "@ember/object";
 import { service } from "@ember/service";
 import FlagModal from "discourse/components/modal/flag";
-import icon from "discourse/helpers/d-icon";
 import { ajax } from "discourse/lib/ajax";
 import { popupAjaxError } from "discourse/lib/ajax-error";
 import PostFlag from "discourse/lib/flag-targets/post-flag";
 import { clipboardCopy } from "discourse/lib/utilities";
 import Composer from "discourse/models/composer";
 import closeOnClickOutside from "discourse/modifiers/close-on-click-outside";
+import ftIcon from "../helpers/ft-icon";
 
 export default class FantribePostMenu extends Component {
   @service composer;
   @service modal;
   @service router;
+  @service store;
 
   @action
   async handleEdit(event) {
@@ -75,7 +76,8 @@ export default class FantribePostMenu extends Component {
       return;
     }
     try {
-      const post = await ajax(`/posts/${postId}.json`);
+      // Use the Discourse store to get a proper Post model for FlagModal
+      const post = await this.store.find("post", postId);
       this.modal.show(FlagModal, {
         model: {
           flagTarget: new PostFlag(),
@@ -83,6 +85,27 @@ export default class FantribePostMenu extends Component {
           setHidden: () => {},
         },
       });
+    } catch (error) {
+      popupAjaxError(error);
+    }
+  }
+
+  @action
+  async handleNotInterested(event) {
+    event.stopPropagation();
+    this.args.onClose?.();
+    const topicId = this.args.topic?.id;
+    if (!topicId) {
+      return;
+    }
+    try {
+      // Mute the topic so it's filtered from future feeds
+      await ajax(`/t/${topicId}/notifications`, {
+        type: "POST",
+        data: { notification_level: 0 },
+      });
+      // Signal the card to remove itself from the current view
+      this.args.onDismiss?.();
     } catch (error) {
       popupAjaxError(error);
     }
@@ -115,9 +138,15 @@ export default class FantribePostMenu extends Component {
       return;
     }
     try {
+      // "ignore" requires an expiry date; use 100 years for a permanent block
+      const farFuture = new Date();
+      farFuture.setFullYear(farFuture.getFullYear() + 100);
       await ajax(`/u/${username}/notification_level.json`, {
         type: "PUT",
-        data: { notification_level: "ignore" },
+        data: {
+          notification_level: "ignore",
+          expiring_at: farFuture.toISOString(),
+        },
       });
     } catch (error) {
       popupAjaxError(error);
@@ -155,7 +184,7 @@ export default class FantribePostMenu extends Component {
               class="fantribe-post-menu__item"
               {{on "click" this.noop}}
             >
-              {{icon "thumbtack"}}
+              {{ftIcon "pin"}}
               <span>Pin to Profile</span>
             </button>
 
@@ -164,7 +193,7 @@ export default class FantribePostMenu extends Component {
               class="fantribe-post-menu__item"
               {{on "click" this.handleEdit}}
             >
-              {{icon "pencil"}}
+              {{ftIcon "edit3"}}
               <span>Edit Post</span>
             </button>
 
@@ -173,7 +202,7 @@ export default class FantribePostMenu extends Component {
               class="fantribe-post-menu__item"
               {{on "click" this.handleCopyLink}}
             >
-              {{icon "link"}}
+              {{ftIcon "link2"}}
               <span>Copy Link</span>
             </button>
 
@@ -182,7 +211,7 @@ export default class FantribePostMenu extends Component {
               class="fantribe-post-menu__item"
               {{on "click" this.noop}}
             >
-              {{icon "comment-slash"}}
+              {{ftIcon "message-square-off"}}
               <span>Turn Off Comments</span>
             </button>
 
@@ -193,7 +222,7 @@ export default class FantribePostMenu extends Component {
               class="fantribe-post-menu__item fantribe-post-menu__item--destructive"
               {{on "click" this.handleDelete}}
             >
-              {{icon "trash-alt"}}
+              {{ftIcon "trash2"}}
               <span>Delete Post</span>
             </button>
           </div>
@@ -205,7 +234,7 @@ export default class FantribePostMenu extends Component {
               class="fantribe-post-menu__item"
               {{on "click" this.noop}}
             >
-              {{icon "bookmark"}}
+              {{ftIcon "bookmark"}}
               <span>Save Post</span>
             </button>
 
@@ -214,7 +243,7 @@ export default class FantribePostMenu extends Component {
               class="fantribe-post-menu__item"
               {{on "click" this.handleCopyLink}}
             >
-              {{icon "link"}}
+              {{ftIcon "link2"}}
               <span>Copy Link</span>
             </button>
 
@@ -224,7 +253,7 @@ export default class FantribePostMenu extends Component {
                 class="fantribe-post-menu__item"
                 {{on "click" this.noop}}
               >
-                {{icon "user-plus"}}
+                {{ftIcon "user-plus"}}
                 <span>Follow {{@userName}}</span>
               </button>
             {{/unless}}
@@ -234,9 +263,9 @@ export default class FantribePostMenu extends Component {
             <button
               type="button"
               class="fantribe-post-menu__item"
-              {{on "click" this.noop}}
+              {{on "click" this.handleNotInterested}}
             >
-              {{icon "eye-slash"}}
+              {{ftIcon "eye-off"}}
               <div class="fantribe-post-menu__item-text">
                 <span>Not interested in this</span>
                 <span class="fantribe-post-menu__item-subtext">Hide this post</span>
@@ -248,7 +277,7 @@ export default class FantribePostMenu extends Component {
               class="fantribe-post-menu__item"
               {{on "click" this.handleMute}}
             >
-              {{icon "eye"}}
+              {{ftIcon "eye"}}
               <div class="fantribe-post-menu__item-text">
                 <span>Mute {{@userName}}</span>
                 <span class="fantribe-post-menu__item-subtext">Stop seeing their
@@ -261,7 +290,7 @@ export default class FantribePostMenu extends Component {
               class="fantribe-post-menu__item"
               {{on "click" this.handleReport}}
             >
-              {{icon "flag"}}
+              {{ftIcon "flag"}}
               <span>Report this post</span>
             </button>
 
@@ -272,7 +301,7 @@ export default class FantribePostMenu extends Component {
               class="fantribe-post-menu__item fantribe-post-menu__item--destructive"
               {{on "click" this.handleBlock}}
             >
-              {{icon "ban"}}
+              {{ftIcon "ban"}}
               <span>Block {{@userName}}</span>
             </button>
           </div>

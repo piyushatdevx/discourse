@@ -5,9 +5,8 @@
 .ft-modal-backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(26, 26, 26, 0.5);
+  background: rgb(26, 26, 26, 0.5);
   backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
   z-index: var(--ft-z-modal);
   display: flex;
   align-items: center;
@@ -51,6 +50,7 @@
     font-size: var(--ft-font-h5);
     font-weight: var(--ft-font-weight-semibold);
     color: var(--ft-dark);
+    border-radius: 10px;
   }
 
   .ft-modal__close {
@@ -89,7 +89,6 @@
 .ft-modal--glass {
   background: var(--ft-glass-card-bg);
   backdrop-filter: blur(var(--ft-glass-card-blur));
-  -webkit-backdrop-filter: blur(var(--ft-glass-card-blur));
   border: var(--ft-glass-card-border);
 }
 
@@ -132,10 +131,9 @@
   position: absolute;
   z-index: var(--ft-z-dropdown);
   min-width: 180px;
-  background: rgba(255, 255, 255, 0.95);
+  background: rgb(255, 255, 255, 0.95);
   backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(26, 26, 26, 0.08);
+  border: 1px solid rgb(26, 26, 26, 0.08);
   border-radius: var(--ft-radius-lg);
   box-shadow: var(--ft-shadow-lg);
   padding: var(--ft-space-1);
@@ -215,7 +213,7 @@
   position: fixed;
   inset: 0;
   z-index: var(--ft-z-modal);
-  background-color: rgba(0, 0, 0, 0.9);
+  background-color: rgb(0, 0, 0, 0.9);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -233,7 +231,7 @@
     width: 40px;
     height: 40px;
     border: none;
-    background: rgba(255, 255, 255, 0.1);
+    background: rgb(255, 255, 255, 0.1);
     color: var(--ft-white);
     border-radius: var(--ft-radius-full);
     cursor: pointer;
@@ -242,7 +240,7 @@
     justify-content: center;
 
     &:hover {
-      background: rgba(255, 255, 255, 0.2);
+      background: rgb(255, 255, 255, 0.2);
     }
   }
 
@@ -253,7 +251,7 @@
     width: 48px;
     height: 48px;
     border: none;
-    background: rgba(255, 255, 255, 0.1);
+    background: rgb(255, 255, 255, 0.1);
     color: var(--ft-white);
     border-radius: var(--ft-radius-full);
     cursor: pointer;
@@ -262,7 +260,7 @@
     justify-content: center;
 
     &:hover {
-      background: rgba(255, 255, 255, 0.2);
+      background: rgb(255, 255, 255, 0.2);
     }
 
     &.ft-lightbox__nav--prev {

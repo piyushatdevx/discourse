@@ -1,0 +1,174 @@
+// Tribe header shown above the feed when browsing a specific category/tribe.
+// Scoped to fantribe-theme body class, excluding admin interface.
+body.fantribe-theme:not(.admin-interface) {
+  .ft-tribe-header {
+    position: relative;
+    border-radius: var(--ft-radius-card);
+    overflow: hidden;
+    margin-bottom: var(--ft-space-4);
+    border: 1px solid var(--ft-gray-200);
+    background: var(--ft-white);
+  }
+
+  .ft-tribe-header__cover {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+  }
+
+  .ft-tribe-header__cover-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to bottom,
+      rgb(0, 0, 0, 0.35) 0%,
+      rgb(0, 0, 0, 0.6) 100%
+    );
+  }
+
+  .ft-tribe-header__content {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: var(--ft-space-4);
+    padding: var(--ft-space-6);
+    min-height: 120px;
+  }
+
+  .ft-tribe-header__info {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .ft-tribe-header__name {
+    font-size: var(--ft-font-size-xl);
+    font-weight: var(--ft-font-weight-bold);
+    color: var(--ft-white);
+    margin: 0 0 var(--ft-space-1) 0;
+    line-height: 1.25;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .ft-tribe-header__description {
+    font-size: var(--ft-font-size-sm);
+    color: rgb(255, 255, 255, 0.85);
+    margin: 0 0 var(--ft-space-2) 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .ft-tribe-header__meta {
+    display: flex;
+    align-items: center;
+    gap: var(--ft-space-1-5);
+    font-size: var(--ft-font-size-xs);
+    color: rgb(255, 255, 255, 0.8);
+
+    .d-icon {
+      width: 12px;
+      height: 12px;
+      color: rgb(255, 255, 255, 0.7);
+    }
+  }
+
+  .ft-tribe-header__meta-sep {
+    opacity: 0.5;
+  }
+
+  // Actions row: edit (admin) + join button
+  .ft-tribe-header__actions {
+    display: flex;
+    align-items: center;
+    gap: var(--ft-space-2);
+    flex-shrink: 0;
+  }
+
+  // Admin edit tribe link
+  .ft-tribe-header__edit-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--ft-space-2);
+    padding: var(--ft-space-2) var(--ft-space-3);
+    border-radius: var(--ft-radius-pill);
+    font-size: var(--ft-font-size-sm);
+    font-weight: var(--ft-font-weight-semibold);
+    color: var(--ft-white);
+    background-color: rgb(255 255 255 / 15%);
+    border: 2px solid rgb(255 255 255 / 40%);
+    text-decoration: none;
+    backdrop-filter: blur(4px);
+    white-space: nowrap;
+    transition:
+      background-color var(--ft-transition-colors),
+      border-color var(--ft-transition-colors);
+
+    .d-icon {
+      width: 14px;
+      height: 14px;
+    }
+
+    &:hover {
+      background-color: rgb(255 255 255 / 25%);
+      border-color: rgb(255 255 255 / 70%);
+    }
+  }
+
+  // Join / Joined button inside the tribe header
+  .ft-tribe-header__join-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--ft-space-2);
+    padding: var(--ft-space-2) var(--ft-space-4);
+    border-radius: var(--ft-radius-pill);
+    font-size: var(--ft-font-size-sm);
+    font-weight: var(--ft-font-weight-semibold);
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition:
+      background-color var(--ft-transition-colors),
+      border-color var(--ft-transition-colors),
+      color var(--ft-transition-colors),
+      box-shadow var(--ft-transition-shadow);
+    white-space: nowrap;
+    flex-shrink: 0;
+    background-color: var(--ft-primary);
+    border-color: var(--ft-primary);
+    color: var(--ft-white);
+
+    .d-icon {
+      width: 14px;
+      height: 14px;
+    }
+
+    &:hover:not(:disabled) {
+      background-color: var(--ft-primary-hover);
+      border-color: var(--ft-primary-hover);
+      box-shadow: var(--ft-shadow-md);
+    }
+
+    &--joined {
+      background-color: rgb(255, 255, 255, 0.15);
+      border-color: rgb(255, 255, 255, 0.6);
+      color: var(--ft-white);
+      backdrop-filter: blur(4px);
+
+      &:hover:not(:disabled) {
+        background-color: rgb(255, 255, 255, 0.25);
+        border-color: var(--ft-white);
+      }
+    }
+
+    &--loading,
+    &:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+    }
+  }
+}

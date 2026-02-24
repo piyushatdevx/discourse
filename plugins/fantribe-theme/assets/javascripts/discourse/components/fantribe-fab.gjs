@@ -1,7 +1,7 @@
 import Component from "@glimmer/component";
 import { on } from "@ember/modifier";
 import { service } from "@ember/service";
-import icon from "discourse/helpers/d-icon";
+import ftIcon from "../helpers/ft-icon";
 
 export default class FantribeFab extends Component {
   @service fantribeCreate;
@@ -20,7 +20,7 @@ export default class FantribeFab extends Component {
         aria-label="Create new post"
         {{on "click" this.fantribeCreate.openCreatePostModal}}
       >
-        {{icon "plus"}}
+        {{ftIcon "plus"}}
       </button>
     {{/if}}
   </template>

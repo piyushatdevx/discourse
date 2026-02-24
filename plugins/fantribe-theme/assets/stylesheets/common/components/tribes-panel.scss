@@ -118,6 +118,71 @@
     display: block;
   }
 
+  // My Tribes section — shown below main nav when user has joined tribes
+  &__section {
+    padding: var(--ft-space-3) 0 var(--ft-space-2);
+    border-top: 1px solid var(--ft-gray-100);
+    margin-top: var(--ft-space-2);
+    flex-shrink: 0;
+  }
+
+  &__section-label {
+    display: block;
+    padding: var(--ft-space-1) var(--ft-space-4) var(--ft-space-2);
+    font-size: var(--ft-font-size-xs);
+    font-weight: var(--ft-font-weight-semibold);
+    color: var(--ft-gray-400);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  &__tribe {
+    display: flex;
+    align-items: center;
+    gap: var(--ft-space-2-5);
+    width: 100%;
+    padding: var(--ft-space-2) var(--ft-space-4);
+    border: none;
+    border-radius: var(--ft-radius-lg);
+    background: transparent;
+    color: var(--ft-gray-600);
+    font-size: var(--ft-font-size-sm);
+    font-weight: var(--ft-font-weight-medium);
+    cursor: pointer;
+    text-align: left;
+    transition:
+      background var(--ft-transition-fast),
+      color var(--ft-transition-fast);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    &:hover {
+      background: var(--ft-gray-50);
+      color: var(--ft-dark);
+    }
+
+    &--active {
+      background: var(--ft-pastel-pink);
+      color: var(--ft-primary);
+      font-weight: var(--ft-font-weight-semibold);
+    }
+  }
+
+  &__tribe-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  &__tribe-name {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
   // Collapse toggle — hide it (hamburger in header will control sidebar)
   &__collapse {
     display: none;
@@ -207,6 +272,7 @@ body.fantribe-sidebar-collapsed {
     &__item-label,
     &__item-chevron,
     &__item-dot,
+    &__section,
     &__user-info,
     &__user-chevron {
       display: none;

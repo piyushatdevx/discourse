@@ -10,7 +10,6 @@ export default class FantribeFilterDropdown extends Component {
         type="button"
         {{on "click" @onToggle}}
       >
-        {{! SlidersHorizontal icon (Lucide, 24x24 viewBox, stroke-width 2) }}
         <svg
           class="ft-filter-dropdown__icon"
           viewBox="0 0 24 24"
@@ -20,15 +19,15 @@ export default class FantribeFilterDropdown extends Component {
           stroke-linecap="round"
           stroke-linejoin="round"
         >
-          <line x1="21" x2="14" y1="4" y2="4" />
-          <line x1="10" x2="3" y1="4" y2="4" />
-          <line x1="21" x2="12" y1="12" y2="12" />
-          <line x1="8" x2="3" y1="12" y2="12" />
-          <line x1="21" x2="16" y1="20" y2="20" />
-          <line x1="12" x2="3" y1="20" y2="20" />
-          <line x1="14" x2="14" y1="2" y2="6" />
-          <line x1="8" x2="8" y1="10" y2="14" />
-          <line x1="16" x2="16" y1="18" y2="22" />
+          <path d="M10 5H3" />
+          <path d="M12 19H3" />
+          <path d="M14 3v4" />
+          <path d="M16 17v4" />
+          <path d="M21 12h-9" />
+          <path d="M21 19h-5" />
+          <path d="M21 5h-7" />
+          <path d="M8 10v4" />
+          <path d="M8 12H3" />
         </svg>
         <span>Filter: {{@activeFilter}}</span>
         {{! ChevronDown icon }}

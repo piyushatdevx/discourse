@@ -6,6 +6,7 @@ import FantribeFeedLayout from "../../components/fantribe-feed-layout";
 export default class FantribeFeedWrapper extends Component {
   @service siteSettings;
   @service router;
+  @service fantribeFeedState;
 
   get isEnabled() {
     return this.siteSettings.fantribe_theme_enabled;
@@ -40,34 +41,52 @@ export default class FantribeFeedWrapper extends Component {
   @cached
   get topics() {
     const model = this.args.outletArgs?.model;
-    if (!model) {
-      return [];
+    let routeTopics = [];
+
+    if (model) {
+      // The route model structure is {list, filterType}
+      // Topics are in model.list.topics for discovery routes
+      const list = model.list || model;
+      let topicsList = list.get?.("topics") ?? list.topics;
+
+      if (topicsList) {
+        if (typeof topicsList.toArray === "function") {
+          routeTopics = topicsList.toArray();
+        } else if (Array.isArray(topicsList)) {
+          routeTopics = topicsList;
+        }
+      }
     }
 
-    // The route model structure is {list, filterType}
-    // Topics are in model.list.topics for discovery routes
-    const list = model.list || model;
-    let topicsList = list.get?.("topics") ?? list.topics;
-
-    if (!topicsList) {
-      return [];
+    // Prepend any topics created in this session, deduplicating against the
+    // route model so they don't double-show after a background refresh.
+    const pending = this.fantribeFeedState.pendingTopics;
+    if (pending.length === 0) {
+      return routeTopics;
     }
 
-    // Convert to regular array if it's an Ember array
-    if (typeof topicsList.toArray === "function") {
-      return topicsList.toArray();
-    }
-
-    return Array.isArray(topicsList) ? topicsList : [];
+    const existingIds = new Set(routeTopics.map((t) => t.id));
+    const newPending = pending.filter((t) => !existingIds.has(t.id));
+    return [...newPending, ...routeTopics];
   }
 
   get model() {
     return this.args.outletArgs?.model;
   }
 
+  // For discovery.category routes, the model includes the current category object.
+  get currentCategory() {
+    const model = this.args.outletArgs?.model;
+    return model?.category || null;
+  }
+
   <template>
     {{#if this.shouldShowFeedLayout}}
-      <FantribeFeedLayout @topics={{this.topics}} @model={{this.model}} />
+      <FantribeFeedLayout
+        @topics={{this.topics}}
+        @model={{this.model}}
+        @category={{this.currentCategory}}
+      />
     {{else}}
       {{yield}}
     {{/if}}
