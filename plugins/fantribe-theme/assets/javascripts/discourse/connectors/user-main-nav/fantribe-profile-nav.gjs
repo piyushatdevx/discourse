@@ -21,21 +21,6 @@ export default class FantribeProfileNav extends Component {
         <span>Posts</span>
       </LinkTo>
 
-      <LinkTo @route="userActivity.ftGearCollection" class="ft-user-nav__tab">
-        {{ftIcon "zap" size=16}}
-        <span>Gear Collection</span>
-      </LinkTo>
-
-      <LinkTo @route="userActivity.ftCoCreations" class="ft-user-nav__tab">
-        {{ftIcon "users" size=16}}
-        <span>Co-Creations</span>
-      </LinkTo>
-
-      <LinkTo @route="userActivity.ftShop" class="ft-user-nav__tab">
-        {{ftIcon "shopping-bag" size=16}}
-        <span>Shop</span>
-      </LinkTo>
-
       <LinkTo @route="userActivity.ftBookmarks" class="ft-user-nav__tab">
         {{ftIcon "bookmark" size=16}}
         <span>Bookmarks</span>

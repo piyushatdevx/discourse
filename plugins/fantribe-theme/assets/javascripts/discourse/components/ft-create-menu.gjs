@@ -42,56 +42,6 @@ export default class FtCreateMenu extends Component {
           </div>
           <span class="ft-create-menu__badge">Suggested</span>
         </button>
-
-        <button type="button" class="ft-create-menu__item">
-          <span class="ft-create-menu__icon ft-create-menu__icon--green">
-            {{ftIcon "shopping-bag"}}
-          </span>
-          <div class="ft-create-menu__item-content">
-            <span class="ft-create-menu__item-label">Sell Gear</span>
-            <span class="ft-create-menu__item-desc">List equipment for sale</span>
-          </div>
-        </button>
-
-        <button type="button" class="ft-create-menu__item">
-          <span class="ft-create-menu__icon ft-create-menu__icon--purple">
-            {{ftIcon "users"}}
-          </span>
-          <div class="ft-create-menu__item-content">
-            <span class="ft-create-menu__item-label">Co-Create Request</span>
-            <span class="ft-create-menu__item-desc">Find collaborators</span>
-          </div>
-        </button>
-
-        <button type="button" class="ft-create-menu__item">
-          <span class="ft-create-menu__icon ft-create-menu__icon--red">
-            {{ftIcon "radio"}}
-          </span>
-          <div class="ft-create-menu__item-content">
-            <span class="ft-create-menu__item-label">Start Event</span>
-            <span class="ft-create-menu__item-desc">Host a live session</span>
-          </div>
-        </button>
-
-        <button type="button" class="ft-create-menu__item">
-          <span class="ft-create-menu__icon ft-create-menu__icon--orange">
-            {{ftIcon "video"}}
-          </span>
-          <div class="ft-create-menu__item-content">
-            <span class="ft-create-menu__item-label">Create Video</span>
-            <span class="ft-create-menu__item-desc">Upload video content</span>
-          </div>
-        </button>
-
-        <button type="button" class="ft-create-menu__item">
-          <span class="ft-create-menu__icon ft-create-menu__icon--pink">
-            {{ftIcon "gift"}}
-          </span>
-          <div class="ft-create-menu__item-content">
-            <span class="ft-create-menu__item-label">Create Reward</span>
-            <span class="ft-create-menu__item-desc">Offer fan rewards</span>
-          </div>
-        </button>
       </div>
     </div>
   </template>

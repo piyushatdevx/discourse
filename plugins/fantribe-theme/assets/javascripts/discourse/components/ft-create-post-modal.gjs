@@ -548,96 +548,10 @@ export default class FtCreatePostModal extends Component {
               {{/each}}
             </div>
           {{/if}}
-
-          {{! Schedule Panel }}
-          {{#if this.showScheduler}}
-            <div class="ft-modal__schedule-panel">
-              <div class="ft-modal__schedule-panel-header">
-                {{ftIcon "calendar"}}
-                <span>Schedule Post</span>
-              </div>
-              <div class="ft-modal__schedule-grid">
-                <div class="ft-modal__schedule-field">
-                  <label class="ft-modal__schedule-label">Date</label>
-                  <input
-                    type="date"
-                    class="ft-modal__schedule-input"
-                    value={{this.scheduledDate}}
-                    {{on "input" this.updateScheduledDate}}
-                  />
-                </div>
-                <div class="ft-modal__schedule-field">
-                  <label class="ft-modal__schedule-label">Time</label>
-                  <input
-                    type="time"
-                    class="ft-modal__schedule-input"
-                    value={{this.scheduledTime}}
-                    {{on "input" this.updateScheduledTime}}
-                  />
-                </div>
-              </div>
-            </div>
-          {{/if}}
-
-          {{! Visibility }}
-          <div class="ft-modal__visibility-section">
-            <span class="ft-modal__section-label">Who can see this?</span>
-            <div class="ft-modal__visibility-grid">
-              <button
-                type="button"
-                class="ft-modal__visibility-card
-                  {{if
-                    (eq this.visibility 'public')
-                    'ft-modal__visibility-card--selected'
-                  }}"
-                {{on "click" (fn this.setVisibility "public")}}
-              >
-                {{ftIcon "globe"}}
-                <span>Public</span>
-              </button>
-              <button
-                type="button"
-                class="ft-modal__visibility-card
-                  {{if
-                    (eq this.visibility 'followers')
-                    'ft-modal__visibility-card--selected'
-                  }}"
-                {{on "click" (fn this.setVisibility "followers")}}
-              >
-                {{ftIcon "users"}}
-                <span>Followers</span>
-              </button>
-              <button
-                type="button"
-                class="ft-modal__visibility-card
-                  {{if
-                    (eq this.visibility 'private')
-                    'ft-modal__visibility-card--selected'
-                  }}"
-                {{on "click" (fn this.setVisibility "private")}}
-              >
-                {{ftIcon "lock"}}
-                <span>Private</span>
-              </button>
-            </div>
-          </div>
         </div>
 
         {{! Footer }}
         <div class="ft-modal__footer">
-          <button
-            type="button"
-            class="ft-modal__schedule-toggle
-              {{if this.showScheduler 'ft-modal__schedule-toggle--active'}}"
-            {{on "click" this.toggleScheduler}}
-          >
-            {{ftIcon "clock"}}
-            <span>{{if
-                this.showScheduler
-                "Cancel Schedule"
-                "Schedule for Later"
-              }}</span>
-          </button>
           <div class="ft-modal__action-buttons">
             <button
               type="button"

@@ -227,15 +227,6 @@ export default class FtUserProfileHeader extends Component {
                 <div class="ft-profile__name-group">
                   <h1 class="ft-profile__name">
                     {{@user.name}}
-                    {{#if this.tier}}
-                      <span
-                        class="ft-profile__tier-badge ft-profile__tier-badge--{{this.tier.key}}"
-                      >
-                        {{ftIcon "zap" size=12}}
-                        {{this.tier.label}}
-                        Tier
-                      </span>
-                    {{/if}}
                   </h1>
                   <p class="ft-profile__handle">@{{@user.username}}</p>
                 </div>
@@ -290,7 +281,7 @@ export default class FtUserProfileHeader extends Component {
                 {{/if}}
                 {{#if this.joinedDate}}
                   <span class="ft-profile__meta-item">
-                    {{icon "calendar"}}
+                    {{ftIcon "calendar" size=14}}
                     Joined
                     {{formatDate this.joinedDate leaveAgo=true}}
                   </span>
@@ -312,30 +303,12 @@ export default class FtUserProfileHeader extends Component {
 
           {{! ── Stats row ── Followers | Tribes | Co-Creations }}
           <div class="ft-profile__stats">
-            <div class="ft-profile__stat">
-              <div class="ft-profile__stat-top">
-                {{ftIcon "users" size=20}}
-                <span
-                  class="ft-profile__stat-value"
-                >{{this.followerCount}}</span>
-              </div>
-              <span class="ft-profile__stat-label">Followers</span>
-            </div>
             <div class="ft-profile__stat ft-profile__stat--divider">
               <div class="ft-profile__stat-top">
                 {{ftIcon "heart" size=20}}
                 <span class="ft-profile__stat-value">{{this.tribeCount}}</span>
               </div>
-              <span class="ft-profile__stat-label">Tribes</span>
-            </div>
-            <div class="ft-profile__stat ft-profile__stat--divider">
-              <div class="ft-profile__stat-top">
-                {{ftIcon "zap" size=20}}
-                <span
-                  class="ft-profile__stat-value"
-                >{{this.coCreationCount}}</span>
-              </div>
-              <span class="ft-profile__stat-label">Co-Creations</span>
+              <span class="ft-profile__stat-label">My Tribes</span>
             </div>
           </div>
         </div>

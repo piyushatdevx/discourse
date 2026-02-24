@@ -435,16 +435,11 @@ body.fantribe-theme:not(.admin-interface) {
   // Figma: Followers | Tribes | Co-Creations
   // Each stat is: [icon] [value bold] [label small] in a row
   .ft-profile__stats {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 0;
+    display: flex;
+    justify-content: center;
     margin-top: 24px;
     padding-top: 20px;
     border-top: 1px solid var(--ft-slate-200);
-
-    @media (width <= 480px) {
-      grid-template-columns: repeat(3, 1fr);
-    }
   }
 
   .ft-profile__stat {
@@ -455,10 +450,6 @@ body.fantribe-theme:not(.admin-interface) {
     padding: 16px 8px;
     text-align: center;
     gap: 4px;
-
-    &--divider {
-      border-left: 1px solid var(--ft-slate-200);
-    }
   }
 
   // Icon + value on the same row, centered (matches Figma)
