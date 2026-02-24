@@ -2000,6 +2000,10 @@ body.fantribe-theme {
 
     // User avatar in list
     .chat-user-avatar {
+      img {
+        margin: 0;
+      }
+
       .avatar {
         border: 2px solid transparent;
         transition: border-color var(--ft-transition-fast);
