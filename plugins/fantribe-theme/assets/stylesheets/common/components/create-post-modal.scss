@@ -85,7 +85,6 @@ body.fantribe-theme:not(.admin-interface) {
     // ==========================================
     &__tribe-section {
       padding: 12px 24px 14px;
-      border-bottom: 1px solid var(--ft-slate-100, #f1f5f9);
     }
 
     &__tribe-section-label {
@@ -399,7 +398,6 @@ body.fantribe-theme:not(.admin-interface) {
     &__media-buttons {
       display: flex;
       gap: 8px;
-      margin-top: 16px;
     }
 
     &__file-input {

@@ -337,9 +337,9 @@ body.fantribe-theme:not(.admin-interface) {
   input[type="text"],
   input[type="search"],
   select {
-    border-radius: 6px;
-    border: 1px solid #e8e8e8;
-    background: #fff;
+    border: 1px solid var(--ft-slate-200);
+    border-radius: 16px;
+    background: var(--ft-slate-50);
     font-size: 14px;
 
     &:focus {
