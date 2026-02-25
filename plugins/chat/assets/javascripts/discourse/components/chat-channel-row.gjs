@@ -175,7 +175,7 @@ export default class ChatChannelRow extends Component {
         (if (eq this.chat.activeChannel.id @channel.id) "active")
         (if this.channelHasUnread "has-unread")
       }}
-      style="display: flex; min-height: 60px; width: 100%; padding: 12px 16px; align-items: center; gap: 12px; text-decoration: none; border-left: 4px solid transparent; transition: background-color 150ms ease, border-color 150ms ease;"
+      style="padding: 40px 16px; display: flex; min-height: 60px; width: 100%; align-items: center; gap: 12px; text-decoration: none; border-left: 4px solid transparent; border-bottom: 1px solid transparent; border-top: 1px solid transparent; border-right: 1px solid transparent; transition: background-color 150ms ease, border-color 150ms ease;"
       tabindex="0"
       data-chat-channel-id={{@channel.id}}
       {{didInsert this.startTrackingStatus}}

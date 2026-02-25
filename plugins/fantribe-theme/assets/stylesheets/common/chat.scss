@@ -314,6 +314,9 @@ body.fantribe-theme {
     &.active {
       background: #f8fafc !important;
       border-left-color: var(--ft-vibrant-red) !important;
+      border-bottom-color: var(--ft-vibrant-red) !important;
+      border-top-color: var(--ft-vibrant-red) !important;
+      border-right-color: var(--ft-vibrant-red) !important;
 
       .chat-channel-name .chat-channel-name__label {
         color: #0f172a !important;
@@ -3299,7 +3302,6 @@ body.fantribe-theme {
   body.fantribe-theme .public-channels .chat-channel-row,
   body.fantribe-theme .starred-channels .chat-channel-row {
     min-height: 64px;
-    padding: var(--ft-space-3) var(--ft-space-4);
     margin: 0;
     border-radius: 0;
     border-bottom: 1px solid var(--ft-neutral-100);
