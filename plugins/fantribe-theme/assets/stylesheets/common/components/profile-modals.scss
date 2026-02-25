@@ -181,9 +181,6 @@ body.fantribe-theme:not(.admin-interface) {
 
   // ── Edit Profile Modal ───────────────────────────────────────
   .ft-edit-modal {
-    width: min(520px, 94vw);
-    max-height: 88vh;
-    overflow-y: auto;
     gap: 0;
   }
 
@@ -333,48 +330,179 @@ body.fantribe-theme:not(.admin-interface) {
   }
 
   // ── Edit Tribe Modal ─────────────────────────────────────────
-  .ft-edit-tribe-modal {
-    width: min(480px, 94vw);
+  .ft-edit-tribe-modal__cover-wrap {
+    position: relative;
   }
 
-  .ft-edit-tribe-modal__color-row {
-    display: flex;
-    align-items: center;
-    gap: 12px;
+  .ft-edit-tribe-modal__cover-preview {
+    width: 100%;
+    height: 140px;
+    border-radius: 12px;
+    background-size: cover;
+    background-position: center;
+    background-color: var(--ft-slate-100);
+    position: relative;
+    overflow: hidden;
   }
 
-  .ft-edit-tribe-modal__color-swatch {
+  .ft-edit-tribe-modal__cover-remove {
+    position: absolute;
+    top: 8px;
+    right: 8px;
     width: 28px;
     height: 28px;
-    border-radius: var(--ft-radius-small);
-    border: 1.5px solid var(--ft-neutral-200);
-    flex-shrink: 0;
-  }
-
-  .ft-edit-tribe-modal__color-input {
-    width: 40px;
-    height: 36px;
-    padding: 2px;
-    border: 1.5px solid var(--ft-neutral-200);
-    border-radius: var(--ft-radius-small);
-    background: var(--ft-neutral-50);
+    border-radius: 50%;
+    background: rgb(0 0 0 / 50%);
+    border: none;
     cursor: pointer;
-    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    transition: background 150ms ease;
 
-    &::-webkit-color-swatch-wrapper {
-      padding: 0;
+    .d-icon {
+      width: 14px;
+      height: 14px;
     }
 
-    &::-webkit-color-swatch {
-      border: none;
-      border-radius: 4px;
+    &:hover {
+      background: rgb(0 0 0 / 70%);
     }
   }
 
-  .ft-edit-tribe-modal__color-value {
+  .ft-edit-tribe-modal__cover-upload-btn {
+    width: 100%;
+    height: 100px;
+    border: 2px dashed var(--ft-slate-300);
+    border-radius: 12px;
+    background: var(--ft-slate-50);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
     font-size: var(--ft-font-sm);
+    font-weight: var(--ft-font-weight-medium);
     color: var(--ft-slate-500);
-    font-family: monospace;
+    transition: all 150ms ease;
+
+    .d-icon {
+      width: 20px;
+      height: 20px;
+      color: var(--ft-slate-400);
+    }
+
+    &:hover:not(:disabled) {
+      border-color: var(--ft-primary);
+      color: var(--ft-primary);
+      background: var(--ft-primary-50, #eff6ff);
+
+      .d-icon {
+        color: var(--ft-primary);
+      }
+    }
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+  }
+
+  .ft-edit-tribe-modal__cover-input {
+    display: none;
+  }
+
+  .ft-edit-tribe-modal__cover-hint {
+    font-size: var(--ft-font-xs);
+    color: var(--ft-slate-400);
+    margin: 4px 0 0;
+    line-height: 1.4;
+  }
+
+  // Logo / Profile Image
+  .ft-edit-tribe-modal__logo-wrap {
+    position: relative;
+  }
+
+  .ft-edit-tribe-modal__logo-preview {
+    position: relative;
+    display: inline-block;
+
+    img {
+      width: 80px;
+      height: 80px;
+      border-radius: 12px;
+      object-fit: cover;
+      border: 2px solid var(--ft-slate-200);
+    }
+  }
+
+  .ft-edit-tribe-modal__logo-remove {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #dc2626;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+
+    .d-icon {
+      width: 10px;
+      height: 10px;
+    }
+  }
+
+  .ft-edit-tribe-modal__logo-upload-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    border: 2px dashed var(--ft-slate-300);
+    border-radius: 12px;
+    background: var(--ft-slate-50);
+    cursor: pointer;
+    font-size: var(--ft-font-sm);
+    font-weight: var(--ft-font-weight-medium);
+    color: var(--ft-slate-500);
+    transition: all 150ms ease;
+
+    .d-icon {
+      width: 16px;
+      height: 16px;
+      color: var(--ft-slate-400);
+    }
+
+    &:hover:not(:disabled) {
+      border-color: var(--ft-primary);
+      color: var(--ft-primary);
+      background: var(--ft-primary-50, #eff6ff);
+
+      .d-icon {
+        color: var(--ft-primary);
+      }
+    }
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+  }
+
+  .ft-edit-tribe-modal__logo-input {
+    display: none;
+  }
+
+  // Create tribe modal file inputs (same approach — triggered programmatically)
+  .ft-create-tribe-modal__cover-input,
+  .ft-create-tribe-modal__logo-input {
+    display: none;
   }
 
   .ft-edit-tribe-modal__visibility-row {

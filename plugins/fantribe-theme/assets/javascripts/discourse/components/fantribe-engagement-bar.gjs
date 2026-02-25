@@ -73,6 +73,10 @@ export default class FantribeEngagementBar extends Component {
     return this.args.commentCount || 0;
   }
 
+  get isClosed() {
+    return this.args.topicClosed || this.args.topic?.closed || false;
+  }
+
   get canReact() {
     // opCanLike is false when viewing your own post (Discourse prevents self-reactions)
     return !!(
@@ -165,7 +169,7 @@ export default class FantribeEngagementBar extends Component {
     event.stopPropagation();
 
     const topic = this.args.topic;
-    if (!topic) {
+    if (!topic || this.isClosed) {
       return;
     }
 
@@ -269,10 +273,17 @@ export default class FantribeEngagementBar extends Component {
       <div class="fantribe-engagement__actions">
         <button
           type="button"
-          class="fantribe-engagement__action fantribe-engagement__action--comment"
+          class="fantribe-engagement__action fantribe-engagement__action--comment
+            {{if this.isClosed 'fantribe-engagement__action--closed'}}"
+          disabled={{this.isClosed}}
+          title={{if this.isClosed "Comments are turned off"}}
           {{on "click" this.handleComment}}
         >
-          {{ftIcon "message-circle"}}
+          {{#if this.isClosed}}
+            {{ftIcon "message-square-off"}}
+          {{else}}
+            {{ftIcon "message-circle"}}
+          {{/if}}
           {{#if this.commentCount}}
             <span>{{this.commentCount}}</span>
           {{/if}}

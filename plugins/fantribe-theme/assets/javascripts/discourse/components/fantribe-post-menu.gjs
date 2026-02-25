@@ -9,18 +9,17 @@ import { ajax } from "discourse/lib/ajax";
 import { popupAjaxError } from "discourse/lib/ajax-error";
 import PostFlag from "discourse/lib/flag-targets/post-flag";
 import { clipboardCopy } from "discourse/lib/utilities";
-import Composer from "discourse/models/composer";
 import closeOnClickOutside from "discourse/modifiers/close-on-click-outside";
 import ftIcon from "../helpers/ft-icon";
 
 export default class FantribePostMenu extends Component {
-  @service composer;
   @service currentUser;
+  @service fantribeCreate;
   @service modal;
-  @service router;
   @service store;
 
   @tracked isBookmarkLoading = false;
+  @tracked showDeleteConfirm = false;
   @tracked _isBookmarked = null;
   @tracked _bookmarkId = null;
 
@@ -29,6 +28,10 @@ export default class FantribePostMenu extends Component {
       return this._isBookmarked;
     }
     return this.args.topic?.bookmarked || false;
+  }
+
+  get isClosed() {
+    return this.args.topicClosed || this.args.topic?.closed || false;
   }
 
   @action
@@ -41,12 +44,8 @@ export default class FantribePostMenu extends Component {
     }
     try {
       const post = await ajax(`/posts/${postId}.json`);
-      this.composer.open({
-        action: Composer.EDIT,
-        post,
-        draftKey: `topic_${this.args.topic?.id}`,
-        draftSequence: 0,
-      });
+      const tags = this.args.topic?.tags || [];
+      this.fantribeCreate.openEditPostModal(post, this.args.topic?.title, tags);
     } catch (error) {
       popupAjaxError(error);
     }
@@ -65,16 +64,28 @@ export default class FantribePostMenu extends Component {
   }
 
   @action
+  confirmDelete(event) {
+    event.stopPropagation();
+    this.showDeleteConfirm = true;
+  }
+
+  @action
+  cancelDelete(event) {
+    event.stopPropagation();
+    this.showDeleteConfirm = false;
+  }
+
+  @action
   async handleDelete(event) {
     event.stopPropagation();
-    this.args.onClose?.();
     const topic = this.args.topic;
     if (!topic?.id) {
       return;
     }
     try {
       await ajax(`/t/${topic.id}`, { type: "DELETE" });
-      this.router.transitionTo("discovery.latest");
+      this.args.onClose?.();
+      this.args.onDismiss?.();
     } catch (error) {
       popupAjaxError(error);
     }
@@ -89,7 +100,6 @@ export default class FantribePostMenu extends Component {
       return;
     }
     try {
-      // Use the Discourse store to get a proper Post model for FlagModal
       const post = await this.store.find("post", postId);
       this.modal.show(FlagModal, {
         model: {
@@ -112,12 +122,10 @@ export default class FantribePostMenu extends Component {
       return;
     }
     try {
-      // Mute the topic so it's filtered from future feeds
       await ajax(`/t/${topicId}/notifications`, {
         type: "POST",
         data: { notification_level: 0 },
       });
-      // Signal the card to remove itself from the current view
       this.args.onDismiss?.();
     } catch (error) {
       popupAjaxError(error);
@@ -137,6 +145,7 @@ export default class FantribePostMenu extends Component {
         type: "PUT",
         data: { notification_level: "mute" },
       });
+      this.args.onDismiss?.();
     } catch (error) {
       popupAjaxError(error);
     }
@@ -151,7 +160,6 @@ export default class FantribePostMenu extends Component {
       return;
     }
     try {
-      // "ignore" requires an expiry date; use 100 years for a permanent block
       const farFuture = new Date();
       farFuture.setFullYear(farFuture.getFullYear() + 100);
       await ajax(`/u/${username}/notification_level.json`, {
@@ -161,6 +169,30 @@ export default class FantribePostMenu extends Component {
           expiring_at: farFuture.toISOString(),
         },
       });
+      this.args.onDismiss?.();
+    } catch (error) {
+      popupAjaxError(error);
+    }
+  }
+
+  @action
+  async handleTurnOffComments(event) {
+    event.stopPropagation();
+    const topicId = this.args.topic?.id;
+    if (!topicId) {
+      return;
+    }
+    const willClose = !this.isClosed;
+    try {
+      await ajax(`/t/${topicId}/status`, {
+        type: "PUT",
+        data: {
+          status: "closed",
+          enabled: willClose ? "true" : "false",
+        },
+      });
+      this.args.onClosedChange?.(willClose);
+      this.args.onClose?.();
     } catch (error) {
       popupAjaxError(error);
     }
@@ -206,12 +238,6 @@ export default class FantribePostMenu extends Component {
     this.args.onClose?.();
   }
 
-  @action
-  noop(event) {
-    event.stopPropagation();
-    this.args.onClose?.();
-  }
-
   <template>
     {{#if @isOpen}}
       {{! Backdrop }}
@@ -229,18 +255,28 @@ export default class FantribePostMenu extends Component {
           (hash ignoreSelector=".fantribe-post-menu")
         }}
       >
-        {{#if @isOwnPost}}
+        {{#if this.showDeleteConfirm}}
+          {{! Delete confirmation view }}
+          <div class="fantribe-post-menu__confirm">
+            <p class="fantribe-post-menu__confirm-text">Delete this post?</p>
+            <p class="fantribe-post-menu__confirm-sub">This action cannot be
+              undone.</p>
+            <div class="fantribe-post-menu__confirm-actions">
+              <button
+                type="button"
+                class="fantribe-post-menu__confirm-cancel"
+                {{on "click" this.cancelDelete}}
+              >Cancel</button>
+              <button
+                type="button"
+                class="fantribe-post-menu__confirm-delete"
+                {{on "click" this.handleDelete}}
+              >Delete</button>
+            </div>
+          </div>
+        {{else if @isOwnPost}}
           {{! Menu for own posts }}
           <div class="fantribe-post-menu__items">
-            <button
-              type="button"
-              class="fantribe-post-menu__item"
-              {{on "click" this.noop}}
-            >
-              {{ftIcon "pin"}}
-              <span>Pin to Profile</span>
-            </button>
-
             <button
               type="button"
               class="fantribe-post-menu__item"
@@ -262,10 +298,14 @@ export default class FantribePostMenu extends Component {
             <button
               type="button"
               class="fantribe-post-menu__item"
-              {{on "click" this.noop}}
+              {{on "click" this.handleTurnOffComments}}
             >
               {{ftIcon "message-square-off"}}
-              <span>Turn Off Comments</span>
+              <span>{{if
+                  this.isClosed
+                  "Turn On Comments"
+                  "Turn Off Comments"
+                }}</span>
             </button>
 
             <div class="fantribe-post-menu__divider"></div>
@@ -273,7 +313,7 @@ export default class FantribePostMenu extends Component {
             <button
               type="button"
               class="fantribe-post-menu__item fantribe-post-menu__item--destructive"
-              {{on "click" this.handleDelete}}
+              {{on "click" this.confirmDelete}}
             >
               {{ftIcon "trash2"}}
               <span>Delete Post</span>
@@ -304,17 +344,6 @@ export default class FantribePostMenu extends Component {
               {{ftIcon "link2"}}
               <span>Copy Link</span>
             </button>
-
-            {{#unless @isFollowing}}
-              <button
-                type="button"
-                class="fantribe-post-menu__item"
-                {{on "click" this.noop}}
-              >
-                {{ftIcon "user-plus"}}
-                <span>Follow {{@userName}}</span>
-              </button>
-            {{/unless}}
 
             <div class="fantribe-post-menu__divider"></div>
 

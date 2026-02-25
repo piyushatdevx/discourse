@@ -13,6 +13,7 @@ import { eq } from "discourse/truth-helpers";
 import ftIcon from "../helpers/ft-icon";
 
 const MAX_CHARS = 2000;
+const MAX_TAGS = 3;
 
 export default class FtCreatePostModal extends Component {
   @service currentUser;
@@ -25,15 +26,31 @@ export default class FtCreatePostModal extends Component {
 
   @tracked postTitle = "";
   @tracked postText = "";
-  @tracked visibility = "public";
   @tracked isSubmitting = false;
   @tracked uploadedMedia = [];
-  @tracked showScheduler = false;
-  @tracked scheduledDate = "";
-  @tracked scheduledTime = "";
   @tracked isUploading = false;
   @tracked isTribeDropdownOpen = false;
+  @tracked selectedTags = [];
+  @tracked tagInput = "";
   @tracked _localCategory = undefined;
+
+  constructor(owner, args) {
+    super(owner, args);
+    const editingPost = this.fantribeCreate.editingPost;
+    if (editingPost) {
+      this.postTitle = this.fantribeCreate.editingTopicTitle || "";
+      this.postText = editingPost.raw || "";
+      this.selectedTags = [...(this.fantribeCreate.editingTags || [])];
+    }
+  }
+
+  get isEditMode() {
+    return !!this.fantribeCreate.editingPost;
+  }
+
+  get modalTitle() {
+    return this.isEditMode ? "Edit Post" : "Create Post";
+  }
 
   get localCategory() {
     return this._localCategory !== undefined
@@ -55,15 +72,17 @@ export default class FtCreatePostModal extends Component {
   }
 
   get hasTribeOptions() {
-    return this.joinedTribes.length > 0 && !this.fantribeCreate.postCategory;
+    return (
+      this.joinedTribes.length > 0 &&
+      !this.fantribeCreate.postCategory &&
+      !this.isEditMode
+    );
   }
 
   tribeDotStyle(category) {
     return htmlSafe(`background-color: #${category.color || "0088cc"}`);
   }
 
-  // Returns the first letter of a category name for use as a letter-avatar
-  // fallback when the tribe has no uploaded logo.
   tribeLetter(category) {
     return (category?.name || "?").charAt(0).toUpperCase();
   }
@@ -115,9 +134,8 @@ export default class FtCreatePostModal extends Component {
     return this.uploadedMedia.length > 0;
   }
 
-  @action
-  selectTribe(category) {
-    this._localCategory = category;
+  get canAddMoreTags() {
+    return this.selectedTags.length < MAX_TAGS;
   }
 
   @action
@@ -144,11 +162,6 @@ export default class FtCreatePostModal extends Component {
   @action
   updateText(event) {
     this.postText = event.target.value;
-  }
-
-  @action
-  setVisibility(value) {
-    this.visibility = value;
   }
 
   @action
@@ -216,22 +229,43 @@ export default class FtCreatePostModal extends Component {
   }
 
   @action
-  toggleScheduler() {
-    this.showScheduler = !this.showScheduler;
-    if (!this.showScheduler) {
-      this.scheduledDate = "";
-      this.scheduledTime = "";
+  updateTagInput(event) {
+    this.tagInput = event.target.value;
+  }
+
+  @action
+  handleTagKeydown(event) {
+    if (event.key === "Enter" || event.key === ",") {
+      event.preventDefault();
+      this.commitTagInput();
+    } else if (
+      event.key === "Backspace" &&
+      !this.tagInput &&
+      this.selectedTags.length > 0
+    ) {
+      this.selectedTags = this.selectedTags.slice(0, -1);
     }
   }
 
   @action
-  updateScheduledDate(event) {
-    this.scheduledDate = event.target.value;
+  commitTagInput() {
+    const tag = this.tagInput
+      .trim()
+      .toLowerCase()
+      .replace(/[^a-z0-9-]/g, "");
+    if (
+      tag &&
+      this.selectedTags.length < MAX_TAGS &&
+      !this.selectedTags.includes(tag)
+    ) {
+      this.selectedTags = [...this.selectedTags, tag];
+    }
+    this.tagInput = "";
   }
 
   @action
-  updateScheduledTime(event) {
-    this.scheduledTime = event.target.value;
+  removeTag(tag) {
+    this.selectedTags = this.selectedTags.filter((t) => t !== tag);
   }
 
   @action
@@ -243,14 +277,34 @@ export default class FtCreatePostModal extends Component {
     this.isSubmitting = true;
 
     try {
+      const mediaParts = this.uploadedMedia.map((m) => m.uploadMarkdown);
+      const rawParts = [...mediaParts, this.postText];
+      const raw = rawParts.join("\n\n");
+
+      if (this.isEditMode) {
+        const post = this.fantribeCreate.editingPost;
+        await ajax(`/posts/${post.id}.json`, {
+          type: "PUT",
+          data: {
+            post: { raw },
+            title: this.postTitle.trim(),
+          },
+        });
+        if (post.topic_id) {
+          await ajax(`/t/${post.topic_id}.json`, {
+            type: "PUT",
+            data: { tags: this.selectedTags },
+          });
+        }
+        this.fantribeCreate.closeCreatePostModal();
+        this.router.refresh();
+        return;
+      }
+
       const categoryId =
         this.localCategory?.id ||
         parseInt(this.siteSettings.default_composer_category, 10) ||
         this.site.uncategorized_category_id;
-
-      const mediaParts = this.uploadedMedia.map((m) => m.uploadMarkdown);
-      const rawParts = [...mediaParts, this.postText];
-      const raw = rawParts.join("\n\n");
 
       const result = await ajax("/posts", {
         type: "POST",
@@ -259,12 +313,11 @@ export default class FtCreatePostModal extends Component {
           title: this.postTitle,
           category: categoryId,
           archetype: "regular",
+          tags: this.selectedTags,
         },
       });
 
       if (result?.post?.topic_id) {
-        // Construct a topic-shaped object from the API response so the new
-        // post appears at the top of the feed instantly — no navigation needed.
         const newTopic = {
           id: result.post.topic_id,
           slug: result.post.topic_slug,
@@ -284,13 +337,12 @@ export default class FtCreatePostModal extends Component {
           first_post_id: result.post.id,
           image_url: null,
           image_urls: [],
+          tags: this.selectedTags,
         };
         this.fantribeFeedState.prependTopic(newTopic);
       }
 
       this.fantribeCreate.closeCreatePostModal();
-      // Refresh the route model so the new post appears in the real topic list.
-      // Fire-and-forget — the pending topic above shows instantly while this loads.
       this.router.refresh();
     } catch (error) {
       popupAjaxError(error);
@@ -311,7 +363,7 @@ export default class FtCreatePostModal extends Component {
       <div class="ft-modal">
         {{! Title Bar }}
         <div class="ft-modal__title-bar">
-          <h2 class="ft-modal__title">Create Post</h2>
+          <h2 class="ft-modal__title">{{this.modalTitle}}</h2>
           <button
             type="button"
             class="ft-modal__close-btn"
@@ -336,7 +388,7 @@ export default class FtCreatePostModal extends Component {
           </div>
         </div>
 
-        {{! Tribe selector — full-width inline expand }}
+        {{! Tribe selector — full-width inline expand (create mode only) }}
         {{#if this.hasTribeOptions}}
           <div class="ft-modal__tribe-section">
             <label class="ft-modal__tribe-section-label">Posting to</label>
@@ -461,6 +513,41 @@ export default class FtCreatePostModal extends Component {
             {{this.charCount}}/{{MAX_CHARS}}
           </div>
 
+          {{! Tags input }}
+          <div class="ft-modal__tags-section">
+            <div class="ft-modal__tags-input-wrap">
+              {{#each this.selectedTags as |tag|}}
+                <span class="ft-modal__tag-chip">
+                  #{{tag}}
+                  <button
+                    type="button"
+                    class="ft-modal__tag-chip-remove"
+                    {{on "click" (fn this.removeTag tag)}}
+                  >{{ftIcon "x"}}</button>
+                </span>
+              {{/each}}
+              {{#if this.canAddMoreTags}}
+                <input
+                  type="text"
+                  class="ft-modal__tag-input"
+                  placeholder={{if
+                    this.selectedTags.length
+                    "Add tag..."
+                    "Add up to 3 tags..."
+                  }}
+                  value={{this.tagInput}}
+                  {{on "input" this.updateTagInput}}
+                  {{on "keydown" this.handleTagKeydown}}
+                  {{on "blur" this.commitTagInput}}
+                />
+              {{/if}}
+            </div>
+            <span
+              class="ft-modal__tags-hint"
+            >{{this.selectedTags.length}}/{{MAX_TAGS}}
+              tags</span>
+          </div>
+
           {{! Hidden file inputs }}
           <input
             type="file"
@@ -565,9 +652,10 @@ export default class FtCreatePostModal extends Component {
               disabled={{this.isDisabled}}
               {{on "click" this.submitPost}}
             >
-              {{#if this.showScheduler}}
-                {{ftIcon "calendar"}}
-                Schedule Post
+              {{#if this.isSubmitting}}
+                Saving...
+              {{else if this.isEditMode}}
+                Save Changes
               {{else}}
                 Publish Now
               {{/if}}

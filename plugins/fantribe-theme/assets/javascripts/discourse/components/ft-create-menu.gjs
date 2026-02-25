@@ -14,6 +14,11 @@ export default class FtCreateMenu extends Component {
     this.fantribeCreate.openCreatePostModal();
   }
 
+  @action
+  handleCreateTribe() {
+    this.fantribeCreate.openCreateTribeModal();
+  }
+
   <template>
     <div
       class="ft-create-menu"
@@ -41,6 +46,21 @@ export default class FtCreateMenu extends Component {
               vibes</span>
           </div>
           <span class="ft-create-menu__badge">Suggested</span>
+        </button>
+
+        <button
+          type="button"
+          class="ft-create-menu__item"
+          {{on "click" this.handleCreateTribe}}
+        >
+          <span class="ft-create-menu__icon ft-create-menu__icon--purple">
+            {{ftIcon "users"}}
+          </span>
+          <div class="ft-create-menu__item-content">
+            <span class="ft-create-menu__item-label">Create Tribe</span>
+            <span class="ft-create-menu__item-desc">Start a community around
+              your passion</span>
+          </div>
         </button>
       </div>
     </div>

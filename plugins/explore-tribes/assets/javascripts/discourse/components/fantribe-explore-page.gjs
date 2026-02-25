@@ -7,18 +7,17 @@ import didInsert from "@ember/render-modifiers/modifiers/did-insert";
 import { service } from "@ember/service";
 import { eq } from "discourse/truth-helpers";
 import ftIcon from "discourse/plugins/fantribe-theme/discourse/helpers/ft-icon";
-import FantribeCreateTribeModal from "./fantribe-create-tribe-modal";
 import FantribeTribeCard from "./fantribe-tribe-card";
 
 export default class FantribeExplorePage extends Component {
   @service currentUser;
   @service fantribeMembership;
+  @service fantribeCreate;
   @service site;
 
   @tracked activeTab = "explore";
   @tracked activeFilter = "All";
   @tracked isFilterOpen = false;
-  @tracked isCreateTribeOpen = false;
 
   isActiveFilter = (filter) => filter === this.activeFilter;
 
@@ -29,16 +28,6 @@ export default class FantribeExplorePage extends Component {
   @action
   initializeMembership() {
     this.fantribeMembership.initialize();
-  }
-
-  @action
-  openCreateTribe() {
-    this.isCreateTribeOpen = true;
-  }
-
-  @action
-  closeCreateTribe() {
-    this.isCreateTribeOpen = false;
   }
 
   @action
@@ -169,7 +158,7 @@ export default class FantribeExplorePage extends Component {
               <button
                 type="button"
                 class="ft-explore-create-btn"
-                {{on "click" this.openCreateTribe}}
+                {{on "click" this.fantribeCreate.openCreateTribeModal}}
               >
                 {{ftIcon "plus"}}
                 <span>Create Tribe</span>
@@ -295,11 +284,6 @@ export default class FantribeExplorePage extends Component {
         {{/if}}
 
       </div>
-
-      {{! Create Tribe modal — admin only }}
-      {{#if this.isCreateTribeOpen}}
-        <FantribeCreateTribeModal @onClose={{this.closeCreateTribe}} />
-      {{/if}}
     </div>
   </template>
 }

@@ -123,6 +123,20 @@ after_initialize do
     SiteSetting.max_likes_per_day = 500 if SiteSetting.max_likes_per_day < 500
   end
 
+  # Enable tagging so posts can have tags
+  if SiteSetting.fantribe_theme_enabled
+    SiteSetting.tagging_enabled = true unless SiteSetting.tagging_enabled
+    SiteSetting.max_tags_per_topic = 3 if SiteSetting.max_tags_per_topic > 3 ||
+      SiteSetting.max_tags_per_topic == 0
+    # Allow all users to create and apply tags (Discourse defaults to TL3+)
+    if SiteSetting.respond_to?(:min_trust_to_create_tag)
+      SiteSetting.min_trust_to_create_tag = 0 if SiteSetting.min_trust_to_create_tag > 0
+    end
+    if SiteSetting.respond_to?(:min_trust_to_tag_topics)
+      SiteSetting.min_trust_to_tag_topics = 0 if SiteSetting.min_trust_to_tag_topics > 0
+    end
+  end
+
   # Default-enable auth settings when FanTribe is active
   if SiteSetting.fantribe_theme_enabled
     SiteSetting.login_required = true unless SiteSetting.login_required
@@ -174,6 +188,22 @@ after_initialize do
       Guardian.prepend(FantribeTheme::GuardianExtension)
     end
   end
+
+  # Allow topic authors to close/open their own topics (Turn Off Comments).
+  # Core guardian requires staff or TL4 for this in some versions; we relax
+  # the check to any authenticated topic owner when FanTribe is active.
+  module ::FantribeTheme
+    module GuardianTopicCloseExtension
+      def can_close_topic?(topic)
+        return super unless SiteSetting.fantribe_theme_enabled
+        return false if !authenticated? || topic.archived?
+        return true if is_staff? || is_category_group_moderator?(topic.category)
+        is_my_own?(topic) && !@user.silenced?
+      end
+    end
+  end
+
+  reloadable_patch { Guardian.prepend(FantribeTheme::GuardianTopicCloseExtension) }
 
   # Enable topic excerpts for feed cards
   module ::FantribeTheme
@@ -339,6 +369,18 @@ after_initialize do
 
     add_to_serializer(serializer_name, :include_first_onebox_html?) do
       SiteSetting.fantribe_theme_enabled
+    end
+
+    # Expose topic tags on bookmark objects so the feed card can render them.
+    add_to_serializer(serializer_name, :tags) do
+      next [] unless SiteSetting.fantribe_theme_enabled && SiteSetting.tagging_enabled
+      topic&.tags&.map(&:name) || []
+    rescue StandardError
+      []
+    end
+
+    add_to_serializer(serializer_name, :include_tags?) do
+      SiteSetting.fantribe_theme_enabled && SiteSetting.tagging_enabled
     end
   end
 

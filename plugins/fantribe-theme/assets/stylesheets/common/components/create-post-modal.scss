@@ -126,13 +126,6 @@ body.fantribe-theme:not(.admin-interface) {
       }
     }
 
-    &__tribe-select-dot {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      flex-shrink: 0;
-    }
-
     // Tribe logo in the selector trigger and dropdown options
     &__tribe-logo {
       width: 26px;
@@ -262,13 +255,6 @@ body.fantribe-theme:not(.admin-interface) {
         height: 13px;
         color: var(--ft-slate-500);
       }
-    }
-
-    &__tribe-select-option-dot {
-      width: 26px;
-      height: 26px;
-      border-radius: 8px;
-      flex-shrink: 0;
     }
 
     &__tribe-select-option-name {
@@ -531,134 +517,6 @@ body.fantribe-theme:not(.admin-interface) {
     }
 
     // ==========================================
-    // SCHEDULE PANEL
-    // ==========================================
-    &__schedule-panel {
-      margin-top: 16px;
-      padding: 16px;
-      background: rgb(239 246 255);
-      border: 1px solid rgb(191 219 254);
-      border-radius: 16px;
-    }
-
-    &__schedule-panel-header {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: var(--ft-font-sm);
-      font-weight: var(--ft-font-weight-semibold);
-      color: var(--ft-electric-blue);
-      margin-bottom: 12px;
-
-      .d-icon {
-        width: 16px;
-        height: 16px;
-      }
-    }
-
-    &__schedule-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-    }
-
-    &__schedule-field {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-
-    &__schedule-label {
-      font-size: var(--ft-font-xs);
-      font-weight: var(--ft-font-weight-medium);
-      color: var(--ft-slate-600);
-    }
-
-    &__schedule-input {
-      width: 100%;
-      padding: 10px 12px;
-      border: 1px solid rgb(191 219 254);
-      border-radius: 10px;
-      font-size: var(--ft-font-sm);
-      color: var(--ft-slate-900);
-      background: white;
-      outline: none;
-      font-family: var(--ft-font-family);
-      transition:
-        border-color 200ms ease,
-        box-shadow 200ms ease;
-
-      &:focus {
-        border-color: var(--ft-electric-blue);
-        box-shadow: 0 0 0 2px rgb(0 128 255 / 20%);
-      }
-    }
-
-    // ==========================================
-    // VISIBILITY
-    // ==========================================
-    &__visibility-section {
-      margin-top: 20px;
-    }
-
-    &__section-label {
-      display: block;
-      font-size: var(--ft-font-sm);
-      font-weight: var(--ft-font-weight-semibold);
-      color: var(--ft-slate-700);
-      margin-bottom: 10px;
-    }
-
-    &__visibility-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 8px;
-    }
-
-    &__visibility-card {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 6px;
-      padding: 14px 8px;
-      background: var(--ft-slate-50);
-      border: 2px solid var(--ft-slate-200);
-      border-radius: 14px;
-      cursor: pointer;
-      transition: all 150ms ease;
-
-      .d-icon {
-        width: 20px;
-        height: 20px;
-        color: var(--ft-slate-500);
-      }
-
-      span {
-        font-size: var(--ft-font-xs);
-        font-weight: var(--ft-font-weight-medium);
-        color: var(--ft-slate-600);
-      }
-
-      &:hover {
-        border-color: var(--ft-slate-300);
-      }
-
-      &--selected {
-        border-color: var(--ft-electric-blue);
-        background: rgb(0, 128, 255, 0.05);
-
-        .d-icon {
-          color: var(--ft-electric-blue);
-        }
-
-        span {
-          color: var(--ft-electric-blue);
-          font-weight: var(--ft-font-weight-semibold);
-        }
-      }
-    }
-
-    // ==========================================
     // FOOTER
     // ==========================================
     &__footer {
@@ -667,37 +525,6 @@ body.fantribe-theme:not(.admin-interface) {
       justify-content: space-between;
       padding: 16px 24px;
       border-top: 1px solid var(--ft-slate-200);
-    }
-
-    &__schedule-toggle {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      background: none;
-      border: none;
-      font-size: var(--ft-font-sm);
-      font-weight: var(--ft-font-weight-medium);
-      color: var(--ft-slate-500);
-      cursor: pointer;
-      padding: 8px 0;
-      transition: color 150ms ease;
-
-      .d-icon {
-        width: 16px;
-        height: 16px;
-      }
-
-      &:hover {
-        color: var(--ft-slate-700);
-      }
-
-      &--active {
-        color: var(--ft-electric-blue);
-
-        &:hover {
-          color: var(--ft-electric-blue);
-        }
-      }
     }
 
     &__action-buttons {
@@ -758,5 +585,91 @@ body.fantribe-theme:not(.admin-interface) {
         }
       }
     }
+  }
+
+  // ==========================================
+  // TAGS INPUT
+  // ==========================================
+  .ft-modal__tags-section {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 0 4px;
+    flex-wrap: wrap;
+  }
+
+  .ft-modal__tags-input-wrap {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px;
+    min-height: 36px;
+    padding: 6px 12px;
+    border: 1px solid var(--ft-slate-200);
+    border-radius: 10px;
+    background: var(--ft-slate-50);
+    cursor: text;
+
+    &:focus-within {
+      border-color: var(--ft-primary);
+      background: white;
+    }
+  }
+
+  .ft-modal__tag-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 8px 2px 10px;
+    background: var(--ft-primary-50, #eff6ff);
+    color: var(--ft-primary, #2563eb);
+    border-radius: 9999px;
+    font-size: 12px;
+    font-weight: var(--ft-font-weight-medium);
+  }
+
+  .ft-modal__tag-chip-remove {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: inherit;
+    opacity: 0.6;
+    padding: 0;
+    width: 14px;
+    height: 14px;
+
+    .d-icon {
+      width: 10px;
+      height: 10px;
+    }
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+
+  .ft-modal__tag-input {
+    border: none;
+    outline: none;
+    background: transparent;
+    font-size: var(--ft-font-sm);
+    color: var(--ft-slate-700);
+    min-width: 80px;
+    flex: 1;
+    padding: 0;
+
+    &::placeholder {
+      color: var(--ft-slate-400);
+    }
+  }
+
+  .ft-modal__tags-hint {
+    font-size: 11px;
+    color: var(--ft-slate-400);
+    white-space: nowrap;
   }
 }

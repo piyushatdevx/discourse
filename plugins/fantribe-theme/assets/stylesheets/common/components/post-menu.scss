@@ -96,6 +96,60 @@ body.fantribe-theme:not(.admin-interface) {
       background: var(--ft-slate-200);
       margin: 8px 0; // my-2
     }
+
+    // Delete confirmation view
+    &__confirm {
+      padding: 20px 16px 16px;
+      text-align: center;
+    }
+
+    &__confirm-text {
+      font-size: var(--ft-font-base);
+      font-weight: var(--ft-font-weight-semibold);
+      color: var(--ft-slate-900);
+      margin: 0 0 6px;
+    }
+
+    &__confirm-sub {
+      font-size: var(--ft-font-sm);
+      color: var(--ft-slate-500);
+      margin: 0 0 16px;
+    }
+
+    &__confirm-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    &__confirm-cancel,
+    &__confirm-delete {
+      flex: 1;
+      padding: 9px 12px;
+      border-radius: 10px;
+      font-size: var(--ft-font-sm);
+      font-weight: var(--ft-font-weight-medium);
+      cursor: pointer;
+      border: none;
+      transition: background-color 150ms ease;
+    }
+
+    &__confirm-cancel {
+      background: var(--ft-slate-100);
+      color: var(--ft-slate-700);
+
+      &:hover {
+        background: var(--ft-slate-200);
+      }
+    }
+
+    &__confirm-delete {
+      background: #dc2626;
+      color: white;
+
+      &:hover {
+        background: #b91c1c;
+      }
+    }
   }
 }
 

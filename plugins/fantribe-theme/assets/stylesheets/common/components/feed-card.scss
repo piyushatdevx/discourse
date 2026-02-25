@@ -289,6 +289,26 @@ body.fantribe-theme:not(.admin-interface) {
     }
 
     // ==========================================
+    // TAGS
+    // ==========================================
+    &__tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 8px;
+    }
+
+    &__tag {
+      display: inline-block;
+      padding: 2px 10px;
+      background: var(--ft-primary-50, #eff6ff);
+      color: var(--ft-primary, #2563eb);
+      border-radius: 9999px;
+      font-size: 12px;
+      font-weight: var(--ft-font-weight-medium);
+    }
+
+    // ==========================================
     // MEDIA (Spec §3.4: px-6 pb-4)
     // ==========================================
     &__media {
