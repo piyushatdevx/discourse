@@ -707,6 +707,33 @@ body.fantribe-theme {
       justify-content: flex-end;
     }
 
+    // Consistent styling for sent message reactions
+    .chat-message-reaction {
+      background: var(--ft-white);
+      border-color: var(--ft-neutral-200);
+
+      .count {
+        color: var(--ft-neutral-800);
+      }
+
+      &:hover {
+        background: var(--ft-neutral-100);
+      }
+
+      &.reacted {
+        background: var(--ft-white);
+        border-color: var(--ft-neutral-200);
+
+        .count {
+          color: var(--ft-neutral-800);
+        }
+      }
+
+      &.reacted:hover {
+        background: var(--ft-neutral-100);
+      }
+    }
+
     // Reply indicator for sent messages - right-aligned
     .chat-reply {
       border-left: none;
@@ -834,6 +861,11 @@ body.fantribe-theme {
     border-radius: var(--ft-radius-pill);
     cursor: pointer;
     transition: var(--ft-transition-fast);
+    color: var(--ft-neutral-700);
+
+    .count {
+      color: var(--ft-neutral-600);
+    }
 
     &:hover {
       background: var(--ft-neutral-200);
@@ -842,6 +874,11 @@ body.fantribe-theme {
     &.reacted {
       background: var(--ft-vibrant-red-tint);
       border-color: var(--ft-vibrant-red-border);
+      color: var(--ft-vibrant-red);
+
+      .count {
+        color: var(--ft-vibrant-red);
+      }
     }
   }
 
@@ -1386,12 +1423,10 @@ body.fantribe-theme {
   @keyframes ft-dropdown-enter {
     from {
       opacity: 0;
-      transform: translateY(-4px) scale(0.95);
     }
 
     to {
       opacity: 1;
-      transform: translateY(0) scale(1);
     }
   }
 
