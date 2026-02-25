@@ -62,6 +62,7 @@ register_asset "stylesheets/common/components/right-sidebar.scss"
 register_asset "stylesheets/common/components/create-menu.scss"
 register_asset "stylesheets/common/components/create-post-modal.scss"
 register_asset "stylesheets/common/components/engagement-bar.scss"
+register_asset "stylesheets/common/components/media.scss"
 
 # Chat theme customization (Phase 3 - Chat UI)
 register_asset "stylesheets/common/chat.scss"

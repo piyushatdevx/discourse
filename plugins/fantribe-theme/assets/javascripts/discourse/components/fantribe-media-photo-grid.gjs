@@ -9,32 +9,50 @@ export default class FantribeMediaPhotoGrid extends Component {
     return this.args.images || [];
   }
 
+  get maxDisplayCount() {
+    const count = this.images.length;
+    if (count <= 4) {
+      return 4;
+    }
+    if (count <= 9) {
+      return 9;
+    }
+    return 16;
+  }
+
   get displayImages() {
-    // Show max 4 images in grid
-    return this.images.slice(0, 4);
+    return this.images.slice(0, this.maxDisplayCount);
   }
 
   get hasMore() {
-    return this.images.length > 4;
+    return this.images.length > this.maxDisplayCount;
   }
 
   get moreCount() {
-    return `+${this.images.length - 4}`;
+    return `+${this.images.length - this.maxDisplayCount}`;
+  }
+
+  get lastDisplayIndex() {
+    return this.displayImages.length - 1;
   }
 
   get gridClass() {
-    const count = Math.min(this.images.length, 4);
+    const count = this.images.length;
     const baseClass = "fantribe-media-grid";
+
     if (count === 2) {
       return `${baseClass} ${baseClass}--2`;
     }
     if (count === 3) {
       return `${baseClass} ${baseClass}--3`;
     }
-    if (count >= 4) {
-      return `${baseClass} ${baseClass}--${this.hasMore ? "more" : "4"}`;
+    if (count === 4) {
+      return `${baseClass} ${baseClass}--4`;
     }
-    return baseClass;
+    if (count <= 9) {
+      return `${baseClass} ${baseClass}--more`;
+    }
+    return `${baseClass} ${baseClass}--large`;
   }
 
   @action
@@ -55,11 +73,11 @@ export default class FantribeMediaPhotoGrid extends Component {
             type="button"
             class="fantribe-media-grid__item
               {{if
-                (and this.hasMore (eq index 3))
+                (and this.hasMore (eq index this.lastDisplayIndex))
                 'fantribe-media-grid__item--more'
               }}"
             data-more-count={{if
-              (and this.hasMore (eq index 3))
+              (and this.hasMore (eq index this.lastDisplayIndex))
               this.moreCount
             }}
             {{on "click" (fn this.handleImageClick index)}}
