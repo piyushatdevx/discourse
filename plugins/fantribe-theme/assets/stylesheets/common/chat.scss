@@ -705,6 +705,18 @@ body.fantribe-theme {
     }
   }
 
+  // Reply indicator for received messages - left-aligned
+  .chat-message-container.has-reply:not(.is-by-current-user) {
+    .chat-reply {
+      flex: 0 100%;
+    }
+
+    .chat-message {
+      display: flex;
+      flex-direction: column;
+    }
+  }
+
   // Left-align received messages (default)
   .chat-message-content {
     display: flex;
