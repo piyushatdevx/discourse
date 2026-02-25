@@ -1,0 +1,215 @@
+// Flag Modal - Fantribe Theme
+// Styles for the post/topic flagging modal
+.flag-modal {
+  // Modal container styling
+  .d-modal__container {
+    border-radius: var(--ft-radius-card);
+    box-shadow: var(--ft-shadow-2xl);
+    overflow: hidden;
+  }
+
+  // Modal header
+  .d-modal__header {
+    background: var(--ft-white);
+    border-bottom: 1px solid var(--ft-gray-200);
+    padding: var(--ft-space-4) var(--ft-space-6);
+
+    .d-modal__title {
+      font-weight: var(--ft-font-weight-semibold);
+      color: var(--ft-dark);
+    }
+  }
+
+  // Modal body
+  .d-modal__body {
+    background: var(--ft-white);
+    padding: var(--ft-space-4) var(--ft-space-6);
+  }
+
+  // Modal footer
+  .d-modal__footer {
+    background: var(--ft-gray-50);
+    border-top: 1px solid var(--ft-gray-200);
+    padding: var(--ft-space-4) var(--ft-space-6);
+  }
+}
+
+// Radio button styling
+.flag-modal-body {
+  .flag-action-type {
+    .controls {
+      .checkbox-label {
+        display: flex;
+        align-items: flex-start;
+        gap: var(--ft-space-3);
+        cursor: pointer;
+
+        input[type="radio"] {
+          flex-shrink: 0;
+          width: 20px;
+          height: 20px;
+          margin: 2px 0 0 0;
+          border: 2px solid var(--ft-gray-400);
+          border-radius: var(--ft-radius-full);
+          appearance: none;
+          cursor: pointer;
+          transition:
+            border-color var(--ft-transition-fast),
+            border-width var(--ft-transition-fast),
+            box-shadow var(--ft-transition-fast);
+
+          &:hover:not(:checked) {
+            border-color: var(--ft-gray-500);
+          }
+
+          &:checked {
+            border-color: var(--ft-primary);
+            border-width: 6px;
+          }
+
+          &:focus,
+          &:focus-visible {
+            outline: none;
+            box-shadow: var(--ft-shadow-focus);
+          }
+        }
+      }
+    }
+  }
+
+  // Textarea styling
+  .flag-message {
+    border: 1px solid var(--ft-gray-300);
+    border-radius: var(--ft-radius-md);
+    padding: var(--ft-space-3);
+    transition:
+      border-color var(--ft-transition-fast),
+      box-shadow var(--ft-transition-fast);
+
+    &:focus {
+      border-color: var(--ft-primary);
+      box-shadow: 0 0 0 3px rgb(255, 23, 68, 0.15);
+      outline: none;
+    }
+  }
+
+  // Confirmation checkbox
+  .flag-confirmation {
+    input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      border: 2px solid var(--ft-gray-400);
+      border-radius: var(--ft-radius-sm);
+      appearance: none;
+      cursor: pointer;
+      transition:
+        background-color var(--ft-transition-fast),
+        border-color var(--ft-transition-fast);
+
+      &:checked {
+        background-color: var(--ft-primary);
+        border-color: var(--ft-primary);
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6 9 17l-5-5'/%3E%3C/svg%3E");
+        background-size: 12px;
+        background-position: center;
+        background-repeat: no-repeat;
+      }
+
+      &:focus,
+      &:focus-visible {
+        outline: none;
+        box-shadow: var(--ft-shadow-focus);
+      }
+    }
+  }
+}
+
+// Button styling
+.flag-modal {
+  .d-modal__footer {
+    // Primary button (Create Flag)
+    .btn-primary {
+      background-color: var(--ft-primary);
+      color: var(--ft-white);
+      border: none;
+      border-radius: var(--ft-radius-lg);
+      font-weight: var(--ft-font-weight-semibold);
+      padding: var(--ft-space-2) var(--ft-space-4);
+      transition:
+        background-color var(--ft-transition-fast),
+        transform var(--ft-transition-fast),
+        box-shadow var(--ft-transition-fast);
+
+      &:hover:not(:disabled) {
+        background-color: var(--ft-primary-hover);
+      }
+
+      &:active:not(:disabled) {
+        background-color: var(--ft-primary-active);
+        transform: scale(0.98);
+      }
+
+      &:focus,
+      &:focus-visible {
+        outline: none;
+        box-shadow: var(--ft-shadow-focus);
+      }
+
+      &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+    }
+
+    // Danger buttons (Warning, Delete Spammer, etc.)
+    .btn-danger {
+      background-color: var(--ft-error);
+      color: var(--ft-white);
+      border: none;
+      border-radius: var(--ft-radius-lg);
+      font-weight: var(--ft-font-weight-semibold);
+      padding: var(--ft-space-2) var(--ft-space-4);
+      transition:
+        background-color var(--ft-transition-fast),
+        transform var(--ft-transition-fast),
+        box-shadow var(--ft-transition-fast);
+
+      &:hover:not(:disabled) {
+        background-color: #d32f2f;
+      }
+
+      &:active:not(:disabled) {
+        background-color: #c62828;
+        transform: scale(0.98);
+      }
+
+      &:focus,
+      &:focus-visible {
+        outline: none;
+        box-shadow: var(--ft-shadow-focus);
+      }
+
+      &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+    }
+
+    // Take Action dropdown button
+    .reviewable-bundled-action {
+      .btn {
+        border-radius: var(--ft-radius-lg);
+        font-weight: var(--ft-font-weight-semibold);
+        transition:
+          background-color var(--ft-transition-fast),
+          box-shadow var(--ft-transition-fast);
+
+        &:focus,
+        &:focus-visible {
+          outline: none;
+          box-shadow: var(--ft-shadow-focus);
+        }
+      }
+    }
+  }
+}
