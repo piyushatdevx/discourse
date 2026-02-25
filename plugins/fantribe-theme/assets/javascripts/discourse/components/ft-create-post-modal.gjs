@@ -55,7 +55,7 @@ export default class FtCreatePostModal extends Component {
   }
 
   get hasTribeOptions() {
-    return this.joinedTribes.length > 0;
+    return this.joinedTribes.length > 0 && !this.fantribeCreate.postCategory;
   }
 
   tribeDotStyle(category) {

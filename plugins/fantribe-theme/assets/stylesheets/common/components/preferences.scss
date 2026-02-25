@@ -379,11 +379,43 @@ body.fantribe-theme:not(.admin-interface).ft-on-preferences {
       }
 
       &.active {
-        background: linear-gradient(135deg, #6366f1, #7c3aed);
+        background: linear-gradient(135deg, var(--ft-vibrant-red), #e63b6f);
         color: #fff;
         font-weight: 600;
-        box-shadow: 0 2px 10px rgb(99 102 241 / 0.35);
+        box-shadow: 0 2px 10px rgb(255 23 68 / 0.35);
       }
+    }
+  }
+
+  // Scroll arrow buttons on the horizontal overflow nav
+  .scroll-right,
+  .scroll-left,
+  .horizontal-overflow-nav__scroll-right,
+  .horizontal-overflow-nav__scroll-left {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #fff;
+    border: 1px solid var(--ft-slate-200);
+    box-shadow: 0 2px 6px rgb(0 0 0 / 0.1);
+    cursor: pointer;
+    color: var(--ft-slate-600);
+    flex-shrink: 0;
+    transition: all 150ms ease;
+
+    .d-icon,
+    svg {
+      width: 14px;
+      height: 14px;
+    }
+
+    &:hover {
+      background: var(--ft-slate-100);
+      border-color: var(--ft-slate-300);
+      color: var(--ft-slate-900);
     }
   }
 

@@ -276,7 +276,7 @@ export default class FantribeTribePage extends Component {
       <div class="ft-tribe-page__posts">
         {{#if this.hasTopics}}
           {{#each this.topics as |topic|}}
-            <FantribeFeedCard @topic={{topic}} />
+            <FantribeFeedCard @topic={{topic}} @hideTribeBadge={{true}} />
           {{/each}}
         {{else}}
           <div class="ft-tribe-page__empty">

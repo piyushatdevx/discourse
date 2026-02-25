@@ -161,6 +161,10 @@ export default class FantribeFeedCard extends Component {
     return this.currentUser.username === this.poster.username;
   }
 
+  get showTribeBadge() {
+    return !!this.tribeCategory && !this.args.hideTribeBadge;
+  }
+
   @action
   toggleMenu(event) {
     event.stopPropagation();
@@ -267,7 +271,7 @@ export default class FantribeFeedCard extends Component {
                     @topic.created_at
                     format="tiny"
                   }}</span>
-                {{#if this.tribeCategory}}
+                {{#if this.showTribeBadge}}
                   <span class="fantribe-feed-card__separator">&middot;</span>
                   <button
                     type="button"
