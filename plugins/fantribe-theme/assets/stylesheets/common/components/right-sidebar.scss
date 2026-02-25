@@ -200,7 +200,7 @@ body.fantribe-theme:not(.admin-interface) {
     &__tribe-meta {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 4px;
       font-size: var(--ft-font-xs);
       color: var(--ft-slate-500);
 
@@ -208,6 +208,11 @@ body.fantribe-theme:not(.admin-interface) {
         width: 12px;
         height: 12px;
       }
+    }
+
+    &__tribe-meta-sep {
+      margin: 0 2px;
+      color: var(--ft-slate-400);
     }
 
     // Live Now Stream Items (GJS: __stream-item)

@@ -28,6 +28,16 @@ export default class FantribeRightSidebar extends Component {
     return `${count} members`;
   }
 
+  formatPostCount(count) {
+    if (!count) {
+      return "0 posts";
+    }
+    if (count >= 1000) {
+      return (count / 1000).toFixed(1) + "K posts";
+    }
+    return `${count} posts`;
+  }
+
   @action
   navigateToTribe(tribe) {
     this.router.transitionTo("discovery.category", tribe.slug);
@@ -76,6 +86,11 @@ export default class FantribeRightSidebar extends Component {
                   <div class="fantribe-right-sidebar__tribe-meta">
                     {{ftIcon "users" size=12}}
                     <span>{{this.formatMemberCount tribe.member_count}}</span>
+                    <span
+                      class="fantribe-right-sidebar__tribe-meta-sep"
+                    >·</span>
+                    {{ftIcon "message-circle" size=12}}
+                    <span>{{this.formatPostCount tribe.post_count}}</span>
                   </div>
                 </div>
                 {{ftIcon "chevron-right" size=16}}
