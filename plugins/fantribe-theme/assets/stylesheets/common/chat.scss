@@ -608,6 +608,21 @@ body.fantribe-theme {
     }
   }
 
+  // =============================================
+  // MESSAGES WITH REPLY INDICATOR - Override grid layout
+  // =============================================
+  .chat-message-container.has-reply {
+    .chat-message {
+      gap: 4px;
+    }
+
+    // Reply indicator styling - full width, above message
+    .chat-reply {
+      flex: 0 0 100%;
+      margin-bottom: 0;
+    }
+  }
+
   // Left-align received messages (default)
   .chat-message-content {
     display: flex;
