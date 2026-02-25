@@ -64,14 +64,8 @@ export default class ChatMessageActionsDesktop extends Component {
   }
 
   get referenceElement() {
-    if (this.isOwnMessage) {
-      return this.messageContainer;
-    }
-    // For received messages, use the message bubble directly for closer positioning
-    return (
-      this.messageContainer?.querySelector(".chat-message-text") ||
-      this.messageContainer
-    );
+    // Use message container for consistent positioning across all message types
+    return this.messageContainer;
   }
 
   @action
@@ -97,8 +91,8 @@ export default class ChatMessageActionsDesktop extends Component {
       strategy: "fixed",
       middleware: [
         offset({
-          mainAxis: this.isOwnMessage ? MSG_ACTIONS_VERTICAL_PADDING : 20,
-          crossAxis: this.isOwnMessage ? -12 : 42,
+          mainAxis: MSG_ACTIONS_VERTICAL_PADDING,
+          crossAxis: this.isOwnMessage ? -12 : 12,
         }),
         flip({
           boundary,
