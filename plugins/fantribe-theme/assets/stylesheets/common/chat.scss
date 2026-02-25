@@ -1568,20 +1568,6 @@ body.fantribe-theme {
 
   // Scroll to bottom button
   .chat-scroll-to-bottom {
-    // background: var(--ft-white);
-    // border: 1px solid var(--ft-neutral-200);
-    border-radius: var(--ft-radius-pill);
-    box-shadow: var(--ft-shadow-lg);
-    padding: var(--ft-space-2) var(--ft-space-4);
-    transition:
-      transform var(--ft-transition-fast),
-      box-shadow var(--ft-transition-fast);
-
-    &:hover {
-      transform: translateY(-2px);
-      box-shadow: var(--ft-shadow-xl);
-    }
-
     .d-icon {
       color: var(--ft-white);
     }
