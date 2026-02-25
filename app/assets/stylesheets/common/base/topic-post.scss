@@ -460,7 +460,7 @@ nav.post-controls {
       }
 
       &.bookmarked .d-icon {
-        color: var(--tertiary);
+        color: var(--ft-vibrant-red);
       }
 
       &.create {
@@ -1494,7 +1494,7 @@ span.mention {
 
 .post-notice {
   align-items: center;
-  background-color: var(--tertiary-very-low);
+  background-color: var(--ft-pastel-pink);
   border-top: 1px solid var(--content-border-color);
   display: flex;
   width: 100%;
@@ -1553,7 +1553,7 @@ iframe {
 
 .posts-filtered-notice {
   position: sticky;
-  background-color: var(--tertiary-low);
+  background-color: var(--ft-pastel-pink);
   bottom: 0;
   padding: 1em;
   margin-top: 0.5em;

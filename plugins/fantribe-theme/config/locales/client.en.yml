@@ -5,6 +5,10 @@ en:
         categories:
           fantribe_theme: "FanTribe Theme"
   js:
+    composer:
+      replying_to: "Replying to"
+      reply_placeholder_simple: "Write your reply..."
+      edit_reply_title: "Edit reply"
     # Empty state customization
     topics:
       none:

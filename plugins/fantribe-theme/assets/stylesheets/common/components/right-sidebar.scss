@@ -122,7 +122,7 @@ body.fantribe-theme:not(.admin-interface) {
       transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
 
       &:hover {
-        background: var(--ft-electric-blue-light);
+        background: var(--ft-pastel-pink);
       }
 
       > .d-icon-chevron-right {
@@ -135,7 +135,7 @@ body.fantribe-theme:not(.admin-interface) {
       }
 
       &:hover > .d-icon-chevron-right {
-        color: var(--ft-electric-blue);
+        color: var(--ft-vibrant-red);
         transform: translateX(4px);
       }
     }
@@ -182,7 +182,7 @@ body.fantribe-theme:not(.admin-interface) {
       transition: color 200ms cubic-bezier(0.4, 0, 0.2, 1);
 
       .fantribe-right-sidebar__tribe-item:hover & {
-        color: var(--ft-electric-blue);
+        color: var(--ft-pastel-pink);
       }
     }
 
@@ -334,7 +334,7 @@ body.fantribe-theme:not(.admin-interface) {
       text-align: center;
       font-size: var(--ft-font-sm);
       font-weight: var(--ft-font-weight-medium);
-      color: var(--ft-electric-blue);
+      color: var(--ft-vibrant-red);
       background: transparent;
       border: none;
       cursor: pointer;

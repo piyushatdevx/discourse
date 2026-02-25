@@ -13,6 +13,7 @@ register_asset "stylesheets/common/tribe-grid.scss"
 register_asset "stylesheets/common/tribe-card.scss"
 register_asset "stylesheets/common/filter-dropdown.scss"
 register_asset "stylesheets/common/create-tribe-modal.scss"
+register_asset "stylesheets/common/leave-confirm-modal.scss"
 
 after_initialize do
   module ::ExploreTribes

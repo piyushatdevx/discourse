@@ -9,6 +9,7 @@ import replaceEmoji from "discourse/helpers/replace-emoji";
 import { ajax } from "discourse/lib/ajax";
 import { popupAjaxError } from "discourse/lib/ajax-error";
 import ftIcon from "discourse/plugins/fantribe-theme/discourse/helpers/ft-icon";
+import FtLeaveTribeConfirmModal from "./ft-leave-tribe-confirm-modal";
 
 export default class FantribeTribeCard extends Component {
   @service router;
@@ -16,6 +17,7 @@ export default class FantribeTribeCard extends Component {
   @service fantribeMembership;
 
   @tracked isJoining = false;
+  @tracked showLeaveConfirm = false;
 
   get category() {
     return this.args.category;
@@ -105,7 +107,7 @@ export default class FantribeTribeCard extends Component {
   }
 
   @action
-  async handleJoinClick(event) {
+  handleJoinClick(event) {
     event.stopPropagation();
 
     if (!this.currentUser) {
@@ -122,10 +124,35 @@ export default class FantribeTribeCard extends Component {
       return;
     }
 
+    if (this.isMember) {
+      this.showLeaveConfirm = true;
+      return;
+    }
+
+    this.doSetLevel(this.fantribeMembership.watchingLevel);
+  }
+
+  @action
+  closeLeaveConfirm() {
+    this.showLeaveConfirm = false;
+  }
+
+  @action
+  async confirmLeave() {
+    this.doSetLevel(this.fantribeMembership.regularLevel);
+    this.showLeaveConfirm = false;
+  }
+
+  async doSetLevel(newLevel) {
+    const categoryId = this.category?.id;
+    if (!categoryId) {
+      return;
+    }
+
     const currentlyMember = this.isMember;
-    const newLevel = currentlyMember
-      ? this.fantribeMembership.regularLevel
-      : this.fantribeMembership.watchingLevel;
+    const previousLevel = currentlyMember
+      ? this.fantribeMembership.watchingLevel
+      : this.fantribeMembership.regularLevel;
 
     this.isJoining = true;
     this.fantribeMembership.setLevel(categoryId, newLevel);
@@ -136,12 +163,7 @@ export default class FantribeTribeCard extends Component {
         data: { notification_level: newLevel },
       });
     } catch (error) {
-      this.fantribeMembership.setLevel(
-        categoryId,
-        currentlyMember
-          ? this.fantribeMembership.watchingLevel
-          : this.fantribeMembership.regularLevel
-      );
+      this.fantribeMembership.setLevel(categoryId, previousLevel);
       popupAjaxError(error);
     } finally {
       this.isJoining = false;
@@ -221,7 +243,7 @@ export default class FantribeTribeCard extends Component {
           >{{this.truncatedDescription}}</p>
         {{/if}}
 
-        {{! Activity dots }}
+        {{!-- Activity dots  //removed as users can’t be active as per category/tribe
         <div class="ft-tribe-card__activity">
           <div class="ft-tribe-card__activity-dots">
             <div class="ft-tribe-card__dot ft-tribe-card__dot--1"></div>
@@ -233,6 +255,7 @@ export default class FantribeTribeCard extends Component {
             active today
           </span>
         </div>
+        --}}
 
         {{! Join / Joined button }}
         <button
@@ -246,8 +269,8 @@ export default class FantribeTribeCard extends Component {
           {{#if this.isJoining}}
             {{ftIcon "circle"}}
           {{else if this.isMember}}
-            {{ftIcon "check-circle"}}
-            <span>Joined</span>
+            {{ftIcon "log-out"}}
+            <span>Leave</span>
           {{else}}
             {{ftIcon "user-plus"}}
             <span>Join Tribe</span>
@@ -255,5 +278,13 @@ export default class FantribeTribeCard extends Component {
         </button>
       </div>
     </div>
+
+    {{#if this.showLeaveConfirm}}
+      <FtLeaveTribeConfirmModal
+        @tribeName={{this.category.name}}
+        @onClose={{this.closeLeaveConfirm}}
+        @onConfirm={{this.confirmLeave}}
+      />
+    {{/if}}
   </template>
 }

@@ -1,6 +1,7 @@
 import Component from "@glimmer/component";
 import { service } from "@ember/service";
 import PluginOutlet from "discourse/components/plugin-outlet";
+import icon from "discourse/helpers/d-icon";
 import element from "discourse/helpers/element";
 import lazyHash from "discourse/helpers/lazy-hash";
 import number from "discourse/helpers/number";
@@ -65,6 +66,7 @@ export default class RepliesCell extends Component {
           @name="topic-list-before-reply-count"
           @outletArgs={{lazyHash topic=@topic}}
         />
+        {{icon "reply" class="replies-icon"}}
         {{number @topic.replyCount noTitle="true"}}
       </a>
     </this.wrapperElement>

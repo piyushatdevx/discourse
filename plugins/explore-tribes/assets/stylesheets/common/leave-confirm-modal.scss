@@ -1,0 +1,50 @@
+// Leave Tribe confirmation modal — matches FanTribe theme (red) when active
+.ft-leave-tribe-confirm-modal__backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 110;
+}
+
+.ft-leave-tribe-confirm-modal {
+  display: flex;
+  flex-direction: column;
+  max-height: 90vh;
+
+  &__body {
+    padding: 20px 24px;
+    flex: 1;
+    min-height: 0;
+  }
+
+  &__message {
+    margin: 0;
+    font-size: var(--ft-font-base, 1rem);
+    line-height: 1.5;
+    color: var(--ft-slate-700, #334155);
+  }
+
+  &__leave-btn {
+    padding: 10px 20px;
+    border-radius: var(--ft-radius-pill, 9999px);
+    font-size: var(--ft-font-sm, 0.875rem);
+    font-weight: var(--ft-font-weight-semibold, 600);
+    border: none;
+    cursor: pointer;
+    transition:
+      background 0.2s ease,
+      box-shadow 0.2s ease;
+    background: var(--ft-vibrant-red, #e11d48);
+    color: #fff;
+    box-shadow: 0 2px 8px rgb(225 29 72 / 0.3);
+
+    &:hover {
+      background: var(--ft-vibrant-red-hover, #be123c);
+      box-shadow: 0 4px 12px rgb(225 29 72 / 0.35);
+    }
+
+    &:focus {
+      outline: 2px solid var(--ft-vibrant-red, #e11d48);
+      outline-offset: 2px;
+    }
+  }
+}

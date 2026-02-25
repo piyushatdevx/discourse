@@ -257,7 +257,7 @@ body.fantribe-theme:not(.admin-interface) {
     &__read-more {
       background: none;
       border: none;
-      color: var(--ft-electric-blue);
+      color: var(--ft-vibrant-red);
       font-weight: var(--ft-font-weight-medium);
       cursor: pointer;
       padding: 0;
@@ -276,7 +276,7 @@ body.fantribe-theme:not(.admin-interface) {
     &__show-less {
       background: none;
       border: none;
-      color: var(--ft-electric-blue);
+      color: var(--ft-vibrant-red);
       font-weight: var(--ft-font-weight-medium);
       cursor: pointer;
       padding: 0;
@@ -405,9 +405,14 @@ body.fantribe-theme:not(.admin-interface) {
     }
 
     &__expanded-body {
-      padding: 0 24px 16px;
       line-height: var(--ft-line-height-relaxed);
       color: var(--ft-slate-800);
+
+      // Video is shown only in .fantribe-feed-card__onebox--in-media; hide duplicate
+      // raw container here so we don't show two videos after "read more".
+      .lazy-video-container {
+        display: none;
+      }
     }
   }
 }

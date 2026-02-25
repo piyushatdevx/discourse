@@ -78,12 +78,183 @@ body.fantribe-theme:not(.admin-interface) {
   #main-outlet .container.posts {
     max-width: 100%;
     box-sizing: border-box;
-    margin-left: auto;
-    margin-right: auto;
+    margin-left: 16px;
+    margin-right: 16px;
+    margin-top: 0;
+    margin-bottom: 0 !important;
+    padding: 0 24px 24px;
+    background: #fff;
+    border: 1px solid var(--ft-slate-200, #e2e0dd);
+    border-top: none;
+    border-radius: 0;
+    box-shadow: var(--ft-shadow-sm, 0 1px 2px rgb(0 0 0 / 0.04));
   }
 
   #main-outlet .container.posts .topic-navigation {
     width: max-content;
+  }
+
+  #topic-title.container {
+    margin-top: 1.5em;
+    margin-bottom: 0;
+    margin-left: 16px;
+    margin-right: 16px;
+    padding: 24px 24px 12px;
+    box-sizing: border-box;
+    background: #fff;
+    border: 1px solid var(--ft-slate-200, #e2e0dd);
+    border-bottom: none;
+    border-radius: 16px 16px 0 0;
+    box-shadow: var(--ft-shadow-sm, 0 1px 2px rgb(0 0 0 / 0.04));
+    z-index: 1;
+
+    .title-wrapper {
+      width: 100%;
+    }
+
+    h1 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      line-height: 1.4;
+      margin-bottom: 8px;
+
+      .fancy-title {
+        color: var(--ft-slate-800, #1a1916);
+      }
+    }
+
+    .topic-category {
+      margin-top: 0;
+      margin-bottom: 0;
+
+      .badge-category-bg,
+      .badge-wrapper {
+        border-radius: 9999px;
+        font-size: 12px;
+        font-weight: 500;
+        padding: 4px 12px;
+      }
+    }
+  }
+
+  .container.posts .topic-area .topic-post:first-of-type {
+    padding-top: 16px;
+
+    .topic-meta-data {
+      margin-bottom: 12px;
+
+      .avatar {
+        width: 48px;
+        height: 48px;
+      }
+
+      .names .username a,
+      .post-info .post-date {
+        font-size: 13px;
+        color: var(--ft-slate-500, #78766f);
+      }
+    }
+
+    .topic-body .cooked {
+      color: var(--ft-slate-800, #1a1916);
+      line-height: 1.5;
+    }
+  }
+
+  .container.posts .topic-map.--bottom {
+    padding-top: 12px;
+    margin-top: 12px;
+    border-top: 1px solid var(--ft-slate-200, #e2e0dd);
+    font-size: 13px;
+    color: var(--ft-slate-500, #78766f);
+  }
+
+  #topic-footer-buttons {
+    max-width: 100%;
+    margin-top: -0.75em;
+    margin-bottom: 1.5em;
+    margin-left: 16px;
+    margin-right: 16px;
+    padding: 16px 24px 24px;
+    box-sizing: border-box;
+    background: #fff;
+    border: 1px solid var(--ft-slate-200, #e2e0dd);
+    border-top: none;
+    border-radius: 0 0 16px 16px;
+    box-shadow: var(--ft-shadow-sm, 0 1px 2px rgb(0 0 0 / 0.04));
+  }
+
+  #main-outlet .container.posts + span {
+    display: block;
+    margin: 0;
+    padding: 0;
+    line-height: 0;
+    min-height: 0;
+  }
+
+  .topic-above-footer-buttons-outlet.presence {
+    margin: 0 !important;
+    padding: 0 !important;
+    min-height: 0 !important;
+    height: 0 !important;
+    overflow: hidden !important;
+  }
+
+  .topic-footer-main-buttons {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    border-top: 1px solid var(--ft-slate-200, #e2e0dd);
+    padding-top: 16px;
+
+    &__actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex: 1;
+    }
+
+    .btn,
+    .topic-footer-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      border-radius: var(--ft-radius-pill, 9999px);
+      background: none;
+      border: none;
+      color: var(--ft-slate-500, #78766f);
+      font-size: 14px;
+      font-weight: 500;
+
+      .d-icon {
+        width: 20px;
+        height: 20px;
+      }
+
+      &.btn-primary.create {
+        background: var(--ft-vibrant-red, #e53935);
+        color: #fff;
+
+        &:hover {
+          background: var(--ft-vibrant-red-hover, #c62828);
+        }
+      }
+    }
+
+    .topic-notifications-button .btn,
+    .pinned-button .btn {
+      background: none;
+      border: none;
+    }
+  }
+
+  #topic-footer-buttons .topic-footer-main-buttons + div,
+  #topic-footer-buttons .topic-notifications-button {
+    margin-top: 8px;
+    font-size: 13px;
+    color: var(--ft-slate-500, #78766f);
   }
 
   #main-outlet > .regular {
@@ -91,6 +262,10 @@ body.fantribe-theme:not(.admin-interface) {
     margin-left: auto;
     margin-right: auto;
   }
+}
+
+#main-outlet .topic-navigation {
+  z-index: 0 !important;
 }
 
 // Collapsed sidebar: icon-only column (80px)
@@ -103,7 +278,7 @@ body.fantribe-theme:not(.admin-interface) {
   }
 }
 
-// Mobile: extra spacing cleanup
+// Mobile: extra spacing and topic detail (keep topic-area inside card)
 @media (width <= 767px) {
   body.fantribe-theme:not(.admin-interface) {
     .wrap {
@@ -118,24 +293,82 @@ body.fantribe-theme:not(.admin-interface) {
     }
 
     // Topic page mobile spacing
-    #main-outlet .container.posts {
-      width: 100%;
-      max-width: 100%;
+    #topic-title.container {
+      margin-left: 12px;
+      margin-right: 12px;
       padding-left: 16px;
       padding-right: 16px;
       box-sizing: border-box;
+    }
+
+    #main-outlet .container.posts {
+      margin-left: 12px;
+      margin-right: 12px;
+      width: 100%;
+      max-width: calc(
+        100vw - 24px
+      ); // keep card within viewport (12px margin each side)
+      padding-left: 16px;
+      padding-right: 16px;
+      box-sizing: border-box;
+      overflow-x: hidden;
+      grid-template-columns: 1fr;
+      min-width: 0;
+    }
+
+    #main-outlet .container.posts .topic-navigation {
+      width: 100%;
+      max-width: 100%;
+      min-width: 0;
+      box-sizing: border-box;
+    }
+
+    #main-outlet .container.posts > .row {
+      width: 100%;
+      max-width: 100% !important;
+      min-width: 0;
+      box-sizing: border-box;
+      overflow-x: hidden;
+    }
+
+    #main-outlet .container.posts .topic-area,
+    #main-outlet .container.posts .posts-wrapper {
+      width: 100%;
+      max-width: 100%;
+      min-width: 0;
+      box-sizing: border-box;
+    }
+
+    #main-outlet .container.posts .topic-area {
+      overflow-x: hidden;
+      padding-left: 0;
+      padding-right: 0;
     }
 
     #main-outlet .container.posts .topic-post {
       padding-left: 0;
       padding-right: 0;
       max-width: 100%;
+      box-sizing: border-box;
     }
 
-    #topic-title.container {
+    #main-outlet .container.posts .topic-body {
+      max-width: 100%;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    #topic-footer-buttons {
+      margin-left: 12px;
+      margin-right: 12px;
       padding-left: 16px;
       padding-right: 16px;
       box-sizing: border-box;
+    }
+
+    // Topic progress bar behind bottom nav when scrolling (bottom nav z-index is 40)
+    .with-topic-progress {
+      z-index: 30;
     }
   }
 }

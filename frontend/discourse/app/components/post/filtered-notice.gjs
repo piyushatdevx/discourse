@@ -97,10 +97,12 @@ export default class PostFilteredNotice extends Component {
             post_count=this.userPostsCount
           }}
         </span>
-        <span class="filtered-avatar">
-          <UserAvatar @size="small" @user={{this.firstUserPost}} />
-        </span>
-        <PostMetaDataPosterName @post={{this.firstUserPost}} />
+        {{#if this.firstUserPost}}
+          <span class="filtered-avatar">
+            <UserAvatar @size="small" @user={{this.firstUserPost}} />
+          </span>
+          <PostMetaDataPosterName @post={{this.firstUserPost}} />
+        {{/if}}
         <FilterShowAllBtn
           @streamFilters={{@streamFilters}}
           @cancelFilter={{@cancelFilter}}

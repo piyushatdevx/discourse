@@ -7,6 +7,13 @@ function applyLazyVideoDecorator(cooked, helper, api) {
     return;
   }
 
+  // Skip inside feed card expanded body so we don't get two videos (one that opens
+  // post on click, one that plays). The onebox in .fantribe-feed-card__media is
+  // the only one we want to decorate and show.
+  if (cooked.closest(".fantribe-feed-card__expanded-body")) {
+    return;
+  }
+
   const lazyContainers = cooked.querySelectorAll(".lazy-video-container");
 
   lazyContainers.forEach((container) => {

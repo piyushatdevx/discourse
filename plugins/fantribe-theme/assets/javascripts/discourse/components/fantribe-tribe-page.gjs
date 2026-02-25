@@ -5,10 +5,10 @@ import { action } from "@ember/object";
 import { service } from "@ember/service";
 import { htmlSafe } from "@ember/template";
 import avatar from "discourse/helpers/avatar";
-import icon from "discourse/helpers/d-icon";
 import replaceEmoji from "discourse/helpers/replace-emoji";
 import { ajax } from "discourse/lib/ajax";
 import { popupAjaxError } from "discourse/lib/ajax-error";
+import FtLeaveTribeConfirmModal from "discourse/plugins/explore-tribes/discourse/components/ft-leave-tribe-confirm-modal";
 import ftIcon from "../helpers/ft-icon";
 import FantribeFeedCard from "./fantribe-feed-card";
 import FtEditTribeModal from "./ft-edit-tribe-modal";
@@ -21,6 +21,7 @@ export default class FantribeTribePage extends Component {
 
   @tracked isJoining = false;
   @tracked showEditModal = false;
+  @tracked showLeaveConfirm = false;
 
   get category() {
     return this.args.category;
@@ -71,8 +72,15 @@ export default class FantribeTribePage extends Component {
     return `${count}`;
   }
 
+  // Prefer this.topics.length so the count matches the list shown on the page.
+  // category.topic_count can include the category definition topic (description),
+  // which the topic list API excludes, causing an off-by-one (count 1 higher than visible posts).
   get postCount() {
-    const count = this.category?.topic_count;
+    const topicsList = this.topics;
+    const count =
+      topicsList?.length != null
+        ? topicsList.length
+        : this.category?.topic_count;
     if (count == null) {
       return null;
     }
@@ -109,7 +117,7 @@ export default class FantribeTribePage extends Component {
   }
 
   @action
-  async handleJoin() {
+  handleJoin() {
     if (!this.currentUser) {
       this.router.transitionTo("login");
       return;
@@ -124,10 +132,35 @@ export default class FantribeTribePage extends Component {
       return;
     }
 
+    if (this.isMember) {
+      this.showLeaveConfirm = true;
+      return;
+    }
+
+    this.doSetLevel(this.fantribeMembership.watchingLevel);
+  }
+
+  @action
+  closeLeaveConfirm() {
+    this.showLeaveConfirm = false;
+  }
+
+  @action
+  async confirmLeave() {
+    this.doSetLevel(this.fantribeMembership.regularLevel);
+    this.showLeaveConfirm = false;
+  }
+
+  async doSetLevel(newLevel) {
+    const categoryId = this.category?.id;
+    if (!categoryId) {
+      return;
+    }
+
     const currentlyMember = this.isMember;
-    const newLevel = currentlyMember
-      ? this.fantribeMembership.regularLevel
-      : this.fantribeMembership.watchingLevel;
+    const previousLevel = currentlyMember
+      ? this.fantribeMembership.watchingLevel
+      : this.fantribeMembership.regularLevel;
 
     this.isJoining = true;
     this.fantribeMembership.setLevel(categoryId, newLevel);
@@ -138,12 +171,7 @@ export default class FantribeTribePage extends Component {
         data: { notification_level: newLevel },
       });
     } catch (error) {
-      this.fantribeMembership.setLevel(
-        categoryId,
-        currentlyMember
-          ? this.fantribeMembership.watchingLevel
-          : this.fantribeMembership.regularLevel
-      );
+      this.fantribeMembership.setLevel(categoryId, previousLevel);
       popupAjaxError(error);
     } finally {
       this.isJoining = false;
@@ -231,10 +259,10 @@ export default class FantribeTribePage extends Component {
                 {{#if this.isJoining}}
                   {{ftIcon "circle"}}
                 {{else if this.isMember}}
-                  {{ftIcon "check-circle"}}
-                  <span>Joined</span>
+                  {{ftIcon "log-out"}}
+                  <span>Leave</span>
                 {{else}}
-                  {{icon "arrow-right-to-bracket"}}
+                  {{ftIcon "user-plus"}}
                   <span>Join Tribe</span>
                 {{/if}}
               </button>
@@ -298,6 +326,14 @@ export default class FantribeTribePage extends Component {
       <FtEditTribeModal
         @category={{@category}}
         @onClose={{this.closeEditModal}}
+      />
+    {{/if}}
+
+    {{#if this.showLeaveConfirm}}
+      <FtLeaveTribeConfirmModal
+        @tribeName={{this.category.name}}
+        @onClose={{this.closeLeaveConfirm}}
+        @onConfirm={{this.confirmLeave}}
       />
     {{/if}}
   </template>

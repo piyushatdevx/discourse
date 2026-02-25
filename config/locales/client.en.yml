@@ -4,6 +4,13 @@ en:
       go_to_slide: "Go to slide %{index}"
       previous: "Previous slide"
       next: "Next slide"
+    explore_tribes:
+      leave_confirm:
+        title: "Leave tribe"
+        message: "Are you sure you want to leave %{name} tribe?"
+        cancel: "Cancel"
+        leave: "Leave"
+        close: "Close"
     number:
       format:
         # symbol used to separate the integer part from the fractional part of a number

@@ -27,6 +27,7 @@ import BackButton from "./back-button";
 import Scroller from "./scroller";
 
 export const SCROLLER_HEIGHT = 50;
+const DOCK_BOTTOM_HIDE_FOOTER_OFFSET = 100;
 const DEFAULT_MIN_SCROLLAREA_HEIGHT = 170;
 const DEFAULT_MAX_SCROLLAREA_HEIGHT = 300;
 const LAST_READ_HEIGHT = 20;
@@ -420,6 +421,7 @@ export default class TopicTimelineScrollArea extends Component {
     const timelineHeight = (timeline && timeline.offsetHeight) || 400;
 
     const prevDockAt = this.dockAt;
+    const prevDockBottom = this.dockBottom;
     const positionTop = headerOffset() + window.pageYOffset;
     const currentPosition = positionTop + timelineHeight;
     const postStream = this.args.model.postStream;
@@ -436,6 +438,12 @@ export default class TopicTimelineScrollArea extends Component {
       }
     } else {
       this.dockAt = null;
+      if (
+        allPostsLoaded &&
+        currentPosition > this.topicBottom - DOCK_BOTTOM_HIDE_FOOTER_OFFSET
+      ) {
+        this.dockBottom = true;
+      }
     }
 
     if (this.dockAt !== prevDockAt) {
@@ -448,6 +456,8 @@ export default class TopicTimelineScrollArea extends Component {
         this.args.setDocked(false);
         this.args.setDockedBottom(false);
       }
+    } else if (this.dockBottom !== prevDockBottom) {
+      this.args.setDockedBottom(this.dockBottom);
     }
   }
 

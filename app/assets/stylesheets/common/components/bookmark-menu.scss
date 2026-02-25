@@ -8,14 +8,14 @@
     display: flex;
     align-items: center;
     gap: 0.75em;
-    background: var(--tertiary-low);
-    color: var(--tertiary);
+    background: var(--ft-pastel-pink);
+    color: var(--ft-vibrant-red);
     padding: 0.75rem 1rem;
     font-weight: bold;
 
-    .d-icon {
-      color: var(--tertiary);
-    }
+    // .d-icon {
+    //   color: var(--tertiary);
+    // }
   }
 
   .bookmark-menu__row {

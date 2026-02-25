@@ -31,7 +31,6 @@
 
       html:not(.anon) & {
         // width: 100%;
-
         .d-button-label {
           display: none;
         }
@@ -55,7 +54,7 @@
     .bookmark.bookmarked {
       .d-icon-discourse-bookmark-clock,
       .d-icon-bookmark {
-        color: var(--tertiary);
+        color: var(--ft-vibrant-red);
       }
     }
 

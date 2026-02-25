@@ -60,7 +60,8 @@ body:not(.archetype-private_message) {
     flex-wrap: wrap;
     align-items: center;
     overflow: hidden;
-    height: 2em;
+
+    // height: 2em; // removed so avatars can wrap
     align-self: center;
     flex: 1 2 0;
     gap: 0.25em;
