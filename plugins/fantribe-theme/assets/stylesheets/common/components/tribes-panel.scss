@@ -5,7 +5,7 @@
   flex-direction: column;
   height: 100%;
   background: var(--ft-white);
-  padding: 24px 16px 0; // pt-6 px-4 (Figma: pt-6 px-4)
+  padding: 0 16px; // pt-6 px-4 (Figma: pt-6 px-4)
   overflow: hidden;
 
   // Scrollable nav items — flex: 1 pushes user section to bottom
@@ -15,7 +15,7 @@
     display: flex;
     flex-direction: column;
     gap: 4px;
-    padding: 0;
+    padding: 24px 0;
     overflow-y: auto;
     overflow-x: hidden;
     scrollbar-width: none;

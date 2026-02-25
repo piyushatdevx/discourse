@@ -44,7 +44,6 @@ body.fantribe-theme:not(.admin-interface) {
     &--mobile-open {
       @media (width <= 1023px) {
         transform: translateX(0);
-        box-shadow: 4px 0 24px rgb(0, 0, 0, 0.15);
       }
     }
 
