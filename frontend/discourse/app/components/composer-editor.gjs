@@ -364,7 +364,7 @@ export default class ComposerEditor extends Component {
       return EmberObject.create({
         failed: true,
         reason,
-        lastShownAt: lastValidatedAt,
+        lastShownAt: lastValidatedAt || (replyLength > 0 ? true : undefined),
       });
     }
   }

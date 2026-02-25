@@ -343,6 +343,10 @@ export default class ComposerContainer extends Component {
                   @label={{this.composer.saveLabel}}
                   @forwardEvent={{true}}
                   @disableSubmit={{this.composer.disableSubmit}}
+                  @disabled={{and
+                    this.composer.model
+                    this.composer.model.cantSubmitPost
+                  }}
                 />
 
                 {{#unless this.site.mobileView}}
