@@ -1173,7 +1173,7 @@ body.fantribe-theme {
   .chat-channel-title {
     display: flex;
     align-items: center;
-    gap: var(--ft-space-3);
+    gap: var(--ft-space-2);
     min-width: 0;
     flex: 1;
   }
@@ -1185,6 +1185,11 @@ body.fantribe-theme {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+  }
+
+  .c-navbar__channel-title .chat-user-avatar img.avatar {
+    width: 44px;
+    height: 44px;
   }
 
   .c-navbar__actions {
