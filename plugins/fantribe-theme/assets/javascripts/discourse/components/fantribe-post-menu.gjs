@@ -1,4 +1,5 @@
 import Component from "@glimmer/component";
+import { tracked } from "@glimmer/tracking";
 import { hash } from "@ember/helper";
 import { on } from "@ember/modifier";
 import { action } from "@ember/object";
@@ -14,9 +15,21 @@ import ftIcon from "../helpers/ft-icon";
 
 export default class FantribePostMenu extends Component {
   @service composer;
+  @service currentUser;
   @service modal;
   @service router;
   @service store;
+
+  @tracked isBookmarkLoading = false;
+  @tracked _isBookmarked = null;
+  @tracked _bookmarkId = null;
+
+  get isBookmarked() {
+    if (this._isBookmarked !== null) {
+      return this._isBookmarked;
+    }
+    return this.args.topic?.bookmarked || false;
+  }
 
   @action
   async handleEdit(event) {
@@ -154,6 +167,46 @@ export default class FantribePostMenu extends Component {
   }
 
   @action
+  async handleBookmark(event) {
+    event.stopPropagation();
+
+    if (!this.currentUser || this.isBookmarkLoading) {
+      return;
+    }
+
+    const wasBookmarked = this.isBookmarked;
+
+    this._isBookmarked = !wasBookmarked;
+    this.isBookmarkLoading = true;
+
+    try {
+      if (wasBookmarked) {
+        const bookmarkId = this._bookmarkId || this.args.topic?.bookmark_id;
+        if (bookmarkId) {
+          await ajax(`/bookmarks/${bookmarkId}`, { type: "DELETE" });
+        }
+        this._bookmarkId = null;
+      } else {
+        const result = await ajax("/bookmarks", {
+          type: "POST",
+          data: {
+            bookmarkable_id: this.args.firstPostId,
+            bookmarkable_type: "Post",
+          },
+        });
+        this._bookmarkId = result?.id ?? null;
+      }
+    } catch (error) {
+      this._isBookmarked = wasBookmarked;
+      popupAjaxError(error);
+    } finally {
+      this.isBookmarkLoading = false;
+    }
+
+    this.args.onClose?.();
+  }
+
+  @action
   noop(event) {
     event.stopPropagation();
     this.args.onClose?.();
@@ -232,9 +285,14 @@ export default class FantribePostMenu extends Component {
             <button
               type="button"
               class="fantribe-post-menu__item"
-              {{on "click" this.noop}}
+              disabled={{this.isBookmarkLoading}}
+              {{on "click" this.handleBookmark}}
             >
-              {{ftIcon "bookmark"}}
+              {{#if this.isBookmarked}}
+                {{ftIcon "bookmark-fill"}}
+              {{else}}
+                {{ftIcon "bookmark"}}
+              {{/if}}
               <span>Save Post</span>
             </button>
 
