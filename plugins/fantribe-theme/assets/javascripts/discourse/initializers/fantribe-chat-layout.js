@@ -3,7 +3,7 @@ import { withPluginApi } from "discourse/lib/plugin-api";
 export default {
   name: "fantribe-chat-layout",
 
-  initialize() {
+  initialize(container) {
     withPluginApi((api) => {
       // Override chat controller to always show channels list inside chat view
       api.modifyClass("controller:chat", {
@@ -33,5 +33,11 @@ export default {
         },
       });
     });
+
+    // Force full-page preference to be stored (ensures isDrawerPreferred returns false)
+    const chatStateManager = container.lookup("service:chat-state-manager");
+    if (chatStateManager) {
+      chatStateManager.prefersFullPage();
+    }
   },
 };

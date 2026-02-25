@@ -76,14 +76,17 @@ export default class FantribeTribesPanel extends Component {
   }
 
   @action
-  navigateTo(item) {
+  async navigateTo(item) {
     if (!item.route) {
       return;
     }
+
     try {
-      this.router.transitionTo(item.route);
-    } catch {
-      // Route may not exist (e.g., chat not enabled)
+      const transition = this.router.transitionTo(item.route);
+      await transition;
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error("[FantribeNav] Navigation failed:", item.route, error);
     }
   }
 
