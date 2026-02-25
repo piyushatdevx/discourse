@@ -110,8 +110,8 @@ body.fantribe-theme:not(.admin-interface) {
     // Trending Tribes Items (GJS: __tribe-item)
     &__tribe-item {
       display: flex;
-      align-items: flex-start;
       justify-content: space-between;
+      align-items: center;
       gap: 12px;
       width: 100%;
       padding: 16px;

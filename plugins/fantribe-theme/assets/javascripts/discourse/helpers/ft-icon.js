@@ -152,8 +152,7 @@ export default class FtIconHelper extends Helper {
 
     const fillAttr = name === "play" ? "currentColor" : fill;
     const sizeStr = `${size}`;
-    const styleAttr =
-      name === "chevron-right" ? ' style="margin-top: 10px"' : "";
+    const styleAttr = name === "chevron-right" ? "" : "";
 
     return htmlSafe(
       `<svg class="ft-icon ft-icon--${name} ${className}" width="${sizeStr}" height="${sizeStr}" viewBox="0 0 24 24" fill="${fillAttr}" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"${styleAttr}>${paths}</svg>`
