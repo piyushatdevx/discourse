@@ -115,6 +115,7 @@ body.fantribe-theme:not(.admin-interface) {
     flex-wrap: wrap;
     align-items: center;
     gap: 12px;
+    min-height: 52px;
     background: #fff;
     border: 1px solid var(--ft-slate-200, #e2e0dd);
     border-radius: 10px;
@@ -145,6 +146,25 @@ body.fantribe-theme:not(.admin-interface) {
     td:nth-last-child(2),
     td:nth-last-child(1) {
       white-space: nowrap;
+    }
+
+    .main-link .link-top-line {
+      display: flex;
+      align-items: center;
+      min-height: 22px;
+      line-height: 1.4;
+      gap: 6px;
+    }
+
+    .main-link .link-top-line .topic-post-badges {
+      flex-shrink: 0;
+      line-height: 1;
+      align-self: center;
+
+      .badge-notification.unread-posts {
+        vertical-align: middle;
+        line-height: 1;
+      }
     }
 
     .main-link .title {
@@ -191,6 +211,68 @@ body.fantribe-theme:not(.admin-interface) {
     .btn {
       border-radius: 9999px;
       font-weight: 500;
+    }
+  }
+}
+
+@media (width >= 768px) {
+  body.fantribe-theme:not(.admin-interface) {
+    .more-topics__container .topic-list-body .topic-list-item {
+      td:nth-last-child(3),
+      td:nth-last-child(2),
+      td:nth-last-child(1) {
+        width: 56px;
+        min-width: 56px;
+        min-height: 24px;
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .topic-list-data.num .badge-posts,
+      .topic-list-data.num .post-activity {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 24px;
+        line-height: 1.2;
+        font-size: 13px;
+        padding: 0 4px;
+        gap: 4px;
+
+        .d-icon {
+          width: 1em;
+          height: 1em;
+          flex-shrink: 0;
+        }
+
+        .number {
+          font-size: 13px;
+          line-height: 1.2;
+        }
+      }
+
+      .topic-list-data.num .post-activity .relative-date {
+        font-size: 13px;
+        line-height: 1.2;
+      }
+
+      .topic-list-data.num.views {
+        gap: 4px;
+      }
+
+      .topic-list-data.num.views .d-icon,
+      .topic-list-data.num.views .number {
+        font-size: 13px;
+        line-height: 1.2;
+      }
+
+      .topic-list-data.num.views .d-icon {
+        width: 1em;
+        height: 1em;
+        flex-shrink: 0;
+      }
     }
   }
 }

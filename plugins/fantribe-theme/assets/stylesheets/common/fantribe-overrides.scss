@@ -618,7 +618,8 @@ body.fantribe-theme:not(.admin-interface) {
       }
 
       .ft-modal__media-buttons {
-        display: flex;
+        // display: flex; browse image for post reply (will uncomment when image upload is implemented)
+        display: none;
         flex-shrink: 0;
         gap: 8px;
       }
