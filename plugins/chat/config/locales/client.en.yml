@@ -118,10 +118,10 @@ en:
       expand: "Expand Chat Drawer"
       confirm_flag: "Are you sure you want to flag %{username}'s message?"
       deleted:
-        one: "A message was deleted. [view]"
+        one: "A message was deleted."
         other: "%{count} messages were deleted. [view all]"
 
-      hidden: "A message was hidden. [view]"
+      hidden: "A message was hidden."
       delete: "Delete"
       edited: "edited"
       muted: "muted"

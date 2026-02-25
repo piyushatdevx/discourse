@@ -758,6 +758,49 @@ body.fantribe-theme {
   }
 
   // =============================================
+  // DELETED MESSAGE STYLING
+  // =============================================
+
+  // Container adjustments for deleted messages
+  .chat-message-container.-deleted {
+    display: flex;
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  // Base deleted message - override core plugin margin, make non-interactive
+  .chat-message-container .chat-message-text.-deleted {
+    display: inline-block;
+    max-width: fit-content;
+    margin-left: 0;
+    padding: 10px 16px;
+    background: var(--ft-neutral-100);
+    border-radius: 16px 16px 16px 4px; // Match received message style
+
+    .chat-message-expand {
+      color: var(--ft-neutral-500);
+      cursor: default;
+      pointer-events: none;
+      padding: 0;
+
+      .d-button-label {
+        font-style: italic;
+      }
+    }
+  }
+
+  // Sent deleted messages - right-aligned, white text, red background
+  .chat-message-container.is-by-current-user .chat-message-text.-deleted {
+    margin-left: auto;
+    background: var(--ft-vibrant-red);
+    border-radius: 16px 16px 4px 16px; // Match sent message style
+
+    .chat-message-expand {
+      color: #fff;
+    }
+  }
+
+  // =============================================
   // REPLY INDICATOR STYLING
   // =============================================
   .chat-reply {
@@ -1131,6 +1174,7 @@ body.fantribe-theme {
 
   // First message in group - add spacing before new group
   .chat-message-container:not(.-user-info-hidden) {
+    background: none;
     margin-top: var(--ft-space-4);
 
     // First message retains its tail
