@@ -19,6 +19,19 @@ export default {
           return this.siteSettings.navigation_menu === "sidebar";
         },
       });
+
+      // Force full-screen chat mode - disable drawer completely
+      api.modifyClass("service:chat-state-manager", {
+        pluginId: "fantribe-theme",
+
+        get isFullPagePreferred() {
+          return true;
+        },
+
+        get isDrawerPreferred() {
+          return false;
+        },
+      });
     });
   },
 };
