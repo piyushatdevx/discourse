@@ -8,8 +8,6 @@ import { htmlSafe } from "@ember/template";
 import avatar from "discourse/helpers/avatar";
 import icon from "discourse/helpers/d-icon";
 import formatDate from "discourse/helpers/format-date";
-import { ajax } from "discourse/lib/ajax";
-import { popupAjaxError } from "discourse/lib/ajax-error";
 import ftIcon from "../helpers/ft-icon";
 import FtEditProfileModal from "./ft-edit-profile-modal";
 import FtShareProfileModal from "./ft-share-profile-modal";
@@ -28,11 +26,8 @@ export default class FtUserProfileHeader extends Component {
   @service currentUser;
   @service router;
 
-  @tracked followLoading = false;
   @tracked showShareModal = false;
   @tracked showEditModal = false;
-  @tracked _isFollowing = null;
-  @tracked _followerCount = null;
 
   // ── Tier ──────────────────────────────────────────────────────
   get tier() {
@@ -42,25 +37,8 @@ export default class FtUserProfileHeader extends Component {
     );
   }
 
-  // ── Follow state (optimistic with server fallback) ─────────────
-  get isFollowing() {
-    return this._isFollowing !== null
-      ? this._isFollowing
-      : (this.args.user?.ft_is_following ?? false);
-  }
-
-  get followerCount() {
-    return this._followerCount !== null
-      ? this._followerCount
-      : (this.args.user?.ft_follower_count ?? 0);
-  }
-
   get isOwnProfile() {
     return this.currentUser && this.currentUser.id === this.args.user?.id;
-  }
-
-  get canFollow() {
-    return !!(this.currentUser && !this.isOwnProfile);
   }
 
   // ── Stats ──────────────────────────────────────────────────────
@@ -132,39 +110,6 @@ export default class FtUserProfileHeader extends Component {
     this.router.transitionTo("userActivity.ftSettings", this.args.user);
   }
 
-  // ── Follow ─────────────────────────────────────────────────────
-  @action
-  async toggleFollow() {
-    if (!this.canFollow || this.followLoading) {
-      return;
-    }
-
-    const wasFollowing = this.isFollowing;
-    const username = this.args.user?.username;
-
-    this._isFollowing = !wasFollowing;
-    this._followerCount = wasFollowing
-      ? Math.max(0, this.followerCount - 1)
-      : this.followerCount + 1;
-
-    this.followLoading = true;
-    try {
-      const result = await ajax(`/u/${username}/follow`, {
-        type: wasFollowing ? "DELETE" : "PUT",
-      });
-      this._followerCount = result.ft_follower_count ?? this._followerCount;
-      this._isFollowing = result.ft_is_following ?? !wasFollowing;
-    } catch (error) {
-      this._isFollowing = wasFollowing;
-      this._followerCount = wasFollowing
-        ? this.followerCount + 1
-        : Math.max(0, this.followerCount - 1);
-      popupAjaxError(error);
-    } finally {
-      this.followLoading = false;
-    }
-  }
-
   <template>
     {{#if @user}}
       <div class="ft-profile">
@@ -231,30 +176,8 @@ export default class FtUserProfileHeader extends Component {
                   <p class="ft-profile__handle">@{{@user.username}}</p>
                 </div>
 
-                {{! Subscribe / Edit Profile button }}
-                {{#if this.canFollow}}
-                  <button
-                    type="button"
-                    class="ft-profile__follow-btn
-                      {{if
-                        this.isFollowing
-                        'ft-profile__follow-btn--following'
-                      }}
-                      {{if
-                        this.followLoading
-                        'ft-profile__follow-btn--loading'
-                      }}"
-                    disabled={{this.followLoading}}
-                    {{on "click" this.toggleFollow}}
-                  >
-                    {{#if this.isFollowing}}
-                      {{ftIcon "check" size=16}}
-                      Following
-                    {{else}}
-                      Subscribe
-                    {{/if}}
-                  </button>
-                {{else if this.isOwnProfile}}
+                {{! Edit Profile button (own profile only) }}
+                {{#if this.isOwnProfile}}
                   <button
                     type="button"
                     class="ft-profile__edit-btn"
@@ -301,7 +224,7 @@ export default class FtUserProfileHeader extends Component {
             </div>
           </div>
 
-          {{! ── Stats row ── Followers | Tribes | Co-Creations }}
+          {{! ── Stats row ── Tribes }}
           <div class="ft-profile__stats">
             <div class="ft-profile__stat ft-profile__stat--divider">
               <div class="ft-profile__stat-top">

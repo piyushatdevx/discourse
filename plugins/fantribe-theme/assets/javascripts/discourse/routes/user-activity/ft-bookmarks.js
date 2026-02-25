@@ -84,6 +84,7 @@ export default class UserActivityFtBookmarksRoute extends DiscourseRoute {
               // backend image_urls field (also populated for cooked HTML images).
               image_urls: imageUrls,
               first_onebox_html: b.first_onebox_html || null,
+              tags: b.tags || [],
               // Synthesise a minimal posters array so the feed card can show
               // the author's avatar and name (bookmark serializer embeds user).
               posters: b.user ? [{ user_id: b.user.id, user: b.user }] : [],

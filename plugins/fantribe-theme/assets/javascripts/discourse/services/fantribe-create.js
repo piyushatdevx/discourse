@@ -5,7 +5,11 @@ import Service from "@ember/service";
 export default class FantribeCreate extends Service {
   @tracked isCreateMenuOpen = false;
   @tracked isCreatePostModalOpen = false;
+  @tracked isCreateTribeModalOpen = false;
   @tracked postCategory = null;
+  @tracked editingPost = null;
+  @tracked editingTopicTitle = "";
+  @tracked editingTags = [];
 
   @action
   toggleCreateMenu() {
@@ -20,6 +24,19 @@ export default class FantribeCreate extends Service {
   @action
   openCreatePostModal(category = null) {
     this.postCategory = category;
+    this.editingPost = null;
+    this.editingTopicTitle = "";
+    this.editingTags = [];
+    this.isCreateMenuOpen = false;
+    this.isCreatePostModalOpen = true;
+  }
+
+  @action
+  openEditPostModal(post, topicTitle, tags) {
+    this.editingPost = post;
+    this.editingTopicTitle = topicTitle || "";
+    this.editingTags = tags || [];
+    this.postCategory = null;
     this.isCreateMenuOpen = false;
     this.isCreatePostModalOpen = true;
   }
@@ -28,5 +45,19 @@ export default class FantribeCreate extends Service {
   closeCreatePostModal() {
     this.isCreatePostModalOpen = false;
     this.postCategory = null;
+    this.editingPost = null;
+    this.editingTopicTitle = "";
+    this.editingTags = [];
+  }
+
+  @action
+  openCreateTribeModal() {
+    this.isCreateMenuOpen = false;
+    this.isCreateTribeModalOpen = true;
+  }
+
+  @action
+  closeCreateTribeModal() {
+    this.isCreateTribeModalOpen = false;
   }
 }

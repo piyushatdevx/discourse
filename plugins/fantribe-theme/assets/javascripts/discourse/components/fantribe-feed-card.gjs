@@ -26,6 +26,7 @@ export default class FantribeFeedCard extends Component {
   @tracked loadingExpanded = false;
   @tracked menuOpen = false;
   @tracked dismissed = false;
+  @tracked _topicClosed = null;
 
   get topic() {
     return this.args.topic;
@@ -161,6 +162,20 @@ export default class FantribeFeedCard extends Component {
     return this.currentUser.username === this.poster.username;
   }
 
+  get tags() {
+    return this.topic?.tags || [];
+  }
+
+  get hasTags() {
+    return this.tags.length > 0;
+  }
+
+  get topicClosed() {
+    return this._topicClosed !== null
+      ? this._topicClosed
+      : this.topic?.closed || false;
+  }
+
   get showTribeBadge() {
     return !!this.tribeCategory && !this.args.hideTribeBadge;
   }
@@ -179,6 +194,11 @@ export default class FantribeFeedCard extends Component {
   @action
   dismissCard() {
     this.dismissed = true;
+  }
+
+  @action
+  setTopicClosed(isClosed) {
+    this._topicClosed = isClosed;
   }
 
   @action
@@ -315,12 +335,24 @@ export default class FantribeFeedCard extends Component {
                 @userName={{this.posterUsername}}
                 @topic={{@topic}}
                 @firstPostId={{this.firstPostId}}
+                @topicClosed={{this.topicClosed}}
+                @onClosedChange={{this.setTopicClosed}}
               />
             </div>
           </header>
 
           <div class="fantribe-feed-card__body">
             <div class="fantribe-feed-card__text">
+              {{#if this.hasTags}}
+                <div
+                  class="fantribe-feed-card__tags"
+                  {{on "click" this.stopPropagation}}
+                >
+                  {{#each this.tags as |tag|}}
+                    <span class="fantribe-feed-card__tag">#{{tag}}</span>
+                  {{/each}}
+                </div>
+              {{/if}}
               <p><strong>{{@topic.title}}</strong></p>
               {{#if this.excerpt}}
                 {{#if this.expanded}}
@@ -385,6 +417,7 @@ export default class FantribeFeedCard extends Component {
               @firstPostId={{this.firstPostId}}
               @opLiked={{this.opLiked}}
               @opCanLike={{this.opCanLike}}
+              @topicClosed={{this.topicClosed}}
             />
           </div>
         </div>

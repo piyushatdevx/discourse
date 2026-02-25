@@ -162,6 +162,18 @@ body.fantribe-theme:not(.admin-interface) {
       &--bookmark.fantribe-engagement__action--active {
         color: var(--ft-mint);
       }
+
+      // Closed (comments turned off) — muted, no hover
+      &--closed,
+      &--closed:hover {
+        color: var(--ft-slate-300);
+        cursor: not-allowed;
+
+        svg,
+        .d-icon {
+          transform: none;
+        }
+      }
     }
   }
 }

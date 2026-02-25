@@ -13,25 +13,43 @@ export default class FtEditTribeModal extends Component {
 
   @tracked name = "";
   @tracked description = "";
-  @tracked color = "#0088cc";
   @tracked isPrivate = false;
   @tracked isSaving = false;
+
+  @tracked isUploadingLogo = false;
+  @tracked logoPreviewUrl = null;
+  @tracked uploadedLogoId = null;
+
+  @tracked isUploadingCover = false;
+  @tracked coverPreviewUrl = null;
+  @tracked uploadedBackgroundId = null;
 
   constructor(owner, args) {
     super(owner, args);
     const cat = args.category;
     this.name = cat?.name || "";
     this.description = cat?.description_text || "";
-    this.color = cat?.color ? `#${cat.color}` : "#0088cc";
     this.isPrivate = cat?.read_restricted ?? false;
-  }
-
-  get colorSwatchStyle() {
-    return htmlSafe(`background-color: ${this.color}`);
+    this.logoPreviewUrl =
+      cat?.uploaded_logo?.url || cat?.uploaded_logo_url || null;
+    this.coverPreviewUrl =
+      cat?.uploaded_background?.url || cat?.uploaded_background_url || null;
   }
 
   get isDisabled() {
-    return this.isSaving || !this.name.trim();
+    return (
+      this.isSaving ||
+      this.isUploadingLogo ||
+      this.isUploadingCover ||
+      !this.name.trim()
+    );
+  }
+
+  get coverStyle() {
+    if (this.coverPreviewUrl) {
+      return htmlSafe(`background-image: url('${this.coverPreviewUrl}')`);
+    }
+    return null;
   }
 
   @action
@@ -42,11 +60,6 @@ export default class FtEditTribeModal extends Component {
   @action
   updateDescription(event) {
     this.description = event.target.value;
-  }
-
-  @action
-  updateColor(event) {
-    this.color = event.target.value;
   }
 
   @action
@@ -74,6 +87,78 @@ export default class FtEditTribeModal extends Component {
   }
 
   @action
+  triggerLogoInput() {
+    document.querySelector(".ft-edit-tribe-modal__logo-input")?.click();
+  }
+
+  @action
+  triggerCoverInput() {
+    document.querySelector(".ft-edit-tribe-modal__cover-input")?.click();
+  }
+
+  async uploadFile(file) {
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("type", "composer");
+    return ajax("/uploads.json", {
+      type: "POST",
+      data: formData,
+      processData: false,
+      contentType: false,
+    });
+  }
+
+  @action
+  async handleLogoSelected(event) {
+    const file = event.target.files?.[0];
+    if (!file) {
+      return;
+    }
+    this.isUploadingLogo = true;
+    try {
+      const upload = await this.uploadFile(file);
+      this.uploadedLogoId = upload.id;
+      this.logoPreviewUrl = upload.url;
+    } catch (error) {
+      popupAjaxError(error);
+    } finally {
+      this.isUploadingLogo = false;
+      event.target.value = "";
+    }
+  }
+
+  @action
+  removeLogo() {
+    this.logoPreviewUrl = null;
+    this.uploadedLogoId = -1;
+  }
+
+  @action
+  async handleCoverSelected(event) {
+    const file = event.target.files?.[0];
+    if (!file) {
+      return;
+    }
+    this.isUploadingCover = true;
+    try {
+      const upload = await this.uploadFile(file);
+      this.uploadedBackgroundId = upload.id;
+      this.coverPreviewUrl = upload.url;
+    } catch (error) {
+      popupAjaxError(error);
+    } finally {
+      this.isUploadingCover = false;
+      event.target.value = "";
+    }
+  }
+
+  @action
+  removeCover() {
+    this.coverPreviewUrl = null;
+    this.uploadedBackgroundId = -1;
+  }
+
+  @action
   async saveTribe() {
     if (this.isDisabled) {
       return;
@@ -81,21 +166,24 @@ export default class FtEditTribeModal extends Component {
 
     this.isSaving = true;
     try {
-      // `permissions` is a top-level param (not nested under `category`).
-      // Public  → everyone can read/post (permission level 1 = full).
-      // Private → only staff can access.
       const permissions = this.isPrivate ? { staff: 1 } : { everyone: 1 };
+
+      const data = {
+        name: this.name.trim(),
+        description: this.description.trim(),
+        permissions,
+      };
+
+      if (this.uploadedLogoId !== null) {
+        data.uploaded_logo_id = this.uploadedLogoId;
+      }
+      if (this.uploadedBackgroundId !== null) {
+        data.uploaded_background_id = this.uploadedBackgroundId;
+      }
 
       await ajax(`/categories/${this.args.category.id}.json`, {
         type: "PUT",
-        data: {
-          category: {
-            name: this.name.trim(),
-            description: this.description.trim(),
-            color: this.color.replace(/^#/, ""),
-          },
-          permissions,
-        },
+        data,
       });
       this.args.onClose();
       this.router.refresh();
@@ -135,6 +223,96 @@ export default class FtEditTribeModal extends Component {
           {{! Fields }}
           <div class="ft-edit-modal__fields">
 
+            {{! Cover Image }}
+            <div class="ft-edit-modal__field">
+              <label class="ft-edit-modal__label">Cover Image</label>
+              <div class="ft-edit-tribe-modal__cover-wrap">
+                {{#if this.coverPreviewUrl}}
+                  <div
+                    class="ft-edit-tribe-modal__cover-preview"
+                    style={{this.coverStyle}}
+                  >
+                    <button
+                      type="button"
+                      class="ft-edit-tribe-modal__cover-remove"
+                      aria-label="Remove cover image"
+                      {{on "click" this.removeCover}}
+                    >
+                      {{ftIcon "x"}}
+                    </button>
+                  </div>
+                {{else}}
+                  <button
+                    type="button"
+                    class="ft-edit-tribe-modal__cover-upload-btn"
+                    disabled={{this.isUploadingCover}}
+                    {{on "click" this.triggerCoverInput}}
+                  >
+                    {{ftIcon "image"}}
+                    <span>{{if
+                        this.isUploadingCover
+                        "Uploading..."
+                        "Upload Cover Image"
+                      }}</span>
+                  </button>
+                {{/if}}
+                <input
+                  type="file"
+                  class="ft-edit-tribe-modal__cover-input"
+                  accept="image/*"
+                  {{on "change" this.handleCoverSelected}}
+                />
+              </div>
+              <p class="ft-edit-tribe-modal__cover-hint">
+                Recommended: 1200×400px or wider. Shown at the top of your tribe
+                page.
+              </p>
+            </div>
+
+            {{! Tribe Logo / Profile Image }}
+            <div class="ft-edit-modal__field">
+              <label class="ft-edit-modal__label">Tribe Logo</label>
+              <div class="ft-edit-tribe-modal__logo-wrap">
+                {{#if this.logoPreviewUrl}}
+                  <div class="ft-edit-tribe-modal__logo-preview">
+                    <img src={{this.logoPreviewUrl}} alt="Tribe logo" />
+                    <button
+                      type="button"
+                      class="ft-edit-tribe-modal__logo-remove"
+                      aria-label="Remove logo"
+                      {{on "click" this.removeLogo}}
+                    >
+                      {{ftIcon "x"}}
+                    </button>
+                  </div>
+                {{else}}
+                  <button
+                    type="button"
+                    class="ft-edit-tribe-modal__logo-upload-btn"
+                    disabled={{this.isUploadingLogo}}
+                    {{on "click" this.triggerLogoInput}}
+                  >
+                    {{ftIcon "image"}}
+                    <span>{{if
+                        this.isUploadingLogo
+                        "Uploading..."
+                        "Upload Tribe Logo"
+                      }}</span>
+                  </button>
+                {{/if}}
+                <input
+                  type="file"
+                  class="ft-edit-tribe-modal__logo-input"
+                  accept="image/*"
+                  {{on "change" this.handleLogoSelected}}
+                />
+              </div>
+              <p class="ft-edit-tribe-modal__cover-hint">
+                Square image, min 100×100px. Shown as your tribe's profile
+                picture.
+              </p>
+            </div>
+
             <div class="ft-edit-modal__field">
               <label class="ft-edit-modal__label" for="ft-tribe-edit-name">
                 Tribe Name
@@ -163,25 +341,6 @@ export default class FtEditTribeModal extends Component {
                 placeholder="What is this tribe about?"
                 {{on "input" this.updateDescription}}
               >{{this.description}}</textarea>
-            </div>
-
-            <div class="ft-edit-modal__field">
-              <label class="ft-edit-modal__label">Tribe Color</label>
-              <div class="ft-edit-tribe-modal__color-row">
-                <span
-                  class="ft-edit-tribe-modal__color-swatch"
-                  style={{this.colorSwatchStyle}}
-                ></span>
-                <input
-                  type="color"
-                  class="ft-edit-tribe-modal__color-input"
-                  value={{this.color}}
-                  {{on "input" this.updateColor}}
-                />
-                <span class="ft-edit-tribe-modal__color-value">
-                  {{this.color}}
-                </span>
-              </div>
             </div>
 
             <div class="ft-edit-modal__field">
