@@ -105,11 +105,16 @@ export default class FantribeEngagementBar extends Component {
       (r) => r.isActive && r.key !== key
     );
 
-    // Optimistic update — reflect change immediately in the UI
+    // Optimistic update — reflect change immediately in the UI.
+    // Use _localReactions as the base when available so that previous
+    // optimistic changes (e.g. A→B) are not overwritten by the stale
+    // serverReactions state on the next interaction (e.g. B→C showing A
+    // as active again because serverReactions still has it marked active).
+    const baseReactions = this._localReactions || this.serverReactions;
     this._localReactions = REACTIONS.map((r) => {
-      const server = this.serverReactions.find((sr) => sr.id === r.key);
-      const baseCount = server?.count ?? 0;
-      const baseActive = server?.current_user_used ?? false;
+      const base = baseReactions.find((br) => br.id === r.key);
+      const baseCount = base?.count ?? 0;
+      const baseActive = base?.current_user_used ?? false;
 
       if (r.key === key) {
         return {
