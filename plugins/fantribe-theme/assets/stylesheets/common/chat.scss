@@ -3823,3 +3823,46 @@ body.fantribe-theme {
     margin-left: auto;
   }
 }
+
+// =============================================================================
+// USERCARD CONTROLS - FanTribe button styling in chat context
+// =============================================================================
+
+// Override button hover/active states to use fantribe theme colors
+// and hide the Message button (PM) since chat has its own button
+body.has-full-page-chat,
+body.has-drawer-chat,
+body.has-chat {
+  .user-card .usercard-controls {
+    // Primary buttons (like chat button)
+    .btn-primary {
+      background-color: var(--ft-primary) !important;
+
+      &:hover {
+        background-color: var(--ft-primary-hover) !important;
+      }
+
+      &:active,
+      &:focus-visible {
+        background-color: var(--ft-primary-active) !important;
+      }
+    }
+
+    // Default buttons
+    .btn-default {
+      &:hover {
+        background-color: var(--ft-gray-100) !important;
+      }
+
+      &:active,
+      &:focus-visible {
+        background-color: var(--ft-gray-200) !important;
+      }
+    }
+
+    // Hide the PM/Message button in chat context
+    .compose-pm {
+      display: none !important;
+    }
+  }
+}
