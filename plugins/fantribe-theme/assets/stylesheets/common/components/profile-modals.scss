@@ -332,6 +332,94 @@ body.fantribe-theme:not(.admin-interface) {
     }
   }
 
+  // ── Edit Tribe Modal ─────────────────────────────────────────
+  .ft-edit-tribe-modal {
+    width: min(480px, 94vw);
+  }
+
+  .ft-edit-tribe-modal__color-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .ft-edit-tribe-modal__color-swatch {
+    width: 28px;
+    height: 28px;
+    border-radius: var(--ft-radius-small);
+    border: 1.5px solid var(--ft-neutral-200);
+    flex-shrink: 0;
+  }
+
+  .ft-edit-tribe-modal__color-input {
+    width: 40px;
+    height: 36px;
+    padding: 2px;
+    border: 1.5px solid var(--ft-neutral-200);
+    border-radius: var(--ft-radius-small);
+    background: var(--ft-neutral-50);
+    cursor: pointer;
+    flex-shrink: 0;
+
+    &::-webkit-color-swatch-wrapper {
+      padding: 0;
+    }
+
+    &::-webkit-color-swatch {
+      border: none;
+      border-radius: 4px;
+    }
+  }
+
+  .ft-edit-tribe-modal__color-value {
+    font-size: var(--ft-font-sm);
+    color: var(--ft-slate-500);
+    font-family: monospace;
+  }
+
+  .ft-edit-tribe-modal__visibility-row {
+    display: flex;
+    gap: 8px;
+  }
+
+  .ft-edit-tribe-modal__vis-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 9px 18px;
+    border-radius: var(--ft-radius-pill);
+    font-size: var(--ft-font-sm);
+    font-weight: var(--ft-font-weight-semibold);
+    border: 1.5px solid var(--ft-neutral-200);
+    background: var(--ft-neutral-50);
+    color: var(--ft-slate-500);
+    cursor: pointer;
+    transition: var(--ft-transition-all);
+
+    svg {
+      width: 14px;
+      height: 14px;
+    }
+
+    &:hover:not(.ft-edit-tribe-modal__vis-btn--active) {
+      border-color: var(--ft-neutral-300);
+      color: var(--ft-slate-700);
+    }
+
+    &--active {
+      border-color: var(--ft-electric-blue);
+      background: var(--ft-electric-blue-light);
+      color: var(--ft-electric-blue);
+    }
+  }
+
+  .ft-edit-tribe-modal__vis-hint {
+    font-size: var(--ft-font-xs);
+    color: var(--ft-slate-400);
+    margin: 4px 0 0;
+    line-height: 1.4;
+  }
+
   // ── Settings Modal ───────────────────────────────────────────
   .ft-settings-modal {
     width: min(460px, 94vw);

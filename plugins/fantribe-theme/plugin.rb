@@ -264,6 +264,51 @@ after_initialize do
     SiteSetting.fantribe_theme_enabled && scope.current_user.present?
   end
 
+  # Mirror image_urls and first_onebox_html onto the bookmark serializers so
+  # FantribeFeedCard can render post images in the Bookmarks profile tab.
+  # The bookmark API returns flat objects (not nested topic objects), so the
+  # topic_list_item extensions above don't apply. We parse from `cooked` via
+  # Nokogiri — already loaded for the excerpt — avoiding extra DB queries.
+  # Both UserPostBookmarkSerializer and UserTopicBookmarkSerializer define a
+  # `cooked` instance method, so calling `cooked` here resolves correctly.
+  %i[user_post_bookmark user_topic_bookmark].each do |serializer_name|
+    add_to_serializer(serializer_name, :image_urls) do
+      next [] unless SiteSetting.fantribe_theme_enabled
+      next [] if cooked.blank?
+
+      doc = Nokogiri::HTML5.fragment(cooked)
+      doc
+        .css("img[src]")
+        .filter_map do |img|
+          src = img["src"]
+          next if src.blank? || img["class"]&.include?("emoji")
+
+          src
+        end
+    rescue StandardError
+      []
+    end
+
+    add_to_serializer(serializer_name, :include_image_urls?) { SiteSetting.fantribe_theme_enabled }
+
+    add_to_serializer(serializer_name, :first_onebox_html) do
+      next nil unless SiteSetting.fantribe_theme_enabled
+      next nil if cooked.blank?
+
+      doc = Nokogiri::HTML5.fragment(cooked)
+      onebox = doc.at_css("aside.onebox, div.youtube-onebox, div.onebox, div.lazy-video-container")
+      next nil unless onebox
+
+      onebox.to_html
+    rescue StandardError
+      nil
+    end
+
+    add_to_serializer(serializer_name, :include_first_onebox_html?) do
+      SiteSetting.fantribe_theme_enabled
+    end
+  end
+
   # Expose the number of categories (Tribes) a user is actively watching.
   # Using notification_level >= watching means only categories the user
   # deliberately joined — not ones they were auto-added to.

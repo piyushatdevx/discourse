@@ -97,6 +97,12 @@ export default class FantribeFeedCard extends Component {
     return this.images.length > 1;
   }
 
+  // URL for the single-image case. Derives from the already-resolved `images`
+  // array so it covers image_urls, topic.image_url, and thumbnails uniformly.
+  get singleImageUrl() {
+    return this.images[0]?.url || null;
+  }
+
   get imageUrl() {
     return this.topic?.image_url || this.topic?.thumbnails?.[0]?.url;
   }
@@ -361,7 +367,7 @@ export default class FantribeFeedCard extends Component {
                 {{else if this.hasMultipleImages}}
                   <FantribeMediaPhotoGrid @images={{this.images}} />
                 {{else}}
-                  <FantribeMediaSingleImage @imageUrl={{this.imageUrl}} />
+                  <FantribeMediaSingleImage @imageUrl={{this.singleImageUrl}} />
                 {{/if}}
               </div>
             {{/if}}

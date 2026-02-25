@@ -8,6 +8,7 @@ import icon from "discourse/helpers/d-icon";
 import { ajax } from "discourse/lib/ajax";
 import { popupAjaxError } from "discourse/lib/ajax-error";
 import ftIcon from "../helpers/ft-icon";
+import FtEditTribeModal from "./ft-edit-tribe-modal";
 
 export default class FantribeTribeHeader extends Component {
   @service currentUser;
@@ -15,6 +16,7 @@ export default class FantribeTribeHeader extends Component {
   @service router;
 
   @tracked isJoining = false;
+  @tracked showEditModal = false;
 
   get category() {
     return this.args.category;
@@ -51,6 +53,16 @@ export default class FantribeTribeHeader extends Component {
 
   get isAdmin() {
     return this.currentUser?.admin;
+  }
+
+  @action
+  openEditModal() {
+    this.showEditModal = true;
+  }
+
+  @action
+  closeEditModal() {
+    this.showEditModal = false;
   }
 
   @action
@@ -128,13 +140,14 @@ export default class FantribeTribeHeader extends Component {
 
           <div class="ft-tribe-header__actions">
             {{#if this.isAdmin}}
-              <a
-                href="/c/{{@category.slug}}/{{@category.id}}/edit"
+              <button
+                type="button"
                 class="ft-tribe-header__edit-btn"
+                {{on "click" this.openEditModal}}
               >
                 {{icon "wrench"}}
                 <span>Edit Tribe</span>
-              </a>
+              </button>
             {{/if}}
             <button
               type="button"
@@ -157,6 +170,13 @@ export default class FantribeTribeHeader extends Component {
           </div>
         </div>
       </div>
+
+      {{#if this.showEditModal}}
+        <FtEditTribeModal
+          @category={{@category}}
+          @onClose={{this.closeEditModal}}
+        />
+      {{/if}}
     {{/if}}
   </template>
 }
