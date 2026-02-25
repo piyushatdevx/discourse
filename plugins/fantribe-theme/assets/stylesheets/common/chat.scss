@@ -587,6 +587,15 @@ body.fantribe-theme {
   }
 
   // =============================================
+  // CHAT SKELETON - Constrain height during loading
+  // =============================================
+  .chat-skeleton {
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  // =============================================
   // MESSAGE BUBBLES - BASE STYLES
   // =============================================
   .chat-message-container {
@@ -3397,8 +3406,6 @@ body.fantribe-theme {
 
   // --- Composer Wrapper ---
   body.fantribe-theme .chat-composer__wrapper {
-    position: sticky;
-    bottom: 0;
     background: var(--ft-white);
     border-top: 1px solid var(--ft-neutral-200);
     padding-bottom: env(safe-area-inset-bottom, 0);

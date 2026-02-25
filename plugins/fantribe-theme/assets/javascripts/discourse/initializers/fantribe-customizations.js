@@ -5,11 +5,12 @@ function initializeFantribe(api) {
   const siteSettings = api.container.lookup("service:site-settings");
   const currentUser = api.getCurrentUser();
 
-  // Force body class for FanTribe styling
-  document.body.classList.add("fantribe-theme");
+  // Force class for FanTribe styling (both html and body for CSS selectors)
+  document?.documentElement?.classList?.add("fantribe-theme");
+  document?.body?.classList?.add("fantribe-theme");
 
   if (siteSettings.fantribe_enable_glassmorphism) {
-    document.body.classList.add("fantribe-glassmorphism");
+    document?.body?.classList?.add("fantribe-glassmorphism");
   }
 
   if (!currentUser) {
