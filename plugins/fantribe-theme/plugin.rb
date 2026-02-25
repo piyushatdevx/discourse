@@ -142,6 +142,37 @@ after_initialize do
     end
   end
 
+  # Remove the reaction undo time window so users can change/remove reactions
+  # at any time. Discourse core enforces post_undo_action_window_mins (default
+  # 10 min) on both custom emoji reactions (via ReactionUser#can_undo?) and
+  # the heart/like (via Guardian#can_delete_post_action?). We bypass both
+  # checks when FanTribe is active while keeping all other guards intact
+  # (own post, not a PM, not archived).
+  if defined?(DiscourseReactions)
+    module ::FantribeTheme
+      module ReactionUserExtension
+        def can_undo?
+          return true if SiteSetting.fantribe_theme_enabled
+          super
+        end
+      end
+
+      module GuardianExtension
+        def can_delete_post_action?(post_action)
+          return super unless SiteSetting.fantribe_theme_enabled
+          # Same ownership / privacy / archive checks as core — just no time window.
+          return false unless is_my_own?(post_action) && !post_action.is_private_message?
+          !post_action.post&.topic&.archived?
+        end
+      end
+    end
+
+    reloadable_patch do
+      DiscourseReactions::ReactionUser.prepend(FantribeTheme::ReactionUserExtension)
+      Guardian.prepend(FantribeTheme::GuardianExtension)
+    end
+  end
+
   # Enable topic excerpts for feed cards
   module ::FantribeTheme
     module ListableTopicSerializerExtension
