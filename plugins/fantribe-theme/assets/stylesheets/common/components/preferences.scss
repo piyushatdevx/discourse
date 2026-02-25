@@ -16,15 +16,16 @@
 // When the user navigates to /activity/ft-settings the profile cover,
 // profile card, and primary tab bar are hidden so the hub fills the
 // viewport as a standalone full page.
+// Using high specificity selectors instead of !important
 body.fantribe-theme:not(.admin-interface).ft-on-settings-hub {
   // Hide the profile header (cover + card) injected via outlet
-  .ft-profile {
-    display: none !important;
+  &.ft-on-settings-hub .ft-profile {
+    display: none;
   }
 
   // Hide the tab bar pill card
-  .user-navigation.user-navigation-primary {
-    display: none !important;
+  &.ft-on-settings-hub .user-navigation.user-navigation-primary {
+    display: none;
   }
 
   // Let the content area fill the full width without extra top padding
@@ -310,12 +311,16 @@ body.fantribe-theme:not(.admin-interface) {
 }
 
 // ── Preference Sub-Pages ─────────────────────────────────────
+// Comprehensive form element styling with full state coverage:
+// hover, focus, focus-visible, active, checked, disabled
+// All styles use specific selectors - NO !important declarations
 body.fantribe-theme:not(.admin-interface).ft-on-preferences {
   // Hide profile chrome (cover, card, primary tab bar) so preferences
   // render as a standalone full page, not embedded in the profile layout.
-  .ft-profile,
-  .user-navigation.user-navigation-primary {
-    display: none !important;
+  // Using high specificity selector instead of !important
+  &.ft-on-preferences .ft-profile,
+  &.ft-on-preferences .user-navigation.user-navigation-primary {
+    display: none;
   }
 
   .new-user-wrapper {
@@ -329,8 +334,9 @@ body.fantribe-theme:not(.admin-interface).ft-on-preferences {
   }
 
   // Show & FT-style the secondary nav (preference page tab bar)
-  .user-navigation.user-navigation-secondary {
-    display: block !important;
+  // Using body selector for specificity instead of !important
+  &.ft-on-preferences .user-navigation.user-navigation-secondary {
+    display: block;
     background: rgb(241, 241, 242);
     border-bottom: none;
     padding: 16px 24px 0;
@@ -411,14 +417,13 @@ body.fantribe-theme:not(.admin-interface).ft-on-preferences {
   .horizontal-overflow-nav__scroll-right,
   .horizontal-overflow-nav__scroll-left {
     display: inline-flex;
+    align-self: center;
     align-items: center;
     justify-content: center;
     width: 32px;
     height: 32px;
     border-radius: 50%;
     background: #fff;
-    border: 1px solid var(--ft-slate-200);
-    box-shadow: 0 2px 6px rgb(0 0 0 / 0.1);
     cursor: pointer;
     color: var(--ft-slate-600);
     flex-shrink: 0;
@@ -428,12 +433,16 @@ body.fantribe-theme:not(.admin-interface).ft-on-preferences {
     svg {
       width: 14px;
       height: 14px;
+      color: #e11d48;
     }
 
-    &:hover {
-      background: var(--ft-slate-100);
-      border-color: var(--ft-slate-300);
-      color: var(--ft-slate-900);
+    &:focus-visible {
+      outline: none;
+      box-shadow: 0 0 0 3px rgb(255 23 68 / 0.2);
+    }
+
+    &:active {
+      background: var(--ft-slate-200);
     }
   }
 
@@ -500,66 +509,931 @@ body.fantribe-theme:not(.admin-interface).ft-on-preferences {
     margin: 0 0 16px;
   }
 
-  // Text inputs / selects
-  input[type="text"],
-  input[type="email"],
-  input[type="password"],
-  input[type="url"],
-  textarea,
-  select {
-    border: 1.5px solid var(--ft-slate-200);
-    border-radius: 8px;
-    background: #f8f9fa;
-    font-size: 0.9375rem;
-    color: var(--ft-slate-900);
-    padding: 10px 14px;
-    transition:
-      border-color 150ms,
-      box-shadow 150ms;
+  // ═══════════════════════════════════════════════════════════════
+  // TEXT INPUTS, TEXTAREA, SELECT - Full State Styling
+  // ═══════════════════════════════════════════════════════════════
+  .user-content.user-preferences {
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    input[type="url"],
+    input[type="number"],
+    input[type="search"],
+    textarea,
+    select {
+      border: 1.5px solid var(--ft-slate-200);
+      border-radius: 8px;
+      background: #f8f9fa;
+      font-size: 0.9375rem;
+      color: var(--ft-slate-900);
+      padding: 10px 14px;
+      transition:
+        border-color 150ms ease,
+        box-shadow 150ms ease,
+        background-color 150ms ease;
 
-    &:focus {
-      outline: none;
-      border-color: var(--ft-electric-blue);
-      box-shadow: 0 0 0 3px rgb(0 128 255 / 0.12);
+      // Hover state
+      &:hover:not(:focus, :disabled) {
+        border-color: var(--ft-slate-300);
+        background: #fff;
+      }
+
+      // Focus state - uses vibrant red
+      &:focus,
+      &:focus-visible {
+        outline: none;
+        border-color: var(--ft-vibrant-red);
+        box-shadow: 0 0 0 3px rgb(255 23 68 / 0.12);
+        background: #fff;
+      }
+
+      // Active state
+      &:active:not(:disabled) {
+        border-color: var(--ft-vibrant-red);
+      }
+
+      // Disabled state
+      &:disabled {
+        background: var(--ft-slate-100);
+        color: var(--ft-slate-400);
+        cursor: not-allowed;
+        opacity: 0.7;
+      }
+
+      // Placeholder styling
+      &::placeholder {
+        color: var(--ft-slate-400);
+      }
+    }
+
+    // Error state (if .has-errors parent)
+    .has-errors {
+      input[type="text"],
+      input[type="email"],
+      input[type="password"],
+      input[type="url"],
+      textarea,
+      select {
+        border-color: var(--ft-error);
+
+        &:focus {
+          box-shadow: 0 0 0 3px rgb(239 68 68 / 0.12);
+        }
+      }
+    }
+
+    // Select dropdown specific styling
+    select {
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%239ca3af' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+      background-size: 16px;
+      padding-right: 40px;
+      cursor: pointer;
     }
   }
 
-  // Save button → FT gradient
-  .btn.btn-primary,
-  .save-changes {
-    background: linear-gradient(
-      135deg,
-      var(--ft-vibrant-red),
-      #e63b6f
-    ) !important;
-    color: #fff !important;
-    border: none !important;
-    border-radius: 9999px !important;
-    padding: 10px 28px !important;
-    font-weight: 700 !important;
-    box-shadow: 0 4px 14px rgb(255 23 68 / 0.3) !important;
-    transition: all 200ms !important;
+  // ═══════════════════════════════════════════════════════════════
+  // CHECKBOX STYLING - Custom with all states
+  // ═══════════════════════════════════════════════════════════════
+  .user-content.user-preferences {
+    input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      min-width: 18px;
+      min-height: 18px;
+      border: 2px solid var(--ft-slate-400);
+      border-radius: 6px;
+      appearance: none;
+      cursor: pointer;
+      transition:
+        background-color 150ms ease,
+        border-color 150ms ease,
+        box-shadow 150ms ease;
+      vertical-align: middle;
+      margin: 0;
+      position: relative;
 
-    &:hover:not(:disabled) {
-      box-shadow: 0 8px 20px rgb(255 23 68 / 0.45) !important;
-      transform: translateY(-1px) !important;
+      // Hover state (unchecked)
+      &:hover:not(:disabled, :checked) {
+        border-color: var(--ft-slate-500);
+        background: var(--ft-slate-50);
+      }
+
+      // Focus-visible state (keyboard navigation)
+      &:focus-visible {
+        outline: none;
+        box-shadow: 0 0 0 3px rgb(255 23 68 / 0.2);
+      }
+
+      // Checked state
+      &:checked {
+        background: var(--ft-vibrant-red);
+        border-color: var(--ft-vibrant-red);
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6 9 17l-5-5'/%3E%3C/svg%3E");
+        background-size: 12px;
+        background-position: center;
+        background-repeat: no-repeat;
+      }
+
+      // Checked + hover state
+      &:checked:hover:not(:disabled) {
+        background-color: var(--ft-vibrant-red-hover);
+        border-color: var(--ft-vibrant-red-hover);
+      }
+
+      // Checked + focus state
+      &:checked:focus-visible {
+        box-shadow: 0 0 0 3px rgb(255 23 68 / 0.25);
+      }
+
+      // Disabled state
+      &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+    }
+
+    // Checkbox label alignment
+    .checkbox-label,
+    label:has(input[type="checkbox"]) {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      font-size: 0.9375rem;
+      color: var(--ft-slate-700);
+
+      &:hover input[type="checkbox"]:not(:disabled, :checked) {
+        border-color: var(--ft-slate-500);
+        background: var(--ft-slate-50);
+      }
     }
   }
 
-  // Cancel / secondary buttons → neutral
-  .btn.btn-default:not(.btn-primary),
-  .btn-flat:not(.btn-primary) {
-    background: var(--ft-slate-100) !important;
-    color: var(--ft-slate-700) !important;
-    border: 1px solid var(--ft-slate-200) !important;
-    border-radius: 9999px !important;
-    padding: 10px 24px !important;
-    font-weight: 600 !important;
-    box-shadow: none !important;
-    transition: background 200ms !important;
+  // ═══════════════════════════════════════════════════════════════
+  // RADIO BUTTON STYLING - Custom with all states
+  // ═══════════════════════════════════════════════════════════════
+  .user-content.user-preferences {
+    input[type="radio"] {
+      width: 18px;
+      height: 18px;
+      min-width: 18px;
+      min-height: 18px;
+      border: 2px solid var(--ft-slate-400);
+      border-radius: 50%;
+      appearance: none;
+      cursor: pointer;
+      transition:
+        border-color 150ms ease,
+        border-width 150ms ease,
+        box-shadow 150ms ease,
+        background-color 150ms ease;
+      vertical-align: middle;
+      margin: 0;
+      background: #fff;
 
-    &:hover:not(:disabled) {
-      background: var(--ft-slate-200) !important;
+      // Hover state (unchecked)
+      &:hover:not(:disabled, :checked) {
+        border-color: var(--ft-slate-500);
+        background: var(--ft-slate-50);
+      }
+
+      // Focus-visible state (keyboard navigation)
+      &:focus-visible {
+        outline: none;
+        box-shadow: 0 0 0 3px rgb(255 23 68 / 0.2);
+      }
+
+      // Checked state - thick border creates the "dot" effect
+      &:checked {
+        border-color: var(--ft-vibrant-red);
+        border-width: 5px;
+        background: #fff;
+      }
+
+      // Checked + hover state
+      &:checked:hover:not(:disabled) {
+        border-color: var(--ft-vibrant-red-hover);
+      }
+
+      // Checked + focus state
+      &:checked:focus-visible {
+        box-shadow: 0 0 0 3px rgb(255 23 68 / 0.25);
+      }
+
+      // Disabled state
+      &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+    }
+
+    // Radio button label alignment
+    .radio-label,
+    label:has(input[type="radio"]) {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      font-size: 0.9375rem;
+      color: var(--ft-slate-700);
+
+      &:hover input[type="radio"]:not(:disabled, :checked) {
+        border-color: var(--ft-slate-500);
+        background: var(--ft-slate-50);
+      }
+    }
+
+    // Radio group styling
+    .radios,
+    .radio-group {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+  }
+
+  // ═══════════════════════════════════════════════════════════════
+  // TOGGLE/SWITCH STYLING - FormKit & Native
+  // ═══════════════════════════════════════════════════════════════
+  .user-content.user-preferences {
+    // Discourse d-toggle-switch component
+    .d-toggle-switch {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+
+      &__checkbox {
+        position: absolute;
+        opacity: 0;
+        width: 0;
+        height: 0;
+
+        // Focus state on hidden checkbox transfers to slider
+        &:focus-visible + .d-toggle-switch__checkbox-slider {
+          box-shadow: 0 0 0 3px rgb(255 23 68 / 0.2);
+        }
+      }
+
+      &__checkbox-slider {
+        position: relative;
+        width: 44px;
+        height: 24px;
+        background: var(--ft-slate-300);
+        border-radius: 9999px;
+        transition:
+          background-color 150ms ease,
+          box-shadow 150ms ease;
+        flex-shrink: 0;
+
+        // Thumb (the sliding circle)
+        &::before {
+          content: "";
+          position: absolute;
+          top: 2px;
+          left: 2px;
+          width: 20px;
+          height: 20px;
+          background: #fff;
+          border-radius: 50%;
+          box-shadow: 0 1px 3px rgb(0 0 0 / 0.2);
+          transition: transform 150ms ease;
+        }
+      }
+
+      // Hover state
+      &:hover:not(.is-disabled) .d-toggle-switch__checkbox-slider {
+        background: var(--ft-slate-400);
+      }
+
+      // Checked state
+      .d-toggle-switch__checkbox:checked + .d-toggle-switch__checkbox-slider {
+        background: var(--ft-vibrant-red);
+
+        &::before {
+          transform: translateX(20px);
+        }
+      }
+
+      // Checked + hover
+      &:hover:not(.is-disabled)
+        .d-toggle-switch__checkbox:checked
+        + .d-toggle-switch__checkbox-slider {
+        background: var(--ft-vibrant-red-hover);
+      }
+
+      // Disabled state
+      &.is-disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+    }
+
+    // FormKit toggle control
+    .form-kit__control-toggle {
+      display: inline-flex;
+      align-items: center;
+      cursor: pointer;
+
+      input[type="checkbox"] {
+        // Reset checkbox styling for toggle
+        width: 44px;
+        height: 24px;
+        border-radius: 9999px;
+        background: var(--ft-slate-300);
+        border: none;
+        position: relative;
+        transition:
+          background-color 150ms ease,
+          box-shadow 150ms ease;
+
+        &::before {
+          content: "";
+          position: absolute;
+          top: 2px;
+          left: 2px;
+          width: 20px;
+          height: 20px;
+          background: #fff;
+          border-radius: 50%;
+          box-shadow: 0 1px 3px rgb(0 0 0 / 0.2);
+          transition: transform 150ms ease;
+        }
+
+        &:hover:not(:disabled) {
+          background: var(--ft-slate-400);
+        }
+
+        &:checked {
+          background: var(--ft-vibrant-red);
+          background-image: none;
+
+          &::before {
+            transform: translateX(20px);
+          }
+        }
+
+        &:checked:hover:not(:disabled) {
+          background: var(--ft-vibrant-red-hover);
+        }
+
+        &:focus-visible {
+          box-shadow: 0 0 0 3px rgb(255 23 68 / 0.2);
+        }
+      }
+    }
+  }
+
+  // ═══════════════════════════════════════════════════════════════
+  // BUTTON STYLING - All variants with full state coverage
+  // ═══════════════════════════════════════════════════════════════
+  // Using deep nesting for specificity instead of !important
+  .user-content.user-preferences {
+    // Primary button (Save, Submit, etc.)
+    .control-group .btn.btn-primary,
+    .save-controls .btn.btn-primary,
+    .form-actions .btn.btn-primary,
+    button.btn.btn-primary,
+    .btn.btn-primary.save-changes,
+    .save-changes.btn {
+      background: linear-gradient(135deg, var(--ft-vibrant-red), #e63b6f);
+      color: #fff;
+      border: none;
+      border-radius: 9999px;
+      padding: 10px 28px;
+      font-weight: 700;
+      box-shadow: 0 4px 14px rgb(255 23 68 / 0.3);
+      transition:
+        box-shadow 200ms ease,
+        transform 200ms ease,
+        background 200ms ease;
+
+      // Hover state
+      &:hover:not(:disabled) {
+        box-shadow: 0 8px 20px rgb(255 23 68 / 0.45);
+        transform: translateY(-1px);
+      }
+
+      // Focus-visible state (keyboard navigation)
+      &:focus-visible {
+        outline: none;
+        box-shadow:
+          0 0 0 3px rgb(255 23 68 / 0.3),
+          0 4px 14px rgb(255 23 68 / 0.3);
+      }
+
+      // Active state (mousedown)
+      &:active:not(:disabled) {
+        transform: translateY(0);
+        box-shadow: 0 2px 8px rgb(255 23 68 / 0.3);
+      }
+
+      // Disabled state
+      &:disabled,
+      &[disabled] {
+        opacity: 0.5;
+        cursor: not-allowed;
+        transform: none;
+        box-shadow: 0 2px 8px rgb(255 23 68 / 0.2);
+      }
+    }
+
+    // Secondary/Default button (Cancel, etc.)
+    .control-group .btn.btn-default:not(.btn-primary, .btn-danger),
+    .save-controls .btn.btn-default:not(.btn-primary, .btn-danger),
+    .form-actions .btn.btn-default:not(.btn-primary, .btn-danger),
+    .btn-flat:not(.btn-primary, .btn-danger),
+    button.btn.btn-default:not(.btn-primary, .btn-danger) {
+      background: var(--ft-slate-100);
+      color: var(--ft-slate-700);
+      border: 1px solid var(--ft-slate-200);
+      border-radius: 9999px;
+      padding: 10px 24px;
+      font-weight: 600;
+      box-shadow: none;
+      transition:
+        background-color 200ms ease,
+        border-color 200ms ease,
+        box-shadow 200ms ease;
+
+      // Hover state
+      &:hover:not(:disabled) {
+        background: var(--ft-slate-200);
+        border-color: var(--ft-slate-300);
+      }
+
+      // Focus-visible state
+      &:focus-visible {
+        outline: none;
+        box-shadow: 0 0 0 3px rgb(255 23 68 / 0.2);
+      }
+
+      // Active state
+      &:active:not(:disabled) {
+        background: var(--ft-slate-300);
+      }
+
+      // Disabled state
+      &:disabled,
+      &[disabled] {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+    }
+
+    // Danger button (Delete, Remove, etc.)
+    .control-group .btn.btn-danger,
+    .save-controls .btn.btn-danger,
+    .form-actions .btn.btn-danger,
+    button.btn.btn-danger {
+      background: var(--ft-error);
+      color: #fff;
+      border: none;
+      border-radius: 9999px;
+      padding: 10px 24px;
+      font-weight: 600;
+      transition:
+        background-color 200ms ease,
+        box-shadow 200ms ease;
+
+      // Hover state
+      &:hover:not(:disabled) {
+        background: #dc2626;
+      }
+
+      // Focus-visible state
+      &:focus-visible {
+        outline: none;
+        box-shadow: 0 0 0 3px rgb(239 68 68 / 0.3);
+      }
+
+      // Active state
+      &:active:not(:disabled) {
+        background: #b91c1c;
+      }
+
+      // Disabled state
+      &:disabled,
+      &[disabled] {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+    }
+
+    // Icon-only buttons
+    .btn.no-text,
+    .btn.btn-icon {
+      padding: 8px;
+      border-radius: 8px;
+      min-width: 36px;
+      min-height: 36px;
+      background: transparent;
+      color: var(--ft-slate-600);
+      border: 1px solid transparent;
+      transition:
+        background-color 150ms ease,
+        color 150ms ease,
+        border-color 150ms ease;
+
+      &:hover:not(:disabled) {
+        background: var(--ft-slate-100);
+        color: var(--ft-slate-900);
+      }
+
+      &:focus-visible {
+        outline: none;
+        box-shadow: 0 0 0 3px rgb(255 23 68 / 0.2);
+      }
+
+      &:active:not(:disabled) {
+        background: var(--ft-slate-200);
+      }
+    }
+  }
+
+  // ═══════════════════════════════════════════════════════════════
+  // SELECT-KIT (ComboBox) STYLING
+  // ═══════════════════════════════════════════════════════════════
+  .user-content.user-preferences {
+    .select-kit {
+      // Header (the visible dropdown trigger)
+      .select-kit-header {
+        border: 1.5px solid var(--ft-slate-200);
+        border-radius: 8px;
+        background: #f8f9fa;
+        transition:
+          border-color 150ms ease,
+          box-shadow 150ms ease,
+          background-color 150ms ease;
+        min-height: 40px;
+
+        // Hover state
+        &:hover:not(.is-disabled) {
+          border-color: var(--ft-slate-300);
+          background: #fff;
+        }
+      }
+
+      // Expanded/focused state
+      &.is-expanded .select-kit-header,
+      .select-kit-header:focus,
+      .select-kit-header:focus-visible {
+        border-color: var(--ft-vibrant-red);
+        box-shadow: 0 0 0 3px rgb(255 23 68 / 0.12);
+        background: #fff;
+        outline: none;
+      }
+
+      // Dropdown body
+      .select-kit-body {
+        border: 1px solid var(--ft-slate-200);
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgb(0 0 0 / 0.1);
+        background: #fff;
+        overflow: hidden;
+        margin-top: 4px;
+      }
+
+      // Dropdown items
+      .select-kit-row {
+        padding: 10px 14px;
+        transition:
+          background-color 150ms ease,
+          color 150ms ease;
+
+        &:hover {
+          background: var(--ft-slate-100);
+        }
+
+        &.is-highlighted {
+          background: var(--ft-slate-100);
+        }
+
+        &.is-selected {
+          background: var(--ft-vibrant-red-light);
+          color: var(--ft-vibrant-red);
+          font-weight: 500;
+        }
+
+        &.is-selected:hover {
+          background: var(--ft-vibrant-red-light);
+        }
+      }
+
+      // Search input inside dropdown
+      .select-kit-filter {
+        input {
+          border: 1.5px solid var(--ft-slate-200);
+          border-radius: 6px;
+          padding: 8px 12px;
+
+          &:focus {
+            border-color: var(--ft-vibrant-red);
+            box-shadow: 0 0 0 3px rgb(255 23 68 / 0.12);
+            outline: none;
+          }
+        }
+      }
+
+      // Disabled state
+      &.is-disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+
+        .select-kit-header {
+          cursor: not-allowed;
+        }
+      }
+    }
+
+    // Multi-select (tag chooser, category selector)
+    .select-kit.multi-select {
+      .select-kit-header {
+        min-height: 44px;
+        padding: 6px 12px;
+        flex-wrap: wrap;
+        gap: 6px;
+      }
+
+      // Selected items (chips/tags)
+      .selected-name {
+        background: var(--ft-slate-100);
+        border-radius: 6px;
+        padding: 4px 8px;
+        font-size: 0.875rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+
+        .d-icon {
+          cursor: pointer;
+          opacity: 0.6;
+          transition: opacity 150ms ease;
+
+          &:hover {
+            opacity: 1;
+          }
+        }
+      }
+    }
+  }
+
+  // ═══════════════════════════════════════════════════════════════
+  // ADDITIONAL FORM ELEMENTS
+  // ═══════════════════════════════════════════════════════════════
+  .user-content.user-preferences {
+    // Helper text / instructions
+    .instructions {
+      font-size: 0.8125rem;
+      color: var(--ft-slate-500);
+      line-height: 1.5;
+      margin-top: 6px;
+    }
+
+    // Error messages
+    .error,
+    .form-error,
+    .alert-error {
+      color: var(--ft-error);
+      font-size: 0.8125rem;
+      margin-top: 6px;
+    }
+
+    // Success messages
+    .success,
+    .alert-success {
+      color: var(--ft-success);
+      font-size: 0.8125rem;
+    }
+
+    // Static text (non-editable values)
+    .static {
+      color: var(--ft-slate-700);
+      font-size: 0.9375rem;
+      padding: 10px 0;
+    }
+
+    // Avatar picker area
+    .pref-avatar {
+      .avatar {
+        border: 3px solid var(--ft-slate-200);
+        border-radius: 50%;
+        transition: border-color 150ms ease;
+
+        &:hover {
+          border-color: var(--ft-vibrant-red);
+        }
+      }
+    }
+
+    // Associated accounts table
+    .pref-associated-accounts {
+      table {
+        border-collapse: separate;
+        border-spacing: 0;
+
+        td {
+          padding: 12px;
+          border-bottom: 1px solid var(--ft-slate-100);
+        }
+
+        tr:last-child td {
+          border-bottom: none;
+        }
+      }
+    }
+  }
+
+  // ═══════════════════════════════════════════════════════════════
+  // FORMKIT SECTIONS (Chat, etc.) - White card styling
+  // ═══════════════════════════════════════════════════════════════
+  .user-content.user-preferences {
+    // FormKit form container
+    .form-kit {
+      // FormKit sections (used by chat preferences, etc.)
+      .form-kit__section {
+        background: #fff;
+        border: 1px solid var(--ft-slate-200);
+        border-radius: 16px;
+        box-shadow: 0 2px 8px rgb(0 0 0 / 5%);
+        padding: 24px;
+        margin-bottom: 16px;
+
+        // Section title
+        .form-kit__section-title {
+          font-size: 1rem;
+          font-weight: 700;
+          color: var(--ft-slate-900);
+          margin: 0 0 16px;
+          padding-bottom: 12px;
+          border-bottom: 1px solid var(--ft-slate-100);
+        }
+      }
+
+      // FormKit fields container
+      .form-kit__container {
+        margin-bottom: 16px;
+
+        &:last-child {
+          margin-bottom: 0;
+        }
+      }
+
+      // FormKit field wrapper
+      .form-kit__field {
+        margin-bottom: 16px;
+
+        &:last-child {
+          margin-bottom: 0;
+        }
+      }
+
+      // FormKit field labels
+      .form-kit__field-label,
+      .form-kit__label {
+        font-size: 0.9375rem;
+        font-weight: 600;
+        color: var(--ft-slate-700);
+        margin-bottom: 6px;
+        display: block;
+      }
+
+      // FormKit field description/help text
+      .form-kit__field-description,
+      .form-kit__container-help-text {
+        font-size: 0.8125rem;
+        color: var(--ft-slate-500);
+        line-height: 1.5;
+        margin-top: 4px;
+      }
+
+      // FormKit control wrappers
+      .form-kit__control-input,
+      .form-kit__control-textarea,
+      .form-kit__control-select {
+        input,
+        textarea,
+        select {
+          width: 100%;
+        }
+      }
+
+      // FormKit checkbox control
+      .form-kit__control-checkbox {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+
+        .form-kit__control-checkbox-content {
+          flex: 1;
+        }
+
+        .form-kit__control-checkbox-title {
+          font-size: 0.9375rem;
+          font-weight: 500;
+          color: var(--ft-slate-700);
+        }
+
+        .form-kit__control-checkbox-description {
+          font-size: 0.8125rem;
+          color: var(--ft-slate-500);
+          margin-top: 2px;
+        }
+      }
+
+      // FormKit radio group
+      .form-kit__control-radio-group {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+
+        .form-kit__control-radio {
+          display: flex;
+          align-items: flex-start;
+          gap: 10px;
+
+          .form-kit__control-radio-content {
+            flex: 1;
+          }
+
+          .form-kit__control-radio-title {
+            font-size: 0.9375rem;
+            font-weight: 500;
+            color: var(--ft-slate-700);
+          }
+
+          .form-kit__control-radio-description {
+            font-size: 0.8125rem;
+            color: var(--ft-slate-500);
+            margin-top: 2px;
+          }
+        }
+      }
+
+      // FormKit inline radio (horizontal)
+      .form-kit__inline-radio {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 16px;
+      }
+
+      // FormKit custom control (emoji pickers, etc.)
+      .form-kit__control-custom {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+
+        // Emoji picker buttons
+        .emoji-picker-trigger,
+        .emoji-pickers button {
+          width: 44px;
+          height: 44px;
+          border: 1.5px solid var(--ft-slate-200);
+          border-radius: 10px;
+          background: #f8f9fa;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          transition:
+            border-color 150ms ease,
+            background-color 150ms ease,
+            box-shadow 150ms ease;
+          font-size: 1.25rem;
+
+          &:hover {
+            border-color: var(--ft-slate-300);
+            background: #fff;
+          }
+
+          &:focus-visible {
+            outline: none;
+            border-color: var(--ft-vibrant-red);
+            box-shadow: 0 0 0 3px rgb(255 23 68 / 0.12);
+          }
+        }
+      }
+
+      // FormKit submit/actions area
+      .form-kit__actions,
+      .save-controls {
+        margin-top: 24px;
+        padding-top: 16px;
+        border-top: 1px solid var(--ft-slate-100);
+      }
+    }
+
+    // Standalone fields outside sections (like chat_enabled checkbox at top)
+    > .form-kit > .form-kit__field:first-child {
+      background: #fff;
+      border: 1px solid var(--ft-slate-200);
+      border-radius: 16px;
+      box-shadow: 0 2px 8px rgb(0 0 0 / 5%);
+      padding: 20px 24px;
+      margin-bottom: 16px;
     }
   }
 }
