@@ -9,6 +9,16 @@ function initializeFantribe(api) {
   document?.documentElement?.classList?.add("fantribe-theme");
   document?.body?.classList?.add("fantribe-theme");
 
+  // Replace the default Discourse composer placeholder (which references
+  // the toolbar we've hidden) with a simple FT-friendly prompt.
+  // Done via the composer:opened app event so we hit the textarea after it renders.
+  api.onAppEvent("composer:opened", () => {
+    const textarea = document.querySelector("#reply-control .d-editor-input");
+    if (textarea) {
+      textarea.placeholder = "Write your reply...";
+    }
+  });
+
   if (siteSettings.fantribe_enable_glassmorphism) {
     document?.body?.classList?.add("fantribe-glassmorphism");
   }
