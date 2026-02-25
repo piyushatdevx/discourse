@@ -1897,6 +1897,24 @@ body.fantribe-theme {
     }
   }
 
+  // Starred channels empty state
+  .starred-channels .chat-channel-list__empty {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem 1.5rem;
+    text-align: center;
+    height: 100%;
+
+    .chat-channel-list__empty-message {
+      color: var(--ft-neutral-500);
+      font-size: var(--font-0);
+      line-height: 1.5;
+      max-width: 280px;
+    }
+  }
+
   // =============================================
   // CHAT NEW MESSAGE MODAL STYLING
   // =============================================
