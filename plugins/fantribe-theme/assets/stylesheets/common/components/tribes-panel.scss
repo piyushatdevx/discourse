@@ -1,10 +1,11 @@
 // FanTribe Left Sidebar — Figma 444-12166: Inter, 14px, weight 500, line-height 24px; color #FF1744 for active
+// Figma 448-15313: 24px between creatortribe logo and first menu item
 .fantribe-sidebar-nav {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   width: 100%;
-  gap: 24px;
+  gap: var(--ft-space-6); // 24px — Figma 448-15313 exact distance logo to menu
   height: 100%;
   min-height: 0;
   background: transparent;
@@ -18,7 +19,7 @@
   line-height: 24px;
   color: var(--ft-text, #1a1a1a);
 
-  // Logo — image (no text); Figma: tight spacing below logo
+  // Logo — Figma 448-15313: spacing to first menu item = nav gap (24px)
   &__logo {
     display: block;
     padding: 16px 0 0;
@@ -341,7 +342,7 @@
     text-overflow: ellipsis;
   }
 
-  // Collapse toggle — below Create button, right edge, slightly protruding
+  // Collapse toggle — Figma 448-16281: circular button, white fill, grey border, chevron centered inside
   &__collapse {
     align-self: flex-end;
     margin-right: -15px;
@@ -351,15 +352,16 @@
     justify-content: center;
     align-items: center;
     padding: 0;
-    border: none;
-    background: #e5e7eb;
+    border: 1px solid var(--Border, #e5e7eb);
+    background: var(--White, #fff);
     cursor: pointer;
     flex-shrink: 0;
     border-radius: 50%;
     box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
 
     &:hover {
-      background: #d1d5db;
+      background: #f9fafb;
+      border-color: #d1d5db;
     }
 
     &:active {
@@ -371,6 +373,7 @@
     }
   }
 
+  // Figma 448-16281: 14×14px chevron only, stroke #6B7280; circle styling is on __collapse
   &__collapse-icon {
     display: flex;
     align-items: center;
@@ -380,17 +383,22 @@
     flex-shrink: 0;
     color: #6b7280;
 
-    .ft-icon {
-      color: currentcolor;
+    .ft-icon,
+    .d-icon,
+    svg {
+      width: 14px;
+      height: 14px;
+      flex-shrink: 0;
+      color: #6b7280;
     }
   }
 
-  // Figma: padding 12px 12px 0 12px, flex-direction column, align-items flex-start, border-top #D4D2CF
+  // Figma 444-12268 (expanded): avatar | name + @handle | vertical dots — all vertically centered, border-top
   &__user {
     display: flex;
-    padding: 12px 12px 0 12px;
+    padding: 12px;
     flex-direction: column;
-    align-items: flex-start;
+    align-items: stretch;
     align-self: stretch;
     margin-top: auto;
     border: none;
@@ -413,21 +421,23 @@
     }
   }
 
+  // Figma 444-12268: avatar, text block, vertical ellipsis — vertically centered; gap avatar–text, flex pushes dots right
   &__user-row {
     display: flex;
     flex-direction: row;
     align-items: center;
     gap: 12px;
     width: 100%;
+    min-height: 36px;
   }
 
+  // Figma 444-12268: circular avatar 36–40px, no border
   &__user-avatar {
     flex-shrink: 0;
     width: 36px;
     height: 36px;
     border-radius: 50%;
     overflow: hidden;
-    border: 2px solid var(--ft-primary);
 
     img {
       width: 100%;
@@ -441,19 +451,21 @@
     min-width: 0;
     display: flex;
     flex-direction: column;
+    justify-content: center;
     gap: 2px;
     font-family: var(--ft-font-family);
-    font-size: var(--ft-font-size-body);
-    font-style: var(--ft-font-style-normal);
-    font-weight: var(--ft-font-weight-body);
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
     line-height: var(--ft-figma-lh-24);
   }
 
+  // Figma 444-12268: name — bold/dark, 14px
   &__user-name {
     font-family: var(--ft-font-family);
-    font-size: var(--ft-font-size-body);
-    font-style: var(--ft-font-style-normal);
-    font-weight: var(--ft-font-weight-semibold);
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 600;
     line-height: var(--ft-figma-lh-24);
     color: var(--ft-text, #1a1a1a);
     white-space: nowrap;
@@ -461,11 +473,12 @@
     text-overflow: ellipsis;
   }
 
+  // Figma 444-12268: @handle — lighter grey, 12px, regular
   &__user-username {
     font-family: var(--ft-font-family);
-    font-size: var(--ft-figma-12);
-    font-style: var(--ft-font-style-normal);
-    font-weight: var(--ft-font-weight-normal);
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
     line-height: var(--ft-figma-lh-16);
     color: var(--ft-gray-500);
     white-space: nowrap;
@@ -482,7 +495,7 @@
     }
   }
 
-  // User menu icon (ellipsis), Figma Music Tribe
+  // Figma 444-12268: vertical ellipsis (three dots) — far right, dark grey, vertically centered with avatar
   &__user-menu {
     flex-shrink: 0;
     display: flex;
@@ -496,7 +509,7 @@
   }
 }
 
-// Collapsed sidebar — Figma 448-16286: "ct" in place of logo; icon-only narrow strip (80px)
+// Collapsed sidebar — Figma 448-16286: "ct" in place of logo; icon-only; selected = light pink bg + red icon
 .fantribe-left-sidebar--collapsed .fantribe-sidebar-nav {
   @media (width >= 1024px) {
     align-items: center;
@@ -526,8 +539,7 @@
     &__section,
     &__create-label,
     &__user-info,
-    &__user-chevron,
-    &__user-menu {
+    &__user-chevron {
       display: none;
     }
 
@@ -535,10 +547,30 @@
       justify-content: center;
       padding: 10px;
       width: 100%;
+      min-height: 44px;
+      border-radius: 10px;
+    }
+
+    &__item--active {
+      background: #ffe5ec;
+      color: #ff1744;
+
+      .fantribe-sidebar-nav__item-icon .d-icon,
+      .fantribe-sidebar-nav__item-icon .ft-icon {
+        color: #ff1744;
+      }
     }
 
     &__item-icon {
-      width: auto;
+      width: 20px;
+      height: 20px;
+
+      .d-icon,
+      .ft-icon {
+        font-size: 20px;
+        width: 20px;
+        height: 20px;
+      }
     }
 
     &__create-wrap {
@@ -552,13 +584,28 @@
       border-radius: 50%;
     }
 
+    // Figma 448-16286: avatar + vertical dots centered in collapsed strip (not flush left)
     &__user {
+      width: 100%;
       justify-content: center;
-      padding: 10px;
+      align-items: center;
+      padding: 8px 0;
+    }
+
+    &__user-row {
+      width: 100%;
+      justify-content: center;
+      align-items: center;
+      gap: 6px;
     }
 
     &__user-avatar {
-      border-width: 2px;
+      width: 36px;
+      height: 36px;
+    }
+
+    &__user-menu {
+      display: flex;
     }
   }
 }

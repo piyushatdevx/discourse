@@ -244,7 +244,7 @@ export default class FantribeTribesPanel extends Component {
               </span>
             </span>
             <span class="fantribe-sidebar-nav__user-menu" aria-hidden="true">
-              {{ftIcon "more-horizontal" size=20}}
+              {{ftIcon "more-vertical" size=20}}
             </span>
           </span>
         </button>

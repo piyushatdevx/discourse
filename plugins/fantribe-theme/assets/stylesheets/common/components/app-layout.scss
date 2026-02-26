@@ -93,17 +93,18 @@ body.fantribe-theme:not(.admin-interface) {
   }
 
   // Main content area — own white background and radius so no layer shows behind sidebar
+  // No top padding so content aligns with left sidebar (same row)
   #main-outlet {
     min-width: 0;
     overflow-x: clip;
     padding: 0;
 
-    @media (width >= 1024px) {
-      background: #fff;
-      border: 1px solid var(--ft-panel-border, #e5e7eb);
-      border-radius: 0 var(--ft-panel-radius) var(--ft-panel-radius) 0;
-      box-shadow: var(--ft-panel-shadow, 0 1px 3px 0 rgb(0 0 0 / 0.06));
-    }
+    // @media (width >= 1024px) {
+    //   background: #fff;
+    //   border: 1px solid var(--ft-panel-border, #e5e7eb);
+    //   border-radius: 0 var(--ft-panel-radius) var(--ft-panel-radius) 0;
+    //   box-shadow: var(--ft-panel-shadow, 0 1px 3px 0 rgb(0 0 0 / 0.06));
+    // }
   }
 
   // Hide welcome banner (custom feed has its own)
@@ -114,6 +115,30 @@ body.fantribe-theme:not(.admin-interface) {
   // Hide default list controls (we use our own filtering)
   .list-controls {
     display: none;
+  }
+
+  // Topic list container: no space above, align with left sidebar (same row)
+  .container.list-container.--topic-list {
+    margin-top: 0;
+    padding-top: 0;
+  }
+
+  .container.list-container.--topic-list > .row.full-width:first-child {
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-top: 0;
+    min-height: 0;
+  }
+
+  .container.list-container.--topic-list #header-list-area {
+    margin: 0;
+    padding: 0;
+    min-height: 0;
+  }
+
+  #main-outlet .wrap {
+    margin-top: 0;
+    padding-top: 0;
   }
 
   // Topic page: respect grid column bounds

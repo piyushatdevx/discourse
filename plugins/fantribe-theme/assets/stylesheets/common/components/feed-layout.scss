@@ -75,20 +75,18 @@ body.fantribe-theme:not(.admin-interface) {
     // Figma: visible at ≥1280px (xl), hidden below that
     // Sticky: stays in place while feed scrolls
     &__right-sidebar {
-      display: none; // hidden by default
+      display: none; /* hidden by default */
 
       @media (width >= 1280px) {
         display: block;
-        width: 320px; // w-80
+        width: 320px; /* w-80 */
         flex-shrink: 0;
         position: sticky;
-        top: 80px; // below header
+        top: 0;
         align-self: flex-start;
-        max-height: calc(100dvh - 80px);
+        max-height: 100dvh;
         overflow-y: auto;
-        border-left: 1px solid #ddd; // Figma Music Tribe Border token
 
-        // Hide scrollbar
         &::-webkit-scrollbar {
           display: none;
         }
