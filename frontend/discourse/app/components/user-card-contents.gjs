@@ -502,6 +502,7 @@ export default class UserCardContents extends CardContentsBase {
               </div>
             </PluginOutlet>
             <ul class="usercard-controls">
+              {{!--
               {{#if this.user.can_send_private_message_to_user}}
                 <li class="compose-pm">
                   <DButton
@@ -512,6 +513,7 @@ export default class UserCardContents extends CardContentsBase {
                   />
                 </li>
               {{/if}}
+              --}}
               <PluginOutlet
                 @name="user-card-below-message-button"
                 @connectorTagName="li"
