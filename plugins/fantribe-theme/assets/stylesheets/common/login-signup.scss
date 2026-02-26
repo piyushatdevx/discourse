@@ -1,733 +1,501 @@
 // FanTribe Login & Signup Page Styles
-// Glassmorphism design with pastel gradient background
-// Comprehensive overrides for Discourse core login styles
+// Custom login page matching Figma design
 
 // ==============================================
-// BODY BACKGROUND (Must override core Discourse)
+// FULL PAGE LAYOUT FOR LOGIN
 // ==============================================
 body.fantribe-theme.login-page,
 body.fantribe-theme.signup-page {
-  background: linear-gradient(
-    135deg,
-    var(--ft-pastel-pink) 0%,
-    var(--ft-pastel-lavender) 100%
-  );
-  min-height: 100vh;
+  background: var(--ft-figma-page-bg) !important;
+  overflow: hidden;
+  height: 100vh;
 
-  // Header should be transparent on login/signup pages
+  // Hide default Discourse header
   .d-header {
+    display: none;
+  }
+
+  // Hide default elements
+  .login-welcome-header,
+  .login-page-cta,
+  .login-right-side,
+  #login-buttons,
+  .login-or-separator {
+    display: none;
+  }
+}
+
+// ==============================================
+// CENTERING STRUCTURE
+// ==============================================
+body.fantribe-theme.login-page,
+body.fantribe-theme.signup-page {
+  #main-outlet-wrapper,
+  #main-outlet,
+  .login-fullpage,
+  .signup-fullpage,
+  .login-body,
+  .signup-body,
+  .login-left-side {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: none !important; // Override Discourse defaults (500px/800px)
     background: transparent;
     border: none;
     box-shadow: none;
+    padding: 0;
+    margin: 0;
   }
 
-  // Hide any other background-colored elements
-  #main-outlet-wrapper,
-  #main-outlet {
-    background: transparent;
+  // Hide user-card and group-card on login/signup pages
+  // These global components interfere with flexbox centering
+  .user-card,
+  .group-card,
+  #user-card,
+  #group-card {
+    display: none !important;
+  }
+
+  #main-outlet-wrapper {
+    height: 100vh;
+    min-height: 100vh;
+    padding-top: 76px; // Account for fixed header (24px padding + 28px logo + 24px padding)
+    padding-bottom: 24px; // Space for shadow
+    box-sizing: border-box;
+    overflow: hidden;
+  }
+
+  .login-fullpage,
+  .signup-fullpage {
+    height: 100%;
+    min-height: auto;
+    padding: 0 24px;
+    box-sizing: border-box;
+    overflow: hidden;
   }
 }
 
 // ==============================================
-// PAGE CONTAINER
+// FANTRIBE LOGIN HEADER (Fixed at Top)
 // ==============================================
-.login-fullpage,
-.signup-fullpage {
-  min-height: calc(100vh - var(--header-offset, 60px));
+.fantribe-login-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px;
+  z-index: 1000;
+  background: var(--ft-figma-page-bg);
+
+  &__logo {
+    display: block;
+
+    img {
+      height: 28px;
+      width: 192px;
+    }
+  }
+
+  &__actions {
+    display: flex;
+    gap: 12px;
+  }
+
+  &__btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    height: 40px;
+    min-width: 88px;
+    padding: 0 16px;
+    background: var(--ft-figma-input-bg);
+    border: 1px solid var(--ft-figma-header-btn-border);
+    border-radius: var(--ft-figma-card-radius);
+    font-family: var(--ft-font-family);
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 16px;
+    color: var(--ft-figma-text-primary);
+    cursor: pointer;
+    transition: all var(--ft-transition-fast);
+
+    .d-icon {
+      width: 16px;
+      height: 16px;
+      color: var(--ft-figma-text-primary);
+    }
+
+    &:hover {
+      background: #f5f3f0;
+      border-color: #d3d1cf;
+    }
+
+    &:active {
+      background: #eae8e5;
+    }
+
+    &:focus,
+    &:focus-visible {
+      box-shadow: 0 0 0 3px rgb(255 26 71 / 0.3);
+      outline: none;
+    }
+  }
+}
+
+// ==============================================
+// FANTRIBE LOGIN CARD
+// ==============================================
+.fantribe-login-card {
+  background: rgb(253 252 252 / 0.8);
+  border: 1px solid rgb(231 230 228 / 0.6);
+  border-radius: 10px;
+  box-shadow:
+    0 20px 25px rgb(0 0 0 / 0.1),
+    0 8px 10px rgb(0 0 0 / 0.1);
+  padding: 32px;
+  width: 100%;
+  max-width: 460px;
+  margin: 30px auto;
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
+  gap: 40px;
   align-items: center;
-  justify-content: center;
-  padding: var(--ft-space-6);
-  background: transparent;
 }
 
 // ==============================================
-// LOGO STYLES
+// LOGIN TITLE
 // ==============================================
+.fantribe-login-title {
+  font-family: var(--ft-font-family);
+  font-size: 32px;
+  font-weight: 600;
+  line-height: 48px;
+  color: #1a1a1a;
+  text-align: center;
+  margin: 0;
+}
 
-// The logo is injected via plugin outlet inside .login-body which uses flex
-// We need to make it take full width to appear above the form columns
-.fantribe-login-logo {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+// ==============================================
+// ERROR MESSAGE
+// ==============================================
+.fantribe-login-error {
   width: 100%;
-  flex-basis: 100%;
-  order: -1; // Ensure it appears first
-  margin-bottom: var(--ft-space-6);
-  padding-bottom: var(--ft-space-4);
-  border-bottom: 1px solid var(--ft-gray-200);
-
-  img {
-    width: 180px;
-    height: auto;
-  }
+  padding: 12px 16px;
+  background: var(--ft-error-light);
+  border: 1px solid var(--ft-error);
+  border-radius: 10px;
+  color: var(--ft-error);
+  font-family: var(--ft-font-family);
+  font-size: 14px;
+  line-height: 21px;
+  text-align: center;
+  margin-top: -24px; // Reduce gap when error shows
 }
 
 // ==============================================
-// FORM CONTAINER (GLASSMORPHISM CARD)
+// LOGIN FORM
 // ==============================================
-.login-fullpage,
-.signup-fullpage {
-  .login-body,
-  .signup-body {
-    background: var(--ft-glass-card-bg);
-    backdrop-filter: blur(var(--ft-glass-card-blur));
-    border: var(--ft-glass-card-border);
-    border-radius: var(--ft-radius-xl);
-    box-shadow: var(--ft-shadow-lg);
-    padding: var(--ft-space-8);
-    width: 100%;
-    max-width: 480px; // Compact single-column layout
-    box-sizing: border-box;
-    display: flex;
-    flex-direction: column;
-
-    // Single column layout for both login and signup (cleaner after passkey removal)
-    &.has-alt-auth {
-      max-width: 480px;
-      flex-direction: column;
-      gap: 0;
-    }
-  }
-
-  // Hide the right side column divider since we're using single column
-  .login-left-side {
-    flex: none;
-    max-width: 100%;
-    width: 100%;
-    padding: 0;
-    box-sizing: border-box;
-  }
-
-  .login-right-side {
-    flex: none;
-    max-width: 100%;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding: var(--ft-space-4) 0 0;
-    position: relative;
-
-    // Hide divider line for single-column layout
-    &::before {
-      display: none;
-    }
-  }
+.fantribe-login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  max-width: 396px;
 }
 
 // ==============================================
-// WELCOME HEADER
+// INPUT GROUPS
 // ==============================================
-.login-fullpage,
-.signup-fullpage {
-  .login-welcome-header {
-    text-align: center;
-    margin-bottom: var(--ft-space-6);
-    width: 100%;
-    box-sizing: border-box;
+.fantribe-input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
 
-    .login-title {
-      font-family: var(--ft-font-family);
-      font-size: var(--ft-font-h3);
-      font-weight: var(--ft-font-weight-bold);
-      color: var(--ft-dark);
-      margin: 0 0 var(--ft-space-2) 0;
+  label {
+    font-family: var(--ft-font-family);
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 21px;
+    color: #1a1a1a;
+  }
+
+  input,
+  input[type="text"],
+  input[type="password"],
+  input[type="email"] {
+    width: 100%;
+    height: 48px;
+    padding: 0 16px;
+    font-family: var(--ft-font-family);
+    font-size: 16px;
+    line-height: 24px;
+    color: #1a1a1a !important;
+    background: #fdfcfc !important;
+    border: 1px solid #ddd !important;
+    border-radius: 10px !important;
+    outline: none;
+    box-sizing: border-box;
+    transition:
+      border-color var(--ft-transition-fast),
+      box-shadow var(--ft-transition-fast);
+
+    &::placeholder {
+      color: #999;
     }
 
-    .login-subheader,
-    .waving-hand {
-      font-family: var(--ft-font-family);
-      font-size: var(--ft-font-body);
-      color: var(--ft-gray-600);
-      margin: 0;
+    &:hover:not(:focus) {
+      border-color: #bbb !important;
+    }
+
+    &:focus {
+      border-color: var(--ft-figma-accent) !important;
+      box-shadow: 0 0 0 2px rgb(255 23 68 / 0.15);
     }
   }
 }
 
 // ==============================================
-// FORM INPUTS
+// PASSWORD INPUT
 // ==============================================
-.login-fullpage,
-.signup-fullpage {
-  .login-form,
-  #login-form {
-    margin-top: var(--ft-space-4);
-  }
-
-  .input-group {
-    margin-bottom: var(--ft-space-4);
+.fantribe-input-password {
+  .fantribe-password-wrapper {
     position: relative;
+    width: 100%;
 
-    label:not(.alt-placeholder, .control-label) {
-      display: block;
-      font-family: var(--ft-font-family);
-      font-size: var(--ft-font-small);
-      font-weight: var(--ft-font-weight-medium);
-      color: var(--ft-dark);
-      margin-bottom: var(--ft-space-1);
-    }
-
-    input[type="text"],
-    input[type="email"],
-    input[type="password"],
-    input[type="number"],
-    textarea {
-      width: 100%;
-      padding: var(--ft-space-3);
-      font-family: var(--ft-font-family);
-      font-size: var(--ft-font-body);
-      color: var(--ft-dark);
-      background-color: var(--ft-white);
-      border: 1px solid var(--ft-gray-300);
-      border-radius: var(--ft-radius-md);
-      outline: none;
-      box-sizing: border-box;
-      transition:
-        border-color var(--ft-transition-fast),
-        box-shadow var(--ft-transition-fast);
-
-      &::placeholder {
-        color: var(--ft-gray-400);
-      }
-
-      &:focus {
-        border-color: var(--ft-primary);
-        box-shadow: 0 0 0 3px var(--ft-primary-light);
-      }
-
-      &:disabled {
-        background-color: var(--ft-gray-100);
-        color: var(--ft-gray-500);
-        cursor: not-allowed;
-      }
-    }
-
-    // Floating label pattern - override Discourse defaults
-    label.alt-placeholder,
-    .user-field.text label.control-label,
-    .user-field.dropdown label.control-label,
-    .user-field.multiselect label.control-label {
-      font-family: var(--ft-font-family);
-      font-size: var(--ft-font-body);
-      color: var(--ft-gray-500);
-      background-color: transparent;
-    }
-
-    // Floating label when focused/filled
-    input:focus + label.alt-placeholder,
-    input.value-entered + label.alt-placeholder {
-      background-color: var(--ft-white);
-      color: var(--ft-primary);
-      font-size: var(--ft-font-caption);
-    }
-
-    // Validation messages
-    .more-info,
-    span.more-info {
-      display: block;
-      font-family: var(--ft-font-family);
-      font-size: var(--ft-font-caption);
-      color: var(--ft-gray-500);
-      margin-top: var(--ft-space-1);
-    }
-
-    .tip {
-      display: block;
-      font-family: var(--ft-font-family);
-      font-size: var(--ft-font-caption);
-      margin-top: var(--ft-space-1);
-
-      &.good {
-        color: var(--ft-success);
-      }
-
-      &.bad {
-        color: var(--ft-error);
-      }
-    }
-
-    // Password links container (forgot password, email login)
-    .login__password-links {
-      display: flex;
-      justify-content: space-between;
-      font-family: var(--ft-font-family);
-      font-size: var(--ft-font-small);
-      margin-top: var(--ft-space-2);
-
-      a {
-        color: var(--ft-primary);
-        text-decoration: none;
-        transition: color var(--ft-transition-fast);
-
-        &:hover {
-          color: var(--ft-primary-hover);
-          text-decoration: underline;
-        }
-      }
-    }
-
-    // "Skip the password; email me a login link" - this IS the anchor element
-    #email-login-link {
-      color: var(--ft-primary);
-      font-family: var(--ft-font-family);
-      font-size: var(--ft-font-small);
-      text-decoration: none;
-      transition:
-        color var(--ft-transition-fast),
-        opacity var(--ft-transition-fast);
-
-      &:hover {
-        color: var(--ft-primary-hover);
-        text-decoration: underline;
-      }
-
-      &.no-login-filled {
-        opacity: 0;
-        visibility: hidden;
-      }
+    input {
+      padding-right: 48px;
     }
   }
 
-  // Password input wrapper - for positioning the toggle button
-  .input-group.create-account__password,
-  .input-group:has(#login-account-password),
-  .input-group:has(#new-account-password),
-  .password-input {
-    position: relative;
-
-    input[type="password"],
-    input[type="text"] {
-      padding-right: var(--ft-space-12); // Make room for eye icon
-    }
-
-    // Position toggle button relative to this specific wrapper
-    .toggle-password-mask {
-      // Use bottom positioning to center within the input field, not the full input-group
-      top: 4px;
-      transform: none;
-    }
-  }
-
-  // Password toggle eye icon button - base styles
-  .toggle-password-mask {
+  .fantribe-password-toggle {
     position: absolute;
-    right: var(--ft-space-2);
-    top: 50%;
+    right: 16px;
+    top: 45%;
     transform: translateY(-50%);
     background: transparent;
     border: none;
-    color: var(--ft-gray-500);
+    padding: 4px;
     cursor: pointer;
-    padding: var(--ft-space-2);
-    border-radius: var(--ft-radius-md);
-    transition:
-      color var(--ft-transition-fast),
-      background-color var(--ft-transition-fast);
-    z-index: 1;
-
-    .d-icon {
-      font-size: 16px;
-      color: var(--ft-gray-500);
-      transition: color var(--ft-transition-fast);
-    }
-
-    &:hover {
-      color: var(--ft-primary);
-      background-color: var(--ft-primary-light);
-
-      .d-icon {
-        color: var(--ft-primary);
-      }
-    }
-
-    &:active {
-      color: var(--ft-gray-600);
-      background-color: transparent;
-
-      .d-icon {
-        color: var(--ft-gray-600);
-      }
-    }
-
-    &:focus,
-    &:focus-visible {
-      outline: none;
-      box-shadow: none;
-      background-color: transparent;
-
-      .d-icon {
-        color: var(--ft-gray-500);
-      }
-    }
-
-    span {
-      font-size: var(--ft-font-small);
-    }
-  }
-
-  // Caps lock warning
-  .caps-lock-warning {
+    color: #666;
     display: flex;
     align-items: center;
-    gap: var(--ft-space-1);
-    font-family: var(--ft-font-family);
-    font-size: var(--ft-font-caption);
-    color: var(--ft-warning);
-    margin-top: var(--ft-space-1);
+    justify-content: center;
+
+    .d-icon {
+      width: 20px;
+      height: 20px;
+    }
+
+    &:hover {
+      color: var(--ft-figma-accent);
+    }
+
+    &:focus {
+      outline: none;
+    }
+  }
+
+  .fantribe-forgot-password {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 4px;
+
+    a {
+      font-family: var(--ft-font-family);
+      font-size: 12px;
+      font-weight: 500;
+      line-height: 16px;
+      color: var(--ft-figma-accent);
+      text-decoration: none;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
   }
 }
 
 // ==============================================
-// ALL BUTTONS (Comprehensive Override)
+// PRIMARY BUTTON (Sign In)
 // ==============================================
-body.fantribe-theme .login-fullpage,
-body.fantribe-theme .signup-fullpage {
-  // Primary action buttons (Login, Create Account)
-  .btn-primary,
-  .login-page-cta__login,
-  .signup-page-cta__signup,
-  button[type="submit"] {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: var(--ft-space-2);
-    width: 100%;
-    padding: var(--ft-space-3) var(--ft-space-4);
-    font-family: var(--ft-font-family);
-    font-size: var(--ft-font-body);
-    font-weight: var(--ft-font-weight-semibold);
-    color: #fff;
-    background-color: var(--ft-primary);
-    border: 2px solid var(--ft-primary);
-    border-radius: var(--ft-radius-lg);
-    cursor: pointer;
-    text-decoration: none;
-    transition:
-      background-color var(--ft-transition-fast),
-      border-color var(--ft-transition-fast),
-      transform var(--ft-transition-fast),
-      box-shadow var(--ft-transition-fast);
+.fantribe-btn-primary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 48px;
+  margin-top: 24px;
+  padding: 0 24px;
+  font-family: var(--ft-font-family);
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 24px;
+  color: #fff;
+  background: #ff1a47;
+  border: none;
+  border-radius: 9999px;
+  cursor: pointer;
+  transition:
+    background-color var(--ft-transition-fast),
+    transform var(--ft-transition-fast),
+    box-shadow var(--ft-transition-fast);
 
-    &:hover {
-      background-color: var(--ft-primary-hover);
-      border-color: var(--ft-primary-hover);
-      box-shadow: var(--ft-shadow-md);
-      outline: none;
-    }
-
-    &:active {
-      background-color: var(--ft-primary-active);
-      border-color: var(--ft-primary-active);
-      transform: scale(0.98);
-      outline: none;
-    }
-
-    &:focus,
-    &:focus-visible {
-      outline: none;
-      box-shadow: var(--ft-shadow-focus);
-      border-color: var(--ft-primary);
-    }
-
-    &:disabled,
-    &[disabled] {
-      opacity: 0.5;
-      cursor: not-allowed;
-      transform: none;
-      box-shadow: none;
-    }
-
-    // Loading state
-    &.is-loading,
-    &.btn-primary.is-loading {
-      position: relative;
-      color: transparent;
-
-      // Hide the core Discourse loading icon to prevent duplicate loaders
-      .loading-icon {
-        display: none;
-      }
-
-      &::after {
-        content: "";
-        position: absolute;
-        width: 20px;
-        height: 20px;
-        top: 50%;
-        left: 50%;
-        margin-top: -10px;
-        margin-left: -10px;
-        border: 2px solid rgb(255, 255, 255, 0.3);
-        border-top-color: #fff;
-        border-radius: 50%;
-        animation: ft-login-spin 0.6s linear infinite;
-      }
-    }
+  &:hover:not(:disabled) {
+    background: var(--ft-figma-btn-primary-hover);
+    box-shadow: var(--ft-shadow-md);
   }
 
-  // Secondary/Outline buttons (Sign Up link on login page, Login link on signup page)
-  .login-page-cta__signup,
-  .signup-page-cta__login {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    font-family: var(--ft-font-family);
-    font-size: var(--ft-font-body);
-    font-weight: var(--ft-font-weight-semibold);
-    color: var(--ft-primary);
-    background: transparent;
-    border: 2px solid var(--ft-primary);
-    border-radius: var(--ft-radius-lg);
-    padding: var(--ft-space-3) var(--ft-space-4);
-    margin-top: var(--ft-space-3);
-    cursor: pointer;
-    transition:
-      background-color var(--ft-transition-fast),
-      color var(--ft-transition-fast),
-      border-color var(--ft-transition-fast),
-      box-shadow var(--ft-transition-fast);
-
-    &:hover {
-      color: #fff;
-      background-color: var(--ft-primary);
-      border-color: var(--ft-primary);
-      box-shadow: var(--ft-shadow-md);
-      transform: none;
-    }
-
-    &:active {
-      color: #fff;
-      background-color: var(--ft-primary-active);
-      border-color: var(--ft-primary-active);
-    }
-
-    &:focus,
-    &:focus-visible {
-      outline: none;
-      box-shadow: var(--ft-shadow-focus);
-    }
+  &:active:not(:disabled) {
+    background: var(--ft-figma-btn-primary-active);
+    transform: scale(0.98);
   }
 
-  .login-page-cta__no-account-yet,
-  .signup-page-cta__existing-account {
-    font-family: var(--ft-font-family);
-    font-size: var(--ft-font-small);
-    color: var(--ft-gray-500);
+  &:focus,
+  &:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px rgb(255 26 71 / 0.3);
+  }
 
-    &::before {
-      background-color: var(--ft-gray-300);
-    }
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  &.is-loading {
+    color: transparent;
+    position: relative;
   }
 }
 
-@keyframes ft-login-spin {
+// ==============================================
+// LOADING SPINNER
+// ==============================================
+.fantribe-spinner {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgb(255 255 255 / 0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: fantribe-spin 0.6s linear infinite;
+}
+
+@keyframes fantribe-spin {
   to {
     transform: rotate(360deg);
   }
 }
 
 // ==============================================
-// CTA SECTION
+// GOOGLE BUTTON
 // ==============================================
-.login-fullpage,
-.signup-fullpage {
-  .login-page-cta,
-  .signup-page-cta {
-    margin-top: var(--ft-space-6);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
+.fantribe-btn-google {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  max-width: 396px;
+  height: 48px;
+  padding: 12px 34px;
+  font-family: var(--ft-font-family);
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 24px;
+  color: #666;
+  background: transparent;
+  border: 1px solid #d3d1cf;
+  border-radius: 9999px;
+  cursor: pointer;
+  transition:
+    background-color var(--ft-transition-fast),
+    border-color var(--ft-transition-fast);
+
+  &:hover {
+    background: #f5f3f0;
+    border-color: #c0beba;
   }
 
-  .login-page-cta__buttons,
-  .signup-page-cta__buttons {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: var(--ft-space-3);
-    width: 100%;
+  &:active {
+    background: #eae8e5;
   }
 
-  // Ensure the signup button on login page is centered
-  .login-page-cta__signup {
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    margin: 0 auto;
+  &:focus,
+  &:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px rgb(255 26 71 / 0.3);
   }
-}
 
-// ==============================================
-// OR SEPARATOR
-// ==============================================
-.login-fullpage,
-.signup-fullpage {
-  .login-or-separator {
-    display: flex;
-    align-items: center;
-    text-align: center;
-    margin: var(--ft-space-6) 0;
-
-    &::before,
-    &::after {
-      content: "";
-      flex: 1;
-      border-bottom: 1px solid var(--ft-gray-300);
-    }
-
-    span {
-      padding: 0 var(--ft-space-4);
-      font-family: var(--ft-font-family);
-      font-size: var(--ft-font-small);
-      color: var(--ft-gray-500);
-      text-transform: uppercase;
-      background: transparent;
-    }
+  .fantribe-google-icon {
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
   }
 }
 
 // ==============================================
-// OAUTH / EXTERNAL LOGIN BUTTONS
+// SIGN UP LINK
 // ==============================================
-body.fantribe-theme .login-fullpage,
-body.fantribe-theme .signup-fullpage {
-  #login-buttons {
-    display: flex;
-    flex-direction: column;
-    gap: var(--ft-space-3);
+.fantribe-signup-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-family: var(--ft-font-family);
+
+  span {
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 21px;
+    color: #666;
   }
 
-  .btn-social,
-  .btn.btn-social {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: var(--ft-space-2);
-    width: 100%;
-    padding: var(--ft-space-3) var(--ft-space-4);
-    font-family: var(--ft-font-family);
-    font-size: var(--ft-font-body);
-    font-weight: var(--ft-font-weight-medium);
-    color: var(--ft-dark);
-    background-color: var(--ft-white);
-    border: 1px solid var(--ft-gray-300);
-    border-radius: var(--ft-radius-lg);
-    cursor: pointer;
+  a {
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 24px;
+    color: var(--ft-figma-accent);
     text-decoration: none;
-    transition:
-      background-color var(--ft-transition-fast),
-      border-color var(--ft-transition-fast),
-      box-shadow var(--ft-transition-fast);
 
     &:hover {
-      background-color: var(--ft-pastel-pink);
-      border-color: var(--ft-primary);
-      box-shadow: var(--ft-shadow-sm);
-    }
-
-    &:focus {
-      outline: none;
-      box-shadow: var(--ft-shadow-focus);
-    }
-
-    .d-icon {
-      font-size: 18px;
-    }
-
-    // Google button
-    &.google_oauth2,
-    &[data-login-method="google_oauth2"] {
-      .d-icon {
-        color: var(--ft-google);
-      }
-
-      &:hover .d-icon {
-        color: var(--ft-google);
-      }
-    }
-
-    // Facebook button
-    &.facebook,
-    &[data-login-method="facebook"] {
-      .d-icon {
-        color: var(--ft-facebook);
-      }
-
-      &:hover .d-icon {
-        color: var(--ft-facebook);
-      }
-    }
-
-    // Discourse ID button
-    &.discourse_id {
-      border-color: var(--ft-gray-300);
-
-      &:hover {
-        background-color: var(--ft-pastel-pink);
-        border-color: var(--ft-primary);
-      }
-    }
-  }
-
-  // Discourse ID wrapper
-  .discourse-id__wrapper {
-    .btn-discourse-id__suffix {
-      color: var(--ft-gray-500);
-      font-family: var(--ft-font-family);
-    }
-  }
-
-  // Passkey button - HIDDEN per feature request
-  .passkey-login-button,
-  .btn-passkey-login,
-  button.passkey-login-button,
-  .btn.passkey-login-button {
-    display: none;
-  }
-}
-
-// ==============================================
-// SIGNUP PROGRESS BAR
-// ==============================================
-.signup-fullpage {
-  .signup-progress-bar {
-    display: flex;
-    justify-content: center;
-    gap: var(--ft-space-2);
-    margin-bottom: var(--ft-space-6);
-
-    .step {
-      width: 40px;
-      height: 4px;
-      background-color: var(--ft-gray-300);
-      border-radius: var(--ft-radius-full);
-      transition: background-color var(--ft-transition-fast);
-
-      &.active {
-        background-color: var(--ft-primary);
-      }
+      text-decoration: underline;
     }
   }
 }
 
 // ==============================================
-// FLASH MESSAGES / ALERTS
+// OAUTH + SIGNUP SECTION (12px gap per Figma)
+// ==============================================
+.fantribe-oauth-signup-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  max-width: 396px;
+}
+
+// ==============================================
+// FLASH MESSAGES
 // ==============================================
 .login-fullpage,
 .signup-fullpage {
   .alert,
   .flash-message {
-    padding: var(--ft-space-3) var(--ft-space-4);
-    margin-bottom: var(--ft-space-4);
+    padding: 12px 16px;
+    margin-bottom: 16px;
     font-family: var(--ft-font-family);
-    font-size: var(--ft-font-small);
-    border-radius: var(--ft-radius-md);
-    max-width: 900px;
+    font-size: 14px;
+    border-radius: 10px;
+    max-width: 460px;
     width: 100%;
     box-sizing: border-box;
 
@@ -755,318 +523,67 @@ body.fantribe-theme .signup-fullpage {
 }
 
 // ==============================================
-// MOBILE RESPONSIVE (< 768px)
-// ==============================================
-
-@media (width <= 767px) {
-  body.fantribe-theme.login-page,
-  body.fantribe-theme.signup-page {
-    .d-header {
-      background: transparent;
-    }
-  }
-
-  .login-fullpage,
-  .signup-fullpage {
-    padding: var(--ft-space-4);
-    padding-top: var(--ft-space-6);
-    justify-content: flex-start;
-    min-height: calc(100vh - var(--header-offset, 60px));
-
-    .login-body,
-    .signup-body {
-      padding: var(--ft-space-6);
-      max-width: 100%;
-
-      &.has-alt-auth {
-        flex-direction: column;
-        gap: 0;
-      }
-    }
-
-    .login-left-side {
-      max-width: 100%;
-      padding: 0;
-    }
-
-    .login-right-side {
-      max-width: 100%;
-      padding: var(--ft-space-4) 0 0;
-
-      &::before {
-        display: none;
-      }
-    }
-
-    .fantribe-login-logo {
-      margin-bottom: var(--ft-space-4);
-      padding-bottom: var(--ft-space-3);
-
-      img {
-        width: 180px;
-      }
-    }
-
-    .login-welcome-header {
-      padding: 0;
-      margin-bottom: var(--ft-space-4);
-
-      .login-title {
-        font-size: var(--ft-font-h4);
-      }
-    }
-
-    .login-form,
-    #login-form {
-      padding: 0;
-      margin: 0;
-    }
-
-    .input-group {
-      margin-bottom: var(--ft-space-3);
-
-      input[type="text"],
-      input[type="email"],
-      input[type="password"] {
-        padding: var(--ft-space-3);
-      }
-    }
-
-    // Fix toggle button vertical centering on mobile - signup page
-    .input-group.create-account__password {
-      .toggle-password-mask {
-        top: 10px;
-        bottom: auto;
-        transform: none;
-      }
-    }
-
-    // Fix toggle button vertical centering on mobile - login page
-    // Login page has extra elements (forgot password link, caps lock warning)
-    // so we position from top instead of bottom
-    .input-group:has(#login-account-password) {
-      .toggle-password-mask {
-        top: 2px;
-
-        // bottom: auto;
-        transform: none;
-      }
-    }
-
-    .login-page-cta,
-    .signup-page-cta {
-      padding: var(--ft-space-4) 0;
-
-      &__buttons {
-        flex-direction: column;
-        gap: var(--ft-space-3);
-
-        button {
-          width: 100%;
-        }
-      }
-    }
-
-    #login-buttons {
-      padding: 0;
-      margin-bottom: var(--ft-space-4);
-
-      .btn-social {
-        flex: 1 1 100%;
-        margin: 0;
-      }
-    }
-
-    .login-or-separator {
-      margin: var(--ft-space-4) 0;
-
-      span {
-        background: var(--ft-white);
-        padding: 0 var(--ft-space-2);
-      }
-    }
-  }
-}
-
-// ==============================================
-// DARK MODE SUPPORT
-// ==============================================
-
-@media (prefers-color-scheme: dark) {
-  body.fantribe-theme.login-page:not(.ft-light-theme),
-  body.fantribe-theme.signup-page:not(.ft-light-theme) {
-    background: linear-gradient(
-      135deg,
-      var(--ft-pastel-pink) 0%,
-      var(--ft-pastel-lavender) 100%
-    );
-
-    .d-header {
-      background: transparent;
-    }
-  }
-
-  .login-fullpage:not(.ft-light-theme),
-  .signup-fullpage:not(.ft-light-theme) {
-    .login-body,
-    .signup-body {
-      background: var(--ft-glass-card-bg);
-      border: var(--ft-glass-card-border);
-    }
-
-    .login-welcome-header {
-      .login-title {
-        color: var(--ft-gray-900);
-      }
-
-      .login-subheader,
-      .waving-hand {
-        color: var(--ft-gray-600);
-      }
-    }
-
-    .input-group {
-      input[type="text"],
-      input[type="email"],
-      input[type="password"],
-      input[type="number"],
-      textarea {
-        background-color: var(--ft-gray-100);
-        border-color: var(--ft-gray-300);
-        color: var(--ft-gray-900);
-
-        &::placeholder {
-          color: var(--ft-gray-500);
-        }
-
-        &:focus {
-          border-color: var(--ft-primary);
-        }
-      }
-
-      label:not(.alt-placeholder) {
-        color: var(--ft-gray-900);
-      }
-
-      input:focus + label.alt-placeholder,
-      input.value-entered + label.alt-placeholder {
-        background-color: var(--ft-gray-100);
-      }
-    }
-
-    .btn-social,
-    .btn-passkey-login {
-      background-color: var(--ft-gray-100);
-      border-color: var(--ft-gray-300);
-      color: var(--ft-gray-900);
-
-      &:hover {
-        background-color: var(--ft-gray-200);
-      }
-    }
-
-    .login-right-side::before {
-      background-color: var(--ft-gray-400);
-    }
-
-    .login-or-separator {
-      &::before,
-      &::after {
-        border-color: var(--ft-gray-400);
-      }
-
-      span {
-        color: var(--ft-gray-600);
-        background: var(--ft-gray-100);
-      }
-    }
-  }
-}
-
-// Manual dark theme class override
-body.fantribe-theme.login-page.ft-dark-theme,
-body.fantribe-theme.signup-page.ft-dark-theme {
-  background: linear-gradient(
-    135deg,
-    var(--ft-pastel-pink) 0%,
-    var(--ft-pastel-lavender) 100%
-  );
-
-  .d-header {
-    background: transparent;
-  }
-
-  .login-body,
-  .signup-body {
-    background: var(--ft-glass-card-bg);
-    border: var(--ft-glass-card-border);
-  }
-}
-
-// ==============================================
 // FORGOT PASSWORD MODAL
 // ==============================================
 body.fantribe-theme .d-modal.forgot-password-modal,
 body.fantribe-theme .forgot-password-modal {
-  // Modal backdrop with blur effect
   .modal-outer-container .modal-backdrop {
-    background-color: rgb(26, 26, 26, 0.5);
+    background-color: rgb(26 26 26 / 0.5);
     backdrop-filter: blur(8px);
   }
 
-  // Modal container with glassmorphism
   .modal-inner-container {
-    background: var(--ft-glass-card-bg);
-    backdrop-filter: blur(var(--ft-glass-card-blur));
-    border: var(--ft-glass-card-border);
-    border-radius: var(--ft-radius-xl);
-    box-shadow: var(--ft-shadow-lg);
+    background: rgb(255 255 255 / 0.95);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgb(231 230 228 / 0.6);
+    border-radius: 10px;
+    box-shadow:
+      0 20px 25px rgb(0 0 0 / 0.1),
+      0 8px 10px rgb(0 0 0 / 0.1);
     font-family: var(--ft-font-family);
     overflow: hidden;
   }
 
-  // Modal header
   .modal-header {
-    border-bottom: 1px solid var(--ft-gray-200);
-    padding: var(--ft-space-4) var(--ft-space-6);
+    border-bottom: 1px solid #e5e7eb;
+    padding: 16px 24px;
 
     .title h3,
     .d-modal__title {
       font-family: var(--ft-font-family);
-      font-weight: var(--ft-font-weight-semibold);
-      font-size: var(--ft-font-h4);
-      color: var(--ft-dark);
+      font-weight: 600;
+      font-size: 18px;
+      color: #1a1a1a;
       margin: 0;
     }
 
     .modal-close,
     .d-modal__dismiss {
-      color: var(--ft-gray-500);
+      color: #666;
       background: transparent;
       border: none;
-      border-radius: var(--ft-radius-md);
+      border-radius: 8px;
       transition:
         color var(--ft-transition-fast),
         background-color var(--ft-transition-fast);
 
       &:hover {
-        color: var(--ft-primary);
-        background-color: var(--ft-primary-light);
+        color: var(--ft-figma-accent);
+        background-color: rgb(255 23 68 / 0.1);
       }
     }
   }
 
-  // Modal body
   .modal-body,
   .d-modal__body {
-    padding: var(--ft-space-6);
+    padding: 24px;
 
     label {
       font-family: var(--ft-font-family);
-      font-size: var(--ft-font-small);
-      font-weight: var(--ft-font-weight-medium);
-      color: var(--ft-dark);
-      margin-bottom: var(--ft-space-2);
+      font-size: 14px;
+      font-weight: 500;
+      color: #1a1a1a;
+      margin-bottom: 8px;
       display: block;
     }
 
@@ -1074,13 +591,14 @@ body.fantribe-theme .forgot-password-modal {
     input[type="text"],
     input[type="email"] {
       width: 100%;
-      padding: var(--ft-space-3);
+      height: 48px;
+      padding: 0 16px;
       font-family: var(--ft-font-family);
-      font-size: var(--ft-font-body);
-      color: var(--ft-dark);
-      background-color: var(--ft-white);
-      border: 1px solid var(--ft-gray-300);
-      border-radius: var(--ft-radius-md);
+      font-size: 16px;
+      color: #1a1a1a;
+      background: #fdfcfc;
+      border: 1px solid #ddd;
+      border-radius: 10px;
       outline: none;
       box-sizing: border-box;
       transition:
@@ -1088,39 +606,37 @@ body.fantribe-theme .forgot-password-modal {
         box-shadow var(--ft-transition-fast);
 
       &::placeholder {
-        color: var(--ft-gray-400);
+        color: #999;
       }
 
       &:focus {
-        border-color: var(--ft-primary);
-        box-shadow: 0 0 0 3px var(--ft-primary-light);
+        border-color: var(--ft-figma-accent);
+        box-shadow: 0 0 0 2px rgb(255 23 68 / 0.15);
       }
     }
 
-    // Description text
     p {
       font-family: var(--ft-font-family);
-      font-size: var(--ft-font-small);
-      color: var(--ft-gray-600);
-      margin-bottom: var(--ft-space-4);
+      font-size: 14px;
+      color: #666;
+      margin-bottom: 16px;
     }
   }
 
-  // Modal footer buttons
   .modal-footer,
   .d-modal__footer {
-    padding: var(--ft-space-4) var(--ft-space-6);
-    border-top: 1px solid var(--ft-gray-200);
+    padding: 16px 24px;
+    border-top: 1px solid #e5e7eb;
     display: flex;
-    gap: var(--ft-space-3);
+    gap: 12px;
     justify-content: flex-end;
 
     .btn,
     button {
       font-family: var(--ft-font-family);
-      font-weight: var(--ft-font-weight-medium);
-      border-radius: var(--ft-radius-lg);
-      padding: var(--ft-space-2) var(--ft-space-4);
+      font-weight: 500;
+      border-radius: 9999px;
+      padding: 8px 16px;
       transition:
         background-color var(--ft-transition-fast),
         color var(--ft-transition-fast),
@@ -1132,24 +648,23 @@ body.fantribe-theme .forgot-password-modal {
       }
     }
 
-    // Primary reset button
     .btn-primary,
     .forgot-password-reset {
-      background-color: var(--ft-primary);
+      background-color: var(--ft-figma-btn-primary);
       color: #fff;
       border: none;
 
       &:hover {
-        background-color: var(--ft-primary-hover);
+        background-color: var(--ft-figma-btn-primary-hover);
         box-shadow: var(--ft-shadow-md);
       }
 
       &:active {
-        background-color: var(--ft-primary-active);
+        background-color: var(--ft-figma-btn-primary-active);
       }
 
       &:focus {
-        box-shadow: var(--ft-shadow-focus);
+        box-shadow: 0 0 0 3px rgb(255 26 71 / 0.3);
       }
 
       &:disabled {
@@ -1158,37 +673,35 @@ body.fantribe-theme .forgot-password-modal {
       }
     }
 
-    // Secondary/help button
     .btn:not(.btn-primary),
     .btn-default,
     .btn-flat {
       background-color: transparent;
-      color: var(--ft-gray-600);
-      border: 1px solid var(--ft-gray-300);
+      color: #666;
+      border: 1px solid #d1d5db;
 
       &:hover {
-        background-color: var(--ft-pastel-pink);
-        border-color: var(--ft-primary);
-        color: var(--ft-primary);
+        background-color: rgb(255 23 68 / 0.1);
+        border-color: var(--ft-figma-accent);
+        color: var(--ft-figma-accent);
       }
 
       &:focus {
-        box-shadow: var(--ft-shadow-focus);
+        box-shadow: 0 0 0 3px rgb(255 26 71 / 0.3);
       }
     }
   }
 
-  // Flash/error messages in modal
   .alert,
   .alert-error {
     background-color: var(--ft-error-light);
     color: var(--ft-error);
     border: 1px solid var(--ft-error);
-    border-radius: var(--ft-radius-md);
-    padding: var(--ft-space-3);
+    border-radius: 10px;
+    padding: 12px;
     font-family: var(--ft-font-family);
-    font-size: var(--ft-font-small);
-    margin-bottom: var(--ft-space-4);
+    font-size: 14px;
+    margin-bottom: 16px;
   }
 
   .alert-success {
@@ -1199,21 +712,69 @@ body.fantribe-theme .forgot-password-modal {
 }
 
 // ==============================================
-// GENERAL MODAL STYLING (for login-related modals)
+// MOBILE RESPONSIVE
 // ==============================================
-body.fantribe-theme.login-page,
-body.fantribe-theme.signup-page {
-  .modal-outer-container {
-    .modal-backdrop {
-      background-color: rgb(26, 26, 26, 0.5);
-      backdrop-filter: blur(4px);
+@media (width <= 767px) {
+  .fantribe-login-header {
+    padding: 16px;
+
+    &__logo img {
+      height: 24px;
+    }
+
+    &__actions {
+      gap: 8px;
+    }
+
+    &__btn {
+      height: 36px;
+      min-width: auto;
+      padding: 0 12px;
+      font-size: 11px;
+
+      .d-icon {
+        width: 14px;
+        height: 14px;
+      }
     }
   }
 
-  .d-modal {
-    .modal-inner-container {
-      border-radius: var(--ft-radius-xl);
-      box-shadow: var(--ft-shadow-lg);
+  body.fantribe-theme.login-page,
+  body.fantribe-theme.signup-page {
+    .login-fullpage,
+    .signup-fullpage {
+      padding: 16px;
     }
+  }
+
+  .fantribe-login-card {
+    padding: 24px;
+    gap: 24px;
+    max-width: 100%;
+  }
+
+  .fantribe-login-title {
+    font-size: 24px;
+    line-height: 32px;
+  }
+
+  .fantribe-login-form {
+    gap: 12px;
+  }
+
+  .fantribe-input-group {
+    input {
+      height: 44px;
+      padding: 0 12px;
+    }
+
+    label {
+      font-size: 13px;
+    }
+  }
+
+  .fantribe-btn-primary,
+  .fantribe-btn-google {
+    height: 44px;
   }
 }

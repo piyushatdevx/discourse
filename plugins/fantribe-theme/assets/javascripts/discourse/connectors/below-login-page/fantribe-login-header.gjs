@@ -2,7 +2,7 @@ import Component from "@glimmer/component";
 import { service } from "@ember/service";
 import getURL from "discourse/lib/get-url";
 
-export default class FantribeLoginLogo extends Component {
+export default class FantribeLoginHeader extends Component {
   @service siteSettings;
 
   get isEnabled() {
@@ -13,11 +13,17 @@ export default class FantribeLoginLogo extends Component {
     return getURL("/plugins/fantribe-theme/images/logo.svg");
   }
 
+  get homeUrl() {
+    return getURL("/");
+  }
+
   <template>
     {{#if this.isEnabled}}
-      <div class="fantribe-login-logo">
-        <img src={{this.logoUrl}} alt="FanTribe" />
-      </div>
+      <header class="fantribe-login-header">
+        <a href={{this.homeUrl}} class="fantribe-login-header__logo">
+          <img src={{this.logoUrl}} alt="FanTribe" />
+        </a>
+      </header>
     {{/if}}
   </template>
 }

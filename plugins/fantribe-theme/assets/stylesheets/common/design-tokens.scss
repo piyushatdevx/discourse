@@ -276,4 +276,30 @@
   // =============================================
   --ft-role-admin: #dc2626;
   --ft-role-moderator: #2563eb;
+
+  // =============================================
+  // FIGMA LOGIN PAGE DESIGN TOKENS
+  // =============================================
+  --ft-figma-page-bg: #f5f3f0;
+  --ft-figma-card-bg: rgb(253 252 252 / 0.8);
+  --ft-figma-card-border: rgb(231 230 228 / 0.6);
+  --ft-figma-card-shadow:
+    0 20px 25px rgb(0 0 0 / 0.1), 0 8px 10px rgb(0 0 0 / 0.1);
+  --ft-figma-card-radius: 10px;
+  --ft-figma-input-height: 48px;
+  --ft-figma-input-radius: 10px;
+  --ft-figma-input-bg: #fdfcfc;
+  --ft-figma-input-border: #ddd;
+  --ft-figma-text-primary: #1a1a1a;
+  --ft-figma-text-secondary: #666;
+  --ft-figma-text-placeholder: #999;
+  --ft-figma-btn-primary: #ff1a47;
+  --ft-figma-btn-primary-hover: #e6143d;
+  --ft-figma-btn-primary-active: #cc1236;
+  --ft-figma-btn-radius-pill: 9999px;
+  --ft-figma-accent: #ff1744;
+  --ft-figma-btn-secondary-border: #d3d1cf;
+  --ft-figma-header-btn-border: #e7e6e4;
+  --ft-figma-heading-size: 32px;
+  --ft-figma-heading-line-height: 48px;
 }

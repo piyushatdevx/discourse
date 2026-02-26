@@ -5,7 +5,7 @@
 // GLOBAL BACKGROUND & LAYOUT SYSTEM
 // ============================================================================
 body.fantribe-theme:not(.admin-interface) {
-  background: #f0f0f2;
+  background: var(--ft-figma-page-bg);
 
   // Force all page backgrounds to light gray
   #main-outlet,
@@ -13,7 +13,7 @@ body.fantribe-theme:not(.admin-interface) {
   #main,
   .container,
   .wrap {
-    background: #f0f0f2;
+    background: var(--ft-figma-page-bg);
     margin-left: 0;
     margin-right: 0;
   }
