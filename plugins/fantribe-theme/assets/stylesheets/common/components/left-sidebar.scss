@@ -2,16 +2,31 @@
 // Grid placement and positioning are in app-layout.scss
 // Inner nav component styles are in tribes-panel.scss
 //
-// Responsive behavior (from Figma source: Sidebar.tsx + Layout.tsx):
-// - Desktop (≥1024px): visible, fixed w-72 (288px)
-// - Tablet/Mobile (<1024px): hidden by default, slides in when toggled
-// - Collapsed state (desktop): w-20 (80px), icons only
+// Figma: same border, border-radius, box-shadow on all sides — 20px radius, #D4D2CF, shadow
 body.fantribe-theme:not(.admin-interface) {
   .fantribe-left-sidebar {
     background: #fff;
-    border-right: 1px solid #d4d2cf;
     overflow-y: auto;
-    overflow-x: hidden;
+
+    @media (width >= 1024px) {
+      width: 220px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      flex-shrink: 0;
+      border: 1px solid #d4d2cf;
+      border-radius: 20px;
+      box-shadow:
+        0 1px 3px 0 rgb(0 0 0 / 0.1),
+        0 1px 2px -1px rgb(0 0 0 / 0.1);
+      overflow-x: visible;
+    }
+
+    @media (width <= 1023px) {
+      border-radius: 0;
+      overflow-x: hidden;
+    }
     box-sizing: border-box;
     transition:
       width 300ms ease,
@@ -30,7 +45,7 @@ body.fantribe-theme:not(.admin-interface) {
       top: 64px;
       bottom: 0;
       left: 0;
-      width: 288px;
+      width: 220px;
       z-index: 40;
       transform: translateX(-100%);
       box-shadow: none;
@@ -47,31 +62,12 @@ body.fantribe-theme:not(.admin-interface) {
       }
     }
 
-    // Desktop collapsed state — narrow with icons only
+    // Desktop collapsed — Figma 448-16310: narrow strip with icons only (no full hide)
     &--collapsed {
       @media (width >= 1024px) {
-        width: 80px !important;
-      }
-
-      .ft-tribes-panel__nav-label,
-      .ft-tribes-panel__user-details,
-      .ft-tribes-panel__nav-active-icon,
-      .ft-tribes-panel__notification-dot {
-        display: none;
-      }
-
-      .ft-tribes-panel__nav-item {
-        justify-content: center;
-        padding: 12px;
-      }
-
-      .ft-tribes-panel__user-section {
-        justify-content: center;
-        padding: 12px;
-
-        .ft-tribes-panel__user-trigger {
-          justify-content: center;
-        }
+        width: 80px;
+        padding: 16px 8px;
+        align-items: center;
       }
     }
   }

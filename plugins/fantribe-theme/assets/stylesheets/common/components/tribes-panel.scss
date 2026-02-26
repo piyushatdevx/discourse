@@ -1,21 +1,77 @@
-// FanTribe Left Sidebar — Match target design exactly
-// Clean nav pills with proper spacing, active state, notification dots
+// FanTribe Left Sidebar — Figma 444-12166: Inter, 14px, weight 500, line-height 24px; color #FF1744 for active
+// Figma 448-15313: 24px between creatortribe logo and first menu item
 .fantribe-sidebar-nav {
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+  gap: var(--ft-space-6); // 24px — Figma 448-15313 exact distance logo to menu
   height: 100%;
-  background: var(--ft-white);
-  padding: 0 16px; // pt-6 px-4 (Figma: pt-6 px-4)
-  overflow: hidden;
+  min-height: 0;
+  background: transparent;
+  padding: 0;
+  overflow: visible;
+  position: relative;
+  font-family: Inter, var(--ft-font-family);
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 24px;
+  color: var(--ft-text, #1a1a1a);
 
-  // Scrollable nav items — flex: 1 pushes user section to bottom
+  // Logo — Figma 448-15313: spacing to first menu item = nav gap (24px)
+  &__logo {
+    display: block;
+    padding: 16px 0 0;
+    text-decoration: none;
+    flex-shrink: 0;
+
+    &:hover {
+      text-decoration: none;
+    }
+  }
+
+  &__logo-img {
+    display: block;
+    height: 32px;
+    width: auto;
+    max-width: 100%;
+    object-fit: contain;
+    object-position: left center;
+  }
+
+  // Collapsed state: "ct" in place of logo — Figma 448-16286 (c red, t black)
+  &__logo-ct {
+    display: none;
+    height: 20.442px;
+    align-items: flex-end;
+    gap: 1px;
+    font-family: Inter, var(--ft-font-family);
+    font-size: 26px;
+    font-weight: 500;
+    line-height: 1;
+    letter-spacing: -0.02em;
+  }
+
+  &__logo-ct-c {
+    color: #ff1744;
+  }
+
+  &__logo-ct-t {
+    color: #1a1a1a;
+  }
+
+  // Nav items — full width so pill background is same size for every item (not content-sized)
   &__items {
     flex: 1 1 0;
     min-height: 0;
+    width: 100%;
+    align-self: stretch;
     display: flex;
     flex-direction: column;
-    gap: 4px;
-    padding: 24px 0;
+    align-items: stretch;
+    gap: var(--ft-space-2); // 8px — Figma vertical margin between items
+    padding: 0;
     overflow-y: auto;
     overflow-x: hidden;
     scrollbar-width: none;
@@ -25,47 +81,52 @@
     }
   }
 
-  // Individual nav item - rounded pill
+  // Individual nav item — fixed height and padding so switching tabs doesn’t shift layout
   &__item {
     display: flex;
     align-items: center;
     gap: 12px;
     width: 100%;
-    min-height: 44px;
-    padding: 12px 16px; // py-3 px-4 (Figma: px-4 py-3)
+    min-width: 0;
+    height: 44px;
+    padding: 0 16px;
     border: none;
-    border-radius: 16px;
+    border-radius: 10px;
     background: transparent;
-    color: var(--ft-gray-600);
-    font-size: var(--ft-font-sm);
-    font-weight: var(--ft-font-weight-medium);
+    color: var(--ft-text, #1a1a1a);
+    font-family: Inter, var(--ft-font-family);
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 24px;
     cursor: pointer;
-    transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
+    transition: var(--ft-transition-all);
     text-align: left;
     position: relative;
 
     &:hover {
       background: var(--ft-gray-50);
-      color: var(--ft-dark);
     }
 
     &:active {
       transform: scale(0.98);
     }
 
-    // Active state - soft red/pink capsule
     &--active {
-      background: var(--ft-pastel-pink);
-      color: var(--ft-primary);
-      font-weight: var(--ft-font-weight-semibold);
+      background: #ffe5ec;
+      color: #ff1744;
 
       .fantribe-sidebar-nav__item-icon .d-icon {
-        color: var(--ft-primary);
+        color: #ff1744;
       }
 
       &:hover {
-        background: var(--ft-pastel-red);
-        color: var(--ft-primary);
+        background: #ffd6e0;
+        color: #ff1744;
+
+        .fantribe-sidebar-nav__item-icon .d-icon {
+          color: #ff1744;
+        }
       }
     }
   }
@@ -99,8 +160,10 @@
     align-items: center;
     color: var(--ft-primary);
 
-    .d-icon {
+    .d-icon,
+    .ft-icon {
       font-size: 14px;
+      color: var(--ft-primary);
     }
   }
 
@@ -118,6 +181,96 @@
     display: block;
   }
 
+  // Numeric badge (e.g. unread chat count), Figma Music Tribe
+  &__item-badge {
+    flex-shrink: 0;
+    min-width: 20px;
+    height: 20px;
+    padding: 0 6px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    background: var(--ft-primary);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1;
+  }
+
+  // Row containing Create button + collapse toggle below it; Figma 444-12158: space above profile
+  &__create-row {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    flex-shrink: 0;
+    margin-bottom: 16px;
+  }
+
+  // Create button — Figma 444-12158: horizontally centered in sidebar, pill shape
+  &__create-wrap {
+    display: flex;
+    flex-shrink: 0;
+    align-self: center;
+    justify-content: center;
+    width: 100%;
+    padding: 0;
+  }
+
+  // Figma 444-12521: full-width pill, 48px height, generous horizontal padding; Primary-gradiant
+  &__create {
+    display: flex;
+    width: 100%;
+    height: 48px;
+    padding: 0 24px;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+    max-width: 100%;
+    border: none;
+    border-radius: var(--ft-radius-pill);
+    background: var(
+      --Primary-gradiant,
+      linear-gradient(135deg, #ff1744 0%, #ff6b6b 100%)
+    );
+    color: #fff;
+    font-size: var(--ft-font-sm, 14px);
+    font-weight: var(--ft-font-weight-semibold);
+    cursor: pointer;
+    transition: var(--ft-transition-all);
+
+    &:hover {
+      opacity: 0.92;
+      box-shadow: var(--ft-shadow-md);
+    }
+
+    &:active {
+      transform: scale(0.98);
+    }
+  }
+
+  &__create-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .ft-icon {
+      color: #fff;
+    }
+  }
+
+  &__create-label {
+    font-family: var(--ft-font-family);
+    font-size: var(--ft-font-size-body);
+    font-style: var(--ft-font-style-normal);
+    font-weight: var(--ft-font-weight-semibold);
+    line-height: var(--ft-figma-lh-24);
+    white-space: nowrap;
+  }
+
   // My Tribes section — shown below main nav when user has joined tribes
   &__section {
     padding: var(--ft-space-3) 0 var(--ft-space-2);
@@ -129,8 +282,11 @@
   &__section-label {
     display: block;
     padding: var(--ft-space-1) var(--ft-space-4) var(--ft-space-2);
-    font-size: var(--ft-font-size-xs);
+    font-family: var(--ft-font-family);
+    font-size: var(--ft-figma-12);
+    font-style: var(--ft-font-style-normal);
     font-weight: var(--ft-font-weight-semibold);
+    line-height: var(--ft-figma-lh-16);
     color: var(--ft-gray-400);
     text-transform: uppercase;
     letter-spacing: 0.06em;
@@ -146,8 +302,11 @@
     border-radius: var(--ft-radius-lg);
     background: transparent;
     color: var(--ft-gray-600);
-    font-size: var(--ft-font-size-sm);
-    font-weight: var(--ft-font-weight-medium);
+    font-family: var(--ft-font-family);
+    font-size: var(--ft-font-size-body);
+    font-style: var(--ft-font-style-normal);
+    font-weight: var(--ft-font-weight-body);
+    line-height: var(--ft-figma-lh-24);
     cursor: pointer;
     text-align: left;
     transition:
@@ -164,7 +323,7 @@
 
     &--active {
       background: var(--ft-pastel-pink);
-      color: var(--ft-primary);
+      color: #ff1744;
       font-weight: var(--ft-font-weight-semibold);
     }
   }
@@ -183,28 +342,74 @@
     text-overflow: ellipsis;
   }
 
-  // Collapse toggle — hide it (hamburger in header will control sidebar)
+  // Collapse toggle — Figma 448-16281: circular button, white fill, grey border, chevron centered inside
   &__collapse {
-    display: none;
+    align-self: flex-end;
+    margin-right: -15px;
+    display: flex;
+    width: 24px;
+    height: 24px;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+    border: 1px solid var(--Border, #e5e7eb);
+    background: var(--White, #fff);
+    cursor: pointer;
+    flex-shrink: 0;
+    border-radius: 50%;
+    box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+
+    &:hover {
+      background: #f9fafb;
+      border-color: #d1d5db;
+    }
+
+    &:active {
+      transform: scale(0.96);
+    }
+
+    @media (width <= 1023px) {
+      display: none;
+    }
   }
 
-  // User section pinned to bottom
-  &__user {
+  // Figma 448-16281: 14×14px chevron only, stroke #6B7280; circle styling is on __collapse
+  &__collapse-icon {
     display: flex;
     align-items: center;
-    gap: 12px; // gap-3 (Figma: gap-3)
-    width: 100%;
-    padding: 30px 16px; // p-4 (Figma: p-4)
+    justify-content: center;
+    width: 14px;
+    height: 14px;
+    flex-shrink: 0;
+    color: #6b7280;
+
+    .ft-icon,
+    .d-icon,
+    svg {
+      width: 14px;
+      height: 14px;
+      flex-shrink: 0;
+      color: #6b7280;
+    }
+  }
+
+  // Figma 444-12268 (expanded): avatar | name + @handle | vertical dots — all vertically centered, border-top
+  &__user {
+    display: flex;
+    padding: 12px;
+    flex-direction: column;
+    align-items: stretch;
+    align-self: stretch;
     margin-top: auto;
     border: none;
-    border-top: 1px solid var(--ft-gray-200);
+    border-top: 1px solid #d4d2cf;
     background: transparent;
     cursor: pointer;
     text-align: left;
     transition:
       background var(--ft-transition-fast),
       transform var(--ft-transition-fast);
-    border-radius: var(--ft-radius-md);
+    border-radius: 0;
     flex-shrink: 0;
 
     &:hover {
@@ -216,13 +421,23 @@
     }
   }
 
+  // Figma 444-12268: avatar, text block, vertical ellipsis — vertically centered; gap avatar–text, flex pushes dots right
+  &__user-row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    min-height: 36px;
+  }
+
+  // Figma 444-12268: circular avatar 36–40px, no border
   &__user-avatar {
     flex-shrink: 0;
     width: 36px;
     height: 36px;
     border-radius: 50%;
     overflow: hidden;
-    border: 2px solid var(--ft-primary);
 
     img {
       width: 100%;
@@ -236,20 +451,35 @@
     min-width: 0;
     display: flex;
     flex-direction: column;
+    justify-content: center;
     gap: 2px;
+    font-family: var(--ft-font-family);
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: var(--ft-figma-lh-24);
   }
 
+  // Figma 444-12268: name — bold/dark, 14px
   &__user-name {
-    font-size: 13px;
-    font-weight: var(--ft-font-weight-semibold);
-    color: var(--ft-dark);
+    font-family: var(--ft-font-family);
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: var(--ft-figma-lh-24);
+    color: var(--ft-text, #1a1a1a);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
   }
 
+  // Figma 444-12268: @handle — lighter grey, 12px, regular
   &__user-username {
-    font-size: var(--ft-font-caption);
+    font-family: var(--ft-font-family);
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: var(--ft-figma-lh-16);
     color: var(--ft-gray-500);
     white-space: nowrap;
     overflow: hidden;
@@ -264,15 +494,50 @@
       font-size: 14px;
     }
   }
+
+  // Figma 444-12268: vertical ellipsis (three dots) — far right, dark grey, vertically centered with avatar
+  &__user-menu {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--ft-gray-500);
+
+    .ft-icon {
+      color: currentcolor;
+    }
+  }
 }
 
-// Collapsed sidebar
-body.fantribe-sidebar-collapsed {
-  .fantribe-sidebar-nav {
+// Collapsed sidebar — Figma 448-16286: "ct" in place of logo; icon-only; selected = light pink bg + red icon
+.fantribe-left-sidebar--collapsed .fantribe-sidebar-nav {
+  @media (width >= 1024px) {
+    align-items: center;
+
+    &__logo {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 16px 0 0;
+    }
+
+    &__logo-img {
+      display: none;
+    }
+
+    &__logo-ct {
+      display: flex;
+      height: 20.442px;
+      align-items: flex-end;
+      gap: 1px;
+    }
+
     &__item-label,
     &__item-chevron,
     &__item-dot,
+    &__item-badge,
     &__section,
+    &__create-label,
     &__user-info,
     &__user-chevron {
       display: none;
@@ -281,19 +546,66 @@ body.fantribe-sidebar-collapsed {
     &__item {
       justify-content: center;
       padding: 10px;
+      width: 100%;
+      min-height: 44px;
+      border-radius: 10px;
+    }
+
+    &__item--active {
+      background: #ffe5ec;
+      color: #ff1744;
+
+      .fantribe-sidebar-nav__item-icon .d-icon,
+      .fantribe-sidebar-nav__item-icon .ft-icon {
+        color: #ff1744;
+      }
     }
 
     &__item-icon {
-      width: auto;
+      width: 20px;
+      height: 20px;
+
+      .d-icon,
+      .ft-icon {
+        font-size: 20px;
+        width: 20px;
+        height: 20px;
+      }
     }
 
+    &__create-wrap {
+      align-self: center;
+    }
+
+    &__create {
+      width: 48px;
+      min-height: 48px;
+      padding: 0;
+      border-radius: 50%;
+    }
+
+    // Figma 448-16286: avatar + vertical dots centered in collapsed strip (not flush left)
     &__user {
+      width: 100%;
       justify-content: center;
-      padding: 10px;
+      align-items: center;
+      padding: 8px 0;
+    }
+
+    &__user-row {
+      width: 100%;
+      justify-content: center;
+      align-items: center;
+      gap: 6px;
     }
 
     &__user-avatar {
-      border-width: 2px;
+      width: 36px;
+      height: 36px;
+    }
+
+    &__user-menu {
+      display: flex;
     }
   }
 }

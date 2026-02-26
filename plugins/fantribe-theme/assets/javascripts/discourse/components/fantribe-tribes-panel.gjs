@@ -1,36 +1,40 @@
 import Component from "@glimmer/component";
-import { tracked } from "@glimmer/tracking";
 import { fn } from "@ember/helper";
 import { on } from "@ember/modifier";
 import { action } from "@ember/object";
 import { service } from "@ember/service";
 import avatar from "discourse/helpers/avatar";
+import getURL from "discourse/lib/get-url";
+import { i18n } from "discourse-i18n";
 import ftIcon from "../helpers/ft-icon";
 
 const NAV_ITEMS = [
   {
     id: "home-feed",
-    label: "Home Feed",
+    label: "sidebar.nav.home_feed",
     icon: "home",
     route: "discovery.latest",
   },
   {
     id: "explore-tribes",
-    label: "Explore Tribes",
+    label: "sidebar.nav.explore_tribes",
     icon: "compass",
     route: "explore",
   },
-  { id: "chat", label: "Chat", icon: "message-circle", route: "chat.index" },
+  {
+    id: "chat",
+    label: "sidebar.nav.chat",
+    icon: "message-circle",
+    route: "chat.index",
+  },
 ];
 
 export default class FantribeTribesPanel extends Component {
   @service router;
   @service currentUser;
   @service chatTrackingStateManager;
-
-  @tracked isCollapsed = document.body.classList.contains(
-    "fantribe-sidebar-collapsed"
-  );
+  @service fantribeCreate;
+  @service fantribeSidebarState;
 
   isActive = (item) => {
     const route = this.router.currentRouteName || "";
@@ -61,8 +65,30 @@ export default class FantribeTribesPanel extends Component {
     return item.id === "chat" && this.hasUnreadChat;
   };
 
+  getBadgeCount = (item) => {
+    if (item.id === "chat" && this.chatTrackingStateManager) {
+      const n =
+        (this.chatTrackingStateManager.allChannelUrgentCount || 0) +
+        (this.chatTrackingStateManager.publicChannelUnreadCount || 0);
+      return n > 0 ? Math.min(n, 99) : 0;
+    }
+    return 0;
+  };
+
+  get isCollapsed() {
+    return this.fantribeSidebarState.isCollapsed;
+  }
+
   get navItems() {
     return NAV_ITEMS;
+  }
+
+  get homeUrl() {
+    return this.router.urlFor("discovery.latest");
+  }
+
+  get logoImageUrl() {
+    return getURL("/plugins/fantribe-theme/images/logo.svg");
   }
 
   get hasUnreadChat() {
@@ -99,12 +125,33 @@ export default class FantribeTribesPanel extends Component {
 
   @action
   toggleCollapse() {
-    document.body.classList.toggle("fantribe-sidebar-collapsed");
-    this.isCollapsed = !this.isCollapsed;
+    this.fantribeSidebarState.toggle();
+  }
+
+  @action
+  openCreate() {
+    this.fantribeCreate.openCreatePostModal();
   }
 
   <template>
     <nav class="fantribe-sidebar-nav">
+      <a
+        href={{this.homeUrl}}
+        class="fantribe-sidebar-nav__logo"
+        aria-label={{i18n "sidebar.logo_aria"}}
+      >
+        <img
+          src={{this.logoImageUrl}}
+          alt="FanTribe"
+          class="fantribe-sidebar-nav__logo-img"
+        />
+        <span class="fantribe-sidebar-nav__logo-ct" aria-hidden="true">
+          <span class="fantribe-sidebar-nav__logo-ct-c">c</span><span
+            class="fantribe-sidebar-nav__logo-ct-t"
+          >t</span>
+        </span>
+      </a>
+
       <div class="fantribe-sidebar-nav__items">
         {{#each this.navItems as |item|}}
           <button
@@ -120,46 +167,85 @@ export default class FantribeTribesPanel extends Component {
             <span class="fantribe-sidebar-nav__item-icon">
               {{ftIcon item.icon}}
             </span>
-            <span class="fantribe-sidebar-nav__item-label">{{item.label}}</span>
+            <span class="fantribe-sidebar-nav__item-label">{{i18n
+                item.label
+              }}</span>
             {{#if (this.isActive item)}}
               <span class="fantribe-sidebar-nav__item-chevron">
                 {{ftIcon "chevron-right"}}
               </span>
             {{/if}}
-            <span class="fantribe-sidebar-nav__item-dot"></span>
+            {{#let (this.getBadgeCount item) as |count|}}
+              {{#if count}}
+                <span
+                  class="fantribe-sidebar-nav__item-badge"
+                  aria-label={{i18n "sidebar.notification_count" count=count}}
+                >{{count}}</span>
+              {{else if (this.hasNotification item)}}
+                <span class="fantribe-sidebar-nav__item-dot"></span>
+              {{/if}}
+            {{/let}}
           </button>
         {{/each}}
       </div>
 
-      {{! Collapse toggle }}
-      <button
-        type="button"
-        class="fantribe-sidebar-nav__collapse"
-        {{on "click" this.toggleCollapse}}
-      >
-        {{ftIcon (if this.isCollapsed "chevron-right" "chevron-left")}}
-      </button>
+      <div class="fantribe-sidebar-nav__create-row">
+        <div class="fantribe-sidebar-nav__create-wrap">
+          <button
+            type="button"
+            class="fantribe-sidebar-nav__create"
+            {{on "click" this.openCreate}}
+          >
+            <span class="fantribe-sidebar-nav__create-icon">{{ftIcon
+                "plus"
+                size=20
+              }}</span>
+            <span class="fantribe-sidebar-nav__create-label">{{i18n
+                "sidebar.create"
+              }}</span>
+          </button>
+        </div>
+        <button
+          type="button"
+          class="fantribe-sidebar-nav__collapse"
+          aria-label={{if
+            this.isCollapsed
+            (i18n "sidebar.expand_aria")
+            (i18n "sidebar.collapse_aria")
+          }}
+          {{on "click" this.toggleCollapse}}
+        >
+          <span class="fantribe-sidebar-nav__collapse-icon">
+            {{ftIcon
+              (if this.isCollapsed "chevron-right" "chevron-left")
+              size=14
+            }}
+          </span>
+        </button>
+      </div>
 
-      {{! User profile at bottom }}
+      {{! User profile at bottom — Figma: column container with inner row for avatar | name | menu }}
       {{#if this.currentUser}}
         <button
           type="button"
           class="fantribe-sidebar-nav__user"
           {{on "click" this.navigateToProfile}}
         >
-          <span class="fantribe-sidebar-nav__user-avatar">
-            {{avatar this.currentUser imageSize="medium"}}
-          </span>
-          <span class="fantribe-sidebar-nav__user-info">
-            <span class="fantribe-sidebar-nav__user-name">
-              {{this.currentUser.name}}
+          <span class="fantribe-sidebar-nav__user-row">
+            <span class="fantribe-sidebar-nav__user-avatar">
+              {{avatar this.currentUser imageSize="medium"}}
             </span>
-            <span class="fantribe-sidebar-nav__user-username">
-              @{{this.currentUser.username}}
+            <span class="fantribe-sidebar-nav__user-info">
+              <span class="fantribe-sidebar-nav__user-name">
+                {{this.currentUser.name}}
+              </span>
+              <span class="fantribe-sidebar-nav__user-username">
+                @{{this.currentUser.username}}
+              </span>
             </span>
-          </span>
-          <span class="fantribe-sidebar-nav__user-chevron">
-            {{ftIcon "chevron-right"}}
+            <span class="fantribe-sidebar-nav__user-menu" aria-hidden="true">
+              {{ftIcon "more-vertical" size=20}}
+            </span>
           </span>
         </button>
       {{/if}}

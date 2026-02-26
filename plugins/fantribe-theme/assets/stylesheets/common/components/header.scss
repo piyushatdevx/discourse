@@ -8,13 +8,13 @@ body.fantribe-custom-header:not(.admin-interface) {
     display: none;
   }
 
-  &.fantribe-theme {
-    padding-top: 64px;
+  // &.fantribe-theme {
+  // padding-top: 64px;
 
-    @media (width >= 768px) {
-      padding-top: 80px;
-    }
-  }
+  //   @media (width >= 768px) {
+  //     padding-top: 80px;
+  //   }
+  // }
 }
 
 // Ensure fantribe components don't render visually on admin
@@ -36,7 +36,8 @@ body.admin-interface {
   z-index: var(--ft-z-sticky);
   height: 64px;
   background: #fff;
-  border-bottom: 1px solid #d4d2cf;
+
+  // border-bottom: 1px solid #d4d2cf;
 
   @media (width >= 768px) {
     height: 80px;
