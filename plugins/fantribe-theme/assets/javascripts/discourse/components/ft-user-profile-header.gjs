@@ -3,11 +3,13 @@ import { tracked } from "@glimmer/tracking";
 import { concat } from "@ember/helper";
 import { on } from "@ember/modifier";
 import { action } from "@ember/object";
+import { getOwner } from "@ember/owner";
 import { service } from "@ember/service";
 import { htmlSafe } from "@ember/template";
 import avatar from "discourse/helpers/avatar";
 import icon from "discourse/helpers/d-icon";
 import formatDate from "discourse/helpers/format-date";
+import { i18n } from "discourse-i18n";
 import ftIcon from "../helpers/ft-icon";
 import FtEditProfileModal from "./ft-edit-profile-modal";
 import FtShareProfileModal from "./ft-share-profile-modal";
@@ -24,6 +26,7 @@ const TRUST_LEVEL_TIERS = [
 
 export default class FtUserProfileHeader extends Component {
   @service currentUser;
+  @service dialog;
   @service router;
 
   @tracked showShareModal = false;
@@ -110,6 +113,17 @@ export default class FtUserProfileHeader extends Component {
     this.router.transitionTo("userActivity.ftSettings", this.args.user);
   }
 
+  @action
+  confirmLogout() {
+    this.dialog.confirm({
+      message: i18n("fantribe.log_out_confirm"),
+      class: "logout-confirm",
+      didConfirm: () => {
+        getOwner(this).lookup("route:application").send("logout");
+      },
+    });
+  }
+
   <template>
     {{#if @user}}
       <div class="ft-profile">
@@ -142,6 +156,14 @@ export default class FtUserProfileHeader extends Component {
                 aria-label="Settings"
               >
                 {{ftIcon "settings"}}
+              </button>
+              <button
+                type="button"
+                class="ft-profile__cover-btn"
+                {{on "click" this.confirmLogout}}
+                aria-label={{i18n "user.log_out"}}
+              >
+                {{ftIcon "log-out"}}
               </button>
             {{/if}}
           </div>

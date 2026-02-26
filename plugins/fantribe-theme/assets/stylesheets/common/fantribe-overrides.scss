@@ -470,6 +470,56 @@ body.fantribe-theme:not(.admin-interface) {
 }
 
 // ============================================================================
+// DIALOGS (CONFIRM / ALERT) - Logout confirmation
+// ============================================================================
+body.fantribe-theme:not(.admin-interface) {
+  .dialog-container.logout-confirm {
+    .dialog-overlay {
+      background: rgb(15 23 42 / 0.7);
+      backdrop-filter: blur(6px);
+    }
+
+    .dialog-content {
+      border-radius: 20px;
+      overflow: hidden;
+      max-width: 420px;
+    }
+
+    .dialog-footer {
+      justify-content: flex-end;
+
+      .btn {
+        border-radius: 999px;
+        padding-inline: 18px;
+      }
+
+      .btn-primary {
+        background: var(--ft-primary, #e53935);
+        border-color: var(--ft-primary, #e53935);
+        color: #fff;
+
+        &:hover {
+          background: #d32f2f;
+          border-color: #d32f2f;
+        }
+      }
+
+      .btn-default {
+        background: transparent;
+        border-color: rgb(229 57 53 / 0.4);
+        color: var(--ft-primary, #e53935);
+
+        &:hover {
+          background: rgb(229 57 53 / 0.06);
+          border-color: var(--ft-primary, #e53935);
+          color: var(--ft-primary, #e53935);
+        }
+      }
+    }
+  }
+}
+
+// ============================================================================
 // COMPOSER STYLING - FT-branded modal panel
 // ============================================================================
 body.fantribe-theme:not(.admin-interface) {
