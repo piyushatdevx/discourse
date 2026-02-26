@@ -588,33 +588,147 @@ body.fantribe-theme:not(.admin-interface) {
   }
 
   // ==========================================
-  // TAGS INPUT
+  // EDIT MODAL FIELDS (tribe create/edit modals)
+  // Makes the fields area scrollable so the footer is always visible.
   // ==========================================
-  .ft-modal__tags-section {
+  .ft-edit-modal__fields {
+    flex: 1;
+    overflow-y: auto;
+    min-height: 0;
+    padding: 0 24px 16px;
     display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 8px 0 4px;
-    flex-wrap: wrap;
+    flex-direction: column;
+    gap: 20px;
   }
 
+  .ft-edit-modal__field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .ft-edit-modal__label {
+    font-size: var(--ft-font-sm);
+    font-weight: var(--ft-font-weight-medium);
+    color: var(--ft-slate-700);
+  }
+
+  .ft-edit-modal__input {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1.5px solid var(--ft-slate-200);
+    border-radius: 12px;
+    font-size: var(--ft-font-sm);
+    color: var(--ft-slate-900);
+    background: var(--ft-slate-50);
+    transition: border-color 150ms ease;
+    box-sizing: border-box;
+
+    &:focus {
+      outline: none;
+      border-color: var(--ft-electric-blue);
+      background: white;
+    }
+  }
+
+  .ft-edit-modal__textarea {
+    width: 100%;
+    min-height: 90px;
+    padding: 10px 14px;
+    border: 1.5px solid var(--ft-slate-200);
+    border-radius: 12px;
+    font-size: var(--ft-font-sm);
+    color: var(--ft-slate-900);
+    background: var(--ft-slate-50);
+    resize: vertical;
+    font-family: inherit;
+    transition: border-color 150ms ease;
+    box-sizing: border-box;
+
+    &:focus {
+      outline: none;
+      border-color: var(--ft-electric-blue);
+      background: white;
+    }
+  }
+
+  .ft-edit-modal__save-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 24px;
+    border-radius: 9999px;
+    border: none;
+    background: var(--ft-gradient-action);
+    color: white;
+    font-size: var(--ft-font-sm);
+    font-weight: var(--ft-font-weight-semibold);
+    cursor: pointer;
+    box-shadow: var(--ft-shadow-lg);
+    transition: all 200ms ease;
+
+    &:hover:not(:disabled) {
+      box-shadow: var(--ft-shadow-xl);
+      transform: scale(1.03);
+    }
+
+    &--disabled,
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+  }
+
+  // ==========================================
+  // TAGS INPUT
+  // ==========================================
+
+  // Outer wrapper: column so hint sits below the input box on its own line
+  .ft-modal__tags-section {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 8px 0 4px;
+  }
+
+  // Label row with icon above the input wrap
+  .ft-modal__tags-label-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--ft-slate-500);
+
+    svg {
+      width: 14px;
+      height: 14px;
+      flex-shrink: 0;
+    }
+  }
+
+  .ft-modal__tags-label {
+    font-size: 12px;
+    font-weight: var(--ft-font-weight-semibold);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--ft-slate-500);
+  }
+
+  // Input box containing chips + text input, full-width
   .ft-modal__tags-input-wrap {
-    flex: 1;
     display: flex;
     align-items: center;
     flex-wrap: wrap;
     gap: 6px;
-    min-height: 36px;
-    padding: 6px 12px;
-    border: 1px solid var(--ft-slate-200);
-    border-radius: 10px;
+    height: 45px;
+    width: 100%;
+    padding: 0 12px;
+    border: 1.5px solid var(--ft-slate-200);
+    border-radius: 12px;
     background: var(--ft-slate-50);
     cursor: text;
-
-    &:focus-within {
-      border-color: var(--ft-primary);
-      background: white;
-    }
+    box-sizing: border-box;
   }
 
   .ft-modal__tag-chip {
@@ -627,6 +741,7 @@ body.fantribe-theme:not(.admin-interface) {
     border-radius: 9999px;
     font-size: 12px;
     font-weight: var(--ft-font-weight-medium);
+    white-space: nowrap;
   }
 
   .ft-modal__tag-chip-remove {
@@ -653,23 +768,29 @@ body.fantribe-theme:not(.admin-interface) {
   }
 
   .ft-modal__tag-input {
-    border: none;
-    outline: none;
-    background: transparent;
+    border: none !important;
+    outline: none !important;
+    background: transparent !important;
+    box-shadow: none !important;
     font-size: var(--ft-font-sm);
     color: var(--ft-slate-700);
+    caret-color: var(--ft-slate-700);
     min-width: 80px;
     flex: 1;
-    padding: 0;
+    padding-left: 3px;
+    margin-top: 5px;
+    line-height: 1.4;
+    appearance: none;
 
     &::placeholder {
       color: var(--ft-slate-400);
     }
   }
 
+  // Count hint below the input box, right-aligned
   .ft-modal__tags-hint {
     font-size: 11px;
     color: var(--ft-slate-400);
-    white-space: nowrap;
+    text-align: right;
   }
 }

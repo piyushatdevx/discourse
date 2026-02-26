@@ -20,6 +20,7 @@ export default class FantribeFeedCard extends Component {
   @service currentUser;
   @service router;
   @service site;
+  @service fantribeFeedState;
 
   @tracked expanded = false;
   @tracked expandedContent = null;
@@ -162,8 +163,16 @@ export default class FantribeFeedCard extends Component {
     return this.currentUser.username === this.poster.username;
   }
 
+  get topicOverrides() {
+    return this.fantribeFeedState.topicUpdates[this.topic?.id] || {};
+  }
+
+  get topicTitle() {
+    return this.topicOverrides.title ?? this.topic?.title ?? "";
+  }
+
   get tags() {
-    return this.topic?.tags || [];
+    return this.topicOverrides.tags ?? this.topic?.tags ?? [];
   }
 
   get hasTags() {
@@ -353,7 +362,7 @@ export default class FantribeFeedCard extends Component {
                   {{/each}}
                 </div>
               {{/if}}
-              <p><strong>{{@topic.title}}</strong></p>
+              <p><strong>{{this.topicTitle}}</strong></p>
               {{#if this.excerpt}}
                 {{#if this.expanded}}
                   <div class="fantribe-feed-card__expanded-body">
