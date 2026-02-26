@@ -5,6 +5,7 @@ import { on } from "@ember/modifier";
 import { action } from "@ember/object";
 import { service } from "@ember/service";
 import closeOnClickOutside from "discourse/modifiers/close-on-click-outside";
+import { and, eq } from "discourse/truth-helpers";
 import ftIcon from "../helpers/ft-icon";
 import FtCreateMenu from "./ft-create-menu";
 import FtCreatePostModal from "./ft-create-post-modal";
@@ -124,7 +125,15 @@ export default class FantribeHeader extends Component {
               <span>Create</span>
             </button>
 
-            {{#if this.fantribeCreate.isCreateMenuOpen}}
+            {{#if
+              (and
+                this.fantribeCreate.isCreateMenuOpen
+                (eq
+                  this.fantribeCreate.createMenuTargetSelector
+                  ".fantribe-header__create-btn"
+                )
+              )
+            }}
               <FtCreateMenu />
             {{/if}}
           {{else}}

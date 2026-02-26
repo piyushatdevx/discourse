@@ -36,10 +36,17 @@ body.fantribe-anon.fantribe-theme:not(.admin-interface) {
   }
 
   // Remove the two-column grid — single column for login content
+  // Also reset Figma panel styling (margin, border, radius) so login is full-bleed
   #main-outlet-wrapper {
     display: block;
     max-width: 100%;
     padding: 0;
+    margin: 0;
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    overflow: visible;
+    box-shadow: none;
   }
 
   // Remove extra top padding that compensates for the hidden header

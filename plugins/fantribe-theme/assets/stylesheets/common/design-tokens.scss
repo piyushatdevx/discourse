@@ -1,8 +1,8 @@
-// FanTribe Design Tokens — Exact values from FeedPage_UI_Master_Spec.md
-// 60-30-10 color rule. DO NOT MODIFY individual values.
+// FanTribe Design Tokens — FeedPage_UI_Master_Spec + Figma Music Tribe (node 444-11426)
+// 60-30-10 color rule. Figma: Inter font, Text #1A1A1A, Primary #FF1744, Gray #6b7280, Border #DDDDDD.
 :root {
   // =============================================
-  // FONT FAMILY (Spec §1.2)
+  // FONT FAMILY (Spec §1.2 / Figma: Inter)
   // =============================================
   --ft-font-family:
     "Inter", -apple-system, blinkmacsystemfont, "Segoe UI", roboto,
@@ -80,16 +80,18 @@
   --ft-blue-verified: #0080ff;
 
   // =============================================
-  // GRADIENTS (Spec §1.1) — all 135deg
+  // GRADIENTS (Spec §1.1 + Figma Primary-gradiant)
   // =============================================
   --ft-gradient-action: linear-gradient(135deg, #ff1744, #ff6b6b);
+  --Primary-gradiant: linear-gradient(135deg, #ff1744 0%, #ff6b6b 100%);
   --ft-gradient-community: linear-gradient(135deg, #0080ff, #b197fc);
   --ft-gradient-commerce: linear-gradient(135deg, #51cf66, #0080ff);
   --ft-gradient-vibrant: linear-gradient(135deg, #ff1744, #e6143d);
   --ft-gradient-electric: linear-gradient(135deg, #0080ff, #006dd9);
 
   // =============================================
-  // TYPOGRAPHY (Spec §1.2)
+  // TYPOGRAPHY (Spec §1.2 + Figma Music Tribe)
+  // Figma: Inter — 12/14, 12/16, 14/21, 14/24, 16/24, 16/26, 18/27
   // =============================================
   --ft-font-xs: 0.75rem; // 12px
   --ft-font-sm: 0.875rem; // 14px
@@ -101,9 +103,26 @@
   --ft-font-weight-medium: 500;
   --ft-font-weight-semibold: 600;
   --ft-font-weight-bold: 700;
+  --ft-font-style-normal: normal;
   --ft-line-height: 1.5;
   --ft-line-height-relaxed: 1.625;
   --ft-line-height-tight: 1.25;
+
+  // Figma body/sidebar default — 14px, normal, 500 (use for left sidebar and body text)
+  --ft-font-size-body: 14px;
+  --ft-font-weight-body: 500;
+
+  // Figma typography scale (size / line-height in px)
+  --ft-figma-12: 12px;
+  --ft-figma-14: 14px;
+  --ft-figma-16: 16px;
+  --ft-figma-18: 18px;
+  --ft-figma-lh-14: 14px;
+  --ft-figma-lh-16: 16px;
+  --ft-figma-lh-21: 21px;
+  --ft-figma-lh-24: 24px;
+  --ft-figma-lh-26: 26px;
+  --ft-figma-lh-27: 27px;
 
   // =============================================
   // SPACING (Spec §1.3 — Tailwind scale)
@@ -163,24 +182,29 @@
   --ft-dark: #1a1916;
   --ft-dark-hover: #111;
 
+  // Figma Music Tribe (node 444-11426) — semantic aliases
+  --ft-text: #1a1a1a; // Figma "Text"
+  --ft-input-text: #666; // Figma "Input field text"
+  --ft-input-placeholder: #999; // Figma "Light input field"
+  --ft-border: #ddd; // Figma "Border"
+
   // =============================================
-  // GRAY SCALE (used by tribes-panel, inputs, buttons, etc.)
-  // Maps to a true gray scale complementing the warm neutrals
+  // GRAY SCALE (Figma Gray #6b7280 + Tailwind-aligned)
   // =============================================
   --ft-gray-50: #f9fafb;
   --ft-gray-100: #f3f4f6;
   --ft-gray-200: #e5e7eb;
   --ft-gray-300: #d1d5db;
   --ft-gray-400: #9ca3af;
-  --ft-gray-500: #6b7280;
+  --ft-gray-500: #6b7280; // Figma "Gray"
   --ft-gray-600: #4b5563;
   --ft-gray-700: #374151;
   --ft-gray-900: #111827;
 
   // =============================================
-  // BRAND ALIASES (primary = vibrant-red)
+  // BRAND ALIASES (Figma Primary #FF1744 = vibrant-red)
   // =============================================
-  --ft-primary: var(--ft-vibrant-red);
+  --ft-primary: #ff1744; // Figma "Primary"
   --ft-primary-hover: var(--ft-vibrant-red-hover);
   --ft-primary-active: #cc1236;
   --ft-primary-light: var(--ft-vibrant-red-light);

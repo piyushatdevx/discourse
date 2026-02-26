@@ -2,10 +2,42 @@
 // Force Discourse to look like a modern product feed
 
 // ============================================================================
-// GLOBAL BACKGROUND & LAYOUT SYSTEM
+// GLOBAL BACKGROUND & LAYOUT SYSTEM (Figma: Inter globally, Text #1A1A1A)
 // ============================================================================
 body.fantribe-theme:not(.admin-interface) {
+  font-family: var(--ft-font-family);
+  color: var(--ft-text, var(--ft-dark));
   background: #f0f0f2;
+
+  // Apply Inter globally so all UI text uses Figma font (icons keep their font via .d-icon, .fa)
+  #main-outlet,
+  #main,
+  .ember-application,
+  .wrap,
+  .container,
+  .topic-body .cooked,
+  .d-editor-preview,
+  .d-editor-container,
+  .list-controls,
+  .topic-list,
+  .topic-list-item,
+  .topic-body,
+  .post-stream,
+  .contents,
+  .list-container,
+  .navigation-container,
+  .d-header,
+  .topic-navigation,
+  .topic-post,
+  .cooked,
+  .reply-controls,
+  .composer-fields,
+  input,
+  textarea,
+  select,
+  button:not(.d-icon) {
+    font-family: var(--ft-font-family);
+  }
 
   // Force all page backgrounds to light gray
   #main-outlet,

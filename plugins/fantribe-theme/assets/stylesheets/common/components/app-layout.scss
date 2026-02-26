@@ -1,17 +1,36 @@
 // FanTribe App Layout — Persistent sidebar + main content grid
-// Applied globally on public routes via body.fantribe-theme
-// Admin UI excluded via :not(.admin-interface)
+// Matches Figma Music Tribe (node 444-11426): no global header; one rounded panel
+// with sidebar + content; Border #DDDDDD, noticeable rounded corners.
 //
 // Responsive behavior (from Figma source):
-// - Desktop ≥1024px: sidebar (288px) + content
+// - Desktop ≥1024px: sidebar (288px) + content inside rounded container
 // - Below 1024px: single column (sidebar is fixed overlay)
-// - Header: 64px mobile, 80px desktop
 body.fantribe-theme:not(.admin-interface) {
   background-color: #f0f0f2;
 
-  // Hide Discourse's built-in sidebar (we use our own)
-  .sidebar-wrapper {
+  // Figma: no header — hide Discourse site header and fantribe header so content starts at top
+  .d-header-wrap,
+  .fantribe-header {
     display: none;
+  }
+
+  // Remove space above #main (header is hidden)
+  #main {
+    padding-top: 0;
+  }
+
+  // Hide Discourse's built-in sidebar so no white shows behind fantribe-left-sidebar
+  #main-outlet-wrapper .sidebar-wrapper {
+    display: none;
+    visibility: hidden;
+    position: absolute;
+    width: 0;
+    min-width: 0;
+    max-width: 0;
+    overflow: hidden;
+    background: transparent;
+    border: none;
+    pointer-events: none;
   }
 
   // Remove Discourse core max-width constraints and backgrounds
@@ -22,15 +41,29 @@ body.fantribe-theme:not(.admin-interface) {
   }
 
   // Layout grid: persistent left sidebar + main content
+  // Figma: entire content in one panel with rounded corners and border
   #main-outlet-wrapper {
     display: grid;
-    grid-template-columns: 288px minmax(0, 1fr);
+    grid-template-columns: 220px minmax(0, 1fr);
     grid-template-rows: 1fr auto;
     grid-template-areas:
       "sidebar content"
       "sidebar below-content";
     max-width: 100%;
     gap: 0;
+
+    // Transparent wrapper so no white shows behind sidebar; sidebar and main have their own backgrounds
+    @media (width >= 1024px) {
+      --ft-panel-border: #e5e7eb;
+      --ft-panel-radius: 24px;
+      --ft-panel-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.06);
+      margin: 16px 24px 24px;
+      background: transparent;
+      border: none;
+      border-radius: 0;
+      overflow: visible;
+      box-shadow: none;
+    }
 
     // Below 1024px: single column (sidebar is fixed overlay, not in grid)
     @media (width <= 1023px) {
@@ -39,29 +72,38 @@ body.fantribe-theme:not(.admin-interface) {
     }
   }
 
-  // Persistent left sidebar (injected via before-main-outlet connector)
+  // Persistent left sidebar — fixed on desktop so it doesn’t scroll (sticky broken by wrapper overflow:hidden)
   .fantribe-left-sidebar {
     grid-area: sidebar;
-    position: sticky;
-    top: 80px;
-    align-self: start;
     min-width: 0;
-    height: calc(100dvh - 80px);
-    overflow: visible;
     box-sizing: border-box;
 
+    @media (width >= 1024px) {
+      position: fixed;
+      top: 16px;
+      left: 24px;
+      width: 220px;
+      height: calc(100dvh - 16px - 24px);
+      z-index: 20;
+    }
+
     @media (width <= 1023px) {
-      // On mobile/tablet the sidebar is positioned fixed by left-sidebar.scss
-      // Remove grid area assignment
       grid-area: unset;
     }
   }
 
-  // Main content area
+  // Main content area — own white background and radius so no layer shows behind sidebar
   #main-outlet {
     min-width: 0;
     overflow-x: clip;
     padding: 0;
+
+    @media (width >= 1024px) {
+      background: #fff;
+      border: 1px solid var(--ft-panel-border, #e5e7eb);
+      border-radius: 0 var(--ft-panel-radius) var(--ft-panel-radius) 0;
+      box-shadow: var(--ft-panel-shadow, 0 1px 3px 0 rgb(0 0 0 / 0.06));
+    }
   }
 
   // Hide welcome banner (custom feed has its own)
@@ -81,7 +123,7 @@ body.fantribe-theme:not(.admin-interface) {
     margin-left: 16px;
     margin-right: 16px;
     margin-top: 0;
-    margin-bottom: 0 !important;
+    margin-bottom: 0;
     padding: 0 24px 24px;
     background: #fff;
     border: 1px solid var(--ft-slate-200, #e2e0dd);
@@ -193,11 +235,11 @@ body.fantribe-theme:not(.admin-interface) {
   }
 
   .topic-above-footer-buttons-outlet.presence {
-    margin: 0 !important;
-    padding: 0 !important;
-    min-height: 0 !important;
-    height: 0 !important;
-    overflow: hidden !important;
+    margin: 0;
+    padding: 0;
+    min-height: 0;
+    height: 0;
+    overflow: hidden;
   }
 
   .topic-footer-main-buttons {
@@ -264,11 +306,11 @@ body.fantribe-theme:not(.admin-interface) {
   }
 }
 
-#main-outlet .topic-navigation {
-  z-index: 0 !important;
+body.fantribe-theme:not(.admin-interface) #main-outlet .topic-navigation {
+  z-index: 0;
 }
 
-// Collapsed sidebar: icon-only column (80px)
+// Collapsed sidebar: Figma 448-16310 — narrow strip (80px) with icons only
 body.fantribe-theme:not(.admin-interface) {
   .fantribe-left-sidebar--collapsed ~ #main-outlet,
   #main-outlet-wrapper:has(.fantribe-left-sidebar--collapsed) {
@@ -325,7 +367,7 @@ body.fantribe-theme:not(.admin-interface) {
 
     #main-outlet .container.posts > .row {
       width: 100%;
-      max-width: 100% !important;
+      max-width: 100%;
       min-width: 0;
       box-sizing: border-box;
       overflow-x: hidden;

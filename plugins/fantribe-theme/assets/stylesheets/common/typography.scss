@@ -1,8 +1,7 @@
-// FanTribe Typography
-// Headings, body text, captions, links
+// FanTribe Typography — Figma Music Tribe: Inter
+// Headings, body text, captions, links. Design tokens in design-tokens.scss.
 
-// Import Google Font
-@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap");
+@import "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap";
 
 .ft-display {
   font-family: var(--ft-font-family);
