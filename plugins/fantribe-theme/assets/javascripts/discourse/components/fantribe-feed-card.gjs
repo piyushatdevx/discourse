@@ -248,11 +248,24 @@ export default class FantribeFeedCard extends Component {
     this.loadingExpanded = true;
     try {
       const result = await ajax(`/posts/${postId}/cooked.json`);
-      this.expandedContent = result?.cooked ?? "";
+      let cooked = result?.cooked ?? "";
+      cooked = this.hideFirstLightboxInExpanded(cooked);
+      this.expandedContent = cooked;
       this.expanded = true;
     } finally {
       this.loadingExpanded = false;
     }
+  }
+
+  hideFirstLightboxInExpanded(html) {
+    if (!html || !html.includes("lightbox-wrapper")) {
+      return html;
+    }
+    const hideClass = "fantribe-feed-card__hide-duplicate-image";
+    return html.replace(
+      /class="(lightbox-wrapper)(?="| )/,
+      `class="$1 ${hideClass}`
+    );
   }
 
   <template>

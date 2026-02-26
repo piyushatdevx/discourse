@@ -433,6 +433,12 @@ body.fantribe-theme:not(.admin-interface) {
       .lazy-video-container {
         display: none;
       }
+
+      // Image is already shown in .fantribe-feed-card__media; hide only the first
+      // .lightbox-wrapper in expanded content (marked by the component).
+      .lightbox-wrapper.fantribe-feed-card__hide-duplicate-image {
+        display: none;
+      }
     }
   }
 }
