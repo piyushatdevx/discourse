@@ -10,7 +10,6 @@ import ftIcon from "../helpers/ft-icon";
 
 export default class FtCreateTribeModal extends Component {
   @service router;
-  @service fantribeCreate;
 
   @tracked name = "";
   @tracked description = "";
@@ -64,14 +63,14 @@ export default class FtCreateTribeModal extends Component {
   @action
   handleBackdropClick(event) {
     if (event.target === event.currentTarget) {
-      this.fantribeCreate.closeCreateTribeModal();
+      this.args.onClose?.();
     }
   }
 
   @action
   handleKeydown(event) {
     if (event.key === "Escape") {
-      this.fantribeCreate.closeCreateTribeModal();
+      this.args.onClose?.();
     }
   }
 
@@ -172,7 +171,7 @@ export default class FtCreateTribeModal extends Component {
         type: "POST",
         data,
       });
-      this.fantribeCreate.closeCreateTribeModal();
+      this.args.onClose?.();
       this.router.refresh();
     } catch (error) {
       popupAjaxError(error);
@@ -200,7 +199,7 @@ export default class FtCreateTribeModal extends Component {
             type="button"
             class="ft-modal__close-btn"
             aria-label="Close"
-            {{on "click" this.fantribeCreate.closeCreateTribeModal}}
+            {{on "click" @onClose}}
           >
             {{ftIcon "x"}}
           </button>
@@ -368,7 +367,7 @@ export default class FtCreateTribeModal extends Component {
           <button
             type="button"
             class="ft-modal__cancel-btn"
-            {{on "click" this.fantribeCreate.closeCreateTribeModal}}
+            {{on "click" @onClose}}
           >
             Cancel
           </button>

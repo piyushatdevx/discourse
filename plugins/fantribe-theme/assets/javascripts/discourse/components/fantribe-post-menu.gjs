@@ -17,6 +17,7 @@ export default class FantribePostMenu extends Component {
   @service fantribeCreate;
   @service modal;
   @service store;
+  @service toasts;
 
   @tracked isBookmarkLoading = false;
   @tracked showDeleteConfirm = false;
@@ -61,6 +62,13 @@ export default class FantribePostMenu extends Component {
     }
     const url = `${window.location.origin}/t/${topic.slug}/${topic.id}`;
     clipboardCopy(url);
+    this.toasts.success({ data: { message: "Link copied to clipboard" } });
+  }
+
+  @action
+  handleClose() {
+    this.showDeleteConfirm = false;
+    this.args.onClose?.();
   }
 
   @action
@@ -84,6 +92,7 @@ export default class FantribePostMenu extends Component {
     }
     try {
       await ajax(`/t/${topic.id}`, { type: "DELETE" });
+      this.toasts.success({ data: { message: "Post deleted" } });
       this.args.onClose?.();
       this.args.onDismiss?.();
     } catch (error) {
@@ -126,6 +135,7 @@ export default class FantribePostMenu extends Component {
         type: "POST",
         data: { notification_level: 0 },
       });
+      this.toasts.success({ data: { message: "Post hidden from your feed" } });
       this.args.onDismiss?.();
     } catch (error) {
       popupAjaxError(error);
@@ -144,6 +154,9 @@ export default class FantribePostMenu extends Component {
       await ajax(`/u/${username}/notification_level.json`, {
         type: "PUT",
         data: { notification_level: "mute" },
+      });
+      this.toasts.success({
+        data: { message: `${username} muted — their posts are hidden` },
       });
       this.args.onDismiss?.();
     } catch (error) {
@@ -169,6 +182,7 @@ export default class FantribePostMenu extends Component {
           expiring_at: farFuture.toISOString(),
         },
       });
+      this.toasts.success({ data: { message: `${username} blocked` } });
       this.args.onDismiss?.();
     } catch (error) {
       popupAjaxError(error);
@@ -189,6 +203,11 @@ export default class FantribePostMenu extends Component {
         data: {
           status: "closed",
           enabled: willClose ? "true" : "false",
+        },
+      });
+      this.toasts.success({
+        data: {
+          message: willClose ? "Comments turned off" : "Comments turned on",
         },
       });
       this.args.onClosedChange?.(willClose);
@@ -218,6 +237,7 @@ export default class FantribePostMenu extends Component {
           await ajax(`/bookmarks/${bookmarkId}`, { type: "DELETE" });
         }
         this._bookmarkId = null;
+        this.toasts.success({ data: { message: "Bookmark removed" } });
       } else {
         const result = await ajax("/bookmarks", {
           type: "POST",
@@ -227,6 +247,7 @@ export default class FantribePostMenu extends Component {
           },
         });
         this._bookmarkId = result?.id ?? null;
+        this.toasts.success({ data: { message: "Post saved to bookmarks" } });
       }
     } catch (error) {
       this._isBookmarked = wasBookmarked;
@@ -244,14 +265,14 @@ export default class FantribePostMenu extends Component {
       <button
         type="button"
         class="fantribe-post-menu__backdrop"
-        {{on "click" @onClose}}
+        {{on "click" this.handleClose}}
       ></button>
 
       {{! Menu Dropdown }}
       <div
         class="fantribe-post-menu"
         {{closeOnClickOutside
-          @onClose
+          this.handleClose
           (hash ignoreSelector=".fantribe-post-menu")
         }}
       >

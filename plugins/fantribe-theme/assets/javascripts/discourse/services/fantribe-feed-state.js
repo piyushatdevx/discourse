@@ -3,6 +3,7 @@ import Service from "@ember/service";
 
 export default class FantribeFeedState extends Service {
   @tracked pendingTopics = [];
+  @tracked topicUpdates = {};
 
   prependTopic(topic) {
     this.pendingTopics = [topic, ...this.pendingTopics];
@@ -10,5 +11,12 @@ export default class FantribeFeedState extends Service {
 
   clearPending() {
     this.pendingTopics = [];
+  }
+
+  updateTopic(topicId, updates) {
+    this.topicUpdates = {
+      ...this.topicUpdates,
+      [topicId]: { ...(this.topicUpdates[topicId] || {}), ...updates },
+    };
   }
 }

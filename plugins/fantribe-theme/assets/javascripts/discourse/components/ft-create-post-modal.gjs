@@ -269,6 +269,11 @@ export default class FtCreatePostModal extends Component {
   }
 
   @action
+  focusTagInput() {
+    document.querySelector(".ft-modal__tag-input")?.focus();
+  }
+
+  @action
   async submitPost() {
     if (this.isDisabled) {
       return;
@@ -295,9 +300,12 @@ export default class FtCreatePostModal extends Component {
             type: "PUT",
             data: { tags: this.selectedTags },
           });
+          this.fantribeFeedState.updateTopic(post.topic_id, {
+            tags: this.selectedTags,
+            title: this.postTitle.trim(),
+          });
         }
         this.fantribeCreate.closeCreatePostModal();
-        this.router.refresh();
         return;
       }
 
@@ -515,7 +523,15 @@ export default class FtCreatePostModal extends Component {
 
           {{! Tags input }}
           <div class="ft-modal__tags-section">
-            <div class="ft-modal__tags-input-wrap">
+            <div class="ft-modal__tags-label-row">
+              {{ftIcon "tag"}}
+              <span class="ft-modal__tags-label">Tags</span>
+            </div>
+            {{! template-lint-disable no-invalid-interactive }}
+            <div
+              class="ft-modal__tags-input-wrap"
+              {{on "click" this.focusTagInput}}
+            >
               {{#each this.selectedTags as |tag|}}
                 <span class="ft-modal__tag-chip">
                   #{{tag}}

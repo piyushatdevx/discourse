@@ -8,7 +8,6 @@ import closeOnClickOutside from "discourse/modifiers/close-on-click-outside";
 import ftIcon from "../helpers/ft-icon";
 import FtCreateMenu from "./ft-create-menu";
 import FtCreatePostModal from "./ft-create-post-modal";
-import FtCreateTribeModal from "./ft-create-tribe-modal";
 
 export default class FantribeHeader extends Component {
   @service router;
@@ -173,10 +172,6 @@ export default class FantribeHeader extends Component {
 
     {{#if this.fantribeCreate.isCreatePostModalOpen}}
       <FtCreatePostModal />
-    {{/if}}
-
-    {{#if this.fantribeCreate.isCreateTribeModalOpen}}
-      <FtCreateTribeModal />
     {{/if}}
   </template>
 }

@@ -126,12 +126,6 @@ body.fantribe-theme:not(.admin-interface) {
     margin: 0;
   }
 
-  .ft-my-tribes-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-    gap: 16px;
-  }
-
   // Section divider between My Tribes and Discover Tribes
   .ft-section-divider {
     display: flex;

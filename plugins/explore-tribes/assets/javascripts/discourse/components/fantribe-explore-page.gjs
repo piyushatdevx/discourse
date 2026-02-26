@@ -6,18 +6,19 @@ import { action } from "@ember/object";
 import didInsert from "@ember/render-modifiers/modifiers/did-insert";
 import { service } from "@ember/service";
 import { eq } from "discourse/truth-helpers";
+import FtCreateTribeModal from "discourse/plugins/fantribe-theme/discourse/components/ft-create-tribe-modal";
 import ftIcon from "discourse/plugins/fantribe-theme/discourse/helpers/ft-icon";
 import FantribeTribeCard from "./fantribe-tribe-card";
 
 export default class FantribeExplorePage extends Component {
   @service currentUser;
   @service fantribeMembership;
-  @service fantribeCreate;
   @service site;
 
   @tracked activeTab = "explore";
   @tracked activeFilter = "All";
   @tracked isFilterOpen = false;
+  @tracked showCreateModal = false;
 
   isActiveFilter = (filter) => filter === this.activeFilter;
 
@@ -99,6 +100,16 @@ export default class FantribeExplorePage extends Component {
   }
 
   @action
+  openCreateModal() {
+    this.showCreateModal = true;
+  }
+
+  @action
+  closeCreateModal() {
+    this.showCreateModal = false;
+  }
+
+  @action
   toggleFilter() {
     this.isFilterOpen = !this.isFilterOpen;
   }
@@ -158,7 +169,7 @@ export default class FantribeExplorePage extends Component {
               <button
                 type="button"
                 class="ft-explore-create-btn"
-                {{on "click" this.fantribeCreate.openCreateTribeModal}}
+                {{on "click" this.openCreateModal}}
               >
                 {{ftIcon "plus"}}
                 <span>Create Tribe</span>
@@ -258,7 +269,7 @@ export default class FantribeExplorePage extends Component {
                   <p class="ft-section-subtitle">Communities you've joined</p>
                 </div>
               </div>
-              <div class="ft-my-tribes-grid">
+              <div class="ft-tribe-grid">
                 {{#each this.joinedTribes as |category|}}
                   <FantribeTribeCard @category={{category}} />
                 {{/each}}
@@ -285,5 +296,9 @@ export default class FantribeExplorePage extends Component {
 
       </div>
     </div>
+
+    {{#if this.showCreateModal}}
+      <FtCreateTribeModal @onClose={{this.closeCreateModal}} />
+    {{/if}}
   </template>
 }
