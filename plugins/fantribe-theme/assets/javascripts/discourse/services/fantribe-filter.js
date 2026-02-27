@@ -4,12 +4,26 @@ import Service from "@ember/service";
 
 export default class FantribeFilterService extends Service {
   @tracked selectedCategoryIds = [];
+  @tracked selectedTagNames = [];
+  @tracked selectedUsernames = [];
+  @tracked topicSearchQuery = "";
+  @tracked contentTypeFilter = "all";
+  @tracked dateFrom = null;
+  @tracked dateTo = null;
   @tracked isFiltersModalOpen = false;
   @tracked isSearchModalOpen = false;
   _hasBeenInitialized = false;
 
   get hasFilters() {
-    return this.selectedCategoryIds.length > 0;
+    return (
+      this.selectedCategoryIds.length > 0 ||
+      this.selectedTagNames.length > 0 ||
+      this.selectedUsernames.length > 0 ||
+      this.topicSearchQuery.trim().length > 0 ||
+      this.contentTypeFilter !== "all" ||
+      this.dateFrom !== null ||
+      this.dateTo !== null
+    );
   }
 
   get selectedCount() {
@@ -69,11 +83,43 @@ export default class FantribeFilterService extends Service {
   @action
   clearFilters() {
     this.selectedCategoryIds = [];
+    this.selectedTagNames = [];
+    this.selectedUsernames = [];
+    this.topicSearchQuery = "";
+    this.contentTypeFilter = "all";
+    this.dateFrom = null;
+    this.dateTo = null;
   }
 
   @action
   setFilters(categoryIds) {
     this.selectedCategoryIds = [...categoryIds];
+  }
+
+  @action
+  setTagFilters(tagNames) {
+    this.selectedTagNames = [...tagNames];
+  }
+
+  @action
+  setUserFilters(usernames) {
+    this.selectedUsernames = [...usernames];
+  }
+
+  @action
+  setTopicSearch(query) {
+    this.topicSearchQuery = query;
+  }
+
+  @action
+  setContentTypeFilter(type) {
+    this.contentTypeFilter = type;
+  }
+
+  @action
+  setDateRange(from, to) {
+    this.dateFrom = from;
+    this.dateTo = to;
   }
 
   isCategorySelected(category) {

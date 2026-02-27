@@ -21,16 +21,76 @@ export default class FantribeFeedLayout extends Component {
   }
 
   get filteredTopics() {
-    const selectedIds = this.fantribeFilter.selectedCategoryIds;
+    let topics = this.topics;
 
-    if (!selectedIds || selectedIds.length === 0) {
-      return this.topics;
+    // Category filter
+    const selectedIds = this.fantribeFilter.selectedCategoryIds;
+    if (selectedIds && selectedIds.length > 0) {
+      topics = topics.filter((topic) => {
+        const categoryId = topic.category?.id || topic.category_id;
+        return selectedIds.includes(categoryId);
+      });
     }
 
-    return this.topics.filter((topic) => {
-      const categoryId = topic.category?.id || topic.category_id;
-      return selectedIds.includes(categoryId);
-    });
+    // Tag filter
+    const selectedTags = this.fantribeFilter.selectedTagNames;
+    if (selectedTags && selectedTags.length > 0) {
+      topics = topics.filter((topic) => {
+        const topicTags = topic.tags || [];
+        return selectedTags.some((tag) => topicTags.includes(tag));
+      });
+    }
+
+    // Posted by filter
+    const selectedUsernames = this.fantribeFilter.selectedUsernames;
+    if (selectedUsernames && selectedUsernames.length > 0) {
+      topics = topics.filter((topic) => {
+        const poster = topic.posters?.[0]?.user || topic.creator;
+        return poster && selectedUsernames.includes(poster.username);
+      });
+    }
+
+    // Topic search filter (title + excerpt)
+    const searchQuery = this.fantribeFilter.topicSearchQuery
+      ?.trim()
+      .toLowerCase();
+    if (searchQuery) {
+      topics = topics.filter((topic) => {
+        const title = (topic.title || "").toLowerCase();
+        const excerpt = (topic.excerpt || "").toLowerCase();
+        return title.includes(searchQuery) || excerpt.includes(searchQuery);
+      });
+    }
+
+    // Content type filter
+    const contentType = this.fantribeFilter.contentTypeFilter;
+    if (contentType === "topics_only") {
+      topics = topics.filter((topic) => (topic.posts_count || 1) <= 1);
+    } else if (contentType === "with_replies") {
+      topics = topics.filter((topic) => (topic.posts_count || 1) > 1);
+    }
+
+    // Date range filter
+    const dateFrom = this.fantribeFilter.dateFrom;
+    const dateTo = this.fantribeFilter.dateTo;
+    if (dateFrom || dateTo) {
+      topics = topics.filter((topic) => {
+        const created = new Date(topic.created_at);
+        if (dateFrom && created < new Date(dateFrom)) {
+          return false;
+        }
+        if (dateTo) {
+          const toEnd = new Date(dateTo);
+          toEnd.setHours(23, 59, 59, 999);
+          if (created > toEnd) {
+            return false;
+          }
+        }
+        return true;
+      });
+    }
+
+    return topics;
   }
 
   get trendingTopics() {
