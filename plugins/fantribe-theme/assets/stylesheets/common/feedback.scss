@@ -20,10 +20,9 @@
   padding: var(--ft-space-3) var(--ft-space-4);
   min-width: 300px;
   max-width: 420px;
-  background: rgba(255, 255, 255, 0.95);
+  background: rgb(255, 255, 255, 0.95);
   backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(26, 26, 26, 0.08);
+  border: 1px solid rgb(26, 26, 26, 0.08);
   border-radius: var(--ft-radius-lg);
   box-shadow: var(--ft-shadow-lg);
   pointer-events: auto;
@@ -102,6 +101,7 @@
     opacity: 0;
     transform: translateX(100%);
   }
+
   to {
     opacity: 1;
     transform: translateX(0);
@@ -112,6 +112,7 @@
   from {
     width: 100%;
   }
+
   to {
     width: 0;
   }
@@ -305,7 +306,7 @@
   }
 
   &.ft-spinner--white {
-    border-color: rgba(255, 255, 255, 0.3);
+    border-color: rgb(255, 255, 255, 0.3);
     border-top-color: var(--ft-white);
   }
 }
@@ -381,6 +382,7 @@
   0% {
     background-position: 200% 0;
   }
+
   100% {
     background-position: -200% 0;
   }

@@ -11,10 +11,9 @@
   justify-content: space-between;
   padding: 0 var(--ft-space-4);
   height: 56px;
-  background: rgba(255, 255, 255, 0.8);
+  background: rgb(255, 255, 255, 0.8);
   backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
-  border-bottom: 1px solid rgba(26, 26, 26, 0.08);
+  border-bottom: 1px solid rgb(26, 26, 26, 0.08);
 
   .ft-navbar__logo {
     display: flex;
@@ -165,7 +164,7 @@
     }
 
     &.ft-sidebar__item--active {
-      background-color: rgba(255, 23, 68, 0.2);
+      background-color: rgb(255, 23, 68, 0.2);
       color: var(--ft-primary);
     }
   }

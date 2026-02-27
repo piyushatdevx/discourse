@@ -153,7 +153,7 @@
     position: absolute;
     inset: 0;
     border-radius: var(--ft-radius-full);
-    background-color: rgba(0, 0, 0, 0.4);
+    background-color: rgb(0, 0, 0, 0.4);
     opacity: 0;
     transition: opacity var(--ft-transition-fast);
     pointer-events: none;

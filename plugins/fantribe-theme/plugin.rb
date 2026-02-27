@@ -75,6 +75,7 @@ register_asset "stylesheets/common/components/search-modal.scss"
 register_asset "stylesheets/common/components/flag-modal.scss"
 register_asset "stylesheets/common/components/preferences.scss"
 register_asset "stylesheets/common/components/composer.scss"
+register_asset "stylesheets/common/components/full-post.scss"
 
 # Discourse overrides - MUST load last
 register_asset "stylesheets/common/fantribe-overrides.scss"

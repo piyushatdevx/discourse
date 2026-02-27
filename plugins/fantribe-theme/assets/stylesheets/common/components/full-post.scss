@@ -1,0 +1,1047 @@
+// ============================================================================
+//
+// Design tokens:
+//   Card:       bg #fff, radius 20px, shadow 0 1px 3px rgb(0,0,0,.1)
+//   Header:     bg rgb(221,221,221,.2), border-bottom 1px rgb(0,0,0,.06)
+//   Text:       #1a1a1a (primary), #666 (secondary), #5a584f (muted)
+//   Primary:    #ff1744
+//   Reactions:  bg #fff2f5, border 0.5px rgb(255,23,68,.3), h 40px, r 30px
+//   Comments:   avatar 40px gradient circle, 14px semibold name, 14px text
+//   Input:      bg rgb(221,221,221,.2), radius 20px, h 38px
+// ============================================================================
+
+// ---------------------------------------------------------------------------
+// Hide ALL standard Discourse topic page elements — our UI replaces them
+// ---------------------------------------------------------------------------
+body.fantribe-theme:not(.admin-interface).ft-full-post-active {
+  // Strip all visual styling from Discourse's container/wrap shells —
+  // our ft-full-post-layout card replaces them entirely
+  #main-outlet,
+  #main-outlet > .container,
+  #main-outlet > .container > .wrap,
+  #main-outlet .container,
+  #main-outlet .wrap {
+    background: transparent !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    padding: 0 !important;
+    margin: 0 auto !important;
+    max-width: none !important;
+    border: 0 !important;
+  }
+
+  .post-stream,
+  .topic-footer-buttons,
+  .topic-navigation,
+  .topic-map,
+  .suggested-topics,
+  .topic-above-suggested,
+  .small-action,
+  .topic-timer-info,
+  .signup-cta,
+  .topic-footer-main-buttons,
+  #topic-title,
+  .extra-info-wrapper,
+  .topic-category,
+  .topic-notifications-button,
+  .notification-options,
+  .timeline-container,
+  .related-footer-topics,
+  .more-topics,
+  .more-topics__container,
+  .more-topics__list,
+  #topic-footer-buttons,
+  .topic-footer {
+    display: none !important;
+  }
+
+  // Remove Discourse's .regular max-width constraints that center the post content
+  #main-outlet > .regular {
+    max-width: none !important;
+    margin: 0 !important;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Page layout: card content (flex-1) + right sidebar (282px — Figma 501:1928)
+//
+// Figma spacing (1440px canvas):
+//   left sidebar  x=24   w=220  → ends at x=244
+//   main content  x=244  w=890  → ends at x=1134  (card=858px + 16px each side)
+//   right sidebar x=1134 w=282  → ends at x=1416
+//   all three start at y=24
+// ---------------------------------------------------------------------------
+body.fantribe-theme:not(.admin-interface) {
+  .ft-full-post-layout {
+    display: flex;
+    align-items: flex-start;
+
+    &__content {
+      flex-shrink: 0;
+      width: 890px;
+      height: 922px;
+    }
+
+    &__sidebar {
+      display: none;
+
+      @media (width >= 1280px) {
+        display: block;
+        width: 282px;
+        flex-shrink: 0;
+        position: sticky;
+        top: 0;
+        align-self: flex-start;
+        max-height: calc(100dvh - 24px);
+        overflow-y: auto;
+        overflow-x: hidden;
+      }
+    }
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Full Post Card
+// ---------------------------------------------------------------------------
+body.fantribe-theme:not(.admin-interface) {
+  // Outer wrapper: 16px horizontal padding keeps the 858px card centred in the
+  // 890px content area (matching Figma's inner container x=16 offset)
+  .ft-full-post {
+    padding: 0 16px;
+
+    // -----------------------------------------------------------------------
+    // Card shell — fixed 840px height; content scrolls inside, not the card
+    // -----------------------------------------------------------------------
+    &__card {
+      background: #fff;
+      border-radius: 20px;
+      box-shadow:
+        0 1px 3px 0 rgb(0, 0, 0, 0.1),
+        0 1px 2px 0 rgb(0, 0, 0, 0.06);
+      display: flex;
+      flex-direction: column;
+      width: 858px; // 890px flex container minus 16px horizontal padding
+      flex-shrink: 0;
+      height: 840px;
+      overflow: visible; // Post menu must escape the card
+    }
+
+    // -----------------------------------------------------------------------
+    // Header — subtle gray tint + bottom separator
+    // -----------------------------------------------------------------------
+    &__header {
+      background: rgb(221, 221, 221, 0.2);
+      border-bottom: 1px solid rgb(0, 0, 0, 0.06);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px;
+      border-radius: 20px 20px 0 0;
+      flex-shrink: 0;
+    }
+
+    &__header-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    // Back arrow — bare icon button (circle only on hover)
+    &__back-btn {
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: none;
+      border: none;
+      cursor: pointer;
+      border-radius: 50%;
+      padding: 0;
+      flex-shrink: 0;
+
+      .ft-icon {
+        width: 18px;
+        height: 18px;
+        color: #1a1a1a;
+      }
+
+      &:hover {
+        background: rgb(0, 0, 0, 0.06);
+      }
+    }
+
+    // Author block: avatar + meta stack
+    &__author-block {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    // Avatar — 48px circular image
+    &__avatar-wrapper {
+      width: 48px;
+      height: 48px;
+      flex-shrink: 0;
+
+      img,
+      .avatar {
+        width: 48px;
+        height: 48px;
+        border-radius: 9999px;
+        object-fit: cover;
+      }
+    }
+
+    &__author-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    // Name: 16px semibold, #1a1a1a
+    &__author-name {
+      font-size: 16px;
+      font-weight: 600;
+      line-height: 20px;
+      color: #1a1a1a;
+      white-space: nowrap;
+    }
+
+    &__author-info {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    // Handle + separator + time: 13px regular, #666
+    &__author-handle,
+    &__separator,
+    &__timestamp {
+      font-size: 13px;
+      font-weight: 400;
+      line-height: 18px;
+      color: #666;
+      white-space: nowrap;
+    }
+
+    // Header right: category pill + role badge + kebab
+    &__header-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    // Category pill: light-beige bg, dark text
+    &__category-pill {
+      background: rgb(0, 0, 0, 0.05); // light beige/gray from Figma
+      color: #1a1a1a;
+      font-size: 13px;
+      font-weight: 500;
+      line-height: 18px;
+      padding: 5px 14px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      white-space: nowrap;
+
+      &:hover {
+        background: rgb(0, 0, 0, 0.08);
+      }
+    }
+
+    // Role badge: grey bg, no border
+    &__role-badge {
+      background: rgb(0, 0, 0, 0.05); // light grey background
+      border: none;
+      color: #666;
+      font-size: 13px;
+      font-weight: 500;
+      line-height: 18px;
+      padding: 5px 14px;
+      border-radius: 6px;
+      white-space: nowrap;
+    }
+
+    &__menu-wrapper {
+      position: relative;
+    }
+
+    &__more-btn {
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+      border-radius: 4px;
+
+      .ft-icon {
+        width: 20px;
+        height: 20px;
+        color: #1a1a1a;
+      }
+
+      &:hover .ft-icon {
+        color: #666;
+      }
+    }
+
+    // -----------------------------------------------------------------------
+    // Content area (below header) — fills remaining card height
+    // -----------------------------------------------------------------------
+    &__content {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      padding: 20px 0 20px;
+      flex: 1;
+      min-height: 0;
+      overflow: hidden;
+    }
+
+    // -----------------------------------------------------------------------
+    // Title section: title row + body text
+    // -----------------------------------------------------------------------
+    &__title-section {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding: 0 20px;
+    }
+
+    &__title-row {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    // Post title: 18px semibold
+    &__title {
+      font-size: 18px;
+      font-weight: 600;
+      line-height: 26px;
+      color: #1a1a1a;
+      margin: 0;
+      flex: 1;
+      min-width: 0;
+    }
+
+    &__title-actions {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex-shrink: 0;
+    }
+
+    // Action icon buttons (share / bookmark / edit)
+    &__action-btn {
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+
+      .ft-icon {
+        width: 20px;
+        height: 20px;
+        color: #555;
+      }
+
+      &--active .ft-icon {
+        color: #ff1744;
+      }
+
+      &:hover .ft-icon {
+        color: #1a1a1a;
+      }
+
+      &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+    }
+
+    // Post body text: 15px regular
+    &__body {
+      font-size: 15px;
+      font-weight: 400;
+      line-height: 24px;
+      color: #1a1a1a;
+
+      p {
+        margin: 0;
+      }
+
+      // Images shown in carousel instead
+      .lightbox-wrapper,
+      img:not(.emoji) {
+        display: none;
+      }
+    }
+
+    // -----------------------------------------------------------------------
+    // Two-column layout: left (image+gear+reactions) / right (comments)
+    // -----------------------------------------------------------------------
+    &__columns {
+      display: flex;
+      align-items: stretch;
+      flex: 1;
+      min-height: 0;
+      overflow: hidden;
+    }
+
+    // -----------------------------------------------------------------------
+    // Left column
+    // -----------------------------------------------------------------------
+    &__left-col {
+      flex: 1 0 0;
+      min-width: 0;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      padding-bottom: 20px;
+      overflow: hidden;
+    }
+
+    // Image carousel + gear tags (gap-12 between them)
+    &__left-top {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      padding: 0 16px;
+    }
+
+    // -----------------------------------------------------------------------
+    // Image Carousel — h-474px, rounded-20px (from Figma node 539:36743)
+    // -----------------------------------------------------------------------
+    &__carousel {
+      position: relative;
+      width: 100%;
+      height: 474px;
+      border-radius: 16px;
+      overflow: hidden;
+    }
+
+    &__carousel-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    // "1/2" badge — frosted top-right corner
+    &__img-indicator {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: rgb(0, 0, 0, 0.35);
+      color: white;
+      font-size: 12px;
+      font-weight: 500;
+      line-height: 16px;
+      padding: 4px 10px;
+      border-radius: 6px;
+      pointer-events: none;
+    }
+
+    // Carousel nav arrows — frosted glass circle
+    &__carousel-nav {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgb(0, 0, 0, 0.28);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgb(255, 255, 255, 0.2);
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background 150ms;
+
+      &:hover {
+        background: rgb(0, 0, 0, 0.5);
+      }
+
+      .ft-icon {
+        width: 20px;
+        height: 20px;
+        color: #fff;
+        filter: drop-shadow(0 1px 2px rgb(0, 0, 0, 0.5));
+      }
+
+      &--prev {
+        left: 12px;
+      }
+
+      &--next {
+        right: 12px;
+      }
+    }
+
+    // -----------------------------------------------------------------------
+    // Gear tags row
+    // -----------------------------------------------------------------------
+    &__gear-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    &__gear-pills {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    // Tag Icon beside Gear Used
+    &__gear-tag-icon {
+      color: #00786f;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 16px;
+      height: 16px;
+      margin-right: 4px;
+    }
+
+    // Gear pill: plain stylized pill (matched to Figma layout, teal outline)
+    &__gear-pill {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 14px;
+      border-radius: 9999px;
+      background: transparent;
+      border: 1px solid #00d492; // Teal border
+      color: #00786f; // Dark teal text
+      font-size: 13px;
+      font-weight: 500;
+      line-height: 18px;
+      cursor: pointer;
+      white-space: nowrap;
+
+      &:hover {
+        background: rgb(0, 212, 146, 0.05);
+      }
+    }
+
+    // -----------------------------------------------------------------------
+    // Bottom of left col: reactions + stats
+    // -----------------------------------------------------------------------
+    &__left-bottom {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      padding: 0 16px;
+    }
+
+    // Reaction pills + Stats row
+    &__reactions-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    &__reactions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    &__reaction-pill {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      height: 36px;
+      padding: 0 14px;
+      border-radius: 30px;
+      background: #fff2f5;
+      border: 0.5px solid rgb(255, 23, 68, 0.3);
+      cursor: pointer;
+      transition: all 150ms;
+
+      &--active {
+        background: rgb(255, 23, 68, 0.12);
+        border-color: rgb(255, 23, 68, 0.5);
+      }
+
+      &:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+    }
+
+    &__reaction-emoji {
+      font-size: 15px;
+      line-height: 1;
+    }
+
+    &__reaction-count {
+      font-size: 15px;
+      font-weight: 600;
+      line-height: 20px;
+      color: #3d3b33;
+    }
+
+    // Stats row: message count + views
+    &__stats {
+      display: flex;
+      align-items: center;
+      gap: 16px; // Adjust gap between items
+      margin-left: 2px;
+    }
+
+    &__stat {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+
+      .ft-icon {
+        width: 18px; // Scale down slightly to match Figma proportions
+        height: 18px;
+        color: #888;
+      }
+
+      span {
+        font-size: 14px;
+        font-weight: 500;
+        line-height: 20px;
+        color: #666;
+      }
+    }
+
+    // -----------------------------------------------------------------------
+    // Right column — Comments
+    // -----------------------------------------------------------------------
+    &__right-col {
+      flex: 1 0 0;
+      min-width: 0;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      border-left: 1px solid rgb(0, 0, 0, 0.05);
+    }
+
+    // Comments scrollable inner container
+    &__comments-inner {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      padding: 4px 16px 16px;
+      flex: 1;
+      min-height: 0;
+      overflow: hidden;
+    }
+
+    // "Comments" label
+    &__comments-label {
+      font-size: 12px;
+      font-weight: 500;
+      line-height: 16px;
+      color: #888;
+      white-space: nowrap;
+      padding-bottom: 8px;
+    }
+
+    // Scrollable comments list
+    &__comments-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      overflow-x: hidden;
+      overflow-y: auto;
+      flex: 1;
+
+      &::-webkit-scrollbar {
+        width: 3px;
+      }
+
+      &::-webkit-scrollbar-track {
+        background: transparent;
+      }
+
+      &::-webkit-scrollbar-thumb {
+        background: rgb(0, 0, 0, 0.12);
+        border-radius: 2px;
+      }
+    }
+
+    // -----------------------------------------------------------------------
+    // Individual comment
+    // -----------------------------------------------------------------------
+    &__comment {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+
+    // Gradient circle avatar with initials — 40px (matches Figma)
+    &__comment-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 9999px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+
+      &--gradient-1 {
+        background: linear-gradient(135deg, #00d492, #00bba7);
+      }
+
+      &--gradient-2 {
+        background: linear-gradient(135deg, #51a2ff, #00b8db);
+      }
+
+      &--gradient-3 {
+        background: linear-gradient(135deg, #c27aff, #f6339a);
+      }
+
+      &--gradient-4 {
+        background: linear-gradient(135deg, #ffb84d, #ff6b6b);
+      }
+    }
+
+    // Initials text inside avatar
+    &__comment-initials {
+      font-size: 13px;
+      font-weight: 600;
+      line-height: 1;
+      color: white;
+      letter-spacing: 0.02em;
+    }
+
+    &__comment-body {
+      flex: 1;
+      min-width: 0;
+    }
+
+    // Comment header: name + time on one row
+    &__comment-header {
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+      margin-bottom: 3px;
+    }
+
+    // Author name: 14px semibold, dark
+    &__comment-author {
+      font-size: 14px;
+      font-weight: 600;
+      line-height: 20px;
+      color: #1a1a1a;
+      white-space: nowrap;
+    }
+
+    // Time: 12px regular, muted
+    &__comment-time {
+      font-size: 12px;
+      font-weight: 400;
+      line-height: 16px;
+      color: #888;
+      white-space: nowrap;
+    }
+
+    // Comment text
+    &__comment-text {
+      font-size: 13px;
+      font-weight: 400;
+      line-height: 20px;
+      color: #333;
+      margin: 0;
+      overflow-wrap: break-word;
+    }
+
+    // -----------------------------------------------------------------------
+    // Comment input row (bottom of right column)
+    // -----------------------------------------------------------------------
+    &__comment-input-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 16px 16px;
+      flex-shrink: 0;
+      border-top: 1px solid rgb(0, 0, 0, 0.05);
+    }
+
+    // Current user's avatar next to input
+    &__comment-input-avatar {
+      width: 36px;
+      height: 36px;
+      flex-shrink: 0;
+
+      img,
+      .avatar {
+        width: 36px;
+        height: 36px;
+        border-radius: 9999px;
+        object-fit: cover;
+      }
+    }
+
+    // Input wrapper (relative for emoji button)
+    &__comment-input-wrap {
+      flex: 1;
+      position: relative;
+      height: 38px;
+    }
+
+    // Text input field
+    &__comment-input {
+      width: 100%;
+      height: 38px;
+      background: rgb(0, 0, 0, 0.04);
+      border: 1px solid rgb(0, 0, 0, 0.08);
+      border-radius: 20px;
+      padding: 0 44px 0 16px;
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 38px;
+      color: #1a1a1a;
+      box-sizing: border-box;
+
+      &::placeholder {
+        color: #aaa;
+      }
+
+      &:focus {
+        outline: none;
+        background: rgb(0, 0, 0, 0.06);
+        border-color: rgb(0, 0, 0, 0.12);
+      }
+
+      &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+    }
+
+    // Emoji button inside input
+    &__emoji-btn {
+      position: absolute;
+      right: 6px;
+      top: 5px;
+      width: 28px;
+      height: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: white;
+      border: none;
+      border-radius: 9999px;
+      cursor: pointer;
+      padding: 0;
+      box-shadow: 0 1px 3px rgb(0, 0, 0, 0.1);
+
+      .ft-icon {
+        width: 16px;
+        height: 16px;
+        color: #888;
+      }
+
+      &:hover .ft-icon {
+        color: #555;
+      }
+    }
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Post page right sidebar: New & Unread Topics (node 501-2874)
+// ---------------------------------------------------------------------------
+body.fantribe-theme:not(.admin-interface) {
+  .ft-post-more-topics {
+    background: #fff;
+    border: 1px solid #d4d2cf;
+    border-radius: 20px;
+    box-shadow:
+      0 1px 3px 0 rgb(0, 0, 0, 0.1),
+      0 1px 2px -1px rgb(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    width: 100%;
+
+    // Header row: icon + title
+    &__header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 13px 17px;
+      border-bottom: 1px solid #ddd;
+      flex-shrink: 0;
+
+      .ft-icon {
+        color: #1a1a1a;
+        flex-shrink: 0;
+      }
+    }
+
+    &__title {
+      font-size: 18px;
+      font-weight: 600;
+      line-height: 27px;
+      color: #1a1a1a;
+      white-space: nowrap;
+    }
+
+    // Topic list area
+    &__content {
+      padding: 12px 16px;
+      flex: 1;
+    }
+
+    &__list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    // Individual topic row
+    &__item {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 8px;
+      width: 100%;
+      background: none;
+      border: none;
+      padding: 0;
+      cursor: pointer;
+      text-align: left;
+
+      &:hover .ft-post-more-topics__item-title {
+        color: #ff1744;
+      }
+    }
+
+    &__item-left {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      flex: 1;
+      min-width: 0;
+    }
+
+    // 47×47 thumbnail
+    &__thumb {
+      width: 47px;
+      height: 47px;
+      border-radius: 4px;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+
+    &__thumb-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    &__thumb-placeholder {
+      width: 100%;
+      height: 100%;
+      background: rgb(0, 0, 0, 0.06);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      .ft-icon {
+        color: #aaa;
+      }
+    }
+
+    &__item-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      flex: 1;
+      min-width: 0;
+    }
+
+    // 14px Medium topic title — clamp to 2 lines
+    &__item-title {
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 24px;
+      color: #1a1a1a;
+      text-align: left;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      transition: color 150ms;
+    }
+
+    // Category pill: light-red bg, red text, 10px
+    &__category-badge {
+      display: inline-flex;
+      align-items: center;
+      background: rgb(255, 23, 68, 0.1);
+      color: #ff1744;
+      font-size: 10px;
+      font-weight: 400;
+      line-height: 15px;
+      padding: 3px 10px;
+      border-radius: 6px;
+      white-space: nowrap;
+      align-self: flex-start;
+    }
+
+    // Arrow icon (top-right of each row)
+    &__item-icon {
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      margin-top: 6px;
+
+      .ft-icon {
+        color: #1a1a1a;
+        opacity: 0.4;
+      }
+    }
+
+    // "View all" — gradient red text
+    &__view-all {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px 16px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 21px;
+      width: 100%;
+      flex-shrink: 0;
+      background-image: linear-gradient(158deg, #ff1744 0%, #ff6b6b 100%);
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+
+      &:hover {
+        opacity: 0.8;
+      }
+    }
+  }
+}
