@@ -42,7 +42,7 @@ body.fantribe-theme:not(.admin-interface).ft-on-settings-hub {
 body.fantribe-theme:not(.admin-interface) {
   .ft-settings-hub {
     padding: 0 24px 32px;
-    background: rgb(241, 241, 242);
+    background: var(--ft-figma-page-bg);
     min-height: 100vh;
 
     @media (width <= 768px) {

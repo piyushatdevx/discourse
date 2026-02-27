@@ -7,7 +7,6 @@ import { getOwner } from "@ember/owner";
 import { service } from "@ember/service";
 import { htmlSafe } from "@ember/template";
 import avatar from "discourse/helpers/avatar";
-import icon from "discourse/helpers/d-icon";
 import formatDate from "discourse/helpers/format-date";
 import { i18n } from "discourse-i18n";
 import ftIcon from "../helpers/ft-icon";
@@ -128,122 +127,118 @@ export default class FtUserProfileHeader extends Component {
     {{#if @user}}
       <div class="ft-profile">
 
-        {{! ── Cover image ── }}
-        <div
-          class="ft-profile__cover
-            {{if
-              this.hasCover
-              'ft-profile__cover--has-image'
-              'ft-profile__cover--gradient'
-            }}"
-          style={{this.coverStyle}}
-        >
-          <div class="ft-profile__cover-overlay"></div>
-          <div class="ft-profile__cover-actions">
-            <button
-              type="button"
-              class="ft-profile__cover-btn"
-              {{on "click" this.openShareModal}}
-              aria-label="Share profile"
-            >
-              {{ftIcon "share2"}}
-            </button>
-            {{#if this.isOwnProfile}}
+        {{! ── Header card (tribe-page style) ── }}
+        <div class="ft-profile__header-card">
+
+          {{! ── Cover/Hero image ── }}
+          <div
+            class="ft-profile__cover
+              {{if
+                this.hasCover
+                'ft-profile__cover--has-image'
+                'ft-profile__cover--gradient'
+              }}"
+            style={{this.coverStyle}}
+          >
+            <div class="ft-profile__cover-overlay"></div>
+            <div class="ft-profile__cover-actions">
               <button
                 type="button"
                 class="ft-profile__cover-btn"
-                {{on "click" this.goToSettings}}
-                aria-label="Settings"
+                {{on "click" this.openShareModal}}
+                aria-label="Share profile"
               >
-                {{ftIcon "settings"}}
+                {{ftIcon "share2"}}
               </button>
-              <button
-                type="button"
-                class="ft-profile__cover-btn"
-                {{on "click" this.confirmLogout}}
-                aria-label={{i18n "user.log_out"}}
-              >
-                {{ftIcon "log-out"}}
-              </button>
-            {{/if}}
-          </div>
-        </div>
-
-        {{! ── Profile card ── }}
-        <div class="ft-profile__card">
-          <div class="ft-profile__card-inner">
-
-            {{! Avatar }}
-            <div class="ft-profile__avatar-wrap">
-              <div
-                class="ft-profile__avatar-ring
-                  {{if
-                    this.tier
-                    (concat 'ft-profile__avatar-ring--' this.tier.key)
-                  }}"
-              >
-                {{avatar @user imageSize="large" class="ft-profile__avatar"}}
-              </div>
+              {{#if this.isOwnProfile}}
+                <button
+                  type="button"
+                  class="ft-profile__cover-btn"
+                  {{on "click" this.goToSettings}}
+                  aria-label="Settings"
+                >
+                  {{ftIcon "settings"}}
+                </button>
+                <button
+                  type="button"
+                  class="ft-profile__cover-btn"
+                  {{on "click" this.confirmLogout}}
+                  aria-label={{i18n "user.log_out"}}
+                >
+                  {{ftIcon "log-out"}}
+                </button>
+              {{/if}}
             </div>
+          </div>
 
-            {{! Name, tier badge, handle, bio, meta }}
-            <div class="ft-profile__info">
+          {{! ── Avatar (overlapping hero) ── }}
+          <div class="ft-profile__avatar-wrap">
+            <div
+              class="ft-profile__avatar-ring
+                {{if
+                  this.tier
+                  (concat 'ft-profile__avatar-ring--' this.tier.key)
+                }}"
+            >
+              {{avatar @user imageSize="large" class="ft-profile__avatar"}}
+            </div>
+          </div>
 
-              {{! Name row: name + tier badge inline + action button }}
-              <div class="ft-profile__name-row">
-                <div class="ft-profile__name-group">
-                  <h1 class="ft-profile__name">
-                    {{@user.name}}
-                  </h1>
-                  <p class="ft-profile__handle">@{{@user.username}}</p>
+          {{! ── Info section ── }}
+          <div class="ft-profile__info">
+            <div class="ft-profile__info-header">
+              <div class="ft-profile__info-text">
+                <h1 class="ft-profile__name">{{@user.name}}</h1>
+                <p class="ft-profile__handle">@{{@user.username}}</p>
+
+                {{! Meta: location · joined · website }}
+                <div class="ft-profile__meta">
+                  {{#if this.location}}
+                    {{ftIcon "map-pin"}}
+                    {{this.location}}
+                    <span class="ft-profile__meta-dot">·</span>
+                  {{/if}}
+                  {{#if this.joinedDate}}
+                    {{ftIcon "calendar"}}
+                    Joined
+                    {{formatDate this.joinedDate leaveAgo=true}}
+                    {{#if this.websiteName}}
+                      <span class="ft-profile__meta-dot">·</span>
+                    {{/if}}
+                  {{/if}}
+                  {{#if this.websiteName}}
+                    <a
+                      href={{this.website}}
+                      target="_blank"
+                      rel="nofollow ugc noopener noreferrer"
+                      class="ft-profile__meta-item ft-profile__meta-item--link"
+                    >
+                      {{ftIcon "link2"}}
+                      {{this.websiteName}}
+                    </a>
+                  {{/if}}
                 </div>
+              </div>
 
-                {{! Edit Profile button (own profile only) }}
+              {{! Action buttons }}
+              <div class="ft-profile__actions">
                 {{#if this.isOwnProfile}}
                   <button
                     type="button"
                     class="ft-profile__edit-btn"
                     {{on "click" this.openEditModal}}
                   >
-                    {{icon "pencil"}}
+                    {{ftIcon "edit3"}}
                     Edit Profile
                   </button>
                 {{/if}}
               </div>
-
-              {{! Bio }}
-              {{#if this.bio}}
-                <div class="ft-profile__bio">{{htmlSafe this.bio}}</div>
-              {{/if}}
-
-              {{! Meta: location · joined · website }}
-              <div class="ft-profile__meta">
-                {{#if this.location}}
-                  <span class="ft-profile__meta-item">
-                    {{icon "location-dot"}}
-                    {{this.location}}
-                  </span>
-                {{/if}}
-                {{#if this.joinedDate}}
-                  <span class="ft-profile__meta-item">
-                    {{ftIcon "calendar" size=14}}
-                    Joined
-                    {{formatDate this.joinedDate leaveAgo=true}}
-                  </span>
-                {{/if}}
-                {{#if this.websiteName}}
-                  <a
-                    href={{this.website}}
-                    target="_blank"
-                    rel="nofollow ugc noopener noreferrer"
-                    class="ft-profile__meta-item ft-profile__meta-item--link"
-                  >
-                    {{ftIcon "link2"}}
-                    {{this.websiteName}}
-                  </a>
-                {{/if}}
-              </div>
             </div>
+
+            {{! Bio/Description }}
+            {{#if this.bio}}
+              <div class="ft-profile__bio">{{htmlSafe this.bio}}</div>
+            {{/if}}
           </div>
 
         </div>

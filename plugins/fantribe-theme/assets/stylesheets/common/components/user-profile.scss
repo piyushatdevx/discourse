@@ -92,10 +92,34 @@ body.fantribe-theme:not(.admin-interface) {
     }
   }
 
+  // ── Header card container (tribe-page style) ─────────────
+  .ft-profile__header-card {
+    background: var(--ft-white, #fff);
+    border: 1px solid var(--ft-border, #ddd);
+    border-radius: 20px;
+    overflow: visible;
+    position: relative;
+    padding: 16px;
+    box-shadow:
+      0 1px 3px rgb(0 0 0 / 0.1),
+      0 1px 2px rgb(0 0 0 / 0.1);
+    margin: 0 24px;
+
+    @media (width <= 768px) {
+      margin: 0 12px;
+    }
+
+    @media (width <= 640px) {
+      padding: 12px;
+    }
+  }
+
+  // ── Cover/Hero inside card ─────────────────────────────────
   .ft-profile__cover {
     position: relative;
-    height: 280px;
+    height: clamp(180px, 28vw, 300px);
     overflow: hidden;
+    border-radius: 12px;
 
     &--gradient {
       background: linear-gradient(
@@ -124,18 +148,18 @@ body.fantribe-theme:not(.admin-interface) {
 
   .ft-profile__cover-actions {
     position: absolute;
-    top: 20px;
-    right: 20px;
+    top: 12px;
+    right: 12px;
     display: flex;
-    gap: 10px;
+    gap: 8px;
   }
 
   .ft-profile__cover-btn {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 40px;
-    height: 40px;
+    width: 36px;
+    height: 36px;
     border-radius: 50%;
     background: rgb(255 255 255 / 0.2);
     backdrop-filter: blur(8px);
@@ -151,53 +175,36 @@ body.fantribe-theme:not(.admin-interface) {
 
     svg,
     .d-icon {
-      width: 18px;
-      height: 18px;
+      width: 16px;
+      height: 16px;
     }
   }
 
-  // ── Profile card ─────────────────────────────────────────
-  .ft-profile__card {
-    background: #fff;
-    border: 1px solid var(--ft-slate-200);
-    border-radius: 24px;
-    box-shadow: 0 20px 40px -8px rgb(0 0 0 / 0.1);
-    margin: -80px 24px 0;
-    padding: 28px;
-    position: relative;
-    z-index: 10;
-
-    @media (width<=768px) {
-      margin: -60px 12px 0;
-      padding: 20px;
-    }
-  }
-
-  .ft-profile__card-inner {
-    display: flex;
-    gap: 24px;
-    align-items: flex-start;
-
-    @media (width<= 640px) {
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-    }
-  }
-
-  // ── Avatar + tier ring ────────────────────────────────────
+  // ── Avatar wrapper (absolute positioned overlapping hero) ──
   .ft-profile__avatar-wrap {
-    flex-shrink: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 8px;
+    position: absolute;
+    left: 31px;
+    top: calc(16px + clamp(149px, 24vw, 269px));
+    z-index: 2;
+
+    @media (width <= 768px) {
+      top: calc(16px + 149px);
+    }
+
+    @media (width <= 640px) {
+      left: 50%;
+      transform: translateX(-50%);
+      top: calc(12px + 149px);
+    }
   }
 
   .ft-profile__avatar-ring {
     padding: 3px;
     border-radius: 50%;
     background: var(--ft-slate-200); // default: no tier
+    box-shadow:
+      0 1px 2px -1px rgb(0 0 0 / 0.1),
+      0 4px 4px rgb(0 0 0 / 0.13);
 
     &--bronze {
       background: #{$tier-bronze};
@@ -209,26 +216,32 @@ body.fantribe-theme:not(.admin-interface) {
 
     &--gold {
       background: #{$tier-gold};
-      box-shadow: 0 0 20px rgb(255 215 0 / 0.4);
+      box-shadow:
+        0 0 20px rgb(255 215 0 / 0.4),
+        0 1px 2px -1px rgb(0 0 0 / 0.1),
+        0 4px 4px rgb(0 0 0 / 0.13);
     }
 
     &--platinum {
       background: #{$tier-platinum};
-      box-shadow: 0 0 20px rgb(177 151 252 / 0.4);
+      box-shadow:
+        0 0 20px rgb(177 151 252 / 0.4),
+        0 1px 2px -1px rgb(0 0 0 / 0.1),
+        0 4px 4px rgb(0 0 0 / 0.13);
     }
 
-    // Wrap the Discourse avatar img inside the ring
+    // Smaller avatar to fit card layout
     img,
     .avatar {
-      width: 112px;
-      height: 112px;
+      width: 80px;
+      height: 80px;
       border-radius: 50%;
       display: block;
       border: 3px solid #fff;
 
-      @media (width<=640px) {
-        width: 88px;
-        height: 88px;
+      @media (width <= 640px) {
+        width: 64px;
+        height: 64px;
       }
     }
   }
@@ -272,44 +285,79 @@ body.fantribe-theme:not(.admin-interface) {
     }
   }
 
-  // ── Profile info ─────────────────────────────────────────
+  // ── Profile info (tribe-page style) ──────────────────────
   .ft-profile__info {
-    flex: 1;
-    min-width: 0; // prevent overflow
+    background: transparent;
+    border: none;
+
+    // Left padding clears avatar (31px pos + 86px width - 16px card padding + 8px gap)
+    padding: 20px 16px 16px 105px;
+    margin-bottom: 0;
+
+    @media (width <= 768px) {
+      padding-top: 36px;
+      padding-left: 100px;
+    }
+
+    @media (width <= 640px) {
+      // On mobile, stack vertically - avatar above text
+      padding-left: 16px;
+      padding-top: 50px;
+      text-align: center;
+    }
   }
 
-  .ft-profile__name-row {
+  .ft-profile__info-header {
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
     gap: 16px;
     margin-bottom: 12px;
-    flex-wrap: wrap;
+
+    @media (width <= 768px) {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    @media (width <= 640px) {
+      align-items: center;
+    }
   }
 
-  // Vertical group: name (h1) + handle (p) stacked
-  .ft-profile__name-group {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
+  .ft-profile__info-text {
+    flex: 1;
+    min-width: 0;
   }
 
   .ft-profile__name {
-    font-size: 1.75rem;
-    font-weight: 700;
-    color: var(--ft-slate-900);
-    margin: 0;
-    line-height: 1.2;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    flex-wrap: wrap;
+    font-size: 18px;
+    font-weight: var(--ft-font-weight-semibold, 600);
+    color: #101828;
+    margin: 0 0 2px;
+    line-height: 27px;
+
+    @media (width <= 640px) {
+      font-size: 16px;
+    }
   }
 
   .ft-profile__handle {
-    font-size: 1rem;
-    color: var(--ft-slate-500);
-    margin: 0;
+    font-size: 14px;
+    color: #666;
+    margin: 0 0 6px;
+    line-height: 21px;
+  }
+
+  .ft-profile__actions {
+    display: flex;
+    align-items: center;
+    gap: var(--ft-space-2, 8px);
+    flex-shrink: 0;
+
+    @media (width <= 768px) {
+      width: 100%;
+    }
   }
 
   // ── Follow / Edit buttons ─────────────────────────────────
@@ -367,56 +415,68 @@ body.fantribe-theme:not(.admin-interface) {
   .ft-profile__edit-btn {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
-    padding: 10px 24px;
-    border-radius: 9999px;
-    font-size: 0.9375rem;
-    font-weight: 600;
-    background: var(--ft-slate-100);
-    color: var(--ft-slate-700);
-    border: 1px solid var(--ft-slate-200);
-    text-decoration: none;
-    transition: all 200ms;
-    white-space: nowrap;
-
-    svg,
-    .d-icon {
-      width: 16px;
-      height: 16px;
-    }
-
-    &:hover {
-      background: var(--ft-slate-200);
-    }
-  }
-
-  // ── Bio ───────────────────────────────────────────────────
-  .ft-profile__bio {
-    font-size: 0.9375rem;
-    line-height: 1.65;
-    color: var(--ft-slate-700);
-    margin: 0 0 12px;
-  }
-
-  // ── Meta row ─────────────────────────────────────────────
-  .ft-profile__meta {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 16px;
-    align-items: center;
-  }
-
-  .ft-profile__meta-item {
-    display: inline-flex;
-    align-items: center;
     gap: 6px;
-    font-size: 0.875rem;
-    color: var(--ft-slate-500);
+    padding: 8px 14px;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: var(--ft-font-weight-medium, 500);
+    color: #666;
+    background: var(--ft-gray-50, #f9fafb);
+    border: 1px solid var(--ft-gray-200, #e5e7eb);
+    text-decoration: none;
+    cursor: pointer;
+    transition: background var(--ft-transition-fast, 200ms);
+    white-space: nowrap;
 
     svg,
     .d-icon {
       width: 14px;
       height: 14px;
+    }
+
+    &:hover {
+      background: var(--ft-gray-100, #f3f4f6);
+      color: var(--ft-deep-charcoal, #1a1d23);
+    }
+  }
+
+  // ── Meta row (tribe-page style) ─────────────────────────
+  .ft-profile__meta {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    flex-wrap: wrap;
+    font-size: 14px;
+    line-height: 21px;
+    color: #666;
+    margin: 0;
+
+    .d-icon,
+    svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    @media (width <= 640px) {
+      justify-content: center;
+    }
+  }
+
+  .ft-profile__meta-dot {
+    margin: 0 4px;
+  }
+
+  .ft-profile__meta-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 14px;
+    color: #666;
+
+    svg,
+    .d-icon {
+      width: 16px;
+      height: 16px;
       flex-shrink: 0;
     }
 
@@ -428,6 +488,14 @@ body.fantribe-theme:not(.admin-interface) {
         text-decoration: underline;
       }
     }
+  }
+
+  // ── Bio/Description ────────────────────────────────────────
+  .ft-profile__bio {
+    font-size: 16px;
+    color: #666;
+    line-height: 26px;
+    margin: 0;
   }
 
   // ── Stats row ─────────────────────────────────────────
