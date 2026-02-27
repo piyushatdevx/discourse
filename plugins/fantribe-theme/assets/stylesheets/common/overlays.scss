@@ -1,6 +1,35 @@
 // FanTribe Overlay Styles
 // Modals, drawers, dropdowns, popovers, tooltips
 
+// ── Shared Animation Keyframes ────────────
+
+@keyframes ft-backdrop-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes ft-modal-in {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+html:has(.ft-modal-backdrop),
+body.fantribe-theme:has(.ft-modal-backdrop) {
+  overflow: hidden;
+}
+
 // Modal backdrop
 .ft-modal-backdrop {
   position: fixed;
@@ -12,6 +41,7 @@
   align-items: center;
   justify-content: center;
   padding: var(--ft-space-4);
+  animation: ft-backdrop-in 200ms ease both;
 }
 
 // Modal container
@@ -22,6 +52,7 @@
   max-height: 100vh;
   overflow: auto;
   position: relative;
+  animation: ft-modal-in 250ms cubic-bezier(0.16, 1, 0.3, 1) both;
 
   &.ft-modal--sm {
     width: 100%;

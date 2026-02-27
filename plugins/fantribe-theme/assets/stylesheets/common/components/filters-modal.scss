@@ -5,28 +5,6 @@
 // ============================================================
 
 // ── Keyframe animations ──────────────────────────────────────
-@keyframes ft-backdrop-in {
-  from {
-    opacity: 0;
-  }
-
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes ft-modal-in {
-  from {
-    opacity: 0;
-    transform: translateY(16px) scale(0.98);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
-
 @keyframes ft-dropdown-in {
   from {
     opacity: 0;
@@ -40,16 +18,10 @@
 }
 
 body.fantribe-theme:not(.admin-interface) {
-  // Animate the backdrop when it hosts the filters modal
-  .ft-modal-backdrop:has(.ft-filters-modal) {
-    animation: ft-backdrop-in 200ms ease both;
-  }
-
   .ft-filters-modal {
     width: 640px;
     border-radius: 20px;
     gap: 0;
-    animation: ft-modal-in 250ms cubic-bezier(0.16, 1, 0.3, 1) both;
 
     // ── Header ─────────────────────────────────────────────
     &__header {
