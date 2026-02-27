@@ -43,7 +43,7 @@ body.fantribe-theme:not(.admin-interface) {
 
       // Vertical spacing between cards (Spec §3.2: space-y-6 = 24px)
       > * + * {
-        margin-top: 24px;
+        margin-top: 16px;
       }
     }
 
