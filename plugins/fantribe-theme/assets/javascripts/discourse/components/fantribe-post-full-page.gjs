@@ -5,6 +5,7 @@ import { on } from "@ember/modifier";
 import { action } from "@ember/object";
 import { service } from "@ember/service";
 import { htmlSafe } from "@ember/template";
+import { modifier } from "ember-modifier";
 import avatar from "discourse/helpers/avatar";
 import formatDate from "discourse/helpers/format-date";
 import { ajax } from "discourse/lib/ajax";
@@ -32,6 +33,23 @@ export default class FantribePostFullPage extends Component {
   @tracked reactionsLoaded = false;
   @tracked isBookmarkLoading = false;
   @tracked isReactionLoading = false;
+  watchTopic = modifier((el, [topicId]) => {
+    if (!topicId) {
+      return;
+    }
+    this._serverComments = null;
+    this._localComments = null;
+    this._serverReactions = null;
+    this._localReactions = null;
+    this._isBookmarked = null;
+    this._bookmarkId = null;
+    this.reactionsLoaded = false;
+    this.currentImageIndex = 0;
+    this.commentText = "";
+    this.loadReactions();
+    this.loadComments();
+  });
+
   @tracked _localComments = null;
   @tracked _serverComments = null;
   @tracked _serverReactions = null;
@@ -42,8 +60,6 @@ export default class FantribePostFullPage extends Component {
   constructor(owner, args) {
     super(owner, args);
     document.body.classList.add("ft-full-post-active");
-    this.loadReactions();
-    this.loadComments();
   }
 
   willDestroy() {
@@ -548,7 +564,7 @@ export default class FantribePostFullPage extends Component {
 
   <template>
     {{! template-lint-disable no-invalid-interactive }}
-    <div class="ft-full-post-layout">
+    <div class="ft-full-post-layout" {{this.watchTopic this.topicId}}>
       <div class="ft-full-post-layout__content">
         <div class="ft-full-post">
           <div class="ft-full-post__card">
