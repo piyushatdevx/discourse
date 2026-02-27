@@ -133,7 +133,22 @@ export default class FtSearchModal extends Component {
     this.isLoading = true;
 
     try {
-      const data = await ajax("/search.json", { data: { q } });
+      const [data, userSearchData] = await Promise.all([
+        ajax("/search.json", { data: { q } }),
+        ajax("/u/search/users.json", {
+          data: { term: q, include_groups: false },
+        }).catch(() => ({ users: [] })),
+      ]);
+
+      const mainUsers = data.users || [];
+      const extraUsers = (userSearchData.users || []).filter(
+        (eu) =>
+          !mainUsers.some(
+            (mu) => mu.username.toLowerCase() === eu.username.toLowerCase()
+          )
+      );
+
+      data.users = [...mainUsers, ...extraUsers];
       this.rawResults = data;
     } catch {
       this.rawResults = null;
@@ -158,10 +173,8 @@ export default class FtSearchModal extends Component {
   handleKeydown(event) {
     if (event.key === "Escape") {
       this.args.onClose();
-    } else if (event.key === "Enter" && this.hasQuery) {
-      this.router.transitionTo("full-page-search", {
-        queryParams: { q: this.query.trim() },
-      });
+    } else if (event.key === "Enter") {
+      event.preventDefault();
       this.args.onClose();
     }
   }
