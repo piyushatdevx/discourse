@@ -13,7 +13,7 @@
 // ---------------------------------------------------------------------------
 // Hide ALL standard Discourse topic page elements — our UI replaces them
 // ---------------------------------------------------------------------------
-body.fantribe-theme:not(.admin-interface).ft-full-post-active {
+body.fantribe-theme:not(.admin-interface):has(.ft-full-post-layout) {
   // Strip all visual styling from Discourse's container/wrap shells —
   // our ft-full-post-layout card replaces them entirely
   #main-outlet,
@@ -51,7 +51,11 @@ body.fantribe-theme:not(.admin-interface).ft-full-post-active {
   .more-topics__container,
   .more-topics__list,
   #topic-footer-buttons,
-  .topic-footer {
+  .topic-footer,
+  #reply-control,
+  .composer-popup,
+  .d-editor-container,
+  .save-or-cancel {
     display: none !important;
   }
 
@@ -97,6 +101,13 @@ body.fantribe-theme:not(.admin-interface) {
         overflow-x: hidden;
       }
     }
+
+    // Edit mode: layout content height is driven by card content, not fixed
+    &--edit {
+      .ft-full-post-layout__content {
+        height: auto;
+      }
+    }
   }
 }
 
@@ -124,6 +135,12 @@ body.fantribe-theme:not(.admin-interface) {
       flex-shrink: 0;
       height: 840px;
       overflow: visible; // Post menu must escape the card
+    }
+
+    // Edit mode card: auto height (content drives size, no fixed constraint)
+    &--edit &__card {
+      height: auto;
+      overflow: hidden; // clip inside card only, no stray overflow
     }
 
     // -----------------------------------------------------------------------
@@ -232,9 +249,9 @@ body.fantribe-theme:not(.admin-interface) {
       gap: 10px;
     }
 
-    // Category pill: light-beige bg, dark text
+    // Category pill: light-beige bg, dark text (view mode)
     &__category-pill {
-      background: rgb(0, 0, 0, 0.05); // light beige/gray from Figma
+      background: rgb(0, 0, 0, 0.05);
       color: #1a1a1a;
       font-size: 13px;
       font-weight: 500;
@@ -248,11 +265,27 @@ body.fantribe-theme:not(.admin-interface) {
       &:hover {
         background: rgb(0, 0, 0, 0.08);
       }
+
+      // Edit mode: red pill to match Figma node 570:2207
+      &--edit {
+        background: rgb(255, 23, 68, 0.1);
+        color: #ff1744;
+        font-size: 14px;
+        font-weight: 400;
+        line-height: 21px;
+        padding: 4px 12px;
+        border-radius: 6px;
+        cursor: default;
+
+        &:hover {
+          background: rgb(255, 23, 68, 0.1);
+        }
+      }
     }
 
-    // Role badge: grey bg, no border
+    // Role badge: grey bg, no border (view mode)
     &__role-badge {
-      background: rgb(0, 0, 0, 0.05); // light grey background
+      background: rgb(0, 0, 0, 0.05);
       border: none;
       color: #666;
       font-size: 13px;
@@ -261,6 +294,18 @@ body.fantribe-theme:not(.admin-interface) {
       padding: 5px 14px;
       border-radius: 6px;
       white-space: nowrap;
+
+      // Edit mode: lighter bg + border to match Figma node 570:2209
+      &--edit {
+        background: rgb(221, 221, 221, 0.2);
+        border: 0.5px solid #ddd;
+        color: #666;
+        font-size: 12px;
+        font-weight: 500;
+        line-height: 16px;
+        padding: 4px 12px;
+        border-radius: 4px;
+      }
     }
 
     &__menu-wrapper {
@@ -297,7 +342,7 @@ body.fantribe-theme:not(.admin-interface) {
       display: flex;
       flex-direction: column;
       gap: 16px;
-      padding: 20px 0 20px;
+      padding: 20px 0 0;
       flex: 1;
       min-height: 0;
       overflow: hidden;
@@ -470,6 +515,7 @@ body.fantribe-theme:not(.admin-interface) {
       justify-content: center;
       cursor: pointer;
       transition: background 150ms;
+      z-index: 10; // Ensure they appear above the image
 
       &:hover {
         background: rgb(0, 0, 0, 0.5);
@@ -488,6 +534,13 @@ body.fantribe-theme:not(.admin-interface) {
 
       &--next {
         right: 12px;
+      }
+
+      // Used in edit mode to keep buttons in the DOM (so they stay mounted and
+      // event listeners persist) but visually hidden when at the boundary.
+      &--hidden {
+        opacity: 0;
+        pointer-events: none;
       }
     }
 
@@ -548,6 +601,7 @@ body.fantribe-theme:not(.admin-interface) {
       flex-direction: column;
       gap: 14px;
       padding: 0 16px;
+      margin-top: auto;
     }
 
     // Reaction pills + Stats row
@@ -1041,6 +1095,653 @@ body.fantribe-theme:not(.admin-interface) {
 
       &:hover {
         opacity: 0.8;
+      }
+    }
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Edit Post UI Styling (.ft-post-edit__*)
+// ---------------------------------------------------------------------------
+body.fantribe-theme:not(.admin-interface) {
+  .ft-full-post--edit {
+    .ft-full-post__card {
+      padding: 0;
+    }
+  }
+
+  .ft-post-edit {
+    &__more-btn {
+      width: 28px;
+      height: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgb(0, 0, 0, 0.04);
+      border: 1px solid rgb(0, 0, 0, 0.08);
+      border-radius: 9999px;
+      cursor: pointer;
+      color: #666;
+      transition: all 150ms;
+
+      &:hover {
+        background: rgb(0, 0, 0, 0.08);
+        color: #1a1a1a;
+      }
+    }
+
+    &__content {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      padding: 20px;
+      flex: 1;
+      min-height: 0;
+      overflow-y: auto;
+    }
+
+    &__field-wrap {
+      display: flex;
+      flex-direction: column;
+
+      &--title {
+        border-bottom: 1px solid rgb(0, 0, 0, 0.08);
+        padding-bottom: 16px;
+        margin-bottom: 4px;
+      }
+    }
+
+    &__title-input {
+      width: 100%;
+      background: transparent;
+      border: none;
+      font-size: 20px;
+      font-weight: 600;
+      line-height: 1.4;
+      color: #1a1a1a;
+      padding: 0;
+
+      &::placeholder {
+        color: #aaa;
+      }
+
+      &:focus {
+        outline: none;
+      }
+    }
+
+    &__body-input {
+      width: 100%;
+      background: transparent;
+      border: none;
+      font-size: 15px;
+      line-height: 1.6;
+      color: #1a1a1a;
+      resize: none;
+      min-height: 80px;
+      padding: 0;
+
+      &::placeholder {
+        color: #aaa;
+      }
+
+      &:focus {
+        outline: none;
+      }
+    }
+
+    &__image-section {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    &__carousel {
+      height: 380px; // Slightly shorter for edit view
+      background: #f0f0f2;
+      border-radius: 16px;
+      position: relative;
+    }
+
+    &__carousel-bg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-size: cover;
+      background-position: center;
+      filter: blur(12px);
+      opacity: 0.8;
+      transform: scale(1.1); // Prevent blur bleeding
+    }
+
+    &__carousel-img {
+      position: relative;
+      z-index: 1;
+      border-radius: 12px;
+      max-height: 100%;
+      width: auto;
+      margin: 0 auto;
+      box-shadow: 0 4px 12px rgb(0 0 0 / 15%);
+    }
+
+    &__delete-img-btn {
+      position: absolute;
+      bottom: 16px;
+      right: 16px;
+      z-index: 2;
+      width: 36px;
+      height: 36px;
+      border-radius: 9999px;
+      background: #fff;
+      border: 1px solid #f9d9d9;
+      color: #ff1744;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgb(0 0 0 / 0.1);
+      transition: all 150ms;
+
+      &:hover {
+        background: #fff2f5;
+        border-color: #ff1744;
+      }
+    }
+
+    &__tags-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 8px;
+    }
+
+    &__tags-label {
+      font-size: 14px;
+      font-weight: 500;
+      color: #666;
+    }
+
+    &__tags-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
+
+    &__tag-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #e6f6f4;
+      border: 1px solid #bceae4;
+      color: #00786f;
+      padding: 4px 10px;
+      border-radius: 9999px;
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    &__tag-remove {
+      background: none;
+      border: none;
+      color: #00786f;
+      font-size: 16px;
+      line-height: 1;
+      padding: 0;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      opacity: 0.7;
+
+      &:hover {
+        opacity: 1;
+      }
+    }
+
+    &__tag-input {
+      background: transparent;
+      border: none;
+      font-size: 14px;
+      color: #1a1a1a;
+      width: 120px;
+      padding: 4px 0;
+
+      &::placeholder {
+        color: #aaa;
+      }
+
+      &:focus {
+        outline: none;
+      }
+    }
+
+    &__footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 20px;
+      border-top: 1px solid rgb(0, 0, 0, 0.08);
+      background: #fff;
+      border-radius: 0 0 20px 20px;
+      flex-shrink: 0;
+    }
+
+    &__cancel-btn {
+      background: rgb(0, 0, 0, 0.05);
+      border: none;
+      color: #666;
+      font-size: 14px;
+      font-weight: 600;
+      padding: 8px 20px;
+      border-radius: 9999px;
+      cursor: pointer;
+      transition: background 150ms;
+
+      &:hover {
+        background: rgb(0, 0, 0, 0.08);
+        color: #1a1a1a;
+      }
+    }
+
+    &__save-btn {
+      background: #ff1744;
+      border: none;
+      color: white;
+      font-size: 14px;
+      font-weight: 600;
+      padding: 8px 24px;
+      border-radius: 9999px;
+      cursor: pointer;
+      transition: background 150ms;
+
+      &:hover {
+        background: #e0002e;
+      }
+
+      &:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+    }
+  }
+}
+
+// =============================================================================
+// Full-Page Post Edit View
+// Matches Figma node 570:2176 — same card shell as view, editable inline fields
+// =============================================================================
+body.fantribe-theme:not(.admin-interface) {
+  // Edit content — flex column between header and footer
+  .ft-post-edit {
+    &__content {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      min-height: 0;
+      overflow-y: auto;
+      gap: 0;
+
+      // Thin scrollbar
+      &::-webkit-scrollbar {
+        width: 3px;
+      }
+
+      &::-webkit-scrollbar-track {
+        background: transparent;
+      }
+
+      &::-webkit-scrollbar-thumb {
+        background: rgb(0, 0, 0, 0.1);
+        border-radius: 2px;
+      }
+    }
+
+    // -------------------------------------------------------------------------
+    // Inline field wrappers — title + body
+    // Each has a subtle bottom separator matching the Figma hairline (imgLine12)
+    // -------------------------------------------------------------------------
+    &__field-wrap {
+      padding: 12px 16px;
+      border-bottom: 1px solid #ddd;
+    }
+
+    &__field-wrap--title {
+      padding: 10px 16px 12px;
+    }
+
+    &__field-wrap--body {
+      padding: 10px 16px 12px;
+    }
+
+    // Title input — 18px semibold, fully stripped of all browser defaults (Figma node 570:2261)
+    // appearance + box-shadow resets are required to remove borders,
+    // blue focus rings, and inner shadow that browsers add to input[type=text].
+    &__title-input {
+      appearance: none;
+      box-shadow: none !important;
+      width: 100%;
+      border: none !important;
+      outline: none !important;
+      background: transparent !important;
+      background-color: transparent !important;
+      border-radius: 0 !important;
+      font-family: inherit;
+      font-size: 18px;
+      font-weight: 600;
+      line-height: 27px;
+      color: #1a1a1a;
+      padding: 0 !important;
+      margin: 0 !important;
+
+      &:focus {
+        outline: none !important;
+        border: none !important;
+        box-shadow: none !important;
+        background-color: transparent !important;
+      }
+
+      &::placeholder {
+        color: #bbb;
+        font-weight: 400;
+      }
+
+      // Kill Chrome/Safari autofill yellow background
+      &:-webkit-autofill,
+      &:-webkit-autofill:focus {
+        box-shadow: 0 0 0 1000px transparent inset;
+        -webkit-text-fill-color: #1a1a1a;
+      }
+    }
+
+    // Body textarea — 16px regular, auto-resize, fully stripped (Figma node 570:2277)
+    &__body-input {
+      appearance: none;
+      box-shadow: none !important;
+      width: 100%;
+      border: none !important;
+      outline: none !important;
+      background: transparent !important;
+      background-color: transparent !important;
+      border-radius: 0 !important;
+      font-family: inherit;
+      font-size: 15px;
+      line-height: 1.6;
+      color: #1a1a1a;
+      resize: none;
+      min-height: 80px;
+      padding: 0 !important;
+      margin: 0 !important;
+      overflow: hidden;
+      display: block;
+
+      &:focus {
+        outline: none !important;
+        border: none !important;
+        box-shadow: none !important;
+        background-color: transparent !important;
+      }
+
+      &::placeholder {
+        color: #bbb;
+      }
+    }
+
+    // -------------------------------------------------------------------------
+    // Image section — carousel + tags below it
+    // -------------------------------------------------------------------------
+    &__image-section {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      padding: 12px 16px 0;
+    }
+
+    // Carousel wrapper for edit mode — adds the blurred bg effect
+    &__carousel {
+      margin-bottom: 12px;
+      border-radius: 20px;
+      overflow: hidden;
+    }
+
+    // Blurred background layer — fills the carousel with the image, blurred
+    // pointer-events: none is CRITICAL — without it the div intercepts all
+    // clicks and the prev/next nav buttons become unclickable.
+    &__carousel-bg {
+      position: absolute;
+      inset: 0;
+      background-size: cover;
+      background-position: center;
+      filter: blur(16px) saturate(1.4);
+      transform: scale(1.15); // avoids blur edge artifacts
+      opacity: 0.6;
+      pointer-events: none; // let clicks pass through to nav buttons below
+    }
+
+    // The main carousel image — contains within bounds
+    &__carousel-img {
+      position: relative; // sits above the blurred bg
+      object-fit: cover;
+    }
+
+    // Trash button overlaid on the carousel — bottom-right corner (Figma node 570:2295)
+    &__delete-img-btn {
+      position: absolute;
+      bottom: 12px;
+      right: 12px;
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgb(255, 255, 255, 0.3);
+      backdrop-filter: blur(6px);
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 150ms;
+
+      .ft-icon {
+        color: #fff;
+        width: 20px;
+        height: 20px;
+        filter: drop-shadow(0 1px 3px rgb(0, 0, 0, 0.5));
+      }
+
+      &:hover {
+        background: rgb(255, 23, 68, 0.65);
+      }
+    }
+
+    // -------------------------------------------------------------------------
+    // Tags row — "Tags:" label + teal chip pills + inline input (Figma 570:2755)
+    // -------------------------------------------------------------------------
+    &__tags-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 0 12px;
+      border-bottom: 1px solid #ddd;
+      flex-wrap: wrap;
+    }
+
+    &__tags-label {
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 20px;
+      color: #5a584f;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    &__tags-chips {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      flex: 1;
+      min-width: 0;
+    }
+
+    // Tag chip — teal gradient border pill with tag icon (Figma node 570:2301)
+    &__tag-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 10px 5px 14px;
+      border-radius: 9999px;
+      background: linear-gradient(to right, #f0fdfa, #eff6ff);
+      border: 1px solid #96f7e4;
+      color: #00786f;
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 21px;
+      white-space: nowrap;
+
+      .ft-icon {
+        color: #00786f;
+        width: 14px;
+        height: 14px;
+        flex-shrink: 0;
+      }
+    }
+
+    // × remove button inside a tag chip
+    &__tag-remove {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+      margin-left: 2px;
+      font-size: 16px;
+      line-height: 1;
+      color: #00786f;
+      opacity: 0.7;
+      display: flex;
+      align-items: center;
+
+      &:hover {
+        opacity: 1;
+      }
+    }
+
+    // Tag input — pill-shaped with dashed border so it's clearly clickable
+    // Padding is essential: without it the text cursor is flush against the
+    // edge and nearly invisible.
+    &__tag-input {
+      appearance: none;
+      box-shadow: none !important;
+      border: 1px dashed rgb(0, 0, 0, 0.2) !important;
+      border-radius: 9999px !important;
+      outline: none !important;
+      background: transparent !important;
+      background-color: transparent !important;
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 400;
+      color: #1a1a1a;
+      padding: 6px 14px !important; // horizontal padding makes cursor clearly visible
+      margin: 0 !important;
+      min-width: 110px;
+      max-width: 180px;
+      line-height: 21px;
+      height: auto !important;
+      transition: border-color 150ms;
+
+      &:focus {
+        outline: none !important;
+        border-color: #96f7e4 !important;
+        background-color: rgb(240, 253, 250, 0.5) !important;
+      }
+
+      &::placeholder {
+        color: #aaa;
+      }
+    }
+
+    // -------------------------------------------------------------------------
+    // More (⋯) button — header-right decorative (Figma node 570:2211)
+    // -------------------------------------------------------------------------
+    &__more-btn {
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+      flex-shrink: 0;
+      border-radius: 4px;
+
+      .ft-icon {
+        width: 20px;
+        height: 20px;
+        color: #1a1a1a;
+      }
+
+      &:hover .ft-icon {
+        color: #666;
+      }
+    }
+
+    // -------------------------------------------------------------------------
+    // Footer — Cancel + Save bar (Figma node 575:3501)
+    // -------------------------------------------------------------------------
+    &__footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px;
+      border-top: 1px solid #ddd;
+      flex-shrink: 0;
+      border-radius: 0 0 20px 20px;
+    }
+
+    // Cancel — muted gray pill (Figma node 575:3502)
+    &__cancel-btn {
+      height: 40px;
+      padding: 0 32px;
+      border-radius: 30px;
+      background: rgb(221, 221, 221, 0.2);
+      border: none;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 16px;
+      font-weight: 600;
+      line-height: 24px;
+      color: #666;
+      transition: background 150ms;
+
+      &:hover {
+        background: rgb(221, 221, 221, 0.5);
+      }
+    }
+
+    // Save — red gradient pill (Figma node 575:3504)
+    &__save-btn {
+      height: 40px;
+      padding: 0 24px;
+      border-radius: 30px;
+      background-image: linear-gradient(155deg, #ff1744 0%, #ff6b6b 100%);
+      border: none;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 16px;
+      font-weight: 600;
+      line-height: 24px;
+      color: #fff;
+      transition: opacity 150ms;
+
+      &:hover {
+        opacity: 0.88;
+      }
+
+      &:disabled {
+        opacity: 0.55;
+        cursor: not-allowed;
       }
     }
   }

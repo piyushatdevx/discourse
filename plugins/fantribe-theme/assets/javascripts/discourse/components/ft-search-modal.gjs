@@ -80,7 +80,7 @@ export default class FtSearchModal extends Component {
           (topic && (topic.fancy_title || topic.title)) || "Untitled";
         out.push({
           type: "feed",
-          item: p,
+          item: { ...p, topic_slug: topic?.slug || p.topic_slug },
           isFeed: true,
           isPeople: false,
           isTribe: false,

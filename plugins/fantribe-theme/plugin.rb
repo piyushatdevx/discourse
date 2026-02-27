@@ -152,13 +152,22 @@ after_initialize do
     SiteSetting.tagging_enabled = true unless SiteSetting.tagging_enabled
     SiteSetting.max_tags_per_topic = 3 if SiteSetting.max_tags_per_topic > 3 ||
       SiteSetting.max_tags_per_topic == 0
-    # Allow all users to create and apply tags (Discourse defaults to TL3+)
-    if SiteSetting.respond_to?(:min_trust_to_create_tag)
-      SiteSetting.min_trust_to_create_tag = 0 if SiteSetting.min_trust_to_create_tag > 0
+    # Allow all users to create and apply free-form tags.
+    # Discourse moved from trust-level checks to group-list checks; the old
+    # min_trust_to_create_tag setting is no longer used. Group 10 = trust_level_0
+    # which includes every registered user.
+    if SiteSetting.respond_to?(:create_tag_allowed_groups)
+      groups = SiteSetting.create_tag_allowed_groups.to_s.split("|")
+      SiteSetting.create_tag_allowed_groups = (groups | ["10"]).join("|") if groups.exclude?("10")
     end
-    if SiteSetting.respond_to?(:min_trust_to_tag_topics)
-      SiteSetting.min_trust_to_tag_topics = 0 if SiteSetting.min_trust_to_tag_topics > 0
+    if SiteSetting.respond_to?(:tag_topic_allowed_groups)
+      groups = SiteSetting.tag_topic_allowed_groups.to_s.split("|")
+      SiteSetting.tag_topic_allowed_groups = (groups | ["10"]).join("|") if groups.exclude?("10")
     end
+    # Allow posts to be edited at any time — FanTribe is a social platform
+    # where authors should always be able to update their content.
+    # 0 = unlimited (Discourse default is 43200 minutes = 30 days).
+    SiteSetting.post_edit_time_limit = 0
   end
 
   # Default-enable auth settings when FanTribe is active

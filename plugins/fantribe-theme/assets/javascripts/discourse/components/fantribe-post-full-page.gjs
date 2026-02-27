@@ -23,6 +23,7 @@ const REACTIONS = [
 
 export default class FantribePostFullPage extends Component {
   @service currentUser;
+  @service fantribeCreate;
   @service site;
   @service toasts;
 
@@ -59,12 +60,10 @@ export default class FantribePostFullPage extends Component {
 
   constructor(owner, args) {
     super(owner, args);
-    document.body.classList.add("ft-full-post-active");
   }
 
   willDestroy() {
     super.willDestroy();
-    document.body.classList.remove("ft-full-post-active");
   }
 
   get topic() {
@@ -562,6 +561,25 @@ export default class FantribePostFullPage extends Component {
     this.toasts?.success?.({ data: { message: "Link copied!" } });
   }
 
+  @action
+  async handleEditPost(event) {
+    event.stopPropagation();
+    const postId = this.firstPostId;
+    if (!postId) {
+      return;
+    }
+    try {
+      const result = await ajax(`/posts/${postId}.json`);
+      this.fantribeCreate.openEditPostModal(
+        result,
+        this.topic?.title,
+        this.topic?.tags || []
+      );
+    } catch (error) {
+      popupAjaxError(error);
+    }
+  }
+
   <template>
     {{! template-lint-disable no-invalid-interactive }}
     <div class="ft-full-post-layout" {{this.watchTopic this.topicId}}>
@@ -674,7 +692,11 @@ export default class FantribePostFullPage extends Component {
                       {{/if}}
                     </button>
                     {{#if this.isOwnPost}}
-                      <button type="button" class="ft-full-post__action-btn">
+                      <button
+                        type="button"
+                        class="ft-full-post__action-btn"
+                        {{on "click" this.handleEditPost}}
+                      >
                         {{ftIcon "edit3"}}
                       </button>
                     {{/if}}

@@ -49,7 +49,8 @@ export default class FantribeCreate extends Service {
     this.editingTags = tags || [];
     this.postCategory = null;
     this.isCreateMenuOpen = false;
-    this.isCreatePostModalOpen = true;
+    // Do not open the create modal — the full-page edit view is shown via
+    // the topic-above-posts connector when editingPost is set.
   }
 
   @action
