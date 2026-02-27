@@ -511,9 +511,9 @@ body.fantribe-theme:not(.admin-interface) {
       display: flex;
       flex-direction: column;
       gap: var(--ft-feed-comments-inner-gap);
-      padding: var(
-        --ft-feed-comments-inner-padding
-      ); // 16px all sides per Figma
+      padding: 0 var(--ft-feed-comments-inner-padding)
+        var(--ft-feed-comments-inner-padding)
+        var(--ft-feed-comments-inner-padding);
     }
 
     &__comments-label {
@@ -608,6 +608,7 @@ body.fantribe-theme:not(.admin-interface) {
       color: var(--ft-text); // #1a1a1a
       white-space: normal;
       overflow-wrap: break-word;
+      margin: 0;
     }
 
     // ==========================================
