@@ -139,28 +139,6 @@ export default class FtSettingsHub extends Component {
           {{/each}}
         </nav>
 
-        {{! Danger zone }}
-        <div class="ft-settings-hub__danger-zone">
-          <p class="ft-settings-hub__danger-label">Danger Zone</p>
-          <button
-            type="button"
-            class="ft-settings-hub__danger-btn"
-            {{on "click" (fn this.navigateTo "preferences.account")}}
-          >
-            <div
-              class="ft-settings-hub__section-icon-wrap ft-settings-hub__section-icon-wrap--danger"
-            >
-              {{ftIcon "trash2" size=18}}
-            </div>
-            <div class="ft-settings-hub__section-text">
-              <span class="ft-settings-hub__section-label">Delete Account</span>
-              <span class="ft-settings-hub__section-desc">Permanently remove
-                your account and data</span>
-            </div>
-            {{ftIcon "chevron-right" size=16}}
-          </button>
-        </div>
-
       </div>
     {{/if}}
   </template>

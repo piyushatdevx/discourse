@@ -7,10 +7,10 @@ import ForgotPassword from "discourse/components/modal/forgot-password";
 import icon from "discourse/helpers/d-icon";
 import { ajax } from "discourse/lib/ajax";
 import getURL from "discourse/lib/get-url";
+import { findAll } from "discourse/models/login-method";
 
 export default class FantribeLoginForm extends Component {
   @service login;
-  @service site;
   @service modal;
   @service router;
 
@@ -24,7 +24,7 @@ export default class FantribeLoginForm extends Component {
   @tracked maskPassword = true;
 
   get googleProvider() {
-    return this.site.auth_providers?.find((p) => p.name === "google_oauth2");
+    return findAll().find((m) => m.name === "google_oauth2");
   }
 
   get signupUrl() {

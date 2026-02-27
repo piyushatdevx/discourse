@@ -352,8 +352,6 @@ export default class FantribePostMenu extends Component {
               <span>Copy Link</span>
             </button>
 
-            <div class="fantribe-post-menu__divider"></div>
-
             <button
               type="button"
               class="fantribe-post-menu__item"
