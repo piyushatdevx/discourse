@@ -69,7 +69,7 @@ export default class FantribeRightSidebar extends Component {
           aria-label="Open filters"
           {{on "click" this.fantribeFilter.openFiltersModal}}
         >
-          {{ftIcon "sliders-horizontal" size=24}}
+          {{ftIcon "filter-lines" size=24}}
         </button>
       </div>
 

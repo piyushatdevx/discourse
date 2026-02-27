@@ -56,7 +56,7 @@ body.fantribe-theme:not(.admin-interface) {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 16px;
+      padding: 0 16px;
       background: rgb(255 23 68 / 10%);
       border-bottom: 0.5px solid #ff1744;
     }
@@ -183,6 +183,10 @@ body.fantribe-theme:not(.admin-interface) {
       }
     }
 
+    &__field--tags {
+      position: relative;
+    }
+
     // ── Inline dropdown panel ──────────────────────────────
     &__dropdown {
       background: #fff;
@@ -207,6 +211,23 @@ body.fantribe-theme:not(.admin-interface) {
         background: #e5e7eb;
         border-radius: 2px;
       }
+
+      &--absolute {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        z-index: 10;
+        margin-top: 4px;
+        box-shadow: 0 4px 12px rgb(0 0 0 / 10%);
+      }
+    }
+
+    &__tag-count {
+      font-size: 11px;
+      font-weight: 400;
+      color: #9ca3af;
+      margin-left: auto;
     }
 
     &__dropdown-item {

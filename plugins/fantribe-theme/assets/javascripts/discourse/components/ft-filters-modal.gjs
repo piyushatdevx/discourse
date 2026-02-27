@@ -31,7 +31,13 @@ export default class FtFiltersModal extends Component {
   @tracked userSearchResults = [];
   @tracked isSearchingUsers = false;
 
+  // Tag search state
+  @tracked tagSearchQuery = "";
+  @tracked tagSearchResults = [];
+  @tracked isSearchingTags = false;
+
   _userSearchTimer = null;
+  _tagSearchTimer = null;
 
   constructor(owner, args) {
     super(owner, args);
@@ -88,31 +94,8 @@ export default class FtFiltersModal extends Component {
 
   // ── Tags ────────────────────────────────────────────────
 
-  get tags() {
-    return this.site.top_tags || [];
-  }
-
   get tagsOpen() {
     return this.openDropdown === "tags";
-  }
-
-  get tagsWithSelection() {
-    const names = this.selectedTagNames;
-    return this.tags.map((tag) => ({
-      tag,
-      isSelected: names.includes(tag),
-    }));
-  }
-
-  get allTagsSelected() {
-    return this.selectedTagNames.length === 0;
-  }
-
-  get tagTriggerLabel() {
-    if (this.selectedTagNames.length === 0) {
-      return "All tags";
-    }
-    return this.selectedTagNames.join(", ");
   }
 
   get hasSelectedTags() {
@@ -250,6 +233,11 @@ export default class FtFiltersModal extends Component {
     this.openDropdown = this.openDropdown === name ? null : name;
   }
 
+  @action
+  openDropdownFor(name) {
+    this.openDropdown = name;
+  }
+
   // ── Actions: Categories ────────────────────────────────
 
   @action
@@ -272,17 +260,43 @@ export default class FtFiltersModal extends Component {
   // ── Actions: Tags ──────────────────────────────────────
 
   @action
-  toggleTag(tag) {
-    if (this.selectedTagNames.includes(tag)) {
-      this.selectedTagNames = this.selectedTagNames.filter((t) => t !== tag);
+  onTagSearchInput(event) {
+    this.tagSearchQuery = event.target.value;
+    clearTimeout(this._tagSearchTimer);
+    if (this.tagSearchQuery.trim()) {
+      this._tagSearchTimer = setTimeout(() => this._performTagSearch(), 300);
     } else {
-      this.selectedTagNames = [...this.selectedTagNames, tag];
+      this.tagSearchResults = [];
+    }
+  }
+
+  async _performTagSearch() {
+    const term = this.tagSearchQuery.trim();
+    if (!term) {
+      return;
+    }
+    this.isSearchingTags = true;
+    try {
+      const data = await ajax("/tags/filter/search.json", {
+        data: { q: term },
+      });
+      this.tagSearchResults = (data.results || []).filter(
+        (t) => !this.selectedTagNames.includes(t.name)
+      );
+    } catch {
+      this.tagSearchResults = [];
+    } finally {
+      this.isSearchingTags = false;
     }
   }
 
   @action
-  selectAllTags() {
-    this.selectedTagNames = [];
+  selectTagFromSearch(tag) {
+    if (!this.selectedTagNames.includes(tag.name)) {
+      this.selectedTagNames = [...this.selectedTagNames, tag.name];
+    }
+    this.tagSearchQuery = "";
+    this.tagSearchResults = [];
   }
 
   // ── Actions: Topics (search) ───────────────────────────
@@ -544,69 +558,59 @@ export default class FtFiltersModal extends Component {
           </div>
 
           {{! ─── Tags ────────────────────────────────────── }}
-          <div class="ft-filters-modal__field">
+          <div class="ft-filters-modal__field ft-filters-modal__field--tags">
             <label class="ft-filters-modal__label">Tags</label>
-            <button
-              type="button"
-              class="ft-filters-modal__trigger
-                {{if this.tagsOpen 'ft-filters-modal__trigger--open'}}"
-              {{on "click" (fn this.toggleDropdown "tags")}}
+            <div
+              class="ft-filters-modal__input-wrap
+                {{if this.tagsOpen 'ft-filters-modal__input-wrap--open'}}"
             >
-              <span
-                class="ft-filters-modal__trigger-value
-                  {{unless
-                    this.hasSelectedTags
-                    'ft-filters-modal__trigger-value--placeholder'
-                  }}"
-              >{{this.tagTriggerLabel}}</span>
-              <span
-                class="ft-filters-modal__trigger-icon
-                  {{if this.tagsOpen 'ft-filters-modal__trigger-icon--open'}}"
-              >
-                {{ftIcon "chevron-down" size=16}}
+              <span class="ft-filters-modal__input-icon">
+                {{ftIcon "search" size=14}}
               </span>
-            </button>
+              <input
+                type="text"
+                class="ft-filters-modal__text-input"
+                placeholder="Search tags…"
+                value={{this.tagSearchQuery}}
+                {{on "input" this.onTagSearchInput}}
+                {{on "focus" (fn this.openDropdownFor "tags")}}
+              />
+            </div>
 
             {{#if this.tagsOpen}}
-              <div class="ft-filters-modal__dropdown" role="listbox">
-                <button
-                  type="button"
-                  class="ft-filters-modal__dropdown-item"
-                  role="option"
-                  {{on "click" this.selectAllTags}}
+              {{#if this.isSearchingTags}}
+                <div
+                  class="ft-filters-modal__dropdown ft-filters-modal__dropdown--absolute ft-filters-modal__dropdown--loading"
                 >
                   <span
-                    class="ft-filters-modal__checkbox
-                      {{if
-                        this.allTagsSelected
-                        'ft-filters-modal__checkbox--checked'
-                      }}"
-                  ></span>
-                  <span class="ft-filters-modal__dropdown-label">All tags</span>
-                </button>
-                <div class="ft-filters-modal__divider"></div>
-
-                {{#each this.tagsWithSelection as |item|}}
-                  <button
-                    type="button"
-                    class="ft-filters-modal__dropdown-item"
-                    role="option"
-                    {{on "click" (fn this.toggleTag item.tag)}}
-                  >
-                    <span
-                      class="ft-filters-modal__checkbox
-                        {{if
-                          item.isSelected
-                          'ft-filters-modal__checkbox--checked'
-                        }}"
-                    ></span>
-                    <span
-                      class="ft-filters-modal__dropdown-label"
-                    >#{{item.tag}}</span>
-                  </button>
-                  <div class="ft-filters-modal__divider"></div>
-                {{/each}}
-              </div>
+                    class="ft-filters-modal__dropdown-label"
+                  >Searching…</span>
+                </div>
+              {{else if this.tagSearchResults.length}}
+                <div
+                  class="ft-filters-modal__dropdown ft-filters-modal__dropdown--absolute"
+                  role="listbox"
+                >
+                  {{#each this.tagSearchResults as |tag|}}
+                    <button
+                      type="button"
+                      class="ft-filters-modal__dropdown-item"
+                      role="option"
+                      {{on "click" (fn this.selectTagFromSearch tag)}}
+                    >
+                      <span
+                        class="ft-filters-modal__dropdown-label"
+                      >#{{tag.name}}</span>
+                      {{#if tag.count}}
+                        <span
+                          class="ft-filters-modal__tag-count"
+                        >×{{tag.count}}</span>
+                      {{/if}}
+                    </button>
+                    <div class="ft-filters-modal__divider"></div>
+                  {{/each}}
+                </div>
+              {{/if}}
             {{/if}}
           </div>
 
