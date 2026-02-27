@@ -781,3 +781,642 @@ body.fantribe-theme .forgot-password-modal {
     height: 44px;
   }
 }
+
+// ==============================================
+// SIGNUP PAGE SPECIFIC STYLES
+// ==============================================
+// Override default Discourse signup styles to match FanTribe login design
+
+// Hide "Already have an account? Log in" after OAuth (step 2+)
+// has-alt-auth class is on .signup-body, only present on first step (before OAuth)
+body.fantribe-theme.signup-page .signup-body:not(.has-alt-auth) {
+  .signup-page-cta__existing-account,
+  .signup-page-cta__login {
+    display: none !important;
+  }
+}
+
+// Hide "Already have an account? Log In to link your Google account" after OAuth
+body.fantribe-theme.signup-page {
+  .create-account-associate-link {
+    display: none !important;
+  }
+}
+
+// Change signup button text to "Finish" after OAuth
+body.fantribe-theme.signup-page .signup-body:not(.has-alt-auth) {
+  .signup-page-cta__signup .d-button-label {
+    font-size: 0; // Hide original text
+    margin-top: 4px;
+
+    &::after {
+      content: "Finish";
+      font-size: 16px;
+    }
+  }
+}
+
+body.fantribe-theme.signup-page {
+  // Hide welcome header and progress bar (use our own)
+  .login-welcome-header {
+    display: none;
+  }
+
+  // ==============================================
+  // CARD CONTAINER FOR SIGNUP FORM
+  // ==============================================
+  .login-left-side {
+    background: rgb(253 252 252 / 0.8);
+    border: 1px solid rgb(231 230 228 / 0.6);
+    border-radius: 10px;
+    box-shadow:
+      0 20px 25px rgb(0 0 0 / 0.1),
+      0 8px 10px rgb(0 0 0 / 0.1);
+    padding: 32px;
+    max-width: 460px;
+    margin: 0 auto;
+    flex-direction: column;
+    align-items: center; // Center inner content like login card
+  }
+
+  // Add title to signup form
+  #login-form::before {
+    content: "Create Account";
+    display: block;
+    font-family: var(--ft-font-family);
+    font-size: 32px;
+    font-weight: 600;
+    line-height: 48px;
+    color: #1a1a1a;
+    text-align: center;
+    margin-bottom: 24px;
+  }
+
+  // ==============================================
+  // FORM LAYOUT
+  // ==============================================
+  #login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    width: 100%;
+    max-width: 396px; // Match login's .fantribe-login-form
+    margin-top: 0;
+    padding: 0;
+  }
+
+  // ==============================================
+  // INPUT GROUP STYLING
+  // ==============================================
+  .input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 0;
+
+    // Convert floating labels to static
+    label.alt-placeholder,
+    .user-field label.control-label,
+    .user-field.text label.control-label,
+    .user-field.dropdown label.control-label,
+    .user-field.multiselect label.control-label {
+      position: static !important;
+      top: unset !important;
+      left: unset !important;
+      font-family: var(--ft-font-family);
+      font-size: 14px !important;
+      font-weight: 400;
+      line-height: 21px;
+      color: #1a1a1a !important;
+      margin-bottom: 0;
+      background: transparent !important;
+      padding: 0 !important;
+      transform: none !important;
+      pointer-events: auto;
+      white-space: normal;
+      overflow: visible;
+      text-overflow: unset;
+      max-width: none;
+      order: -1; // Ensure label comes before input
+    }
+
+    // Keep label static even on focus/value-entered
+    input:focus + label.alt-placeholder,
+    input.value-entered + label.alt-placeholder {
+      position: static !important;
+      top: unset !important;
+      left: unset !important;
+      font-size: 14px !important;
+      background: transparent !important;
+      padding: 0 !important;
+    }
+
+    // Input styling
+    input,
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    textarea {
+      width: 100%;
+      height: 48px;
+      padding: 0 16px !important;
+      font-family: var(--ft-font-family);
+      font-size: 16px;
+      line-height: 24px;
+      color: #1a1a1a !important;
+      background: #fdfcfc !important;
+      border: 1px solid #ddd !important;
+      border-radius: 10px !important;
+      outline: none;
+      box-sizing: border-box;
+      margin-bottom: 0 !important;
+      min-width: unset;
+      transition:
+        border-color var(--ft-transition-fast),
+        box-shadow var(--ft-transition-fast);
+
+      &::placeholder {
+        color: #999;
+      }
+
+      &:hover:not(:focus) {
+        border-color: #bbb !important;
+      }
+
+      &:focus {
+        border-color: var(--ft-figma-accent) !important;
+        box-shadow: 0 0 0 2px rgb(255 23 68 / 0.15) !important;
+      }
+
+      &:disabled {
+        background-color: #f5f5f5 !important;
+        color: #999 !important;
+      }
+    }
+
+    textarea {
+      height: auto;
+      min-height: 80px;
+      padding: 12px 16px !important;
+    }
+
+    // Select kit styling
+    .select-kit-header {
+      height: 48px;
+      padding: 0 16px;
+      border: 1px solid #ddd !important;
+      border-radius: 10px !important;
+      background: #fdfcfc !important;
+
+      &:focus,
+      &.is-focused {
+        border-color: var(--ft-figma-accent) !important;
+        box-shadow: 0 0 0 2px rgb(255 23 68 / 0.15) !important;
+      }
+    }
+
+    // Validation tips
+    .tip {
+      font-family: var(--ft-font-family);
+      font-size: 13px;
+      margin-top: 4px;
+
+      &.bad {
+        color: var(--ft-error);
+      }
+
+      &.good {
+        color: var(--ft-success);
+      }
+    }
+
+    // More info text
+    span.more-info {
+      font-family: var(--ft-font-family);
+      font-size: 13px;
+      color: #666;
+      margin-top: 4px;
+    }
+  }
+
+  // ==============================================
+  // PASSWORD FIELD
+  // ==============================================
+  .create-account__password {
+    position: relative;
+
+    .toggle-password-mask {
+      position: absolute;
+      right: 16px;
+      top: 45px; // Below label
+      background: transparent;
+      border: none;
+      padding: 4px;
+      cursor: pointer;
+      color: #666;
+
+      &:hover {
+        color: var(--ft-figma-accent);
+      }
+    }
+
+    .create-account__password-info {
+      margin-top: 4px;
+    }
+
+    .caps-lock-warning {
+      color: var(--ft-error);
+      font-size: 13px;
+      margin-top: 4px;
+    }
+  }
+
+  // ==============================================
+  // USER FIELDS
+  // ==============================================
+  .user-fields {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+
+    .input-group {
+      margin-bottom: 0;
+    }
+
+    .user-field {
+      &.checkbox {
+        .checkbox-label {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          font-family: var(--ft-font-family);
+          font-size: 14px;
+          color: #1a1a1a;
+
+          input[type="checkbox"] {
+            width: 18px !important;
+            height: 18px !important;
+            min-width: unset;
+            accent-color: var(--ft-figma-accent);
+          }
+        }
+      }
+    }
+  }
+
+  // ==============================================
+  // SIGNUP PAGE CTA (BUTTONS)
+  // ==============================================
+  .signup-page-cta {
+    width: 100%;
+    max-width: 396px; // Match login's button section
+    margin-top: 24px;
+
+    &__disclaimer {
+      font-family: var(--ft-font-family);
+      font-size: 13px;
+      color: #666;
+      text-align: center;
+      margin-bottom: 16px;
+    }
+
+    &__buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      align-items: center;
+    }
+
+    // Primary signup button
+    &__signup,
+    .btn-primary {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 48px;
+      padding: 0 24px;
+      font-family: var(--ft-font-family);
+      font-size: 16px !important;
+      font-weight: 600;
+      line-height: 24px;
+      color: #fff !important;
+      background: #ff1a47 !important;
+      border: none !important;
+      border-radius: 9999px !important;
+      cursor: pointer;
+      transition:
+        background-color var(--ft-transition-fast),
+        transform var(--ft-transition-fast),
+        box-shadow var(--ft-transition-fast);
+
+      &:hover:not(:disabled) {
+        background: var(--ft-figma-btn-primary-hover) !important;
+        box-shadow: var(--ft-shadow-md);
+      }
+
+      &:active:not(:disabled) {
+        background: var(--ft-figma-btn-primary-active) !important;
+        transform: scale(0.98);
+      }
+
+      &:focus,
+      &:focus-visible {
+        outline: none;
+        box-shadow: 0 0 0 3px rgb(255 26 71 / 0.3);
+      }
+
+      &:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+    }
+
+    // "Already have account? Log in" - inline text with link
+    &__existing-account {
+      display: inline;
+      vertical-align: baseline;
+      font-family: var(--ft-font-family);
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 21px;
+      color: #666;
+      margin-top: 16px;
+
+      &::before {
+        display: none; // Remove separator line
+      }
+    }
+
+    // Login link (styled as inline link, not button)
+    &__login {
+      display: inline !important;
+      vertical-align: baseline;
+      width: auto !important;
+      height: auto !important;
+      padding: 0 !important;
+      margin-left: 6px;
+      font-family: var(--ft-font-family);
+      font-size: 14px !important;
+      font-weight: 600;
+      line-height: 21px;
+      color: var(--ft-figma-accent) !important;
+      background: transparent !important;
+      border: none !important;
+      border-radius: 0 !important;
+      cursor: pointer;
+      text-decoration: none;
+
+      &:hover {
+        text-decoration: underline;
+        background: transparent !important;
+      }
+
+      &:focus,
+      &:focus-visible {
+        outline: none;
+        box-shadow: none;
+      }
+    }
+  }
+
+  // ==============================================
+  // SIGNUP BODY - Stack everything vertically
+  // ==============================================
+  .signup-body {
+    flex-direction: column !important;
+    align-items: center;
+    max-width: 460px !important;
+    background: rgb(253 252 252 / 0.8);
+    border: 1px solid rgb(231 230 228 / 0.6);
+    border-radius: 10px;
+    box-shadow:
+      0 20px 25px rgb(0 0 0 / 0.1),
+      0 8px 10px rgb(0 0 0 / 0.1);
+    padding: 32px;
+    margin: 80px 0 40px 0;
+  }
+
+  // Remove card styling from login-left-side (now on signup-body)
+  .login-left-side {
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    padding: 0;
+    max-width: 396px;
+    border-radius: 0;
+  }
+
+  // ==============================================
+  // OAUTH BUTTONS (Google, etc.) - Inside card
+  // ==============================================
+  .login-right-side {
+    display: flex !important;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 396px;
+    padding: 0;
+    margin-top: 0;
+    order: 1; // Ensure it comes after the form
+
+    &::before {
+      display: none; // Remove vertical separator
+    }
+  }
+
+  #login-buttons {
+    display: flex !important;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+    padding: 0;
+
+    // Hide Facebook login button
+    .btn-social.facebook {
+      display: none !important;
+    }
+
+    .btn-social {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      width: 100%;
+      height: 48px;
+      padding: 12px 24px;
+      font-family: var(--ft-font-family);
+      font-size: 16px;
+      font-weight: 500;
+      color: #666;
+      background: transparent;
+      border: 1px solid #d3d1cf !important;
+      border-radius: 9999px !important;
+      cursor: pointer;
+      transition:
+        background-color var(--ft-transition-fast),
+        border-color var(--ft-transition-fast);
+
+      &:hover {
+        background: #f5f3f0;
+        border-color: #c0beba !important;
+      }
+
+      &:focus,
+      &:focus-visible {
+        outline: none;
+        box-shadow: 0 0 0 3px rgb(255 26 71 / 0.3);
+      }
+
+      .d-icon {
+        width: 24px;
+        height: 24px;
+      }
+    }
+  }
+
+  // OR separator - styled divider
+  .login-or-separator {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: 396px;
+    margin: 24px 0;
+    color: #666;
+    font-family: var(--ft-font-family);
+    font-size: 14px;
+    border-top: none;
+
+    span {
+      position: static;
+      transform: none;
+      background: transparent;
+      padding: 0 16px;
+    }
+
+    &::before,
+    &::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: #ddd;
+    }
+  }
+
+  // ==============================================
+  // PROGRESS BAR
+  // ==============================================
+  .signup-progress-bar {
+    margin-bottom: 8px;
+
+    &__segment {
+      &.--active,
+      &.--completed {
+        .signup-progress-bar__connector {
+          background: var(--ft-figma-accent);
+        }
+      }
+    }
+
+    &__circle {
+      &.--active {
+        background: var(--ft-figma-accent);
+        border-color: var(--ft-figma-accent);
+        box-shadow: 0 0 0 4px rgb(255 26 71 / 0.2);
+      }
+
+      &.--completed {
+        background: var(--ft-figma-accent);
+        border-color: var(--ft-figma-accent);
+      }
+    }
+
+    &__step-name {
+      font-family: var(--ft-font-family);
+      font-size: 12px;
+    }
+  }
+
+  // ==============================================
+  // FLASH MESSAGES
+  // ==============================================
+  .alert {
+    max-width: 460px;
+    margin-bottom: 16px;
+    padding: 12px 16px;
+    border-radius: 10px;
+    font-family: var(--ft-font-family);
+    font-size: 14px;
+
+    &.alert-error {
+      background: var(--ft-error-light);
+      color: var(--ft-error);
+      border: 1px solid var(--ft-error);
+    }
+
+    &.alert-success {
+      background: var(--ft-success-light);
+      color: var(--ft-success);
+      border: 1px solid var(--ft-success);
+    }
+  }
+}
+
+// ==============================================
+// SIGNUP PAGE MOBILE RESPONSIVE
+// ==============================================
+@media (width <= 767px) {
+  body.fantribe-theme.signup-page {
+    #main-outlet-wrapper {
+      padding-top: 60px;
+    }
+
+    .signup-body {
+      padding: 24px;
+      max-width: 100%;
+      margin: 0 16px;
+    }
+
+    .login-left-side {
+      padding: 0;
+      max-width: 100%;
+      margin: 0;
+    }
+
+    #login-form::before {
+      font-size: 24px;
+      line-height: 32px;
+      margin-bottom: 16px;
+    }
+
+    #login-form {
+      gap: 12px;
+    }
+
+    .input-group {
+      input {
+        height: 44px;
+        padding: 0 12px !important;
+      }
+
+      label.alt-placeholder,
+      .user-field label.control-label {
+        font-size: 13px !important;
+      }
+    }
+
+    .signup-page-cta {
+      &__signup,
+      &__login,
+      .btn-primary,
+      .btn-flat {
+        height: 44px;
+      }
+    }
+
+    #login-buttons .btn-social {
+      height: 44px;
+    }
+  }
+}

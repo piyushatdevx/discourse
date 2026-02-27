@@ -13,11 +13,17 @@ export default class FantribeSignupLogo extends Component {
     return getURL("/plugins/fantribe-theme/images/logo.svg");
   }
 
+  get homeUrl() {
+    return getURL("/");
+  }
+
   <template>
     {{#if this.isEnabled}}
-      <div class="fantribe-login-logo">
-        <img src={{this.logoUrl}} alt="FanTribe" />
-      </div>
+      <header class="fantribe-login-header">
+        <a href={{this.homeUrl}} class="fantribe-login-header__logo">
+          <img src={{this.logoUrl}} alt="FanTribe" />
+        </a>
+      </header>
     {{/if}}
   </template>
 }
