@@ -14,18 +14,17 @@ const autoFocus = modifier((element) => {
 });
 
 const TABS = [
-  { id: "all", label: "All", icon: "layout-grid" },
-  { id: "people", label: "People", icon: "user" },
   { id: "feed", label: "Feed", icon: "newspaper" },
+  { id: "people", label: "People", icon: "user" },
   { id: "tribes", label: "Tribes", icon: "compass" },
-  { id: "gear", label: "Gear", icon: "tag" },
 ];
 
 export default class FtSearchModal extends Component {
   @service router;
+  @service site;
 
   @tracked query = "";
-  @tracked activeTab = "all";
+  @tracked activeTab = "feed";
   @tracked rawResults = null;
   @tracked isLoading = false;
 
@@ -43,18 +42,38 @@ export default class FtSearchModal extends Component {
   }
 
   get visibleResults() {
+    const limit = this.activeTab === "feed" ? 4 : 10;
+    const out = [];
+
+    if (this.activeTab === "tribes") {
+      const q = this.query.trim().toLowerCase();
+      let matches = this.site.categories || [];
+      if (q) {
+        matches = matches.filter((c) => c.name.toLowerCase().includes(q));
+      }
+      matches.slice(0, limit).forEach((c) => {
+        out.push({
+          type: "tribe",
+          item: c,
+          isFeed: false,
+          isPeople: false,
+          isTribe: true,
+          titleDisplay: htmlSafe(c.name),
+        });
+      });
+      return out;
+    }
+
     if (!this.rawResults) {
       return [];
     }
 
-    const limit = this.activeTab === "all" ? 4 : 10;
-    const out = [];
     const topicsMap = {};
     (this.rawResults.topics || []).forEach((t) => {
       topicsMap[t.id] = t;
     });
 
-    if (this.activeTab === "all" || this.activeTab === "feed") {
+    if (this.activeTab === "feed") {
       (this.rawResults.posts || []).slice(0, limit).forEach((p) => {
         const topic = topicsMap[p.topic_id];
         const title =
@@ -65,13 +84,12 @@ export default class FtSearchModal extends Component {
           isFeed: true,
           isPeople: false,
           isTribe: false,
-          isGear: false,
           titleDisplay: htmlSafe(title),
         });
       });
     }
 
-    if (this.activeTab === "all" || this.activeTab === "people") {
+    if (this.activeTab === "people") {
       (this.rawResults.users || []).slice(0, limit).forEach((u) => {
         out.push({
           type: "people",
@@ -79,36 +97,7 @@ export default class FtSearchModal extends Component {
           isFeed: false,
           isPeople: true,
           isTribe: false,
-          isGear: false,
           titleDisplay: htmlSafe(`@${u.username}`),
-        });
-      });
-    }
-
-    if (this.activeTab === "all" || this.activeTab === "tribes") {
-      (this.rawResults.categories || []).slice(0, limit).forEach((c) => {
-        out.push({
-          type: "tribe",
-          item: c,
-          isFeed: false,
-          isPeople: false,
-          isTribe: true,
-          isGear: false,
-          titleDisplay: htmlSafe(c.name),
-        });
-      });
-    }
-
-    if (this.activeTab === "all" || this.activeTab === "gear") {
-      (this.rawResults.tags || []).slice(0, limit).forEach((t) => {
-        out.push({
-          type: "gear",
-          item: t,
-          isFeed: false,
-          isPeople: false,
-          isTribe: false,
-          isGear: true,
-          titleDisplay: htmlSafe(t.name),
         });
       });
     }
@@ -170,6 +159,7 @@ export default class FtSearchModal extends Component {
   @action
   setTab(tabId) {
     this.activeTab = tabId;
+    document.querySelector(".ft-search-modal__search-input")?.focus();
   }
 
   @action
@@ -204,12 +194,6 @@ export default class FtSearchModal extends Component {
   @action
   navigateToTribe(category) {
     this.router.transitionTo("discovery.category", category.slug);
-    this.args.onClose();
-  }
-
-  @action
-  navigateToGear(tag) {
-    this.router.transitionTo("tag.show", tag.name);
     this.args.onClose();
   }
 
@@ -265,7 +249,7 @@ export default class FtSearchModal extends Component {
             <input
               type="text"
               class="ft-search-modal__search-input"
-              placeholder="Search people, gear, tribes..."
+              placeholder="Search feed, people, tribes..."
               value={{this.query}}
               {{autoFocus}}
               {{on "input" this.updateQuery}}
@@ -382,28 +366,6 @@ export default class FtSearchModal extends Component {
                         {{ftIcon "users" size=10}}
                         <span>{{this.formatCount result.item.topic_count}}
                           posts</span>
-                      </span>
-                    </span>
-                  </button>
-                {{/if}}
-
-                {{#if result.isGear}}
-                  <button
-                    type="button"
-                    class="ft-search-modal__result-item"
-                    {{on "click" (fn this.navigateToGear result.item)}}
-                  >
-                    <span
-                      class="ft-search-modal__result-icon ft-search-modal__result-icon--gear"
-                    >
-                      {{ftIcon "tag" size=16}}
-                    </span>
-                    <span class="ft-search-modal__result-body">
-                      <span
-                        class="ft-search-modal__result-title"
-                      >{{result.titleDisplay}}</span>
-                      <span class="ft-search-modal__result-meta">
-                        <span>{{this.formatCount result.item.count}} used</span>
                       </span>
                     </span>
                   </button>
