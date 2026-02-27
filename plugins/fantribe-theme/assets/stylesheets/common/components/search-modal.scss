@@ -1,0 +1,353 @@
+// ============================================================
+// FanTribe Search Modal
+// Matches Figma nodes: 498:26594 (empty), 498:27604 (results)
+// ============================================================
+body.fantribe-theme:not(.admin-interface) {
+  // Animate backdrop when it hosts the search modal
+  .ft-modal-backdrop:has(.ft-search-modal) {
+    animation: ft-backdrop-in 200ms ease both;
+  }
+
+  .ft-search-modal {
+    width: 640px;
+    border-radius: 20px;
+    gap: 0;
+    animation: ft-modal-in 250ms cubic-bezier(0.16, 1, 0.3, 1) both;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+
+    // ── Header ───────────────────────────────────────────────
+    &__header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 16px;
+      background: rgb(255 23 68 / 10%);
+      border-bottom: 0.5px solid #ff1744;
+      border-radius: 20px 20px 0 0;
+      flex-shrink: 0;
+    }
+
+    &__title {
+      font-size: 18px;
+      font-weight: 600;
+      line-height: 27px;
+      color: #111827;
+      margin: 0;
+    }
+
+    &__close-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      color: #6b7280;
+      border-radius: 50%;
+      flex-shrink: 0;
+      transition: background 150ms;
+
+      &:hover {
+        background: rgb(0 0 0 / 8%);
+      }
+
+      svg,
+      .ft-icon {
+        width: 20px;
+        height: 20px;
+      }
+    }
+
+    // ── Search input ─────────────────────────────────────────
+    &__search-wrap {
+      padding: 16px 16px 0;
+      flex-shrink: 0;
+    }
+
+    &__search-bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      height: 48px;
+      padding: 0 16px;
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 24px;
+      cursor: text;
+      width: 100%;
+      box-sizing: border-box;
+      transition: border-color 150ms;
+
+      svg,
+      .ft-icon {
+        flex-shrink: 0;
+        width: 18px;
+        height: 18px;
+        color: #999;
+      }
+
+      &:focus-within {
+        border-color: var(--ft-vibrant-red);
+        box-shadow: 0 0 0 2px rgb(255 23 68 / 12%);
+      }
+    }
+
+    &__search-input {
+      flex: 1;
+      border: none !important;
+      outline: none !important;
+      background: transparent !important;
+      box-shadow: none !important;
+      font-size: 14px;
+      color: #1a1a1a;
+      min-width: 0;
+      margin-bottom: 0;
+
+      &::placeholder {
+        color: #666;
+      }
+    }
+
+    // ── Tab bar ──────────────────────────────────────────────
+    &__tabs {
+      display: flex;
+      align-items: center;
+      padding: 0 24px;
+      border-bottom: 1px solid #e5e7eb;
+      flex-shrink: 0;
+      margin-top: 12px;
+      gap: 0;
+    }
+
+    &__tab {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 16px;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 500;
+      line-height: 16px;
+      color: #666;
+      position: relative;
+      white-space: nowrap;
+      transition: color 150ms;
+
+      &::after {
+        content: "";
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 1px;
+        background: transparent;
+        transition: background 150ms;
+      }
+
+      &--active {
+        color: #1a1a1a;
+
+        &::after {
+          background: #1a1a1a;
+        }
+      }
+
+      &:hover:not(&--active) {
+        color: #374151;
+      }
+    }
+
+    // ── Results area ─────────────────────────────────────────
+    &__results {
+      flex: 1;
+      overflow-y: auto;
+      min-height: 0;
+
+      &::-webkit-scrollbar {
+        width: 4px;
+      }
+
+      &::-webkit-scrollbar-track {
+        background: transparent;
+      }
+
+      &::-webkit-scrollbar-thumb {
+        background: #e5e7eb;
+        border-radius: 2px;
+      }
+    }
+
+    // ── Empty / loading state ─────────────────────────────────
+    &__state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      padding: 40px 24px;
+      border-bottom: 1px solid #e5e7eb;
+
+      svg,
+      .ft-icon {
+        color: #bbb;
+      }
+
+      p {
+        font-size: 14px;
+        font-weight: 500;
+        line-height: 24px;
+        color: #999;
+        margin: 0;
+      }
+    }
+
+    // Spinning loader
+    &__spinner {
+      width: 20px;
+      height: 20px;
+      border: 2px solid #e5e7eb;
+      border-top-color: var(--ft-vibrant-red);
+      border-radius: 50%;
+      animation: ft-spin 0.6s linear infinite;
+    }
+
+    // ── Result item ──────────────────────────────────────────
+    &__result-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      width: 100%;
+      padding: 16px 24px;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      text-align: left;
+      border-bottom: 1px solid #e5e7eb;
+      transition: background 100ms;
+
+      &:hover {
+        background: #fafafa;
+      }
+    }
+
+    // ── Colored type icon box ─────────────────────────────────
+    &__result-icon {
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      flex-shrink: 0;
+      padding: 7px;
+      border-radius: 2px;
+
+      svg,
+      .ft-icon {
+        width: 16px;
+        height: 16px;
+      }
+
+      // Feed — red tint
+      &--feed {
+        background: rgb(251 44 54 / 10%);
+
+        svg,
+        .ft-icon {
+          color: #fb2c36;
+        }
+      }
+
+      // People — orange tint
+      &--people {
+        background: rgb(255 105 0 / 10%);
+
+        svg,
+        .ft-icon {
+          color: #ff6900;
+        }
+      }
+
+      // Tribe — purple tint
+      &--tribe {
+        background: rgb(173 70 255 / 10%);
+
+        svg,
+        .ft-icon {
+          color: #ad46ff;
+        }
+      }
+
+      // Gear — teal tint
+      &--gear {
+        background: rgb(0 120 111 / 10%);
+
+        svg,
+        .ft-icon {
+          color: #00786f;
+        }
+      }
+    }
+
+    // ── Result text block ─────────────────────────────────────
+    &__result-body {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      min-width: 0;
+      flex: 1;
+    }
+
+    &__result-title {
+      font-size: 12px;
+      font-weight: 500;
+      line-height: 16px;
+      color: #111827;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+
+      // Style highlighted matches from Discourse search
+      em {
+        font-style: normal;
+        font-weight: 700;
+        color: #111827;
+      }
+    }
+
+    &__result-meta {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 10px;
+      font-weight: 400;
+      line-height: 15px;
+      color: #6b7280;
+
+      svg,
+      .ft-icon {
+        width: 10px;
+        height: 10px;
+        flex-shrink: 0;
+        color: #9ca3af;
+      }
+    }
+
+    &__result-avatar {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      object-fit: cover;
+      flex-shrink: 0;
+    }
+  }
+}
+
+@keyframes ft-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

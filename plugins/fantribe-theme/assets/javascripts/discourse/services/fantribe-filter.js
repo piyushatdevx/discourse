@@ -4,6 +4,8 @@ import Service from "@ember/service";
 
 export default class FantribeFilterService extends Service {
   @tracked selectedCategoryIds = [];
+  @tracked isFiltersModalOpen = false;
+  @tracked isSearchModalOpen = false;
   _hasBeenInitialized = false;
 
   get hasFilters() {
@@ -42,6 +44,26 @@ export default class FantribeFilterService extends Service {
     this.selectedCategoryIds = this.selectedCategoryIds.filter(
       (id) => id !== categoryId
     );
+  }
+
+  @action
+  openFiltersModal() {
+    this.isFiltersModalOpen = true;
+  }
+
+  @action
+  closeFiltersModal() {
+    this.isFiltersModalOpen = false;
+  }
+
+  @action
+  openSearchModal() {
+    this.isSearchModalOpen = true;
+  }
+
+  @action
+  closeSearchModal() {
+    this.isSearchModalOpen = false;
   }
 
   @action

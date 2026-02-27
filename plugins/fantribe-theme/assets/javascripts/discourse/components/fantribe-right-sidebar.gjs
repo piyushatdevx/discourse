@@ -13,6 +13,7 @@ function dotStyle(color) {
 export default class FantribeRightSidebar extends Component {
   @service router;
   @service site;
+  @service fantribeFilter;
 
   get tribes() {
     return this.site.trending_tribes || [];
@@ -50,6 +51,33 @@ export default class FantribeRightSidebar extends Component {
 
   <template>
     <div class="fantribe-right-sidebar">
+
+      {{! Search + Filter row }}
+      <div class="fantribe-right-sidebar__search-row">
+        <button
+          type="button"
+          class="fantribe-right-sidebar__search-bar"
+          aria-label="Open search"
+          {{on "click" this.fantribeFilter.openSearchModal}}
+        >
+          {{ftIcon "search" size=18}}
+          <span class="fantribe-right-sidebar__search-placeholder">Search
+            people, gear, tribes...</span>
+        </button>
+        <button
+          type="button"
+          class="fantribe-right-sidebar__filter-btn
+            {{if
+              this.fantribeFilter.hasFilters
+              'fantribe-right-sidebar__filter-btn--active'
+            }}"
+          aria-label="Open filters"
+          {{on "click" this.fantribeFilter.openFiltersModal}}
+        >
+          {{ftIcon "sliders-horizontal" size=24}}
+        </button>
+      </div>
+
       {{! Trending Tribes Widget }}
       <div class="fantribe-right-sidebar__widget">
         <div class="fantribe-right-sidebar__widget-header">

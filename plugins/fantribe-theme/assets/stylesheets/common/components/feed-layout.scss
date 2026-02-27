@@ -47,69 +47,6 @@ body.fantribe-theme:not(.admin-interface) {
       }
     }
 
-    // Filter trigger row
-    &__filter-row {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    &__filter-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      height: 34px;
-      padding: 0 14px;
-      border-radius: 30px;
-      border: 1px solid var(--ft-slate-200);
-      background: #fff;
-      cursor: pointer;
-      font-size: 14px;
-      font-weight: 500;
-      color: var(--ft-slate-700);
-      transition:
-        border-color 150ms,
-        background 150ms;
-
-      svg,
-      .ft-icon {
-        width: 16px;
-        height: 16px;
-        color: var(--ft-slate-500);
-      }
-
-      &:hover {
-        border-color: var(--ft-slate-400);
-        background: var(--ft-slate-50);
-      }
-
-      &--active {
-        border-color: var(--ft-vibrant-red);
-        background: var(--ft-vibrant-red-light);
-        color: var(--ft-vibrant-red);
-
-        svg,
-        .ft-icon {
-          color: var(--ft-vibrant-red);
-        }
-      }
-    }
-
-    &__filter-badge {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-width: 18px;
-      height: 18px;
-      padding: 0 5px;
-      border-radius: 9999px;
-      background: var(--ft-vibrant-red);
-      color: #fff;
-      font-size: 11px;
-      font-weight: 700;
-      line-height: 1;
-    }
-
     // Period chooser (top filter)
     &__period-chooser {
       margin-bottom: 16px;
