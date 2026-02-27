@@ -206,7 +206,7 @@
     gap: 12px;
     width: 100%;
     flex-shrink: 0;
-    margin-bottom: 36px;
+    margin-bottom: 44px;
   }
 
   // Create button — Figma 444-12158: horizontally centered in sidebar, pill shape
@@ -217,6 +217,18 @@
     justify-content: center;
     width: 100%;
     padding: 0;
+    position: relative;
+  }
+
+  // Hover dropdown: Create Post, Sell gear, Co-create request, Start event (Figma 469-22156)
+  // Position set via JS modifier (position: fixed) so it isn’t clipped by sidebar overflow
+  &__create-menu-wrap {
+    min-width: 0;
+
+    .ft-create-menu--sidebar {
+      position: relative;
+      top: 0;
+    }
   }
 
   // Figma 444-12521: full-width pill, 48px height, generous horizontal padding; Primary-gradiant
@@ -396,7 +408,7 @@
   // Figma 444-12268 (expanded): avatar | name + @handle | vertical dots — all vertically centered, border-top
   &__user {
     display: flex;
-    padding: 12px;
+    padding: 12px 12px 0 12px;
     flex-direction: column;
     align-items: stretch;
     align-self: stretch;
@@ -411,10 +423,6 @@
       transform var(--ft-transition-fast);
     border-radius: 0;
     flex-shrink: 0;
-
-    &:hover {
-      background: var(--ft-gray-50);
-    }
 
     &:active {
       transform: scale(0.98);
@@ -453,20 +461,15 @@
     flex-direction: column;
     justify-content: center;
     gap: 2px;
-    font-family: var(--ft-font-family);
-    font-size: 14px;
-    font-style: normal;
-    font-weight: 500;
-    line-height: var(--ft-figma-lh-24);
   }
 
   // Figma 444-12268: name — bold/dark, 14px
   &__user-name {
     font-family: var(--ft-font-family);
-    font-size: 14px;
-    font-style: normal;
-    font-weight: 600;
-    line-height: var(--ft-figma-lh-24);
+    font-size: var(--ft-figma-14); // 14px
+    font-style: var(--ft-font-style-normal);
+    font-weight: var(--ft-font-weight-semibold);
+    line-height: var(--ft-figma-lh-21); // 21px
     color: var(--ft-text, #1a1a1a);
     white-space: nowrap;
     overflow: hidden;
@@ -476,10 +479,10 @@
   // Figma 444-12268: @handle — lighter grey, 12px, regular
   &__user-username {
     font-family: var(--ft-font-family);
-    font-size: 12px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: var(--ft-figma-lh-16);
+    font-size: var(--ft-figma-12); // 12px
+    font-style: var(--ft-font-style-normal);
+    font-weight: var(--ft-font-weight-normal);
+    line-height: var(--ft-figma-lh-16); // 16px
     color: var(--ft-gray-500);
     white-space: nowrap;
     overflow: hidden;
@@ -589,7 +592,7 @@
       width: 100%;
       justify-content: center;
       align-items: center;
-      padding: 8px 0;
+      padding: 12px 12px 0 12px;
     }
 
     &__user-row {

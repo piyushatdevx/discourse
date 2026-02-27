@@ -4,8 +4,8 @@ body.fantribe-theme:not(.admin-interface) {
     position: absolute;
     top: calc(100% + 8px);
     right: 0;
-    width: 320px;
-    background: #fff;
+    width: 294px;
+    background: var(--ft-white);
     border-radius: 20px;
     box-shadow:
       0 25px 50px -12px rgb(0, 0, 0, 0.25),
@@ -14,20 +14,21 @@ body.fantribe-theme:not(.admin-interface) {
     overflow: hidden;
     animation: ft-menu-fade-in 150ms ease-out;
 
-    &__header {
-      padding: 16px 20px 8px;
-    }
-
-    &__title {
-      font-size: var(--ft-font-xs);
-      font-weight: var(--ft-font-weight-semibold);
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      color: var(--ft-slate-400);
+    &--sidebar {
+      display: flex;
+      flex-direction: column;
+      padding: 0;
+      align-items: stretch;
+      gap: 0;
+      align-self: stretch;
+      border-radius: 20px;
+      background: var(--ft-white);
+      box-shadow: var(--ft-shadow-md);
     }
 
     &__items {
-      padding: 4px 8px 8px;
+      padding: 0;
+      width: 100%;
     }
 
     &__item {
@@ -38,13 +39,13 @@ body.fantribe-theme:not(.admin-interface) {
       padding: 10px 12px;
       background: none;
       border: none;
-      border-radius: 12px;
+      border-radius: 0;
       cursor: pointer;
       transition: background 150ms ease;
       text-align: left;
 
       &:hover {
-        background: var(--ft-slate-50);
+        background: var(--ft-light-mist);
       }
     }
 
@@ -54,33 +55,38 @@ body.fantribe-theme:not(.admin-interface) {
       justify-content: center;
       width: 40px;
       height: 40px;
-      border-radius: 12px;
+      border-radius: 10px;
       flex-shrink: 0;
 
-      .d-icon {
-        width: 18px;
-        height: 18px;
-        color: #fff;
+      .d-icon,
+      .ft-icon {
+        width: 20px;
+        height: 20px;
       }
 
       &--blue {
-        background: var(--ft-electric-blue);
+        background: var(--ft-electric-blue-icon-bg);
+        color: var(--ft-electric-blue-icon);
       }
 
       &--green {
-        background: var(--ft-mint);
+        background: var(--ft-mint-light);
+        color: var(--ft-mint);
       }
 
       &--purple {
-        background: var(--ft-purple);
+        background: var(--ft-purple-light);
+        color: var(--ft-purple);
       }
 
       &--red {
-        background: var(--ft-coral);
+        background: var(--ft-coral-light);
+        color: var(--ft-coral);
       }
 
       &--orange {
-        background: var(--ft-amber);
+        background: var(--ft-amber-light);
+        color: var(--ft-amber);
       }
 
       &--pink {
@@ -96,14 +102,21 @@ body.fantribe-theme:not(.admin-interface) {
     }
 
     &__item-label {
-      font-size: var(--ft-font-sm);
+      font-family: var(--ft-font-family);
+      font-size: var(--ft-figma-14);
+      font-style: var(--ft-font-style-normal);
       font-weight: var(--ft-font-weight-semibold);
-      color: var(--ft-slate-900);
+      line-height: var(--ft-figma-lh-21);
+      color: var(--ft-dark);
     }
 
     &__item-desc {
-      font-size: var(--ft-font-xs);
-      color: var(--ft-slate-500);
+      font-family: var(--ft-font-family);
+      font-size: var(--ft-figma-12);
+      font-style: var(--ft-font-style-normal);
+      font-weight: var(--ft-font-weight-normal);
+      line-height: var(--ft-figma-lh-16);
+      color: var(--ft-neutral-600);
     }
 
     &__badge {

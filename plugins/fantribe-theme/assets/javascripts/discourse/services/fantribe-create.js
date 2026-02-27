@@ -4,6 +4,7 @@ import Service from "@ember/service";
 
 export default class FantribeCreate extends Service {
   @tracked isCreateMenuOpen = false;
+  @tracked isSidebarCreateMenuOpen = false;
   @tracked isCreatePostModalOpen = false;
   @tracked postCategory = null;
   @tracked editingPost = null;
@@ -21,12 +22,23 @@ export default class FantribeCreate extends Service {
   }
 
   @action
+  openSidebarCreateMenu() {
+    this.isSidebarCreateMenuOpen = true;
+  }
+
+  @action
+  closeSidebarCreateMenu() {
+    this.isSidebarCreateMenuOpen = false;
+  }
+
+  @action
   openCreatePostModal(category = null) {
     this.postCategory = category;
     this.editingPost = null;
     this.editingTopicTitle = "";
     this.editingTags = [];
     this.isCreateMenuOpen = false;
+    this.isSidebarCreateMenuOpen = false;
     this.isCreatePostModalOpen = true;
   }
 

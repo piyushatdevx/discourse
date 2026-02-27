@@ -35,6 +35,18 @@ en:
       discover: "Discover"
       for_you: "For You"
       log_out_confirm: "Are you sure you want to log out ?"
+      create_menu:
+        suggested: "Suggested"
+        create_post: "Create Post"
+        create_post_desc: "Share your music, updates, and vibes"
+        sell_gear: "Sell Gear"
+        sell_gear_desc: "List equipment, merch, or beats"
+        co_create_request: "Co-Create Request"
+        co_create_request_desc: "Start a collaboration"
+        start_event: "Start Event"
+        start_event_desc: "Go live or schedule a stream"
+        create_video: "Create Video"
+        create_video_desc: "Record and edit your content"
     sidebar:
       logo_aria: "Go to home feed"
       collapse_aria: "Collapse sidebar"

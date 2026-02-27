@@ -3,10 +3,34 @@ import { fn } from "@ember/helper";
 import { on } from "@ember/modifier";
 import { action } from "@ember/object";
 import { service } from "@ember/service";
+import { modifier } from "ember-modifier";
 import avatar from "discourse/helpers/avatar";
 import getURL from "discourse/lib/get-url";
 import { i18n } from "discourse-i18n";
 import ftIcon from "../helpers/ft-icon";
+import FtCreateMenu from "./ft-create-menu";
+
+const SIDEBAR_CREATE_MENU_GAP = 110;
+const SIDEBAR_CREATE_MENU_OFFSET_TOP = 80;
+// Match expanded sidebar width (left-sidebar.scss) so menu starts at same horizontal position when expanded or collapsed
+const EXPANDED_SIDEBAR_WIDTH = 200;
+
+const positionSidebarCreateMenu = modifier((element) => {
+  const trigger = element.parentElement?.querySelector(
+    ".fantribe-sidebar-nav__create"
+  );
+  const sidebar = element.closest(".fantribe-left-sidebar");
+  if (!trigger || !sidebar) {
+    return;
+  }
+  const triggerRect = trigger.getBoundingClientRect();
+  const sidebarRect = sidebar.getBoundingClientRect();
+  element.style.position = "fixed";
+  element.style.left = `${sidebarRect.left + EXPANDED_SIDEBAR_WIDTH + SIDEBAR_CREATE_MENU_GAP}px`;
+  element.style.bottom = "auto";
+  element.style.top = `${triggerRect.top - SIDEBAR_CREATE_MENU_OFFSET_TOP}px`;
+  element.style.zIndex = "var(--ft-z-dropdown, 1100)";
+});
 
 const NAV_ITEMS = [
   {
@@ -35,6 +59,8 @@ export default class FantribeTribesPanel extends Component {
   @service chatTrackingStateManager;
   @service fantribeCreate;
   @service fantribeSidebarState;
+
+  positionSidebarCreateMenu = positionSidebarCreateMenu;
 
   isActive = (item) => {
     const route = this.router.currentRouteName || "";
@@ -74,6 +100,8 @@ export default class FantribeTribesPanel extends Component {
     }
     return 0;
   };
+
+  _sidebarCreateMenuCloseTimeout = null;
 
   get isCollapsed() {
     return this.fantribeSidebarState.isCollapsed;
@@ -129,8 +157,28 @@ export default class FantribeTribesPanel extends Component {
   }
 
   @action
-  openCreate() {
-    this.fantribeCreate.openCreatePostModal();
+  openSidebarCreateMenu() {
+    if (this._sidebarCreateMenuCloseTimeout) {
+      clearTimeout(this._sidebarCreateMenuCloseTimeout);
+      this._sidebarCreateMenuCloseTimeout = null;
+    }
+    this.fantribeCreate.openSidebarCreateMenu();
+  }
+
+  @action
+  closeSidebarCreateMenu() {
+    this._sidebarCreateMenuCloseTimeout = setTimeout(() => {
+      this.fantribeCreate.closeSidebarCreateMenu();
+      this._sidebarCreateMenuCloseTimeout = null;
+    }, 150);
+  }
+
+  @action
+  cancelSidebarCreateMenuClose() {
+    if (this._sidebarCreateMenuCloseTimeout) {
+      clearTimeout(this._sidebarCreateMenuCloseTimeout);
+      this._sidebarCreateMenuCloseTimeout = null;
+    }
   }
 
   <template>
@@ -190,11 +238,16 @@ export default class FantribeTribesPanel extends Component {
       </div>
 
       <div class="fantribe-sidebar-nav__create-row">
-        <div class="fantribe-sidebar-nav__create-wrap">
+        <div
+          class="fantribe-sidebar-nav__create-wrap"
+          {{on "mouseenter" this.openSidebarCreateMenu}}
+          {{on "mouseleave" this.closeSidebarCreateMenu}}
+        >
           <button
             type="button"
             class="fantribe-sidebar-nav__create"
-            {{on "click" this.openCreate}}
+            aria-haspopup="true"
+            aria-expanded={{this.fantribeCreate.isSidebarCreateMenuOpen}}
           >
             <span class="fantribe-sidebar-nav__create-icon">{{ftIcon
                 "plus"
@@ -204,8 +257,21 @@ export default class FantribeTribesPanel extends Component {
                 "sidebar.create"
               }}</span>
           </button>
+          {{#if this.fantribeCreate.isSidebarCreateMenuOpen}}
+            <div
+              class="fantribe-sidebar-nav__create-menu-wrap"
+              {{this.positionSidebarCreateMenu}}
+              {{on "mouseenter" this.cancelSidebarCreateMenuClose}}
+              {{on "mouseleave" this.closeSidebarCreateMenu}}
+            >
+              <FtCreateMenu
+                @variant="sidebar"
+                @useClickOutside={{false}}
+                @clickOutsideTargetSelector=".fantribe-sidebar-nav__create-wrap"
+              />
+            </div>
+          {{/if}}
         </div>
-
       </div>
 
       {{! User profile at bottom — Figma: column container with inner row for avatar | name | menu }}
@@ -226,6 +292,9 @@ export default class FantribeTribesPanel extends Component {
               <span class="fantribe-sidebar-nav__user-username">
                 @{{this.currentUser.username}}
               </span>
+            </span>
+            <span class="fantribe-sidebar-nav__user-menu">
+              {{ftIcon "more-vertical" size=20}}
             </span>
           </span>
         </button>

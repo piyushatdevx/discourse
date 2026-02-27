@@ -21,7 +21,11 @@
   --ft-electric-blue-hover: #006dd9;
   --ft-electric-blue-light: #e5f3ff;
   --ft-electric-blue-tint: #f0f8ff;
-  --ft-electric-blue-border: rgb(0, 128, 255, 0.2);
+  --ft-electric-blue-border: rgb(0 128 255 / 0.2);
+
+  // Figma: Create Post icon colors
+  --ft-electric-blue-icon-bg: rgb(43 127 255 / 0.3);
+  --ft-electric-blue-icon: #2b7fff;
   --ft-deep-charcoal: #1a1d23;
   --ft-deep-charcoal-light: #2d3139;
   --ft-deep-charcoal-border: rgb(26, 29, 35, 0.2);

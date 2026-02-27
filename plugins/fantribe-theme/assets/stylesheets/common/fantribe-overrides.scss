@@ -180,16 +180,7 @@ body.fantribe-theme:not(.admin-interface) {
   }
 }
 
-.fantribe-sidebar-nav__user-avatar {
-  height: 50px;
-  width: 50px;
-}
-
-.fantribe-sidebar-nav__user-avatar img.avatar {
-  // height: 50px;
-  // width: 50px;
-  margin: 0;
-}
+// User avatar sizing is controlled in components/tribes-panel.scss (Figma 444-12268)
 
 @import "components/left-sidebar";
 
