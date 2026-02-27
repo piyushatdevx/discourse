@@ -1,11 +1,8 @@
 import Component from "@glimmer/component";
-import { tracked } from "@glimmer/tracking";
-import { on } from "@ember/modifier";
 import { action } from "@ember/object";
 import { service } from "@ember/service";
 import { filterTypeForMode } from "discourse/lib/filter-mode";
 import PeriodChooser from "discourse/select-kit/components/period-chooser";
-import ftIcon from "../helpers/ft-icon";
 import FantribeComposeBox from "./fantribe-compose-box";
 import FantribeFeedCard from "./fantribe-feed-card";
 import FantribeMobileTribeChips from "./fantribe-mobile-tribe-chips";
@@ -17,8 +14,6 @@ export default class FantribeFeedLayout extends Component {
   @service fantribeFilter;
   @service currentUser;
   @service router;
-
-  @tracked showFiltersModal = false;
 
   get topics() {
     return this.args.topics || [];
@@ -67,16 +62,6 @@ export default class FantribeFeedLayout extends Component {
     this.router.transitionTo({ queryParams: { period: newPeriod } });
   }
 
-  @action
-  openFiltersModal() {
-    this.showFiltersModal = true;
-  }
-
-  @action
-  closeFiltersModal() {
-    this.showFiltersModal = false;
-  }
-
   <template>
     {{! When on a category route, show the dedicated tribe page (full-width, no sidebar) }}
     {{#if @category}}
@@ -96,31 +81,6 @@ export default class FantribeFeedLayout extends Component {
         <main class="fantribe-feed-layout__content">
           {{#if this.currentUser}}
             <FantribeComposeBox />
-          {{/if}}
-
-          {{! Filter trigger row }}
-          <div class="fantribe-feed-layout__filter-row">
-            <button
-              type="button"
-              class="fantribe-feed-layout__filter-btn
-                {{if
-                  this.fantribeFilter.hasFilters
-                  'fantribe-feed-layout__filter-btn--active'
-                }}"
-              {{on "click" this.openFiltersModal}}
-            >
-              {{ftIcon "sliders-horizontal" size=16}}
-              <span>Filters</span>
-              {{#if this.fantribeFilter.hasFilters}}
-                <span class="fantribe-feed-layout__filter-badge">
-                  {{this.fantribeFilter.selectedCount}}
-                </span>
-              {{/if}}
-            </button>
-          </div>
-
-          {{#if this.showFiltersModal}}
-            <FtFiltersModal @onClose={{this.closeFiltersModal}} />
           {{/if}}
 
           {{#if this.showPeriodChooser}}
@@ -151,6 +111,11 @@ export default class FantribeFeedLayout extends Component {
           <FantribeRightSidebar />
         </aside>
       </div>
+
+      {{! Filters modal — rendered outside sticky sidebar so backdrop covers full page }}
+      {{#if this.fantribeFilter.isFiltersModalOpen}}
+        <FtFiltersModal @onClose={{this.fantribeFilter.closeFiltersModal}} />
+      {{/if}}
     {{/if}}
   </template>
 }

@@ -14,7 +14,7 @@ body.fantribe-theme:not(.admin-interface) {
     @media (width >= 1280px) {
       display: flex;
       flex-direction: column;
-      gap: 24px;
+      gap: 16px;
       width: 320px;
       height: 100%;
       overflow-y: auto;
@@ -25,6 +25,107 @@ body.fantribe-theme:not(.admin-interface) {
       }
       -ms-overflow-style: none;
       scrollbar-width: none;
+    }
+
+    // Search + Filter row (top of sidebar, above Trending Tribes)
+    &__search-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    &__search-bar {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      height: 48px;
+      padding: 0 16px;
+      background: #fff;
+      border: 1px solid #d4d2cf;
+      border-radius: 24px;
+      box-shadow:
+        0 1px 3px rgb(0 0 0 / 10%),
+        0 1px 2px rgb(0 0 0 / 10%);
+      cursor: text;
+      transition: border-color 150ms;
+      min-width: 0;
+
+      svg,
+      .ft-icon {
+        flex-shrink: 0;
+        width: 18px;
+        height: 18px;
+        color: #999;
+      }
+
+      &:focus-within {
+        border-color: var(--ft-vibrant-red);
+        box-shadow:
+          0 1px 3px rgb(0 0 0 / 10%),
+          0 0 0 2px rgb(255 23 68 / 12%);
+      }
+    }
+
+    &__search-input {
+      flex: 1;
+      border: none !important;
+      outline: none !important;
+      background: transparent !important;
+      box-shadow: none !important;
+      font-size: 14px;
+      color: #374151;
+      min-width: 0;
+      margin-bottom: 0;
+
+      &::placeholder {
+        color: #666;
+      }
+    }
+
+    &__filter-btn {
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 48px;
+      height: 48px;
+      border-radius: 24px;
+      border: 1px solid var(--ft-vibrant-red);
+      background: #fff;
+      cursor: pointer;
+      box-shadow:
+        0 1px 3px rgb(0 0 0 / 10%),
+        0 1px 2px rgb(0 0 0 / 10%);
+      transition:
+        background 150ms,
+        box-shadow 150ms;
+
+      svg,
+      .ft-icon {
+        width: 24px;
+        height: 24px;
+        color: var(--ft-vibrant-red);
+      }
+
+      &:hover {
+        background: var(--ft-vibrant-red-light);
+      }
+
+      &--active {
+        background: var(--ft-vibrant-red);
+
+        svg,
+        .ft-icon {
+          color: #fff;
+          width: 24px;
+          height: 24px;
+        }
+
+        &:hover {
+          background: var(--ft-vibrant-red-hover);
+        }
+      }
     }
 
     // Widget Card (shared by Trending + Live)

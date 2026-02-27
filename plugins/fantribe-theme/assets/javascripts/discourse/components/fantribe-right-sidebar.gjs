@@ -1,4 +1,5 @@
 import Component from "@glimmer/component";
+import { tracked } from "@glimmer/tracking";
 import { fn } from "@ember/helper";
 import { on } from "@ember/modifier";
 import { action } from "@ember/object";
@@ -13,6 +14,9 @@ function dotStyle(color) {
 export default class FantribeRightSidebar extends Component {
   @service router;
   @service site;
+  @service fantribeFilter;
+
+  @tracked searchQuery = "";
 
   get tribes() {
     return this.site.trending_tribes || [];
@@ -48,8 +52,53 @@ export default class FantribeRightSidebar extends Component {
     this.router.transitionTo("explore");
   }
 
+  @action
+  updateSearch(event) {
+    this.searchQuery = event.target.value;
+  }
+
+  @action
+  handleSearchKeydown(event) {
+    if (event.key === "Enter") {
+      const q = this.searchQuery.trim();
+      if (q) {
+        this.router.transitionTo("full-page-search", { queryParams: { q } });
+      } else {
+        this.router.transitionTo("full-page-search");
+      }
+    }
+  }
+
   <template>
     <div class="fantribe-right-sidebar">
+
+      {{! Search + Filter row }}
+      <div class="fantribe-right-sidebar__search-row">
+        <label class="fantribe-right-sidebar__search-bar">
+          {{ftIcon "search" size=18}}
+          <input
+            type="text"
+            class="fantribe-right-sidebar__search-input"
+            placeholder="Search people, gear, tribes..."
+            value={{this.searchQuery}}
+            {{on "input" this.updateSearch}}
+            {{on "keydown" this.handleSearchKeydown}}
+          />
+        </label>
+        <button
+          type="button"
+          class="fantribe-right-sidebar__filter-btn
+            {{if
+              this.fantribeFilter.hasFilters
+              'fantribe-right-sidebar__filter-btn--active'
+            }}"
+          aria-label="Open filters"
+          {{on "click" this.fantribeFilter.openFiltersModal}}
+        >
+          {{ftIcon "sliders-horizontal" size=24}}
+        </button>
+      </div>
+
       {{! Trending Tribes Widget }}
       <div class="fantribe-right-sidebar__widget">
         <div class="fantribe-right-sidebar__widget-header">
