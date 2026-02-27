@@ -9,6 +9,7 @@ import FantribeMobileTribeChips from "./fantribe-mobile-tribe-chips";
 import FantribeRightSidebar from "./fantribe-right-sidebar";
 import FantribeTribePage from "./fantribe-tribe-page";
 import FtFiltersModal from "./ft-filters-modal";
+import FtSearchModal from "./ft-search-modal";
 
 export default class FantribeFeedLayout extends Component {
   @service fantribeFilter;
@@ -112,9 +113,12 @@ export default class FantribeFeedLayout extends Component {
         </aside>
       </div>
 
-      {{! Filters modal — rendered outside sticky sidebar so backdrop covers full page }}
+      {{! Modals — rendered outside sticky sidebar so backdrop covers full page }}
       {{#if this.fantribeFilter.isFiltersModalOpen}}
         <FtFiltersModal @onClose={{this.fantribeFilter.closeFiltersModal}} />
+      {{/if}}
+      {{#if this.fantribeFilter.isSearchModalOpen}}
+        <FtSearchModal @onClose={{this.fantribeFilter.closeSearchModal}} />
       {{/if}}
     {{/if}}
   </template>

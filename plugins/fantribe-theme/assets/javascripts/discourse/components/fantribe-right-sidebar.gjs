@@ -1,5 +1,4 @@
 import Component from "@glimmer/component";
-import { tracked } from "@glimmer/tracking";
 import { fn } from "@ember/helper";
 import { on } from "@ember/modifier";
 import { action } from "@ember/object";
@@ -15,8 +14,6 @@ export default class FantribeRightSidebar extends Component {
   @service router;
   @service site;
   @service fantribeFilter;
-
-  @tracked searchQuery = "";
 
   get tribes() {
     return this.site.trending_tribes || [];
@@ -52,39 +49,21 @@ export default class FantribeRightSidebar extends Component {
     this.router.transitionTo("explore");
   }
 
-  @action
-  updateSearch(event) {
-    this.searchQuery = event.target.value;
-  }
-
-  @action
-  handleSearchKeydown(event) {
-    if (event.key === "Enter") {
-      const q = this.searchQuery.trim();
-      if (q) {
-        this.router.transitionTo("full-page-search", { queryParams: { q } });
-      } else {
-        this.router.transitionTo("full-page-search");
-      }
-    }
-  }
-
   <template>
     <div class="fantribe-right-sidebar">
 
       {{! Search + Filter row }}
       <div class="fantribe-right-sidebar__search-row">
-        <label class="fantribe-right-sidebar__search-bar">
+        <button
+          type="button"
+          class="fantribe-right-sidebar__search-bar"
+          aria-label="Open search"
+          {{on "click" this.fantribeFilter.openSearchModal}}
+        >
           {{ftIcon "search" size=18}}
-          <input
-            type="text"
-            class="fantribe-right-sidebar__search-input"
-            placeholder="Search people, gear, tribes..."
-            value={{this.searchQuery}}
-            {{on "input" this.updateSearch}}
-            {{on "keydown" this.handleSearchKeydown}}
-          />
-        </label>
+          <span class="fantribe-right-sidebar__search-placeholder">Search
+            people, gear, tribes...</span>
+        </button>
         <button
           type="button"
           class="fantribe-right-sidebar__filter-btn
