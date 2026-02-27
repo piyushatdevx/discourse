@@ -326,4 +326,48 @@
   --ft-figma-header-btn-border: #e7e6e4;
   --ft-figma-heading-size: 32px;
   --ft-figma-heading-line-height: 48px;
+
+  // =============================================
+  // FIGMA FEED CARD TOKENS (node 444-12566)
+  // =============================================
+  --ft-feed-card-radius: 20px;
+  --ft-feed-avatar-size: 52px;
+  --ft-feed-avatar-padding: 2px;
+  --ft-feed-avatar-inner-radius: 16px;
+  --ft-feed-reaction-bg: #fff2f5;
+  --ft-feed-reaction-border: rgb(255, 23, 68, 0.3);
+  --ft-feed-reaction-radius: 20px;
+  --ft-feed-reaction-height: 36px;
+  --ft-feed-reaction-emoji-size: 16px;
+  --ft-feed-reaction-count-size: 18px;
+  --ft-feed-reaction-count-lh: 27px;
+  --ft-feed-reaction-count-color: #3d3b33;
+  --ft-feed-text-lh: 26px;
+  --ft-feed-handle-color: #666;
+  --ft-feed-comment-avatar-size: 32px;
+  --ft-feed-comment-input-avatar-size: 38px;
+  --ft-feed-comment-input-bg: rgb(221, 221, 221, 0.1);
+  --ft-feed-comment-input-radius: 20px;
+  --ft-feed-comment-emoji-btn-size: 28px;
+  --ft-feed-comments-bg: rgb(255, 255, 255, 0.5);
+
+  // Comment avatar gradient presets (Figma design)
+  --ft-feed-comment-gradient-1: linear-gradient(135deg, #00d492, #00bba7);
+  --ft-feed-comment-gradient-2: linear-gradient(135deg, #51a2ff, #00b8db);
+  --ft-feed-comment-gradient-3: linear-gradient(135deg, #c27aff, #f6339a);
+  --ft-feed-comment-gradient-4: linear-gradient(135deg, #ffb84d, #ff6b6b);
+
+  // Feed card content spacing (Figma node 444-12566)
+  --ft-feed-card-content-gap: 12px;
+  --ft-feed-meta-info-gap: 8px;
+
+  // Category pill tokens (Figma node 448-14913)
+  --ft-feed-category-pill-py: 4.25px;
+  --ft-feed-category-pill-px: 12.25px;
+  --ft-feed-category-pill-radius: 4px;
+  --ft-feed-header-right-gap: 11px;
+
+  // Comments section inner spacing (Figma node 444-12752)
+  --ft-feed-comments-inner-gap: 16px;
+  --ft-feed-comments-inner-padding: 16px;
 }

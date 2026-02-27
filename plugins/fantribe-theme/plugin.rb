@@ -98,6 +98,9 @@ register_topic_preloader_associations({ first_post: { reactions: :reaction_users
     SiteSetting.discourse_reactions_enabled
 end
 
+# Preload posts with users for inline comments preview in feed cards
+register_topic_preloader_associations({ posts: :user }) { SiteSetting.fantribe_theme_enabled }
+
 after_initialize do
   # Auto-configure discourse-reactions for FanTribe's engagement bar.
   # Uses the same "unless already set" pattern as the OAuth settings below
@@ -289,6 +292,44 @@ after_initialize do
   add_to_serializer(:topic_list_item, :include_reactions?) do
     SiteSetting.respond_to?(:discourse_reactions_enabled) &&
       SiteSetting.discourse_reactions_enabled && object.first_post.present?
+  end
+
+  # Expose first 3 comments (replies) on topic list items for inline preview
+  # in feed cards. Returns user info + formatted timestamp + raw text.
+  add_to_serializer(:topic_list_item, :first_comments) do
+    return [] unless SiteSetting.fantribe_theme_enabled
+    return [] if object.posts_count <= 1
+
+    # Get first 3 replies (posts after OP, sorted by creation)
+    replies =
+      object
+        .posts
+        .where("post_number > 1")
+        .where(deleted_at: nil)
+        .order(:created_at)
+        .limit(3)
+        .includes(:user)
+
+    replies.map do |post|
+      user = post.user
+      {
+        id: post.id,
+        raw: post.raw&.truncate(200),
+        created_at: post.created_at,
+        user: {
+          id: user&.id,
+          username: user&.username || "unknown",
+          name: user&.name || user&.username || "Unknown",
+          avatar_template: user&.avatar_template,
+        },
+      }
+    end
+  rescue StandardError
+    []
+  end
+
+  add_to_serializer(:topic_list_item, :include_first_comments?) do
+    SiteSetting.fantribe_theme_enabled
   end
 
   # Expose the bookmark ID on topic list items so the engagement bar can call

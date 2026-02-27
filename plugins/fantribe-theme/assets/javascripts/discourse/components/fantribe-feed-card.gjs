@@ -8,7 +8,8 @@ import DecoratedHtml from "discourse/components/decorated-html";
 import avatar from "discourse/helpers/avatar";
 import formatDate from "discourse/helpers/format-date";
 import { ajax } from "discourse/lib/ajax";
-import { or } from "discourse/truth-helpers";
+import { popupAjaxError } from "discourse/lib/ajax-error";
+import { not, or } from "discourse/truth-helpers";
 import { i18n } from "discourse-i18n";
 import ftIcon from "../helpers/ft-icon";
 import FantribeEngagementBar from "./fantribe-engagement-bar";
@@ -27,7 +28,11 @@ export default class FantribeFeedCard extends Component {
   @tracked loadingExpanded = false;
   @tracked menuOpen = false;
   @tracked dismissed = false;
+  @tracked commentText = "";
+  @tracked isSubmittingComment = false;
   @tracked _topicClosed = null;
+  // Local comments state for optimistic updates after submission
+  @tracked _localComments = null;
 
   get topic() {
     return this.args.topic;
@@ -189,6 +194,35 @@ export default class FantribeFeedCard extends Component {
     return !!this.tribeCategory && !this.args.hideTribeBadge;
   }
 
+  // Inline comments preview — first 3 replies from serializer or local state
+  get firstComments() {
+    const comments = this._localComments || this.topic?.first_comments || [];
+    return comments.map((comment, index) => ({
+      ...comment,
+      initials: this.getInitials(comment.user?.name || comment.user?.username),
+      gradientClass: `fantribe-feed-card__comment-avatar--gradient-${(index % 4) + 1}`,
+    }));
+  }
+
+  get hasComments() {
+    return this.firstComments.length > 0;
+  }
+
+  get canComment() {
+    return !!this.currentUser && !this.topicClosed;
+  }
+
+  getInitials(name) {
+    if (!name) {
+      return "?";
+    }
+    const parts = name.trim().split(/\s+/);
+    if (parts.length === 1) {
+      return parts[0].substring(0, 2).toUpperCase();
+    }
+    return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+  }
+
   @action
   toggleMenu(event) {
     event.stopPropagation();
@@ -237,6 +271,88 @@ export default class FantribeFeedCard extends Component {
   @action
   stopPropagation(event) {
     event.stopPropagation();
+  }
+
+  @action
+  focusCommentInput(event) {
+    event.stopPropagation();
+  }
+
+  @action
+  updateCommentText(event) {
+    event.stopPropagation();
+    this.commentText = event.target.value;
+  }
+
+  @action
+  handleCommentKeydown(event) {
+    event.stopPropagation();
+    if (event.key === "Enter" && !event.shiftKey) {
+      event.preventDefault();
+      this.submitComment(event);
+    }
+  }
+
+  @action
+  async submitComment(event) {
+    event?.stopPropagation();
+
+    if (
+      !this.canComment ||
+      this.isSubmittingComment ||
+      !this.commentText.trim()
+    ) {
+      return;
+    }
+
+    const topicId = this.topic?.id;
+    if (!topicId) {
+      return;
+    }
+
+    this.isSubmittingComment = true;
+    const commentText = this.commentText.trim();
+
+    try {
+      const result = await ajax("/posts", {
+        type: "POST",
+        data: {
+          raw: commentText,
+          topic_id: topicId,
+          draft_key: `topic_${topicId}`,
+        },
+      });
+
+      // Clear input on success
+      this.commentText = "";
+
+      // Optimistic update: add new comment to local state
+      if (result) {
+        const newComment = {
+          id: result.id,
+          raw:
+            commentText.length > 200
+              ? commentText.substring(0, 200) + "..."
+              : commentText,
+          created_at: new Date().toISOString(),
+          user: {
+            id: this.currentUser.id,
+            username: this.currentUser.username,
+            name: this.currentUser.name || this.currentUser.username,
+            avatar_template: this.currentUser.avatar_template,
+          },
+        };
+
+        const existingComments =
+          this._localComments || this.topic?.first_comments || [];
+        // Keep only first 3 comments (new one at the end)
+        this._localComments = [...existingComments, newComment].slice(-3);
+      }
+    } catch (error) {
+      popupAjaxError(error);
+    } finally {
+      this.isSubmittingComment = false;
+    }
   }
 
   @action
@@ -313,53 +429,38 @@ export default class FantribeFeedCard extends Component {
                     @topic.created_at
                     format="tiny"
                   }}</span>
-                {{#if this.showTribeBadge}}
-                  <span class="fantribe-feed-card__separator">&middot;</span>
-                  <button
-                    type="button"
-                    class="fantribe-feed-card__tribe-badge"
-                    {{on "click" this.navigateToTribe}}
-                  >
-                    {{#if this.tribeLogo}}
-                      <img
-                        src={{this.tribeLogo}}
-                        class="fantribe-feed-card__tribe-logo"
-                        alt=""
-                      />
-                    {{else}}
-                      <span
-                        class="fantribe-feed-card__tribe-dot"
-                        style={{this.tribeDotStyle}}
-                      ></span>
-                    {{/if}}
-                    <span
-                      class="fantribe-feed-card__tribe-name"
-                    >{{this.tribeCategory.name}}</span>
-                  </button>
-                {{/if}}
               </div>
             </div>
 
-            <div class="fantribe-feed-card__more-wrapper">
-              <button
-                type="button"
-                class="fantribe-feed-card__more-btn"
-                {{on "click" this.toggleMenu}}
-              >
-                {{ftIcon "more-horizontal"}}
-              </button>
+            <div class="fantribe-feed-card__header-right">
+              {{#if this.showTribeBadge}}
+                <button
+                  type="button"
+                  class="fantribe-feed-card__category-pill"
+                  {{on "click" this.navigateToTribe}}
+                >{{this.tribeCategory.name}}</button>
+              {{/if}}
+              <div class="fantribe-feed-card__more-wrapper">
+                <button
+                  type="button"
+                  class="fantribe-feed-card__more-btn"
+                  {{on "click" this.toggleMenu}}
+                >
+                  {{ftIcon "more-horizontal"}}
+                </button>
 
-              <FantribePostMenu
-                @isOpen={{this.menuOpen}}
-                @onClose={{this.closeMenu}}
-                @onDismiss={{this.dismissCard}}
-                @isOwnPost={{this.isOwnPost}}
-                @userName={{this.posterUsername}}
-                @topic={{@topic}}
-                @firstPostId={{this.firstPostId}}
-                @topicClosed={{this.topicClosed}}
-                @onClosedChange={{this.setTopicClosed}}
-              />
+                <FantribePostMenu
+                  @isOpen={{this.menuOpen}}
+                  @onClose={{this.closeMenu}}
+                  @onDismiss={{this.dismissCard}}
+                  @isOwnPost={{this.isOwnPost}}
+                  @userName={{this.posterUsername}}
+                  @topic={{@topic}}
+                  @firstPostId={{this.firstPostId}}
+                  @topicClosed={{this.topicClosed}}
+                  @onClosedChange={{this.setTopicClosed}}
+                />
+              </div>
             </div>
           </header>
 
@@ -441,6 +542,103 @@ export default class FantribeFeedCard extends Component {
               @opCanLike={{this.opCanLike}}
               @topicClosed={{this.topicClosed}}
             />
+          </div>
+        </div>
+
+        {{! Divider line }}
+        <div class="fantribe-feed-card__divider"></div>
+
+        {{! Comments Section - Always shown }}
+        <div
+          class="fantribe-feed-card__comments-section"
+          {{on "click" this.stopPropagation}}
+        >
+          {{#if this.hasComments}}
+            <div class="fantribe-feed-card__comments-inner">
+              <span class="fantribe-feed-card__comments-label">Comments</span>
+
+              <div class="fantribe-feed-card__comments-list">
+                {{#each this.firstComments as |comment|}}
+                  <div class="fantribe-feed-card__comment">
+                    <div
+                      class="fantribe-feed-card__comment-avatar
+                        {{comment.gradientClass}}"
+                    >
+                      <span
+                        class="fantribe-feed-card__comment-initials"
+                      >{{comment.initials}}</span>
+                    </div>
+                    <div class="fantribe-feed-card__comment-content">
+                      <div class="fantribe-feed-card__comment-meta">
+                        <span
+                          class="fantribe-feed-card__comment-author"
+                        >{{comment.user.name}}</span>
+                        <span
+                          class="fantribe-feed-card__comment-timestamp"
+                        >{{formatDate comment.created_at format="tiny"}}</span>
+                      </div>
+                      <p
+                        class="fantribe-feed-card__comment-text"
+                      >{{comment.raw}}</p>
+                    </div>
+                  </div>
+                {{/each}}
+              </div>
+            </div>
+          {{/if}}
+
+          {{! Comment Input - Always shown }}
+          <div class="fantribe-feed-card__comment-input-wrapper">
+            <div class="fantribe-feed-card__comment-input-avatar">
+              {{#if this.currentUser}}
+                {{avatar this.currentUser imageSize="medium"}}
+              {{/if}}
+            </div>
+            <div class="fantribe-feed-card__comment-input-container">
+              <input
+                type="text"
+                class="fantribe-feed-card__comment-input
+                  {{if
+                    this.topicClosed
+                    'fantribe-feed-card__comment-input--disabled'
+                  }}"
+                placeholder={{if
+                  this.topicClosed
+                  "Comments are turned off"
+                  "Join the conversation..."
+                }}
+                value={{this.commentText}}
+                disabled={{or
+                  this.isSubmittingComment
+                  this.topicClosed
+                  (not this.currentUser)
+                }}
+                {{on "click" this.focusCommentInput}}
+                {{on "input" this.updateCommentText}}
+                {{on "keydown" this.handleCommentKeydown}}
+              />
+              <button
+                type="button"
+                class="fantribe-feed-card__comment-input-send
+                  {{if
+                    this.commentText
+                    'fantribe-feed-card__comment-input-send--active'
+                  }}"
+                disabled={{or
+                  this.isSubmittingComment
+                  (not this.commentText)
+                  this.topicClosed
+                  (not this.currentUser)
+                }}
+                {{on "click" this.submitComment}}
+              >
+                {{#if this.isSubmittingComment}}
+                  {{ftIcon "loader"}}
+                {{else}}
+                  {{ftIcon "arrow-up"}}
+                {{/if}}
+              </button>
+            </div>
           </div>
         </div>
       </article>

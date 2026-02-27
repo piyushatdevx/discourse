@@ -7,7 +7,6 @@ import { service } from "@ember/service";
 import ShareTopicModal from "discourse/components/modal/share-topic";
 import { ajax } from "discourse/lib/ajax";
 import { extractError, popupAjaxError } from "discourse/lib/ajax-error";
-import Composer from "discourse/models/composer";
 import { not, or } from "discourse/truth-helpers";
 import ftIcon from "../helpers/ft-icon";
 
@@ -23,7 +22,6 @@ const REACTIONS = [
 
 export default class FantribeEngagementBar extends Component {
   @service currentUser;
-  @service composer;
   @service modal;
 
   @tracked isLoading = false;
@@ -165,23 +163,6 @@ export default class FantribeEngagementBar extends Component {
   }
 
   @action
-  handleComment(event) {
-    event.stopPropagation();
-
-    const topic = this.args.topic;
-    if (!topic || this.isClosed) {
-      return;
-    }
-
-    this.composer.open({
-      action: Composer.REPLY,
-      draftKey: topic.draft_key || `topic_${topic.id}`,
-      draftSequence: topic.draft_sequence ?? 0,
-      topic,
-    });
-  }
-
-  @action
   handleShare(event) {
     event.stopPropagation();
 
@@ -248,7 +229,7 @@ export default class FantribeEngagementBar extends Component {
 
   <template>
     <div class="fantribe-engagement">
-      {{! Reaction row — one active reaction per user at a time }}
+      {{! Reaction row — emoji reactions + comment count + share/bookmark }}
       <div class="fantribe-engagement__reactions">
         {{#each this.reactions as |reaction|}}
           <button
@@ -267,17 +248,12 @@ export default class FantribeEngagementBar extends Component {
             {{/if}}
           </button>
         {{/each}}
-      </div>
 
-      {{! Action bar — comment, share, save }}
-      <div class="fantribe-engagement__actions">
-        <button
-          type="button"
-          class="fantribe-engagement__action fantribe-engagement__action--comment
-            {{if this.isClosed 'fantribe-engagement__action--closed'}}"
-          disabled={{this.isClosed}}
+        {{! Comment count with icon (display-only) }}
+        <span
+          class="fantribe-engagement__comment-count
+            {{if this.isClosed 'fantribe-engagement__comment-count--closed'}}"
           title={{if this.isClosed "Comments are turned off"}}
-          {{on "click" this.handleComment}}
         >
           {{#if this.isClosed}}
             {{ftIcon "message-square-off"}}
@@ -287,31 +263,32 @@ export default class FantribeEngagementBar extends Component {
           {{#if this.commentCount}}
             <span>{{this.commentCount}}</span>
           {{/if}}
-        </button>
+        </span>
 
-        <button
-          type="button"
-          class="fantribe-engagement__action fantribe-engagement__action--share"
-          {{on "click" this.handleShare}}
-        >
-          {{ftIcon "share2"}}
-          <span>Share</span>
-        </button>
+        {{! Right-aligned actions (share, bookmark) }}
+        <div class="fantribe-engagement__actions-right">
+          <button
+            type="button"
+            class="fantribe-engagement__action fantribe-engagement__action--share"
+            {{on "click" this.handleShare}}
+          >
+            {{ftIcon "share"}}
+          </button>
 
-        <button
-          type="button"
-          class="fantribe-engagement__action fantribe-engagement__action--bookmark
-            {{if this.isBookmarked 'fantribe-engagement__action--active'}}"
-          disabled={{this.isBookmarkLoading}}
-          {{on "click" this.handleBookmark}}
-        >
-          {{#if this.isBookmarked}}
-            {{ftIcon "bookmark-fill"}}
-          {{else}}
-            {{ftIcon "bookmark"}}
-          {{/if}}
-          <span>Save</span>
-        </button>
+          <button
+            type="button"
+            class="fantribe-engagement__action fantribe-engagement__action--bookmark
+              {{if this.isBookmarked 'fantribe-engagement__action--active'}}"
+            disabled={{this.isBookmarkLoading}}
+            {{on "click" this.handleBookmark}}
+          >
+            {{#if this.isBookmarked}}
+              {{ftIcon "bookmark-fill"}}
+            {{else}}
+              {{ftIcon "bookmark"}}
+            {{/if}}
+          </button>
+        </div>
       </div>
     </div>
   </template>

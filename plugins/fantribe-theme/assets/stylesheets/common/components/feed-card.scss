@@ -10,8 +10,7 @@
 body.fantribe-theme:not(.admin-interface) {
   .fantribe-feed-card {
     background: white;
-    border-radius: 16px; // rounded-2xl (Spec §3.4: 16px)
-    border: 1px solid var(--ft-slate-200); // #D4D2CF
+    border-radius: var(--ft-feed-card-radius); // Figma: 20px
     box-shadow: var(--ft-shadow-sm);
     transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
     cursor: pointer;
@@ -23,29 +22,38 @@ body.fantribe-theme:not(.admin-interface) {
       box-shadow: var(--ft-shadow-md);
     }
 
+    // Content wrapper — creates 12px gap between header and body (Figma node 444-12566)
+    &__content {
+      display: flex;
+      flex-direction: column;
+      gap: var(--ft-feed-card-content-gap);
+    }
+
     // ==========================================
-    // HEADER (Spec §3.4: p-6 pb-4)
+    // HEADER (Figma node 444-12567)
     // ==========================================
-    // Figma: flex items-start justify-between p-6 pb-4
+    // Figma: pt-16 px-16, flex items-start justify-between
     &__header {
       display: flex;
       align-items: flex-start;
       gap: 16px; // gap-4
-      padding: 24px 24px 16px; // p-6 pb-4
+      padding: 16px 16px 0; // Figma: pt-16 px-16
     }
 
-    // Avatar — 48x48px with verification ring (Spec §3.4)
+    // Avatar — 52x52px with 2px padding wrapper (Figma node 444-12569)
     &__avatar {
       flex-shrink: 0;
       background: none;
       border: none;
-      padding: 0;
+      padding: var(--ft-feed-avatar-padding); // 2px padding wrapper
       cursor: pointer;
+      width: var(--ft-feed-avatar-size); // 52px
+      height: var(--ft-feed-avatar-size);
 
       img {
-        width: 48px; // Medium avatar
+        width: 48px; // Inner avatar (52 - 2*2 = 48)
         height: 48px;
-        border-radius: var(--ft-radius-pill);
+        border-radius: var(--ft-feed-avatar-inner-radius); // 16px per Figma
         object-fit: cover;
       }
 
@@ -116,15 +124,17 @@ body.fantribe-theme:not(.admin-interface) {
     &__meta-info-row {
       display: flex;
       align-items: center;
-      gap: 4px;
+      gap: var(--ft-feed-meta-info-gap); // 8px per Figma
     }
 
     // Name takes full width to force handle/time onto line 2
     // (works with flat span structure too)
+    // Figma: Inter Semi Bold 16px/24px, color #1a1a1a
     &__display-name {
-      font-weight: 600;
-      font-size: 15px;
-      color: #1a1916;
+      font-weight: var(--ft-font-weight-semibold); // 600
+      font-size: var(--ft-figma-16); // 16px
+      line-height: var(--ft-figma-lh-24); // 24px
+      color: var(--ft-text); // #1a1a1a
       width: 100%; // forces line break after name
     }
 
@@ -140,16 +150,19 @@ body.fantribe-theme:not(.admin-interface) {
       vertical-align: middle;
     }
 
+    // Figma: Inter Regular 14px/21px, color #666
     &__username-handle,
     &__timestamp {
-      font-size: 13px;
-      color: #78766f;
+      font-size: var(--ft-figma-14); // 14px
+      line-height: var(--ft-figma-lh-21); // 21px
+      font-weight: var(--ft-font-weight-normal); // 400
+      color: var(--ft-feed-handle-color); // #666
     }
 
     &__separator {
       margin: 0;
-      color: #78766f;
-      font-size: 13px;
+      color: var(--ft-feed-handle-color); // #666
+      font-size: var(--ft-figma-14); // 14px
     }
 
     // ── Tribe badge — shows which Tribe the post belongs to ───────────────
@@ -203,6 +216,40 @@ body.fantribe-theme:not(.admin-interface) {
       white-space: nowrap;
     }
 
+    // Header right container — holds category pill and more button (Figma node 444-12584)
+    &__header-right {
+      display: flex;
+      align-items: center;
+      gap: var(--ft-feed-header-right-gap); // 11px per Figma
+      flex-shrink: 0;
+    }
+
+    // Category pill — shows category on right side of header (Figma node 448-14913)
+    &__category-pill {
+      display: inline-flex;
+      align-items: center;
+      padding: var(--ft-feed-category-pill-py) var(--ft-feed-category-pill-px);
+      background: rgb(221, 221, 221, 0.2);
+      border: 0.5px solid var(--ft-border);
+      border-radius: var(--ft-feed-category-pill-radius);
+      font-size: var(--ft-figma-12);
+      font-weight: var(--ft-font-weight-medium);
+      line-height: var(--ft-figma-lh-16);
+      color: var(--ft-feed-handle-color);
+      white-space: nowrap;
+      cursor: pointer;
+      transition:
+        background 150ms ease,
+        border-color 150ms ease,
+        color 150ms ease;
+
+      &:hover {
+        background: var(--ft-electric-blue-light);
+        border-color: var(--ft-electric-blue);
+        color: var(--ft-electric-blue);
+      }
+    }
+
     // More button
     &__more-btn {
       flex-shrink: 0;
@@ -233,10 +280,12 @@ body.fantribe-theme:not(.admin-interface) {
       display: block;
     }
 
+    // Figma: Inter Regular 16px/26px, color #1a1a1a, px-16
     &__text {
-      padding: 0 30px 12px;
-      color: var(--ft-slate-800);
-      line-height: 1.5;
+      padding: 0 16px 12px; // px-16 pb-12
+      color: var(--ft-text); // #1a1a1a
+      font-size: var(--ft-figma-16); // 16px
+      line-height: var(--ft-feed-text-lh); // 26px
       white-space: normal;
       overflow-wrap: break-word;
 
@@ -440,5 +489,283 @@ body.fantribe-theme:not(.admin-interface) {
         display: none;
       }
     }
+
+    // ==========================================
+    // DIVIDER (Figma node 448:15270)
+    // ==========================================
+    &__divider {
+      height: 1px;
+      background: var(--ft-border); // #ddd
+      margin: 16px 0;
+    }
+
+    // ==========================================
+    // COMMENTS SECTION (Figma node 444-12751)
+    // ==========================================
+    &__comments-section {
+      background: var(--ft-feed-comments-bg); // rgba(255,255,255,0.5)
+      border-radius: 0 0 var(--ft-feed-card-radius) var(--ft-feed-card-radius);
+    }
+
+    &__comments-inner {
+      display: flex;
+      flex-direction: column;
+      gap: var(--ft-feed-comments-inner-gap);
+      padding: var(
+        --ft-feed-comments-inner-padding
+      ); // 16px all sides per Figma
+    }
+
+    &__comments-label {
+      font-size: var(--ft-figma-12); // 12px
+      line-height: var(--ft-figma-lh-16); // 16px
+      font-weight: var(--ft-font-weight-normal);
+      color: var(--ft-neutral-600); // #5a584f
+    }
+
+    &__comments-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    &__comment {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+
+    // Comment avatar with gradient background + initials (Figma node 444-12754)
+    &__comment-avatar {
+      flex-shrink: 0;
+      width: var(--ft-feed-comment-avatar-size); // 32px
+      height: var(--ft-feed-comment-avatar-size);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      // Gradient backgrounds based on index
+      &--gradient-1 {
+        background: var(--ft-feed-comment-gradient-1);
+      }
+
+      &--gradient-2 {
+        background: var(--ft-feed-comment-gradient-2);
+      }
+
+      &--gradient-3 {
+        background: var(--ft-feed-comment-gradient-3);
+      }
+
+      &--gradient-4 {
+        background: var(--ft-feed-comment-gradient-4);
+      }
+    }
+
+    &__comment-initials {
+      font-size: var(--ft-figma-12); // 12px
+      font-weight: var(--ft-font-weight-medium); // 500
+      color: white;
+      text-transform: uppercase;
+    }
+
+    &__comment-content {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    &__comment-meta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    // Figma: Inter Semi Bold 14px/21px, color #1a1a1a
+    &__comment-author {
+      font-size: var(--ft-figma-14); // 14px
+      line-height: var(--ft-figma-lh-21); // 21px
+      font-weight: var(--ft-font-weight-semibold); // 600
+      color: var(--ft-text); // #1a1a1a
+    }
+
+    // Figma: Inter Regular 12px/16px, color #5a584f
+    &__comment-timestamp {
+      font-size: var(--ft-figma-12); // 12px
+      line-height: var(--ft-figma-lh-16); // 16px
+      font-weight: var(--ft-font-weight-normal);
+      color: var(--ft-neutral-600); // #5a584f
+    }
+
+    // Figma: Inter Regular 14px/20px, color #1a1a1a
+    &__comment-text {
+      font-size: var(--ft-figma-14); // 14px
+      line-height: 20px;
+      font-weight: var(--ft-font-weight-normal);
+      color: var(--ft-text); // #1a1a1a
+      white-space: normal;
+      overflow-wrap: break-word;
+    }
+
+    // ==========================================
+    // COMMENT INPUT (Figma node 444-12786)
+    // ==========================================
+    &__comment-input-wrapper {
+      display: flex;
+      gap: 12px;
+      align-items: center; // Figma: vertically centered
+      padding: 0 16px 16px;
+    }
+
+    &__comment-input-avatar {
+      flex-shrink: 0;
+      width: var(--ft-feed-comment-input-avatar-size); // 38px
+      height: var(--ft-feed-comment-input-avatar-size);
+      border-radius: var(--ft-feed-card-radius); // 20px
+
+      img {
+        width: 100%;
+        height: 100%;
+        border-radius: var(--ft-feed-card-radius);
+        object-fit: cover;
+      }
+    }
+
+    &__comment-input-container {
+      flex: 1;
+      position: relative;
+      height: 38px;
+    }
+
+    &__comment-input {
+      width: 100%;
+      height: 100%;
+      background: rgb(221, 221, 221, 0.1); // Figma: light gray input
+      border: none;
+      border-radius: var(--ft-feed-comment-input-radius); // 20px
+      padding: 8px 44px 8px 16px; // Extra right padding for send button
+      font-size: var(--ft-figma-14); // 14px
+      line-height: var(--ft-figma-lh-21); // 21px
+      color: var(--ft-text);
+      outline: none;
+      transition: background 150ms ease;
+
+      &::placeholder {
+        color: var(--ft-input-placeholder); // #999
+      }
+
+      &:focus {
+        background: rgb(221, 221, 221, 0.15);
+      }
+
+      &--disabled {
+        cursor: not-allowed;
+        opacity: 0.6;
+
+        &::placeholder {
+          color: var(--ft-slate-300);
+        }
+      }
+
+      &:disabled {
+        cursor: not-allowed;
+        opacity: 0.6;
+      }
+    }
+
+    &__comment-input-emoji {
+      position: absolute;
+      right: 5px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: var(--ft-feed-comment-emoji-btn-size); // 28px
+      height: var(--ft-feed-comment-emoji-btn-size);
+      background: white;
+      border: none;
+      border-radius: var(--ft-feed-card-radius); // 20px
+      padding: 6px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      svg,
+      img {
+        width: 16px;
+        height: 16px;
+      }
+
+      &:hover {
+        background: var(--ft-slate-50);
+      }
+    }
+
+    // Send button for comment submission (Figma node 444-12793)
+    &__comment-input-send {
+      position: absolute;
+      right: 5px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: var(--ft-feed-comment-emoji-btn-size); // 28px
+      height: var(--ft-feed-comment-emoji-btn-size);
+      background: white; // Figma: white background
+      border: none;
+      border-radius: 50%;
+      padding: 0;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--ft-slate-400);
+      transition:
+        background 150ms ease,
+        color 150ms ease,
+        transform 150ms ease;
+
+      svg,
+      .d-icon {
+        width: 14px;
+        height: 14px;
+      }
+
+      &:hover:not(:disabled, &--active) {
+        background: var(--ft-slate-50);
+      }
+
+      // Active state when there's text to send
+      &--active {
+        background: var(--ft-vibrant-red);
+        color: white;
+
+        &:hover:not(:disabled) {
+          background: var(--ft-vibrant-red-hover);
+          transform: translateY(-50%) scale(1.05);
+        }
+      }
+
+      &:disabled {
+        cursor: not-allowed;
+        opacity: 0.5;
+      }
+
+      // Loading spinner animation
+      svg.ft-icon--loader,
+      .d-icon-loader {
+        animation: ft-spin 1s linear infinite;
+      }
+    }
+  }
+}
+
+@keyframes ft-spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
   }
 }
