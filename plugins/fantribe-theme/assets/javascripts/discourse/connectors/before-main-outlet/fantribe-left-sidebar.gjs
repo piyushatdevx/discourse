@@ -4,6 +4,7 @@ import { action } from "@ember/object";
 import didInsert from "@ember/render-modifiers/modifiers/did-insert";
 import { service } from "@ember/service";
 import FantribeTribesPanel from "../../components/fantribe-tribes-panel";
+import ftIcon from "../../helpers/ft-icon";
 
 export default class FantribeLeftSidebar extends Component {
   @service siteSettings;
@@ -66,7 +67,25 @@ export default class FantribeLeftSidebar extends Component {
       {{/if}}
 
       <aside class={{this.sidebarClass}} {{didInsert this.initializeFilters}}>
-        <FantribeTribesPanel />
+        <div class="fantribe-left-sidebar__content">
+          <FantribeTribesPanel />
+        </div>
+
+        <button
+          class="fantribe-left-sidebar__toggle"
+          type="button"
+          aria-label="Toggle sidebar"
+          {{on "click" this.fantribeSidebarState.toggle}}
+        >
+          {{ftIcon
+            (if
+              this.fantribeSidebarState.isCollapsed
+              "chevron-right"
+              "chevron-left"
+            )
+            size=14
+          }}
+        </button>
       </aside>
     {{/if}}
   </template>

@@ -205,23 +205,7 @@ export default class FantribeTribesPanel extends Component {
               }}</span>
           </button>
         </div>
-        <button
-          type="button"
-          class="fantribe-sidebar-nav__collapse"
-          aria-label={{if
-            this.isCollapsed
-            (i18n "sidebar.expand_aria")
-            (i18n "sidebar.collapse_aria")
-          }}
-          {{on "click" this.toggleCollapse}}
-        >
-          <span class="fantribe-sidebar-nav__collapse-icon">
-            {{ftIcon
-              (if this.isCollapsed "chevron-right" "chevron-left")
-              size=14
-            }}
-          </span>
-        </button>
+
       </div>
 
       {{! User profile at bottom — Figma: column container with inner row for avatar | name | menu }}
