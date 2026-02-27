@@ -677,7 +677,7 @@ class SessionController < ApplicationController
         path("/login-required") if uses_sso || has_one_auth
       end
 
-    redirect_url ||= path("/")
+    redirect_url ||= path("/login")
 
     data = {
       redirect_url: redirect_url,
