@@ -5,8 +5,13 @@ import { on } from "@ember/modifier";
 import { action } from "@ember/object";
 import { service } from "@ember/service";
 import { htmlSafe } from "@ember/template";
+import { modifier } from "ember-modifier";
 import { ajax } from "discourse/lib/ajax";
 import ftIcon from "../helpers/ft-icon";
+
+const autoFocus = modifier((element) => {
+  element.focus();
+});
 
 const TABS = [
   { id: "all", label: "All", icon: "layout-grid" },
@@ -44,9 +49,16 @@ export default class FtSearchModal extends Component {
 
     const limit = this.activeTab === "all" ? 4 : 10;
     const out = [];
+    const topicsMap = {};
+    (this.rawResults.topics || []).forEach((t) => {
+      topicsMap[t.id] = t;
+    });
 
     if (this.activeTab === "all" || this.activeTab === "feed") {
       (this.rawResults.posts || []).slice(0, limit).forEach((p) => {
+        const topic = topicsMap[p.topic_id];
+        const title =
+          (topic && (topic.fancy_title || topic.title)) || "Untitled";
         out.push({
           type: "feed",
           item: p,
@@ -54,9 +66,7 @@ export default class FtSearchModal extends Component {
           isPeople: false,
           isTribe: false,
           isGear: false,
-          titleDisplay: htmlSafe(
-            p.topic_title_headline || p.blurb || "Untitled"
-          ),
+          titleDisplay: htmlSafe(title),
         });
       });
     }
@@ -133,7 +143,22 @@ export default class FtSearchModal extends Component {
     this.isLoading = true;
 
     try {
-      const data = await ajax("/search.json", { data: { q } });
+      const [data, userSearchData] = await Promise.all([
+        ajax("/search.json", { data: { q } }),
+        ajax("/u/search/users.json", {
+          data: { term: q, include_groups: false },
+        }).catch(() => ({ users: [] })),
+      ]);
+
+      const mainUsers = data.users || [];
+      const extraUsers = (userSearchData.users || []).filter(
+        (eu) =>
+          !mainUsers.some(
+            (mu) => mu.username.toLowerCase() === eu.username.toLowerCase()
+          )
+      );
+
+      data.users = [...mainUsers, ...extraUsers];
       this.rawResults = data;
     } catch {
       this.rawResults = null;
@@ -158,10 +183,8 @@ export default class FtSearchModal extends Component {
   handleKeydown(event) {
     if (event.key === "Escape") {
       this.args.onClose();
-    } else if (event.key === "Enter" && this.hasQuery) {
-      this.router.transitionTo("full-page-search", {
-        queryParams: { q: this.query.trim() },
-      });
+    } else if (event.key === "Enter") {
+      event.preventDefault();
       this.args.onClose();
     }
   }
@@ -239,13 +262,12 @@ export default class FtSearchModal extends Component {
         <div class="ft-search-modal__search-wrap">
           <label class="ft-search-modal__search-bar">
             {{ftIcon "search" size=18}}
-            {{! template-lint-disable no-autofocus-attribute }}
             <input
               type="text"
               class="ft-search-modal__search-input"
               placeholder="Search people, gear, tribes..."
               value={{this.query}}
-              autofocus
+              {{autoFocus}}
               {{on "input" this.updateQuery}}
               {{on "keydown" this.handleKeydown}}
             />
