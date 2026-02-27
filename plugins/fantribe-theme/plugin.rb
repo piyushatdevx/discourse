@@ -104,6 +104,24 @@ end
 register_topic_preloader_associations({ posts: :user }) { SiteSetting.fantribe_theme_enabled }
 
 after_initialize do
+  # Preload first_post.uploads for search results to avoid N+1 queries when
+  # serializing image_urls in SearchTopicListItemSerializer
+  Search.on_preload do |results, _search|
+    next unless SiteSetting.fantribe_theme_enabled
+
+    topics = results.posts&.map(&:topic)&.compact&.uniq
+    next if topics.blank?
+
+    # Preload first_post association on topics
+    ActiveRecord::Associations::Preloader.new(records: topics, associations: :first_post).call
+
+    # Then preload uploads on the first_posts
+    first_posts = topics.filter_map(&:first_post)
+    if first_posts.present?
+      ActiveRecord::Associations::Preloader.new(records: first_posts, associations: :uploads).call
+    end
+  end
+
   # Auto-configure discourse-reactions for FanTribe's engagement bar.
   # Uses the same "unless already set" pattern as the OAuth settings below
   # so admin changes made through the UI are never overwritten on reboot.
@@ -270,6 +288,37 @@ after_initialize do
     next nil unless onebox
 
     onebox.to_html
+  end
+
+  # Mirror image_urls onto search results so tribe page search shows images
+  add_to_serializer(:search_topic_list_item, :image_urls) do
+    next [] unless SiteSetting.fantribe_theme_enabled
+    next [] unless object.first_post
+
+    object
+      .first_post
+      .uploads
+      .select { |u| FileHelper.is_supported_image?(u.original_filename) }
+      .reject { |u| u.extension&.downcase == "svg" }
+      .map(&:url)
+  end
+
+  add_to_serializer(:search_topic_list_item, :include_image_urls?) do
+    SiteSetting.fantribe_theme_enabled
+  end
+
+  add_to_serializer(:search_topic_list_item, :first_onebox_html) do
+    next nil unless SiteSetting.fantribe_theme_enabled
+    next nil if object.first_post&.cooked.blank?
+
+    doc = Nokogiri::HTML5.fragment(object.first_post.cooked)
+    onebox = doc.at_css("aside.onebox, div.youtube-onebox, div.onebox, div.lazy-video-container")
+    next nil unless onebox
+    onebox.to_html
+  end
+
+  add_to_serializer(:search_topic_list_item, :include_first_onebox_html?) do
+    SiteSetting.fantribe_theme_enabled
   end
 
   # Expose per-post emoji reactions on topic list items so the feed engagement

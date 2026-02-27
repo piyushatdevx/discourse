@@ -8,6 +8,8 @@ import avatar from "discourse/helpers/avatar";
 import replaceEmoji from "discourse/helpers/replace-emoji";
 import { ajax } from "discourse/lib/ajax";
 import { popupAjaxError } from "discourse/lib/ajax-error";
+import discourseDebounce from "discourse/lib/debounce";
+import { searchForTerm } from "discourse/lib/search";
 import FtLeaveTribeConfirmModal from "discourse/plugins/explore-tribes/discourse/components/ft-leave-tribe-confirm-modal";
 import ftIcon from "../helpers/ft-icon";
 import FantribeFeedCard from "./fantribe-feed-card";
@@ -22,6 +24,9 @@ export default class FantribeTribePage extends Component {
   @tracked isJoining = false;
   @tracked showEditModal = false;
   @tracked showLeaveConfirm = false;
+  @tracked searchQuery = "";
+  @tracked searchResults = null;
+  @tracked isSearching = false;
 
   get category() {
     return this.args.category;
@@ -103,7 +108,89 @@ export default class FantribeTribePage extends Component {
   }
 
   get hasTopics() {
-    return this.topics.length > 0;
+    return this.displayTopics.length > 0;
+  }
+
+  get displayTopics() {
+    if (this.searchQuery.trim() && this.searchResults) {
+      return this.searchResults;
+    }
+    return this.topics;
+  }
+
+  get isSearchActive() {
+    return this.searchQuery.trim().length > 0;
+  }
+
+  @action
+  handleSearchInput(event) {
+    this.searchQuery = event.target.value;
+    if (this.searchQuery.trim()) {
+      discourseDebounce(this, this.performSearch, 300);
+    } else {
+      this.searchResults = null;
+    }
+  }
+
+  async performSearch() {
+    const term = this.searchQuery.trim();
+    if (!term || term.length < 2) {
+      this.searchResults = null;
+      return;
+    }
+
+    this.isSearching = true;
+    try {
+      const results = await searchForTerm(term, {
+        searchContext: {
+          type: "category",
+          id: this.category.id,
+          name: this.category.name,
+        },
+      });
+      // Transform search posts into topic-like objects with full data
+      const topicMap = new Map();
+      (results.posts || []).forEach((post) => {
+        if (post.topic && !topicMap.has(post.topic.id)) {
+          const topic = post.topic;
+          // Build transformed topic with poster info and missing fields
+          const transformedTopic = {
+            ...topic,
+            // Add synthetic posters array from post's user data
+            posters: [
+              {
+                user: {
+                  id: post.user_id,
+                  username: post.username,
+                  name: post.name,
+                  avatar_template: post.avatar_template,
+                },
+                description: "Original Poster",
+              },
+            ],
+            // Ensure excerpt is available (use blurb as fallback)
+            excerpt: topic.excerpt || post.blurb || "",
+            // Mark as truncated if there's content (enables "Read more")
+            excerptTruncated: !!(topic.excerpt || post.blurb),
+            // Ensure image fields are present
+            image_url: topic.image_url,
+            image_urls:
+              topic.image_urls || (topic.image_url ? [topic.image_url] : []),
+            thumbnails: topic.thumbnails || [],
+            // Add first post ID for expand functionality
+            first_post_id: post.id,
+          };
+          topicMap.set(topic.id, transformedTopic);
+        }
+      });
+      this.searchResults = Array.from(topicMap.values());
+    } catch (e) {
+      this.searchResults = [];
+      // eslint-disable-next-line no-console
+      console.warn(`Failed to load search results with error: ${e}`);
+    } finally {
+      this.isSearching = false;
+    }
   }
 
   @action
@@ -185,140 +272,173 @@ export default class FantribeTribePage extends Component {
 
   <template>
     <div class="ft-tribe-page">
-      {{! Hero cover image }}
-      <div class="ft-tribe-page__hero" style={{this.coverStyle}}>
-        <div class="ft-tribe-page__hero-overlay"></div>
-        <div class="ft-tribe-page__logo-wrapper">
-          {{#if this.hasLogo}}
-            <div class="ft-tribe-page__logo ft-tribe-page__logo--img">
-              <img
-                src={{@category.uploaded_logo.url}}
-                alt={{@category.name}}
-                class="ft-tribe-page__logo-img"
-              />
+      {{! Search bar }}
+      <div class="ft-tribe-page__search">
+        {{ftIcon "search"}}
+        <input
+          type="text"
+          placeholder="Search posts..."
+          value={{this.searchQuery}}
+          {{on "input" this.handleSearchInput}}
+        />
+        {{#if this.isSearching}}
+          <span class="ft-tribe-page__search-spinner">{{ftIcon "loader"}}</span>
+        {{/if}}
+      </div>
+
+      {{! Main container }}
+      <div class="ft-tribe-page__container">
+        {{! Header card with cover + info }}
+        <div class="ft-tribe-page__header-card">
+          {{! Hero cover image }}
+          <div class="ft-tribe-page__hero" style={{this.coverStyle}}></div>
+
+          {{! Logo positioned overlapping cover }}
+          <div class="ft-tribe-page__logo-wrapper">
+            {{#if this.hasLogo}}
+              <div class="ft-tribe-page__logo ft-tribe-page__logo--img">
+                <img
+                  src={{@category.uploaded_logo.url}}
+                  alt={{@category.name}}
+                  class="ft-tribe-page__logo-img"
+                />
+              </div>
+            {{else if this.hasEmoji}}
+              <div class="ft-tribe-page__logo ft-tribe-page__logo--emoji">
+                {{replaceEmoji this.emojiCode}}
+              </div>
+            {{else}}
+              <div
+                class="ft-tribe-page__logo ft-tribe-page__logo--initial"
+                style={{this.logoColorStyle}}
+              >
+                {{this.initialLetter}}
+              </div>
+            {{/if}}
+          </div>
+
+          {{! Info section }}
+          <div class="ft-tribe-page__info">
+            <div class="ft-tribe-page__info-header">
+              <div class="ft-tribe-page__info-text">
+                <h1 class="ft-tribe-page__name">{{@category.name}}</h1>
+                <div class="ft-tribe-page__meta">
+                  {{#if this.memberCount}}
+                    {{ftIcon "users"}}
+                    <span>{{this.memberCount}} members</span>
+                    <span class="ft-tribe-page__meta-dot">·</span>
+                  {{/if}}
+                  {{#if this.isPrivate}}
+                    {{ftIcon "lock"}}
+                    <span>Private</span>
+                  {{else}}
+                    {{ftIcon "globe"}}
+                    <span>Public</span>
+                  {{/if}}
+                  {{#if this.postCount}}
+                    <span class="ft-tribe-page__meta-dot">·</span>
+                    {{ftIcon "file-text"}}
+                    <span>{{this.postCount}} posts</span>
+                  {{/if}}
+                </div>
+              </div>
+
+              <div class="ft-tribe-page__actions">
+                {{#if this.isAdmin}}
+                  <button
+                    type="button"
+                    class="ft-tribe-page__edit-btn"
+                    {{on "click" this.openEditModal}}
+                  >
+                    {{ftIcon "edit3"}}
+                    <span>Edit</span>
+                  </button>
+                {{/if}}
+                {{#if this.currentUser}}
+                  <button
+                    type="button"
+                    class="ft-tribe-page__join-btn
+                      {{if this.isMember 'ft-tribe-page__join-btn--joined'}}
+                      {{if this.isJoining 'ft-tribe-page__join-btn--loading'}}"
+                    disabled={{this.isJoining}}
+                    {{on "click" this.handleJoin}}
+                  >
+                    {{#if this.isJoining}}
+                      {{ftIcon "loader"}}
+                    {{else if this.isMember}}
+                      {{ftIcon "log-out"}}
+                      <span>Leave</span>
+                    {{else}}
+                      {{ftIcon "user-plus"}}
+                      <span>Join Tribe</span>
+                    {{/if}}
+                  </button>
+                {{/if}}
+              </div>
             </div>
-          {{else if this.hasEmoji}}
-            <div class="ft-tribe-page__logo ft-tribe-page__logo--emoji">
-              {{replaceEmoji this.emojiCode}}
-            </div>
-          {{else}}
+
+            {{#if @category.description_text}}
+              <p
+                class="ft-tribe-page__description"
+              >{{@category.description_text}}</p>
+            {{/if}}
+          </div>
+        </div>
+
+        {{! Posts section }}
+        <div class="ft-tribe-page__posts-wrapper">
+          {{! Compose box — only for members }}
+          {{#if this.isMember}}
+            {{! template-lint-disable no-invalid-interactive }}
             <div
-              class="ft-tribe-page__logo ft-tribe-page__logo--initial"
-              style={{this.logoColorStyle}}
+              class="ft-tribe-page__compose"
+              {{on "click" this.openComposeForTribe}}
             >
-              {{this.initialLetter}}
+              <div class="ft-tribe-page__compose-avatar">
+                {{#if this.currentUser}}
+                  {{avatar this.currentUser imageSize="medium"}}
+                {{/if}}
+              </div>
+              <div class="ft-tribe-page__compose-placeholder">
+                Write something in
+                <strong>{{@category.name}}</strong>...
+              </div>
+              <button type="button" class="ft-tribe-page__compose-btn">
+                {{ftIcon "send"}}
+                <span>Post</span>
+              </button>
             </div>
           {{/if}}
-        </div>
-      </div>
 
-      {{! Info card }}
-      <div class="ft-tribe-page__info">
-        <div class="ft-tribe-page__info-header">
-          <div class="ft-tribe-page__info-text">
-            <h1 class="ft-tribe-page__name">{{@category.name}}</h1>
-            <div class="ft-tribe-page__meta">
-              {{#if this.isPrivate}}
-                {{ftIcon "lock"}}
-                <span>Private</span>
-              {{else}}
-                {{ftIcon "globe"}}
-                <span>Public</span>
-              {{/if}}
-              {{#if this.memberCount}}
-                {{ftIcon "users"}}
-                <span>{{this.memberCount}} members</span>
-              {{/if}}
-              {{#if this.postCount}}
-                {{ftIcon "message-circle"}}
-                <span>{{this.postCount}} posts</span>
-              {{/if}}
-            </div>
-          </div>
-
-          <div class="ft-tribe-page__actions">
-            {{#if this.isAdmin}}
-              <button
-                type="button"
-                class="ft-tribe-page__edit-btn"
-                {{on "click" this.openEditModal}}
-              >
-                {{ftIcon "edit3"}}
-                <span>Edit</span>
-              </button>
-            {{/if}}
-            {{#if this.currentUser}}
-              <button
-                type="button"
-                class="ft-tribe-page__join-btn
-                  {{if this.isMember 'ft-tribe-page__join-btn--joined'}}
-                  {{if this.isJoining 'ft-tribe-page__join-btn--loading'}}"
-                disabled={{this.isJoining}}
-                {{on "click" this.handleJoin}}
-              >
-                {{#if this.isJoining}}
-                  {{ftIcon "circle"}}
-                {{else if this.isMember}}
-                  {{ftIcon "log-out"}}
-                  <span>Leave</span>
+          {{! Posts list }}
+          <div class="ft-tribe-page__posts">
+            {{#if this.hasTopics}}
+              {{#each this.displayTopics as |topic|}}
+                <FantribeFeedCard @topic={{topic}} @hideTribeBadge={{true}} />
+              {{/each}}
+            {{else}}
+              <div class="ft-tribe-page__empty">
+                {{#if this.isSearchActive}}
+                  <div class="ft-tribe-page__empty-icon">🔍</div>
+                  <h3 class="ft-tribe-page__empty-title">No results found</h3>
+                  <p class="ft-tribe-page__empty-text">
+                    Try a different search term
+                  </p>
                 {{else}}
-                  {{ftIcon "user-plus"}}
-                  <span>Join Tribe</span>
+                  <div class="ft-tribe-page__empty-icon">🏕️</div>
+                  <h3 class="ft-tribe-page__empty-title">No posts yet</h3>
+                  <p class="ft-tribe-page__empty-text">
+                    {{#if this.isMember}}
+                      Be the first to share something in this tribe!
+                    {{else}}
+                      Join this tribe to see and share posts.
+                    {{/if}}
+                  </p>
                 {{/if}}
-              </button>
+              </div>
             {{/if}}
           </div>
         </div>
-
-        {{#if @category.description_text}}
-          <p
-            class="ft-tribe-page__description"
-          >{{@category.description_text}}</p>
-        {{/if}}
-      </div>
-
-      {{! Compose box — only for members }}
-      {{#if this.isMember}}
-        {{! template-lint-disable no-invalid-interactive }}
-        <div
-          class="ft-tribe-page__compose"
-          {{on "click" this.openComposeForTribe}}
-        >
-          <div class="ft-tribe-page__compose-avatar">
-            {{#if this.currentUser}}
-              {{avatar this.currentUser imageSize="medium"}}
-            {{/if}}
-          </div>
-          <div class="ft-tribe-page__compose-placeholder">
-            Write something in
-            <strong>{{@category.name}}</strong>...
-          </div>
-          <button type="button" class="ft-tribe-page__compose-btn">
-            {{ftIcon "send"}}
-            <span>Post</span>
-          </button>
-        </div>
-      {{/if}}
-
-      {{! Posts list }}
-      <div class="ft-tribe-page__posts">
-        {{#if this.hasTopics}}
-          {{#each this.topics as |topic|}}
-            <FantribeFeedCard @topic={{topic}} @hideTribeBadge={{true}} />
-          {{/each}}
-        {{else}}
-          <div class="ft-tribe-page__empty">
-            <div class="ft-tribe-page__empty-icon">🏕️</div>
-            <h3 class="ft-tribe-page__empty-title">No posts yet</h3>
-            <p class="ft-tribe-page__empty-text">
-              {{#if this.isMember}}
-                Be the first to share something in this tribe!
-              {{else}}
-                Join this tribe to see and share posts.
-              {{/if}}
-            </p>
-          </div>
-        {{/if}}
       </div>
     </div>
 

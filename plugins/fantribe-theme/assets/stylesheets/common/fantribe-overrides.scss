@@ -60,6 +60,7 @@ body.fantribe-theme:not(.admin-interface) {
     background: var(--ft-figma-page-bg);
     margin-left: 0;
     margin-right: 0;
+    padding-left: 14px;
   }
 
   // Remove Discourse default backgrounds
@@ -316,6 +317,7 @@ body.fantribe-theme:not(.admin-interface) {
   // List container spacing
   .list-container {
     padding: 16px;
+    padding-right: 0;
   }
 
   // Topic list spacing

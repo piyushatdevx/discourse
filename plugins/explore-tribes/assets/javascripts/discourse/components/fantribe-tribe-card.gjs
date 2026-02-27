@@ -98,6 +98,24 @@ export default class FantribeTribeCard extends Component {
     return this.category?.read_restricted;
   }
 
+  get creatorName() {
+    const user = this.category?.user;
+    if (!user) {
+      return "";
+    }
+    const name = user.name || user.username;
+    const parts = name.split(" ");
+    if (parts.length > 1) {
+      return `${parts[0]} ${parts[parts.length - 1].charAt(0)}.`;
+    }
+    return name;
+  }
+
+  get creatorAvatarUrl() {
+    const user = this.category?.user;
+    return user?.avatar_template?.replace("{size}", "80");
+  }
+
   @action
   handleCardClick() {
     const cat = this.category;
@@ -219,6 +237,12 @@ export default class FantribeTribeCard extends Component {
             </div>
             <div class="ft-tribe-card__meta">
               <span class="ft-tribe-card__meta-item">
+                {{ftIcon "users"}}
+                <span>{{if this.memberCount this.memberCount "–"}}
+                  members</span>
+              </span>
+              <span class="ft-tribe-card__meta-sep">·</span>
+              <span class="ft-tribe-card__meta-item">
                 {{#if this.isPrivate}}
                   {{ftIcon "lock"}}
                   <span>Private</span>
@@ -226,11 +250,6 @@ export default class FantribeTribeCard extends Component {
                   {{ftIcon "globe"}}
                   <span>Public</span>
                 {{/if}}
-              </span>
-              <span class="ft-tribe-card__meta-sep">&bull;</span>
-              <span class="ft-tribe-card__meta-item">
-                {{ftIcon "users"}}
-                <span>{{if this.memberCount this.memberCount "–"}}</span>
               </span>
             </div>
           </div>
@@ -243,19 +262,25 @@ export default class FantribeTribeCard extends Component {
           >{{this.truncatedDescription}}</p>
         {{/if}}
 
-        {{!-- Activity dots  //removed as users can’t be active as per category/tribe
-        <div class="ft-tribe-card__activity">
-          <div class="ft-tribe-card__activity-dots">
-            <div class="ft-tribe-card__dot ft-tribe-card__dot--1"></div>
-            <div class="ft-tribe-card__dot ft-tribe-card__dot--2"></div>
-            <div class="ft-tribe-card__dot ft-tribe-card__dot--3"></div>
+        {{! Creator Info }}
+        {{#if this.creatorName}}
+          <div class="ft-tribe-card__creator">
+            {{#if this.creatorAvatarUrl}}
+              <img
+                class="ft-tribe-card__creator-avatar"
+                src={{this.creatorAvatarUrl}}
+                alt={{this.creatorName}}
+              />
+            {{else}}
+              <div
+                class="ft-tribe-card__creator-avatar ft-tribe-card__creator-avatar--placeholder"
+              ></div>
+            {{/if}}
+            <span
+              class="ft-tribe-card__creator-name"
+            >{{this.creatorName}}</span>
           </div>
-          <span class="ft-tribe-card__activity-text">
-            {{@category.topic_count}}
-            active today
-          </span>
-        </div>
-        --}}
+        {{/if}}
 
         {{! Join / Joined button }}
         <button
