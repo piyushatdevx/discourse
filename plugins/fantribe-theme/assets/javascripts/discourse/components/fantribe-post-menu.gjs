@@ -346,20 +346,6 @@ export default class FantribePostMenu extends Component {
             <button
               type="button"
               class="fantribe-post-menu__item"
-              disabled={{this.isBookmarkLoading}}
-              {{on "click" this.handleBookmark}}
-            >
-              {{#if this.isBookmarked}}
-                {{ftIcon "bookmark-fill"}}
-              {{else}}
-                {{ftIcon "bookmark"}}
-              {{/if}}
-              <span>Save Post</span>
-            </button>
-
-            <button
-              type="button"
-              class="fantribe-post-menu__item"
               {{on "click" this.handleCopyLink}}
             >
               {{ftIcon "link2"}}

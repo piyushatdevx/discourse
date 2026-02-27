@@ -246,16 +246,6 @@ export default class FtUserProfileHeader extends Component {
             </div>
           </div>
 
-          {{! ── Stats row ── Tribes }}
-          <div class="ft-profile__stats">
-            <div class="ft-profile__stat ft-profile__stat--divider">
-              <div class="ft-profile__stat-top">
-                {{ftIcon "heart" size=20}}
-                <span class="ft-profile__stat-value">{{this.tribeCount}}</span>
-              </div>
-              <span class="ft-profile__stat-label">My Tribes</span>
-            </div>
-          </div>
         </div>
       </div>
 
