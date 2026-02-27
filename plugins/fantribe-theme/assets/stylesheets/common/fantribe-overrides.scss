@@ -2,6 +2,18 @@
 // Force Discourse to look like a modern product feed
 
 // ============================================================================
+// GLOBAL FONT OVERRIDE - Replace Poppins with Inter
+// ============================================================================
+body.fantribe-theme {
+  --font-family:
+    "Inter", -apple-system, blinkmacsystemfont, "Segoe UI", roboto,
+    "Helvetica Neue", arial, sans-serif;
+  --heading-font-family:
+    "Inter", -apple-system, blinkmacsystemfont, "Segoe UI", roboto,
+    "Helvetica Neue", arial, sans-serif;
+}
+
+// ============================================================================
 // GLOBAL BACKGROUND & LAYOUT SYSTEM (Figma: Inter globally, Text #1A1A1A)
 // ============================================================================
 body.fantribe-theme:not(.admin-interface) {

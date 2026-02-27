@@ -109,7 +109,7 @@ export default class FantribeRightSidebar extends Component {
             class="fantribe-right-sidebar__footer-btn"
             {{on "click" this.viewAllTribes}}
           >
-            See all tribes
+            View all
           </button>
         </div>
       </div>

@@ -1,57 +1,56 @@
 // FanTribe Trending Panel — Right Sidebar Widget
-// Matches Figma RightSidebar.tsx design:
-//   - rounded-3xl card with border + shadow-sm
-//   - divide-y divide-slate-100 between items
-//   - hover:bg-electric-blue-light on each row
-//   - tribe name hover:text-electric-blue
-//   - ChevronRight with group-hover:translate-x-1
+// Matches Figma Music Tribe design (node 478-22218)
+// Typography: Inter font, text #1A1A1A, stats #999
 body.fantribe-theme {
   .ft-trending-panel {
+    width: 282px; // Figma: exact card width
     background: var(--ft-white);
-    border-radius: 24px; // rounded-3xl
-    border: 1px solid var(--ft-slate-200);
-    box-shadow: 0 1px 2px rgb(0 0 0 / 5%); // shadow-sm
+    border-radius: var(--ft-radius-xl); // 20px per Figma
+    border: 1px solid var(--ft-neutral-300); // #D4D2CF
+    box-shadow: var(--ft-shadow); // Figma shadow
     overflow: hidden;
 
     // ── Header ────────────────────────────────────────────
     &__header {
-      padding: 20px; // p-5
-      border-bottom: 1px solid var(--ft-slate-200);
+      padding: 13px 17px; // Figma: py 13px, px 17px
+      border-bottom: 1px solid var(--ft-border); // #DDDDDD
     }
 
     &__header-inner {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 12px; // Figma: 12px gap
 
       svg,
       .ft-icon {
-        color: var(--ft-electric-blue);
+        color: var(--ft-vibrant-red); // Red icon per Figma
         flex-shrink: 0;
       }
     }
 
     &__title {
-      font-size: 0.9375rem;
-      font-weight: 600;
-      color: var(--ft-slate-900);
+      font-family: var(--ft-font-family); // Inter font
+      font-size: 18px; // Figma: 18px explicit
+      line-height: 27px; // Figma: 27px explicit
+      font-weight: 600; // Semi Bold
+      color: var(--ft-text); // #1A1A1A
       margin: 0;
     }
 
-    // ── List — divide-y ────────────────────────────────────
+    // ── List ───────────────────────────────────────────────
     &__list {
-      // Each child except the first gets a top border (divide-y effect)
-      & > * + * {
-        border-top: 1px solid var(--ft-slate-100);
-      }
+      padding: 12px 16px; // Figma: py 12px, px 16px
+      display: flex;
+      flex-direction: column;
+      gap: 12px; // Figma: 12px gap between items
     }
 
     &__item {
       display: flex;
-      align-items: center;
-      gap: 12px;
+      align-items: flex-start;
+      justify-content: space-between;
       width: 100%;
-      padding: 16px; // p-4
+      padding: 0;
       background: transparent;
       border: none;
       cursor: pointer;
@@ -59,86 +58,71 @@ body.fantribe-theme {
       transition: all 200ms ease;
 
       &:hover {
-        background: var(
-          --ft-electric-blue-light,
-          #e5f3ff
-        ); // hover:bg-electric-blue-light
-
         .ft-trending-panel__item-name {
-          color: var(--ft-electric-blue); // hover:text-electric-blue
+          color: var(--ft-vibrant-red);
         }
 
         .ft-trending-panel__item-chevron svg {
-          transform: translateX(4px); // group-hover:translate-x-1
-          color: var(--ft-electric-blue);
+          transform: translateX(4px);
+          color: var(--ft-vibrant-red);
         }
       }
-    }
-
-    // ── Logo / Dot ─────────────────────────────────────────
-    &__item-lead {
-      flex-shrink: 0;
-    }
-
-    &__item-logo {
-      width: 36px;
-      height: 36px;
-      border-radius: 10px;
-      object-fit: cover;
-    }
-
-    &__item-dot {
-      display: block;
-      width: 36px;
-      height: 36px;
-      border-radius: 10px;
     }
 
     // ── Text ───────────────────────────────────────────────
     &__item-body {
       flex: 1;
       min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 2px; // Figma: 2px gap between name and stats
     }
 
     &__item-name {
-      font-size: 0.875rem; // text-sm
-      font-weight: 500;
-      color: var(--ft-slate-900);
+      font-size: var(--ft-figma-14); // 14px
+      line-height: var(--ft-figma-lh-24); // 24px
+      font-weight: var(--ft-font-weight-medium); // 500
+      color: var(--ft-text); // #1A1A1A
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      margin: 0 0 4px;
+      margin: 0;
       transition: color 200ms ease;
     }
 
     &__item-meta {
       display: flex;
       align-items: center;
-      gap: 4px;
-      font-size: 0.75rem; // text-xs
-      color: var(--ft-slate-500);
+      gap: 10px; // Figma: 10px gap between stat groups
+      font-size: var(--ft-figma-12); // 12px
+      line-height: var(--ft-figma-lh-14); // 14px
+      color: var(--ft-input-placeholder); // #999999
 
       svg,
       .ft-icon {
         flex-shrink: 0;
-        opacity: 0.7;
+        width: 12px;
+        height: 12px;
       }
     }
 
-    &__item-meta-sep {
-      margin: 0 2px;
-      color: var(--ft-slate-400);
+    &__item-stat {
+      display: flex;
+      align-items: center;
+      gap: 4px; // Figma: 4px gap between icon and text
     }
 
-    // ── Chevron ────────────────────────────────────────────
+    // ── Arrow Icon ─────────────────────────────────────────
     &__item-chevron {
       flex-shrink: 0;
       display: flex;
       align-items: center;
-      color: var(--ft-slate-400);
+      color: var(--ft-vibrant-red); // Pink/red per Figma
 
       svg,
       .ft-icon {
+        width: 12px; // Figma: 12px
+        height: 12px;
         transition:
           transform 200ms ease,
           color 200ms ease;
@@ -149,32 +133,32 @@ body.fantribe-theme {
     &__empty {
       padding: 24px 16px;
       text-align: center;
-      color: var(--ft-slate-400);
-      font-size: 0.875rem;
+      color: var(--ft-input-placeholder);
+      font-size: var(--ft-figma-14);
     }
 
     // ── Footer ────────────────────────────────────────────
     &__footer {
-      padding: 16px;
-      border-top: 1px solid var(--ft-slate-200);
-      text-align: center;
+      padding: 12px 16px; // Figma: py 12px, px 16px
+      text-align: left;
     }
 
     &__see-all {
-      font-size: 0.875rem;
-      font-weight: 500;
-      color: var(--ft-electric-blue);
-      background: none;
+      display: block; // Ensure block display
+      text-align: left; // Explicit left align
+      font-size: 14px; // Figma: 14px
+      line-height: 21px; // Figma: 21px
+      font-weight: 500; // Medium
+      background: linear-gradient(158deg, #ff1744 0%, #ff6b6b 100%);
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
       border: none;
       cursor: pointer;
-      transition: color 150ms ease;
-      width: 100%;
+      transition: opacity 150ms ease;
+      padding: 0;
 
       &:hover {
-        color: var(
-          --ft-electric-blue-hover,
-          #006dd9
-        ); // hover:text-electric-blue-hover
+        opacity: 0.8;
       }
     }
   }

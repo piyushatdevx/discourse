@@ -38,8 +38,7 @@ body.fantribe-theme:not(.admin-interface) {
       padding: 12px 32px;
 
       @media (width >= 768px) {
-        padding: 24px 16px; // py-6 px-8 (desktop)
-        padding-left: 0;
+        padding: 0 16px 24px 0; // py-6 px-8 (desktop)
       }
 
       // Vertical spacing between cards (Spec §3.2: space-y-6 = 24px)
