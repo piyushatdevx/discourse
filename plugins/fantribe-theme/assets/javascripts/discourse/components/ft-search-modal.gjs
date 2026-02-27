@@ -5,8 +5,13 @@ import { on } from "@ember/modifier";
 import { action } from "@ember/object";
 import { service } from "@ember/service";
 import { htmlSafe } from "@ember/template";
+import { modifier } from "ember-modifier";
 import { ajax } from "discourse/lib/ajax";
 import ftIcon from "../helpers/ft-icon";
+
+const autoFocus = modifier((element) => {
+  element.focus();
+});
 
 const TABS = [
   { id: "all", label: "All", icon: "layout-grid" },
@@ -257,13 +262,12 @@ export default class FtSearchModal extends Component {
         <div class="ft-search-modal__search-wrap">
           <label class="ft-search-modal__search-bar">
             {{ftIcon "search" size=18}}
-            {{! template-lint-disable no-autofocus-attribute }}
             <input
               type="text"
               class="ft-search-modal__search-input"
               placeholder="Search people, gear, tribes..."
               value={{this.query}}
-              autofocus
+              {{autoFocus}}
               {{on "input" this.updateQuery}}
               {{on "keydown" this.handleKeydown}}
             />
