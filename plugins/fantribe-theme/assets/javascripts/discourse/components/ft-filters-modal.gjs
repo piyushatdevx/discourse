@@ -4,8 +4,46 @@ import { fn } from "@ember/helper";
 import { on } from "@ember/modifier";
 import { action } from "@ember/object";
 import { service } from "@ember/service";
+import { modifier } from "ember-modifier";
 import { ajax } from "discourse/lib/ajax";
 import ftIcon from "../helpers/ft-icon";
+
+const positionDropdown = modifier((element) => {
+  const field = element.closest(".ft-filters-modal__field");
+  if (!field) {
+    return;
+  }
+
+  const trigger =
+    field.querySelector(".ft-filters-modal__trigger") ||
+    field.querySelector(".ft-filters-modal__input-wrap");
+  if (!trigger) {
+    return;
+  }
+
+  const modal = element.closest(".ft-filters-modal");
+  const modalRect = modal ? modal.getBoundingClientRect() : { top: 0, left: 0 };
+
+  const triggerRect = trigger.getBoundingClientRect();
+  const viewportHeight = window.innerHeight;
+  const spaceBelow = viewportHeight - triggerRect.bottom;
+  const spaceAbove = triggerRect.top;
+
+  element.style.position = "fixed";
+  element.style.width = `${triggerRect.width}px`;
+  element.style.left = `${triggerRect.left - modalRect.left}px`;
+  element.style.zIndex = "1100";
+
+  const dropdownHeight = element.offsetHeight;
+
+  if (spaceBelow >= dropdownHeight + 4 || spaceBelow >= spaceAbove) {
+    element.style.top = `${triggerRect.bottom - modalRect.top + 4}px`;
+    element.style.bottom = "auto";
+  } else {
+    element.style.bottom = `${viewportHeight - triggerRect.top + modalRect.top + 4}px`;
+    element.style.top = "auto";
+  }
+});
 
 const CONTENT_TYPE_OPTIONS = [
   { id: "all", label: "All" },
@@ -494,7 +532,11 @@ export default class FtFiltersModal extends Component {
             </button>
 
             {{#if this.categoriesOpen}}
-              <div class="ft-filters-modal__dropdown" role="listbox">
+              <div
+                class="ft-filters-modal__dropdown ft-filters-modal__dropdown--absolute"
+                role="listbox"
+                {{positionDropdown}}
+              >
                 <button
                   type="button"
                   class="ft-filters-modal__dropdown-item"
@@ -558,7 +600,7 @@ export default class FtFiltersModal extends Component {
           </div>
 
           {{! ─── Tags ────────────────────────────────────── }}
-          <div class="ft-filters-modal__field ft-filters-modal__field--tags">
+          <div class="ft-filters-modal__field">
             <label class="ft-filters-modal__label">Tags</label>
             <div
               class="ft-filters-modal__input-wrap
@@ -581,6 +623,7 @@ export default class FtFiltersModal extends Component {
               {{#if this.isSearchingTags}}
                 <div
                   class="ft-filters-modal__dropdown ft-filters-modal__dropdown--absolute ft-filters-modal__dropdown--loading"
+                  {{positionDropdown}}
                 >
                   <span
                     class="ft-filters-modal__dropdown-label"
@@ -590,6 +633,7 @@ export default class FtFiltersModal extends Component {
                 <div
                   class="ft-filters-modal__dropdown ft-filters-modal__dropdown--absolute"
                   role="listbox"
+                  {{positionDropdown}}
                 >
                   {{#each this.tagSearchResults as |tag|}}
                     <button
@@ -630,21 +674,26 @@ export default class FtFiltersModal extends Component {
                 placeholder="Search for a person…"
                 value={{this.userSearchQuery}}
                 {{on "input" this.onUserSearchInput}}
-                {{on "focus" (fn this.toggleDropdown "postedBy")}}
+                {{on "focus" (fn this.openDropdownFor "postedBy")}}
               />
             </div>
 
             {{#if this.postedByOpen}}
               {{#if this.isSearchingUsers}}
                 <div
-                  class="ft-filters-modal__dropdown ft-filters-modal__dropdown--loading"
+                  class="ft-filters-modal__dropdown ft-filters-modal__dropdown--absolute ft-filters-modal__dropdown--loading"
+                  {{positionDropdown}}
                 >
                   <span
                     class="ft-filters-modal__dropdown-label"
                   >Searching…</span>
                 </div>
               {{else if this.userSearchResults.length}}
-                <div class="ft-filters-modal__dropdown" role="listbox">
+                <div
+                  class="ft-filters-modal__dropdown ft-filters-modal__dropdown--absolute"
+                  role="listbox"
+                  {{positionDropdown}}
+                >
                   {{#each this.userSearchResults as |user|}}
                     <button
                       type="button"
@@ -703,7 +752,11 @@ export default class FtFiltersModal extends Component {
             </button>
 
             {{#if this.contentTypeOpen}}
-              <div class="ft-filters-modal__dropdown" role="listbox">
+              <div
+                class="ft-filters-modal__dropdown ft-filters-modal__dropdown--absolute"
+                role="listbox"
+                {{positionDropdown}}
+              >
                 {{#each this.contentTypeOptions as |opt|}}
                   <button
                     type="button"
@@ -750,7 +803,10 @@ export default class FtFiltersModal extends Component {
             </button>
 
             {{#if this.dateRangeOpen}}
-              <div class="ft-filters-modal__date-range-panel">
+              <div
+                class="ft-filters-modal__date-range-panel ft-filters-modal__date-range-panel--absolute"
+                {{positionDropdown}}
+              >
                 <div class="ft-filters-modal__date-field">
                   <label class="ft-filters-modal__date-label">From</label>
                   <input
