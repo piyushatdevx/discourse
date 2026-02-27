@@ -44,9 +44,16 @@ export default class FtSearchModal extends Component {
 
     const limit = this.activeTab === "all" ? 4 : 10;
     const out = [];
+    const topicsMap = {};
+    (this.rawResults.topics || []).forEach((t) => {
+      topicsMap[t.id] = t;
+    });
 
     if (this.activeTab === "all" || this.activeTab === "feed") {
       (this.rawResults.posts || []).slice(0, limit).forEach((p) => {
+        const topic = topicsMap[p.topic_id];
+        const title =
+          (topic && (topic.fancy_title || topic.title)) || "Untitled";
         out.push({
           type: "feed",
           item: p,
@@ -54,9 +61,7 @@ export default class FtSearchModal extends Component {
           isPeople: false,
           isTribe: false,
           isGear: false,
-          titleDisplay: htmlSafe(
-            p.topic_title_headline || p.blurb || "Untitled"
-          ),
+          titleDisplay: htmlSafe(title),
         });
       });
     }
