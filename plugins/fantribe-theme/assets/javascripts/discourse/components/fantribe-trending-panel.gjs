@@ -81,7 +81,7 @@ export default class FantribeTrendingPanel extends Component {
 
               {{! Arrow — animates on hover via CSS }}
               <span class="ft-trending-panel__item-chevron">
-                {{ftIcon "arrow-up-right" size=12}}
+                {{ftIcon "trend-arrow" size=12}}
               </span>
             </button>
           {{/each}}

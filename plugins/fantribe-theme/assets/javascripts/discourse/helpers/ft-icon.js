@@ -106,6 +106,7 @@ const ICON_PATHS = {
   // Arrow icons
   "arrow-up": '<path d="M12 19V5"/><path d="m5 12 7-7 7 7"/>',
   "arrow-up-right": '<path d="M7 17 17 7"/><path d="M10 7h7v7"/>',
+  "trend-arrow": '<path d="M21 1L12.5 9.5L7.5 4.5L1 11"/><path d="M15 1h6v6"/>',
 
   // Social / Engagement icons
   heart:

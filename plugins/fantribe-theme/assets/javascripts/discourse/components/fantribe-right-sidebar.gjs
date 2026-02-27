@@ -3,12 +3,7 @@ import { fn } from "@ember/helper";
 import { on } from "@ember/modifier";
 import { action } from "@ember/object";
 import { service } from "@ember/service";
-import { htmlSafe } from "@ember/template";
 import ftIcon from "../helpers/ft-icon";
-
-function dotStyle(color) {
-  return htmlSafe(`background-color: #${color}`);
-}
 
 export default class FantribeRightSidebar extends Component {
   @service router;
@@ -93,20 +88,6 @@ export default class FantribeRightSidebar extends Component {
                 class="fantribe-right-sidebar__tribe-item"
                 {{on "click" (fn this.navigateToTribe tribe)}}
               >
-                <div class="fantribe-right-sidebar__tribe-lead">
-                  {{#if tribe.logo_url}}
-                    <img
-                      src={{tribe.logo_url}}
-                      class="fantribe-right-sidebar__tribe-logo"
-                      alt=""
-                    />
-                  {{else}}
-                    <span
-                      class="fantribe-right-sidebar__tribe-dot"
-                      style={{dotStyle tribe.color}}
-                    ></span>
-                  {{/if}}
-                </div>
                 <div class="fantribe-right-sidebar__tribe-info">
                   <span
                     class="fantribe-right-sidebar__tribe-name"
@@ -121,7 +102,7 @@ export default class FantribeRightSidebar extends Component {
                     <span>{{this.formatPostCount tribe.post_count}}</span>
                   </div>
                 </div>
-                {{ftIcon "chevron-right" size=16}}
+                {{ftIcon "trend-arrow" size=16}}
               </button>
             {{/each}}
           {{else}}

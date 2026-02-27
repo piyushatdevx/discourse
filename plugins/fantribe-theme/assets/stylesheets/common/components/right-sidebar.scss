@@ -29,6 +29,7 @@ body.fantribe-theme:not(.admin-interface) {
 
     // Search + Filter row (top of sidebar, above Trending Tribes)
     &__search-row {
+      max-width: 282px;
       display: flex;
       align-items: center;
       gap: 16px;
@@ -129,6 +130,7 @@ body.fantribe-theme:not(.admin-interface) {
 
     // Widget Card (shared by Trending + Live)
     &__widget {
+      max-width: 282px;
       background: white;
       border-radius: 24px;
       border: 1px solid var(--ft-slate-200);
@@ -225,16 +227,16 @@ body.fantribe-theme:not(.admin-interface) {
         background: var(--ft-pastel-pink);
       }
 
-      > .d-icon-chevron-right {
+      > .ft-icon--trend-arrow {
         width: 16px;
         height: 16px;
-        color: var(--ft-slate-400);
+        color: var(--ft-vibrant-red);
         flex-shrink: 0;
         margin-top: 2px;
         transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
       }
 
-      &:hover > .d-icon-chevron-right {
+      &:hover > .ft-icon--trend-arrow {
         color: var(--ft-vibrant-red);
         transform: translateX(4px);
       }
@@ -263,6 +265,9 @@ body.fantribe-theme:not(.admin-interface) {
     &__tribe-info {
       flex: 1;
       min-width: 0;
+      gap: 4px;
+      display: flex;
+      flex-direction: column;
     }
 
     &__tribe-name-row {
@@ -424,6 +429,8 @@ body.fantribe-theme:not(.admin-interface) {
     // Widget Footer (GJS: __widget-footer)
     &__widget-footer {
       padding: 16px;
+      display: flex;
+      max-width: fit-content;
     }
 
     // Footer button (GJS: __footer-btn)
