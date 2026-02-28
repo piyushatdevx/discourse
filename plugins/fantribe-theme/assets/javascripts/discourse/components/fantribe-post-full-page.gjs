@@ -19,11 +19,13 @@ const REACTIONS = [
   { emoji: "🎵", key: "musical_note" },
   { emoji: "🔥", key: "fire" },
   { emoji: "❤️", key: "heart" },
+  { emoji: "👏", key: "clap" },
 ];
 
 export default class FantribePostFullPage extends Component {
   @service currentUser;
   @service fantribeCreate;
+  @service fantribeFeedState;
   @service site;
   @service toasts;
 
@@ -157,14 +159,26 @@ export default class FantribePostFullPage extends Component {
   }
 
   get reactions() {
-    const serverReactions = this._serverReactions || [];
+    // Prefer feedState so counts are immediately in sync when the full page
+    // opens after reacting via a feed card (and vice versa).
+    const feedStateReactions =
+      this.fantribeFeedState?.topicUpdates?.[this.topicId]?.reactions;
+    const serverReactions = feedStateReactions || this._serverReactions || [];
     return REACTIONS.map((r) => {
       const server = serverReactions.find((sr) => sr.id === r.key);
       const local = (this._localReactions || []).find((lr) => lr.id === r.key);
       const count = local?.count ?? server?.count ?? 0;
       const isActive =
         local?.current_user_used ?? server?.current_user_used ?? false;
-      return { ...r, count, isActive };
+      const cssKey = r.key.replace(/_/g, "-");
+      return {
+        ...r,
+        count,
+        isActive,
+        activeClass: isActive
+          ? `ft-full-post__reaction-pill--${cssKey}-active`
+          : "",
+      };
     });
   }
 
@@ -313,10 +327,12 @@ export default class FantribePostFullPage extends Component {
       return;
     }
     try {
+      // Route: GET /discourse-reactions/posts/:id/reactions-users (dash, not underscore)
+      // Response: { reaction_users: [{id, count, users: [{username, ...}]}] }
       const result = await ajax(
-        `/discourse-reactions/posts/${postId}/reactions_users.json`
+        `/discourse-reactions/posts/${postId}/reactions-users.json`
       );
-      this._serverReactions = (result || []).map((r) => ({
+      this._serverReactions = (result?.reaction_users || []).map((r) => ({
         id: r.id,
         count: r.count || 0,
         current_user_used:
@@ -474,7 +490,14 @@ export default class FantribePostFullPage extends Component {
       (r) => r.isActive && r.key !== key
     );
 
-    const baseReactions = this._localReactions || this._serverReactions || [];
+    // Mirror the same priority as the reactions getter: local → feedState → server.
+    // Without the feedState fallback, switching reactions from the full page
+    // while _serverReactions is still loading (or after a reverted error) would
+    // use stale/empty counts as the base for the optimistic update.
+    const feedStateReactions =
+      this.fantribeFeedState?.topicUpdates?.[this.topicId]?.reactions;
+    const baseReactions =
+      this._localReactions || feedStateReactions || this._serverReactions || [];
     this._localReactions = REACTIONS.map((r) => {
       const base = baseReactions.find((br) => br.id === r.key);
       const baseCount = base?.count ?? 0;
@@ -505,6 +528,11 @@ export default class FantribePostFullPage extends Component {
         `/discourse-reactions/posts/${this.firstPostId}/custom-reactions/${key}/toggle`,
         { type: "PUT" }
       );
+      if (this.topicId) {
+        this.fantribeFeedState?.updateTopic(this.topicId, {
+          reactions: this._localReactions,
+        });
+      }
     } catch (error) {
       this._localReactions = null;
       const message = extractError(error) || "";
@@ -774,31 +802,23 @@ export default class FantribePostFullPage extends Component {
                     <div class="ft-full-post__reactions-row">
                       <div class="ft-full-post__reactions">
                         {{#each this.reactions as |reaction|}}
-                          {{#if reaction.count}}
-                            <button
-                              type="button"
-                              class="ft-full-post__reaction-pill
-                                {{if
-                                  reaction.isActive
-                                  'ft-full-post__reaction-pill--active'
-                                }}"
-                              disabled={{or
-                                this.isReactionLoading
-                                (not this.currentUser)
-                              }}
-                              {{on
-                                "click"
-                                (fn this.toggleReaction reaction.key)
-                              }}
-                            >
-                              <span
-                                class="ft-full-post__reaction-emoji"
-                              >{{reaction.emoji}}</span>
-                              <span
-                                class="ft-full-post__reaction-count"
-                              >{{reaction.count}}</span>
-                            </button>
-                          {{/if}}
+                          <button
+                            type="button"
+                            class="ft-full-post__reaction-pill
+                              {{reaction.activeClass}}"
+                            disabled={{or
+                              this.isReactionLoading
+                              (not this.currentUser)
+                            }}
+                            {{on "click" (fn this.toggleReaction reaction.key)}}
+                          >
+                            <span
+                              class="ft-full-post__reaction-emoji"
+                            >{{reaction.emoji}}</span>
+                            <span
+                              class="ft-full-post__reaction-count"
+                            >{{reaction.count}}</span>
+                          </button>
                         {{/each}}
                       </div>
 

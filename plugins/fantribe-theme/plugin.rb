@@ -214,11 +214,46 @@ after_initialize do
           !post_action.post&.topic&.archived?
         end
       end
+
+      # Each reaction switch removes the old shadow like and creates a new one.
+      # PostActionDestroyer and PostActionCreator share the same rate limit key
+      # ("post_action-{post_id}_{type_id}", 4 ops/minute). Each switch consumes
+      # 2 ops (1 remove + 1 create), so after 2 switches the 4-op limit is
+      # exhausted and the 3rd switch raises LimitExceeded in remove_shadow_like —
+      # before add_shadow_like is ever called. Admins bypass rate limiters.
+      # We rescue in both places so the ReactionUser record changes always commit;
+      # the shadow PostAction may become temporarily stale but emoji counts stay
+      # correct.
+      module ReactionManagerExtension
+        private
+
+        def remove_shadow_like
+          return super unless SiteSetting.fantribe_theme_enabled
+          begin
+            super
+          rescue RateLimiter::LimitExceeded
+            # The destroy-side rate limit fired — leave the shadow like in place.
+            # The ReactionUser change is still committed in the outer transaction.
+          end
+        end
+
+        def add_shadow_like(notify: true)
+          return super unless SiteSetting.fantribe_theme_enabled
+          begin
+            super
+          rescue RateLimiter::LimitExceeded
+            # The create-side rate limit fired — skip the shadow like silently.
+            # Still send the reaction notification since the ReactionUser was saved.
+            add_reaction_notification if notify
+          end
+        end
+      end
     end
 
     reloadable_patch do
       DiscourseReactions::ReactionUser.prepend(FantribeTheme::ReactionUserExtension)
       Guardian.prepend(FantribeTheme::GuardianExtension)
+      DiscourseReactions::ReactionManager.prepend(FantribeTheme::ReactionManagerExtension)
     end
   end
 
@@ -269,6 +304,12 @@ after_initialize do
   # Expose the category (Tribe) logo URL on each topic so feed cards can
   # show the tribe badge with a logo image rather than just a colour dot.
   add_to_serializer(:topic_list_item, :category_logo_url) { object.category&.uploaded_logo&.url }
+
+  # Expose first_post_id explicitly to ensure feed cards can always react
+  add_to_serializer(:topic_list_item, :first_post_id) { object.first_post&.id }
+  add_to_serializer(:topic_list_item, :include_first_post_id?) do
+    SiteSetting.fantribe_theme_enabled && object.first_post.present?
+  end
 
   add_to_serializer(:topic_list_item, :include_category_logo_url?) do
     SiteSetting.fantribe_theme_enabled

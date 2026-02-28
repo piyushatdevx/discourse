@@ -10,18 +10,18 @@ import { extractError, popupAjaxError } from "discourse/lib/ajax-error";
 import { not, or } from "discourse/truth-helpers";
 import ftIcon from "../helpers/ft-icon";
 
-// Keys must match discourse_reactions_enabled_reactions site setting values.
-// Configure: discourse_reactions_enabled_reactions = "heart|fire|clap|musical_note"
-//            discourse_reactions_reaction_for_like  = "heart"
+// Order matches Figma design (node 583:4519) and fantribe-post-full-page.gjs.
+// Keys must match discourse_reactions_enabled_reactions = "heart|fire|clap|musical_note"
 const REACTIONS = [
-  { emoji: "❤️", key: "heart" },
-  { emoji: "🔥", key: "fire" },
-  { emoji: "👏", key: "clap" },
   { emoji: "🎵", key: "musical_note" },
+  { emoji: "🔥", key: "fire" },
+  { emoji: "❤️", key: "heart" },
+  { emoji: "👏", key: "clap" },
 ];
 
 export default class FantribeEngagementBar extends Component {
   @service currentUser;
+  @service fantribeFeedState;
   @service modal;
 
   @tracked isLoading = false;
@@ -34,7 +34,11 @@ export default class FantribeEngagementBar extends Component {
   @tracked _bookmarkId = null;
 
   get serverReactions() {
-    return this.args.topic?.reactions || [];
+    // Prefer feedState override (set after a reaction toggle on the full post
+    // page) so the feed card stays in sync without a full route refresh.
+    const override =
+      this.fantribeFeedState?.topicUpdates?.[this.args.topicId]?.reactions;
+    return override ?? this.args.topic?.reactions ?? [];
   }
 
   get reactions() {
@@ -76,12 +80,8 @@ export default class FantribeEngagementBar extends Component {
   }
 
   get canReact() {
-    // opCanLike is false when viewing your own post (Discourse prevents self-reactions)
-    return !!(
-      this.currentUser &&
-      this.args.firstPostId &&
-      this.args.opCanLike !== false
-    );
+    // Custom emoji reactions should be available even on one's own post
+    return !!(this.currentUser && this.args.firstPostId);
   }
 
   get isBookmarked() {
@@ -144,6 +144,13 @@ export default class FantribeEngagementBar extends Component {
         `/discourse-reactions/posts/${this.args.firstPostId}/custom-reactions/${key}/toggle`,
         { type: "PUT" }
       );
+      // Propagate updated reactions to feedState so the full post page and
+      // other feed cards for this topic reflect the change immediately.
+      if (this.args.topicId) {
+        this.fantribeFeedState?.updateTopic(this.args.topicId, {
+          reactions: this._localReactions,
+        });
+      }
     } catch (error) {
       // Always revert the optimistic update
       this._localReactions = null;
