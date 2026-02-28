@@ -14,6 +14,63 @@ export default class FantribeRightSidebar extends Component {
     return this.site.trending_tribes || [];
   }
 
+  get activeFilters() {
+    const filters = [];
+    const categories = this.site.categories || [];
+
+    for (const id of this.fantribeFilter.selectedCategoryIds) {
+      const cat = categories.find((c) => c.id === id);
+      filters.push({
+        type: "category",
+        label: cat?.name ?? String(id),
+        value: id,
+      });
+    }
+
+    for (const tag of this.fantribeFilter.selectedTagNames) {
+      filters.push({ type: "tag", label: `#${tag}`, value: tag });
+    }
+
+    for (const username of this.fantribeFilter.selectedUsernames) {
+      filters.push({ type: "user", label: `@${username}`, value: username });
+    }
+
+    if (this.fantribeFilter.contentTypeFilter !== "all") {
+      filters.push({
+        type: "contentType",
+        label: this.fantribeFilter.contentTypeFilter,
+        value: this.fantribeFilter.contentTypeFilter,
+      });
+    }
+
+    if (this.fantribeFilter.dateFrom || this.fantribeFilter.dateTo) {
+      filters.push({
+        type: "date",
+        label: [this.fantribeFilter.dateFrom, this.fantribeFilter.dateTo]
+          .filter(Boolean)
+          .join(" – "),
+        value: null,
+      });
+    }
+
+    return filters;
+  }
+
+  @action
+  removeFilter(filter) {
+    if (filter.type === "category") {
+      this.fantribeFilter.removeCategoryById(filter.value);
+    } else if (filter.type === "tag") {
+      this.fantribeFilter.removeTag(filter.value);
+    } else if (filter.type === "user") {
+      this.fantribeFilter.removeUser(filter.value);
+    } else if (filter.type === "contentType") {
+      this.fantribeFilter.setContentTypeFilter("all");
+    } else if (filter.type === "date") {
+      this.fantribeFilter.setDateRange(null, null);
+    }
+  }
+
   formatMemberCount(count) {
     if (!count) {
       return "0 members";
@@ -72,6 +129,30 @@ export default class FantribeRightSidebar extends Component {
           {{ftIcon "filter-lines" size=24}}
         </button>
       </div>
+
+      {{#if this.fantribeFilter.hasFilters}}
+        <div class="fantribe-right-sidebar__clear-filters">
+          {{#each this.activeFilters as |filter|}}
+            <button
+              type="button"
+              class="fantribe-right-sidebar__filter-pill"
+              {{on "click" (fn this.removeFilter filter)}}
+            >
+              <span
+                class="fantribe-right-sidebar__filter-pill-label"
+              >{{filter.label}}</span>
+              <span class="fantribe-right-sidebar__filter-pill-x">×</span>
+            </button>
+          {{/each}}
+          <button
+            type="button"
+            class="fantribe-right-sidebar__clear-all-btn"
+            {{on "click" this.fantribeFilter.clearFilters}}
+          >
+            Clear all
+          </button>
+        </div>
+      {{/if}}
 
       {{! Trending Tribes Widget }}
       <div class="fantribe-right-sidebar__widget">

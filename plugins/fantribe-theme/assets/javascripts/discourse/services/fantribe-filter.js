@@ -12,7 +12,6 @@ export default class FantribeFilterService extends Service {
   @tracked dateTo = null;
   @tracked isFiltersModalOpen = false;
   @tracked isSearchModalOpen = false;
-  _hasBeenInitialized = false;
 
   get hasFilters() {
     return (
@@ -81,6 +80,25 @@ export default class FantribeFilterService extends Service {
   }
 
   @action
+  removeCategoryById(id) {
+    this.selectedCategoryIds = this.selectedCategoryIds.filter(
+      (cid) => cid !== id
+    );
+  }
+
+  @action
+  removeTag(name) {
+    this.selectedTagNames = this.selectedTagNames.filter((t) => t !== name);
+  }
+
+  @action
+  removeUser(username) {
+    this.selectedUsernames = this.selectedUsernames.filter(
+      (u) => u !== username
+    );
+  }
+
+  @action
   clearFilters() {
     this.selectedCategoryIds = [];
     this.selectedTagNames = [];
@@ -124,16 +142,5 @@ export default class FantribeFilterService extends Service {
 
   isCategorySelected(category) {
     return this.selectedCategoryIds.includes(category.id);
-  }
-
-  initializeWithAllIfEmpty(categories) {
-    if (
-      !this._hasBeenInitialized &&
-      categories?.length > 0 &&
-      this.selectedCategoryIds.length === 0
-    ) {
-      this.selectedCategoryIds = categories.map((c) => c.id);
-      this._hasBeenInitialized = true;
-    }
   }
 }
