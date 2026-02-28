@@ -115,7 +115,7 @@ export default class FantribePostMoreTopics extends Component {
                   </div>
                 </div>
                 <div class="ft-post-more-topics__item-icon">
-                  {{ftIcon "arrow-up-right" size=12}}
+                  {{ftIcon "trending-up" size=14}}
                 </div>
               </button>
             {{/each}}
