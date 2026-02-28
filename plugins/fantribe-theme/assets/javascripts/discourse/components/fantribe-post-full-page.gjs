@@ -46,11 +46,13 @@ export default class FantribePostFullPage extends Component {
     this._localReactions = null;
     this._isBookmarked = null;
     this._bookmarkId = null;
+    this._viewCount = null;
     this.reactionsLoaded = false;
     this.currentImageIndex = 0;
     this.commentText = "";
     this.loadReactions();
     this.loadComments();
+    this.recordView();
   });
 
   @tracked _localComments = null;
@@ -59,6 +61,7 @@ export default class FantribePostFullPage extends Component {
   @tracked _localReactions = null;
   @tracked _isBookmarked = null;
   @tracked _bookmarkId = null;
+  @tracked _viewCount = null;
 
   constructor(owner, args) {
     super(owner, args);
@@ -264,7 +267,11 @@ export default class FantribePostFullPage extends Component {
   }
 
   get viewCount() {
-    return this.topic?.views || 0;
+    // _viewCount is set by recordView() after POST /fantribe/topics/:id/view,
+    // which calls TopicViewItem.add synchronously and returns the fresh count.
+    // Falls back to the route-model value (pre-visit count) until the POST
+    // completes.
+    return this._viewCount ?? this.topic?.views ?? 0;
   }
 
   get topicTitle() {
@@ -319,6 +326,23 @@ export default class FantribePostFullPage extends Component {
     const parser = new DOMParser();
     const doc = parser.parseFromString(cooked, "text/html");
     return doc.body.textContent?.trim() || "";
+  }
+
+  async recordView() {
+    const topicId = this.topicId;
+    if (!topicId || !this.currentUser) {
+      return;
+    }
+    try {
+      const result = await ajax(`/fantribe/topics/${topicId}/view`, {
+        type: "POST",
+      });
+      if (typeof result?.views === "number") {
+        this._viewCount = result.views;
+      }
+    } catch {
+      // Silently ignore — view tracking is non-critical
+    }
   }
 
   async loadReactions() {

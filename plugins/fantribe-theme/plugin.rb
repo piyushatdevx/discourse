@@ -105,6 +105,34 @@ end
 register_topic_preloader_associations({ posts: :user }) { SiteSetting.fantribe_theme_enabled }
 
 after_initialize do
+  # POST /fantribe/topics/:id/view
+  # Records a topic view synchronously and returns the updated view count.
+  # Discourse's standard view tracking is deferred (background job), so the
+  # route-model response always carries the pre-visit count. This endpoint
+  # runs TopicViewItem.add inline and immediately returns the fresh `views`
+  # value so the full-page component can display it without a race condition.
+  Discourse::Application.routes.prepend do
+    post "fantribe/topics/:topic_id/view" => "fantribe_theme/topic_views#record",
+         :constraints => {
+           topic_id: /\d+/,
+         }
+  end
+
+  module ::FantribeTheme
+    class TopicViewsController < ::ApplicationController
+      requires_plugin "fantribe-theme"
+
+      def record
+        topic = Topic.find_by(id: params[:topic_id].to_i)
+        raise Discourse::NotFound if topic.nil?
+        raise Discourse::InvalidAccess unless guardian.can_see?(topic)
+
+        TopicViewItem.add(topic.id, request.remote_ip, current_user&.id)
+        render json: { views: Topic.where(id: topic.id).pick(:views) }
+      end
+    end
+  end
+
   # Preload first_post.uploads for search results to avoid N+1 queries when
   # serializing image_urls in SearchTopicListItemSerializer
   Search.on_preload do |results, _search|
