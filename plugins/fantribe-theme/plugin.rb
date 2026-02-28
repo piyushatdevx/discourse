@@ -235,6 +235,15 @@ after_initialize do
       end
 
       module GuardianExtension
+        # Allow custom emoji reactions on own posts when FanTribe is enabled (core
+        # blocks liking own posts via post_can_act?(post, :like)).
+        def can_use_reactions?(post)
+          if SiteSetting.fantribe_theme_enabled && authenticated? && post && is_my_own?(post)
+            return true
+          end
+          super
+        end
+
         def can_delete_post_action?(post_action)
           return super unless SiteSetting.fantribe_theme_enabled
           # Same ownership / privacy / archive checks as core — just no time window.

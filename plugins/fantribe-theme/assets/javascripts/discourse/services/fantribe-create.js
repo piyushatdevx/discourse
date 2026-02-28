@@ -6,6 +6,7 @@ export default class FantribeCreate extends Service {
   @tracked isCreateMenuOpen = false;
   @tracked isSidebarCreateMenuOpen = false;
   @tracked isCreatePostModalOpen = false;
+  @tracked isCreateTribeModalOpen = false;
   @tracked postCategory = null;
   @tracked editingPost = null;
   @tracked editingTopicTitle = "";
@@ -60,5 +61,16 @@ export default class FantribeCreate extends Service {
     this.editingPost = null;
     this.editingTopicTitle = "";
     this.editingTags = [];
+  }
+
+  @action
+  openCreateTribeModal() {
+    this.isSidebarCreateMenuOpen = false;
+    this.isCreateTribeModalOpen = true;
+  }
+
+  @action
+  closeCreateTribeModal() {
+    this.isCreateTribeModalOpen = false;
   }
 }

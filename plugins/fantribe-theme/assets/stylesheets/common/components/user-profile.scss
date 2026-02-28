@@ -605,6 +605,7 @@ body.fantribe-theme:not(.admin-interface) {
   // ── FanTribe custom profile tabs (injected via connector) ─────────────────
   // Styled to match explore page tabs (individual floating pills)
   .ft-user-nav__tab {
+    margin-bottom: 2px;
     display: inline-flex;
     align-items: center;
     gap: 8px;

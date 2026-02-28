@@ -47,6 +47,8 @@ en:
         start_event_desc: "Go live or schedule a stream"
         create_video: "Create Video"
         create_video_desc: "Record and edit your content"
+        create_tribe: "Create Tribe"
+        create_tribe_desc: "Start a new tribe for your community"
     sidebar:
       logo_aria: "Go to home feed"
       collapse_aria: "Collapse sidebar"

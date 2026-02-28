@@ -11,7 +11,8 @@ import ftIcon from "../helpers/ft-icon";
 import FtCreateMenu from "./ft-create-menu";
 
 const SIDEBAR_CREATE_MENU_GAP = 110;
-const SIDEBAR_CREATE_MENU_OFFSET_TOP = 80;
+// Gap between menu bottom and create button top — keeps spacing constant for 1 or more items
+const SIDEBAR_CREATE_MENU_GAP_ABOVE_BUTTON = 20;
 // Match expanded sidebar width (left-sidebar.scss) so menu starts at same horizontal position when expanded or collapsed
 const EXPANDED_SIDEBAR_WIDTH = 200;
 
@@ -23,13 +24,47 @@ const positionSidebarCreateMenu = modifier((element) => {
   if (!trigger || !sidebar) {
     return;
   }
-  const triggerRect = trigger.getBoundingClientRect();
-  const sidebarRect = sidebar.getBoundingClientRect();
-  element.style.position = "fixed";
-  element.style.left = `${sidebarRect.left + EXPANDED_SIDEBAR_WIDTH + SIDEBAR_CREATE_MENU_GAP}px`;
-  element.style.bottom = "auto";
-  element.style.top = `${triggerRect.top - SIDEBAR_CREATE_MENU_OFFSET_TOP}px`;
-  element.style.zIndex = "var(--ft-z-dropdown, 1100)";
+
+  const gap = SIDEBAR_CREATE_MENU_GAP_ABOVE_BUTTON;
+
+  const applyPosition = () => {
+    const triggerRect = trigger.getBoundingClientRect();
+    const sidebarRect = sidebar.getBoundingClientRect();
+
+    // We want the BOTTOM of `.ft-create-menu__items` to be a fixed GAP above the Create button.
+    // This keeps the last menu item “fixed” even as the menu grows upward with more options.
+    const items = element.querySelector(".ft-create-menu__items");
+    const itemsBottomWithinMenu = items
+      ? items.offsetTop + items.offsetHeight
+      : element.offsetHeight;
+
+    const menuHeight = element.offsetHeight;
+    const desiredItemsBottomViewport = triggerRect.top - gap;
+    const menuTopViewport = desiredItemsBottomViewport - itemsBottomWithinMenu;
+    const menuBottomViewport = menuTopViewport + menuHeight;
+
+    // If the sidebar is transformed (collapsed/mobile), it becomes the fixed-position containing block.
+    const isFixedToSidebar = getComputedStyle(sidebar).transform !== "none";
+    const bottomBase = isFixedToSidebar
+      ? sidebarRect.bottom
+      : window.innerHeight;
+    const bottom = bottomBase - menuBottomViewport;
+
+    element.style.position = "fixed";
+    element.style.left = `${sidebarRect.left + EXPANDED_SIDEBAR_WIDTH + SIDEBAR_CREATE_MENU_GAP}px`;
+    element.style.zIndex = "var(--ft-z-dropdown, 1100)";
+    element.style.top = "auto";
+    element.style.bottom = `${bottom + 10}px`;
+  };
+
+  applyPosition();
+  requestAnimationFrame(() => {
+    requestAnimationFrame(applyPosition);
+  });
+  const resizeObserver = new ResizeObserver(applyPosition);
+  resizeObserver.observe(element);
+
+  return () => resizeObserver.disconnect();
 });
 
 const NAV_ITEMS = [
@@ -238,16 +273,14 @@ export default class FantribeTribesPanel extends Component {
       </div>
 
       <div class="fantribe-sidebar-nav__create-row">
-        <div
-          class="fantribe-sidebar-nav__create-wrap"
-          {{on "mouseenter" this.openSidebarCreateMenu}}
-          {{on "mouseleave" this.closeSidebarCreateMenu}}
-        >
+        <div class="fantribe-sidebar-nav__create-wrap">
           <button
             type="button"
             class="fantribe-sidebar-nav__create"
             aria-haspopup="true"
             aria-expanded={{this.fantribeCreate.isSidebarCreateMenuOpen}}
+            {{on "mouseenter" this.openSidebarCreateMenu}}
+            {{on "mouseleave" this.closeSidebarCreateMenu}}
           >
             <span class="fantribe-sidebar-nav__create-icon">{{ftIcon
                 "plus"

@@ -84,6 +84,16 @@ body.fantribe-theme:not(.admin-interface) {
         color: var(--ft-coral);
       }
 
+      &--lightRed {
+        background: var(--ft-vibrant-red-light);
+        color: var(--ft-vibrant-red);
+      }
+
+      &--darkRed {
+        background: var(--ft-amber-light);
+        color: var(--ft-amber);
+      }
+
       &--orange {
         background: var(--ft-amber-light);
         color: var(--ft-amber);

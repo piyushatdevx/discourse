@@ -14,8 +14,16 @@ const CREATE_MENU_ITEMS = [
     iconMod: "blue",
     labelKey: "fantribe.create_menu.create_post",
     descKey: "fantribe.create_menu.create_post_desc",
-    suggested: false,
     action: "handleCreatePost",
+  },
+  {
+    id: "create-tribe",
+    icon: "compass",
+    iconMod: "darkRed",
+    labelKey: "fantribe.create_menu.create_tribe",
+    descKey: "fantribe.create_menu.create_tribe_desc",
+    action: "handleCreateTribe",
+    adminOnly: true,
   },
   /*
   {
@@ -58,6 +66,7 @@ const CREATE_MENU_ITEMS = [
 ];
 
 export default class FtCreateMenu extends Component {
+  @service currentUser;
   @service fantribeCreate;
 
   fnHelper = fn;
@@ -67,7 +76,11 @@ export default class FtCreateMenu extends Component {
   }
 
   get menuItems() {
-    return CREATE_MENU_ITEMS;
+    const items = CREATE_MENU_ITEMS;
+    if (this.currentUser?.admin) {
+      return items;
+    }
+    return items.filter((item) => !item.adminOnly);
   }
 
   get closeCallback() {
@@ -90,6 +103,11 @@ export default class FtCreateMenu extends Component {
   @action
   handleCreatePost() {
     this.fantribeCreate.openCreatePostModal();
+  }
+
+  @action
+  handleCreateTribe() {
+    this.fantribeCreate.openCreateTribeModal();
   }
 
   @action
