@@ -374,7 +374,7 @@ export default class FantribeFeedCard extends Component {
     try {
       const result = await ajax(`/posts/${postId}/cooked.json`);
       let cooked = result?.cooked ?? "";
-      cooked = this.hideFirstLightboxInExpanded(cooked);
+      cooked = this.hideAllLightboxesInExpanded(cooked);
       this.expandedContent = cooked;
       this.expanded = true;
     } finally {
@@ -382,15 +382,14 @@ export default class FantribeFeedCard extends Component {
     }
   }
 
-  hideFirstLightboxInExpanded(html) {
+  hideAllLightboxesInExpanded(html) {
     if (!html || !html.includes("lightbox-wrapper")) {
       return html;
     }
-    const hideClass = "fantribe-feed-card__hide-duplicate-image";
-    return html.replace(
-      /class="(lightbox-wrapper)(?="| )/,
-      `class="$1 ${hideClass}`
-    );
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, "text/html");
+    doc.querySelectorAll(".lightbox-wrapper").forEach((el) => el.remove());
+    return doc.body.innerHTML.trim() || html;
   }
 
   <template>

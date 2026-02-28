@@ -72,7 +72,7 @@ body.fantribe-theme:not(.admin-interface) {
 
     // Right Sidebar container
     // Figma: visible at ≥1280px (xl), hidden below that
-    // Sticky: stays in place while feed scrolls
+    // Sticky: sticks at current position (match #main-outlet-wrapper margin-top 16px)
     &__right-sidebar {
       display: none; /* hidden by default */
 
@@ -81,9 +81,9 @@ body.fantribe-theme:not(.admin-interface) {
         width: 320px; /* w-80 */
         flex-shrink: 0;
         position: sticky;
-        top: 0;
+        top: 16px; /* match app layout wrapper margin so sidebar doesn’t jump when sticking */
         align-self: flex-start;
-        max-height: 100dvh;
+        max-height: calc(100dvh - 16px);
         overflow-y: auto;
 
         &::-webkit-scrollbar {

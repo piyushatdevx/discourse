@@ -83,7 +83,11 @@ body.fantribe-theme:not(.admin-interface) {
     &__content {
       flex-shrink: 0;
       width: 890px;
-      height: 922px;
+      height: 900px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      padding-bottom: 8px; // room for card box-shadow so it isn’t clipped
     }
 
     &__sidebar {
@@ -94,9 +98,9 @@ body.fantribe-theme:not(.admin-interface) {
         width: 282px;
         flex-shrink: 0;
         position: sticky;
-        top: 0;
+        top: 16px; /* match app layout wrapper margin so sidebar doesn’t jump when sticking */
         align-self: flex-start;
-        max-height: calc(100dvh - 24px);
+        max-height: calc(100dvh - 16px);
         overflow-y: auto;
         overflow-x: hidden;
       }
@@ -104,6 +108,13 @@ body.fantribe-theme:not(.admin-interface) {
 
     // Edit mode: layout content height is driven by card content, not fixed
     &--edit {
+      .ft-full-post-layout__content {
+        height: auto;
+      }
+    }
+
+    // No image (Figma node 785-3194): card height follows content, no fixed 922px
+    &--no-image {
       .ft-full-post-layout__content {
         height: auto;
       }
@@ -119,9 +130,13 @@ body.fantribe-theme:not(.admin-interface) {
   // 890px content area (matching Figma's inner container x=16 offset)
   .ft-full-post {
     padding: 0 16px;
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
 
     // -----------------------------------------------------------------------
-    // Card shell — fixed 840px height; content scrolls inside, not the card
+    // Card shell — fills layout content height; inner content scrolls, not the card
     // -----------------------------------------------------------------------
     &__card {
       background: #fff;
@@ -132,7 +147,8 @@ body.fantribe-theme:not(.admin-interface) {
       display: flex;
       flex-direction: column;
       width: 858px; // 890px flex container minus 16px horizontal padding
-      flex-shrink: 0;
+      flex: 1;
+      min-height: 0;
       overflow: visible; // Post menu must escape the card
     }
 
@@ -345,6 +361,14 @@ body.fantribe-theme:not(.admin-interface) {
       flex: 1;
       min-height: 0;
       overflow: hidden;
+
+      // No image (Figma node 785-3194): content-driven height, compact layout
+      &--no-image {
+        flex: 0 0 auto;
+        min-height: 0;
+        overflow: visible;
+        padding-bottom: 20px;
+      }
     }
 
     // -----------------------------------------------------------------------
@@ -441,6 +465,14 @@ body.fantribe-theme:not(.admin-interface) {
       flex: 1;
       min-height: 0;
       overflow: hidden;
+
+      .ft-full-post__content--no-image & {
+        flex: 0 0 auto;
+        min-height: 0;
+        overflow: visible;
+        align-items: stretch;
+        width: 100%;
+      }
     }
 
     // -----------------------------------------------------------------------
@@ -455,6 +487,11 @@ body.fantribe-theme:not(.admin-interface) {
       gap: 16px;
       padding-bottom: 20px;
       overflow: hidden;
+
+      .ft-full-post__content--no-image & {
+        flex: 1 1 100%;
+        padding-bottom: 0;
+      }
     }
 
     // Image carousel + gear tags (gap-12 between them)
@@ -463,6 +500,10 @@ body.fantribe-theme:not(.admin-interface) {
       flex-direction: column;
       gap: 14px;
       padding: 0 16px;
+
+      .ft-full-post__content--no-image & {
+        padding: 0 20px;
+      }
     }
 
     // -----------------------------------------------------------------------
@@ -474,6 +515,20 @@ body.fantribe-theme:not(.admin-interface) {
       height: 474px;
       border-radius: 16px;
       overflow: hidden;
+    }
+
+    &__onebox {
+      width: 100%;
+      border-radius: 16px;
+      overflow: hidden;
+
+      .lazy-video-wrapper {
+        width: 100%;
+      }
+
+      .lazy-video-container {
+        width: 100%;
+      }
     }
 
     &__carousel-img {
@@ -601,14 +656,19 @@ body.fantribe-theme:not(.admin-interface) {
       gap: 14px;
       padding: 0 16px;
       margin-top: auto;
+
+      .ft-full-post__content--no-image & {
+        margin-top: 0;
+        padding: 0 20px;
+      }
     }
 
-    // Reaction pills + Stats row
+    // Reaction pills on first line; stats (comment + view count) on next line — Figma node 785-3709
     &__reactions-row {
       display: flex;
-      align-items: center;
-      gap: 16px;
-      flex-wrap: wrap;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 12px;
     }
 
     &__reactions {
@@ -705,12 +765,12 @@ body.fantribe-theme:not(.admin-interface) {
       color: #3d3b33;
     }
 
-    // Stats row: message count + views
+    // Stats row: message count + views (below reaction line per Figma node 785-3709)
     &__stats {
       display: flex;
       align-items: center;
-      gap: 16px; // Adjust gap between items
-      margin-left: 2px;
+      gap: 16px;
+      margin-left: 0;
     }
 
     &__stat {
@@ -756,7 +816,7 @@ body.fantribe-theme:not(.admin-interface) {
       overflow: hidden;
     }
 
-    // "Comments" label
+    // "Comments" label (flex-shrink: 0 so scrollable list gets remaining height)
     &__comments-label {
       font-size: 12px;
       font-weight: 500;
@@ -764,9 +824,27 @@ body.fantribe-theme:not(.admin-interface) {
       color: #888;
       white-space: nowrap;
       padding-bottom: 8px;
+      flex-shrink: 0;
     }
 
-    // Scrollable comments list
+    // No image (Figma node 785-3194): full-width comments block below main content
+    &__comments-block {
+      &--no-image {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        padding: 20px 20px 16px;
+        border-top: 1px solid rgb(0, 0, 0, 0.06);
+        margin-top: 4px;
+
+        .ft-full-post__comments-list {
+          max-height: 360px;
+          flex: 0 1 auto;
+        }
+      }
+    }
+
+    // Scrollable comments list (min-height: 0 allows flex child to shrink and scroll)
     &__comments-list {
       display: flex;
       flex-direction: column;
@@ -774,18 +852,24 @@ body.fantribe-theme:not(.admin-interface) {
       overflow-x: hidden;
       overflow-y: auto;
       flex: 1;
+      min-height: 0;
 
       &::-webkit-scrollbar {
-        width: 3px;
+        width: 8px;
       }
 
       &::-webkit-scrollbar-track {
-        background: transparent;
+        background: rgb(0, 0, 0, 0.04);
+        border-radius: 4px;
       }
 
       &::-webkit-scrollbar-thumb {
-        background: rgb(0, 0, 0, 0.12);
-        border-radius: 2px;
+        background: rgb(0, 0, 0, 0.2);
+        border-radius: 4px;
+      }
+
+      &::-webkit-scrollbar-thumb:hover {
+        background: rgb(0, 0, 0, 0.3);
       }
     }
 
@@ -799,7 +883,7 @@ body.fantribe-theme:not(.admin-interface) {
       flex-shrink: 0;
     }
 
-    // Gradient circle avatar with initials — 40px (matches Figma)
+    // Gradient circle avatar with initials or user avatar — 40px (matches Figma)
     &__comment-avatar {
       width: 40px;
       height: 40px;
@@ -808,6 +892,13 @@ body.fantribe-theme:not(.admin-interface) {
       align-items: center;
       justify-content: center;
       flex-shrink: 0;
+      overflow: hidden;
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
 
       &--gradient-1 {
         background: linear-gradient(135deg, #00d492, #00bba7);
@@ -1130,7 +1221,7 @@ body.fantribe-theme:not(.admin-interface) {
     &__view-all {
       display: flex;
       align-items: center;
-      justify-content: center;
+      justify-content: flex-start;
       padding: 12px 16px;
       background: none;
       border: none;

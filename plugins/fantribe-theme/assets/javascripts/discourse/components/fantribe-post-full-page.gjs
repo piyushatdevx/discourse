@@ -6,6 +6,7 @@ import { action } from "@ember/object";
 import { service } from "@ember/service";
 import { htmlSafe } from "@ember/template";
 import { modifier } from "ember-modifier";
+import DecoratedHtml from "discourse/components/decorated-html";
 import avatar from "discourse/helpers/avatar";
 import formatDate from "discourse/helpers/format-date";
 import { ajax } from "discourse/lib/ajax";
@@ -14,6 +15,9 @@ import { not, or } from "discourse/truth-helpers";
 import ftIcon from "../helpers/ft-icon";
 import FantribePostMenu from "./fantribe-post-menu";
 import FantribePostMoreTopics from "./fantribe-post-more-topics";
+
+const ONEBOX_SELECTOR =
+  "aside.onebox, div.youtube-onebox, div.onebox, div.lazy-video-container";
 
 const REACTIONS = [
   { emoji: "🎵", key: "musical_note" },
@@ -145,6 +149,25 @@ export default class FantribePostFullPage extends Component {
     return this.images.length > 1;
   }
 
+  get firstOneboxHtml() {
+    const cooked = this.firstPost?.cooked;
+    if (!cooked) {
+      return null;
+    }
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(cooked, "text/html");
+    const onebox = doc.querySelector(ONEBOX_SELECTOR);
+    if (!onebox) {
+      return null;
+    }
+    const html = onebox.outerHTML;
+    return html ? htmlSafe(html) : null;
+  }
+
+  get hasOnebox() {
+    return !!this.firstOneboxHtml;
+  }
+
   get currentImage() {
     return this.images[this.currentImageIndex] || null;
   }
@@ -204,8 +227,8 @@ export default class FantribePostFullPage extends Component {
     }
     const parser = new DOMParser();
     const doc = parser.parseFromString(cooked, "text/html");
-    // Remove lightbox wrappers (shown in carousel) and video embeds
     doc.querySelectorAll(".lightbox-wrapper").forEach((el) => el.remove());
+    doc.querySelectorAll(ONEBOX_SELECTOR).forEach((el) => el.remove());
     doc
       .querySelectorAll("img:not(.emoji)")
       .forEach((img) => img.parentElement?.remove?.() || img.remove());
@@ -634,7 +657,11 @@ export default class FantribePostFullPage extends Component {
 
   <template>
     {{! template-lint-disable no-invalid-interactive }}
-    <div class="ft-full-post-layout" {{this.watchTopic this.topicId}}>
+    <div
+      class="ft-full-post-layout
+        {{unless this.hasImages 'ft-full-post-layout--no-image'}}"
+      {{this.watchTopic this.topicId}}
+    >
       <div class="ft-full-post-layout__content">
         <div class="ft-full-post">
           <div class="ft-full-post__card">
@@ -713,7 +740,10 @@ export default class FantribePostFullPage extends Component {
             </div>
 
             {{! ===== CONTENT ===== }}
-            <div class="ft-full-post__content">
+            <div
+              class="ft-full-post__content
+                {{unless this.hasImages 'ft-full-post__content--no-image'}}"
+            >
 
               {{! Title + Action Icons }}
               <div class="ft-full-post__title-section">
@@ -763,15 +793,17 @@ export default class FantribePostFullPage extends Component {
                 {{/if}}
               </div>
 
-              {{! ===== TWO COLUMNS ===== }}
+              {{! ===== WITH IMAGE: two columns (left: image + gear + reactions | right: comments) ===== }}
+              {{! ===== NO IMAGE: single column (gear + reactions then comments below) — Figma node 785-3194 ===== }}
               <div class="ft-full-post__columns">
-
-                {{! LEFT COLUMN: Image + Gear + Reactions + Stats }}
+                {{! LEFT COLUMN: Image + Gear + Reactions + Stats (or gear + reactions only when no image) }}
                 <div class="ft-full-post__left-col">
-                  {{! Top: image + gear tags (gap-12 between them, matching Figma node 539:36411) }}
                   <div class="ft-full-post__left-top">
-                    {{! Image Carousel }}
-                    {{#if this.hasImages}}
+                    {{#if this.hasOnebox}}
+                      <div class="ft-full-post__onebox">
+                        <DecoratedHtml @html={{this.firstOneboxHtml}} />
+                      </div>
+                    {{else if this.hasImages}}
                       <div class="ft-full-post__carousel">
                         <img
                           src={{this.currentImage.url}}
@@ -805,7 +837,6 @@ export default class FantribePostFullPage extends Component {
                       </div>
                     {{/if}}
 
-                    {{! Gear Tags (rendered from topic tags) }}
                     {{#if this.hasTags}}
                       <div class="ft-full-post__gear-row">
                         <div class="ft-full-post__gear-pills">
@@ -846,7 +877,6 @@ export default class FantribePostFullPage extends Component {
                         {{/each}}
                       </div>
 
-                      {{! Comment + View Counts }}
                       <div class="ft-full-post__stats">
                         <span class="ft-full-post__stat">
                           {{ftIcon "message-circle"}}
@@ -861,40 +891,118 @@ export default class FantribePostFullPage extends Component {
                   </div>
                 </div>
 
-                {{! RIGHT COLUMN: Comments }}
-                <div class="ft-full-post__right-col">
-                  <div class="ft-full-post__comments-inner">
-                    <span class="ft-full-post__comments-label">Comments</span>
-                    <div class="ft-full-post__comments-list">
-                      {{#each this.comments as |comment|}}
-                        <div class="ft-full-post__comment">
-                          <div
-                            class="ft-full-post__comment-avatar
-                              {{comment.gradientClass}}"
-                          >
+                {{! RIGHT COLUMN: Comments (hidden when no media; comments move to no-image block below) }}
+                {{#if (or this.hasImages this.hasOnebox)}}
+                  <div class="ft-full-post__right-col">
+                    <div class="ft-full-post__comments-inner">
+                      <span class="ft-full-post__comments-label">Comments</span>
+                      <div class="ft-full-post__comments-list">
+                        {{#each this.comments as |comment|}}
+                          <div class="ft-full-post__comment">
+                            <div
+                              class="ft-full-post__comment-avatar
+                                {{unless comment.user comment.gradientClass}}"
+                            >
+                              {{#if comment.user}}
+                                {{avatar comment.user imageSize="small"}}
+                              {{else}}
+                                <span
+                                  class="ft-full-post__comment-initials"
+                                >{{comment.initials}}</span>
+                              {{/if}}
+                            </div>
+                            <div class="ft-full-post__comment-body">
+                              <div class="ft-full-post__comment-header">
+                                <span
+                                  class="ft-full-post__comment-author"
+                                >{{comment.user.name}}</span>
+                                <span class="ft-full-post__comment-time">
+                                  {{formatDate
+                                    comment.created_at
+                                    format="tiny"
+                                  }}
+                                </span>
+                              </div>
+                              <p
+                                class="ft-full-post__comment-text"
+                              >{{comment.raw}}</p>
+                            </div>
+                          </div>
+                        {{/each}}
+                      </div>
+                    </div>
+
+                    <div class="ft-full-post__comment-input-row">
+                      <div class="ft-full-post__comment-input-avatar">
+                        {{#if this.currentUser}}
+                          {{avatar this.currentUser imageSize="medium"}}
+                        {{/if}}
+                      </div>
+                      <div class="ft-full-post__comment-input-wrap">
+                        <input
+                          type="text"
+                          class="ft-full-post__comment-input"
+                          placeholder={{if
+                            this.topicClosed
+                            "Comments are turned off"
+                            "Join the conversation..."
+                          }}
+                          value={{this.commentText}}
+                          disabled={{or
+                            this.isSubmittingComment
+                            this.topicClosed
+                            (not this.currentUser)
+                          }}
+                          {{on "input" this.updateCommentText}}
+                          {{on "keydown" this.handleCommentKeydown}}
+                        />
+                        <button type="button" class="ft-full-post__emoji-btn">
+                          {{ftIcon "smile"}}
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                {{/if}}
+              </div>
+
+              {{! NO MEDIA: comments section full width below (Figma node 785-3194) }}
+              {{#unless (or this.hasImages this.hasOnebox)}}
+                <div
+                  class="ft-full-post__comments-block ft-full-post__comments-block--no-image"
+                >
+                  <span class="ft-full-post__comments-label">Comments</span>
+                  <div class="ft-full-post__comments-list">
+                    {{#each this.comments as |comment|}}
+                      <div class="ft-full-post__comment">
+                        <div
+                          class="ft-full-post__comment-avatar
+                            {{unless comment.user comment.gradientClass}}"
+                        >
+                          {{#if comment.user}}
+                            {{avatar comment.user imageSize="small"}}
+                          {{else}}
                             <span
                               class="ft-full-post__comment-initials"
                             >{{comment.initials}}</span>
-                          </div>
-                          <div class="ft-full-post__comment-body">
-                            <div class="ft-full-post__comment-header">
-                              <span
-                                class="ft-full-post__comment-author"
-                              >{{comment.user.name}}</span>
-                              <span class="ft-full-post__comment-time">
-                                {{formatDate comment.created_at format="tiny"}}
-                              </span>
-                            </div>
-                            <p
-                              class="ft-full-post__comment-text"
-                            >{{comment.raw}}</p>
-                          </div>
+                          {{/if}}
                         </div>
-                      {{/each}}
-                    </div>
+                        <div class="ft-full-post__comment-body">
+                          <div class="ft-full-post__comment-header">
+                            <span
+                              class="ft-full-post__comment-author"
+                            >{{comment.user.name}}</span>
+                            <span class="ft-full-post__comment-time">
+                              {{formatDate comment.created_at format="tiny"}}
+                            </span>
+                          </div>
+                          <p
+                            class="ft-full-post__comment-text"
+                          >{{comment.raw}}</p>
+                        </div>
+                      </div>
+                    {{/each}}
                   </div>
 
-                  {{! Comment Input }}
                   <div class="ft-full-post__comment-input-row">
                     <div class="ft-full-post__comment-input-avatar">
                       {{#if this.currentUser}}
@@ -925,8 +1033,7 @@ export default class FantribePostFullPage extends Component {
                     </div>
                   </div>
                 </div>
-
-              </div>
+              {{/unless}}
             </div>
           </div>
         </div>
