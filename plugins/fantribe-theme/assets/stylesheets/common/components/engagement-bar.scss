@@ -49,7 +49,7 @@ body.fantribe-theme:not(.admin-interface) {
       // musical-note → purple  (creative — vibes)
       &--heart-active {
         background: var(--ft-vibrant-red-light);
-        border: 2px solid var(--ft-vibrant-red);
+        border: 1px solid var(--ft-vibrant-red);
         transform: scale(1.05);
 
         .fantribe-engagement__reaction-count {
@@ -59,7 +59,7 @@ body.fantribe-theme:not(.admin-interface) {
 
       &--fire-active {
         background: var(--ft-coral-light);
-        border: 2px solid var(--ft-coral);
+        border: 1px solid var(--ft-coral);
         transform: scale(1.05);
 
         .fantribe-engagement__reaction-count {
@@ -69,7 +69,7 @@ body.fantribe-theme:not(.admin-interface) {
 
       &--clap-active {
         background: var(--ft-electric-blue-light);
-        border: 2px solid var(--ft-electric-blue);
+        border: 1px solid var(--ft-electric-blue);
         transform: scale(1.05);
 
         .fantribe-engagement__reaction-count {
@@ -79,7 +79,7 @@ body.fantribe-theme:not(.admin-interface) {
 
       &--musical-note-active {
         background: var(--ft-purple-light);
-        border: 2px solid var(--ft-purple);
+        border: 1px solid var(--ft-purple);
         transform: scale(1.05);
 
         .fantribe-engagement__reaction-count {
