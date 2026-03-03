@@ -134,6 +134,62 @@ after_initialize do
     end
   end
 
+  # GET /fantribe/trending_tribes.json
+  # Returns top 5 tribes by post count. Previously embedded in the site
+  # serializer (bootstrap JSON on every page). Now fetched on-demand by
+  # sidebar components, reducing the initial payload on non-feed pages.
+  # Uses the same ft_top_tribes_by_posts cache key and 10-minute TTL.
+  Discourse::Application.routes.prepend do
+    get "fantribe/trending_tribes" => "fantribe_theme/trending_tribes#index"
+  end
+
+  module ::FantribeTheme
+    class TrendingTribesController < ::ApplicationController
+      requires_plugin "fantribe-theme"
+
+      def index
+        return render json: { trending_tribes: [] } unless SiteSetting.fantribe_theme_enabled
+
+        tribes =
+          Rails
+            .cache
+            .fetch("ft_top_tribes_by_posts", expires_in: 10.minutes) do
+              top_categories =
+                Category
+                  .where(read_restricted: false)
+                  .where.not(id: SiteSetting.uncategorized_category_id)
+                  .order(post_count: :desc)
+                  .limit(5)
+
+              next [] if top_categories.empty?
+
+              member_counts =
+                CategoryUser
+                  .where(category_id: top_categories.map(&:id))
+                  .where("notification_level >= ?", CategoryUser.notification_levels[:watching])
+                  .group(:category_id)
+                  .count
+
+              top_categories.map do |cat|
+                {
+                  id: cat.id,
+                  name: cat.name,
+                  slug: cat.slug,
+                  color: cat.color,
+                  logo_url: cat.uploaded_logo&.url,
+                  member_count: member_counts[cat.id].to_i,
+                  post_count: cat.post_count,
+                }
+              end
+            end
+
+        render json: { trending_tribes: tribes }
+      rescue StandardError
+        render json: { trending_tribes: [] }
+      end
+    end
+  end
+
   # Preload first_post.uploads for search results to avoid N+1 queries when
   # serializing image_urls in SearchTopicListItemSerializer
   Search.on_preload do |results, _search|
@@ -591,50 +647,6 @@ after_initialize do
   end
 
   add_to_serializer(:user_card, :include_ft_tribe_count?) { SiteSetting.fantribe_theme_enabled }
-
-  # Top Tribes — ranked by all-time post count (highest posts first), top 5.
-  # Uses the indexed post_count column on categories — no joins or aggregation
-  # needed. Cached for 10 minutes to avoid per-request DB hits.
-  add_to_serializer(:site, :trending_tribes) do
-    return [] unless SiteSetting.fantribe_theme_enabled
-
-    Rails
-      .cache
-      .fetch("ft_top_tribes_by_posts", expires_in: 10.minutes) do
-        top_categories =
-          Category
-            .where(read_restricted: false)
-            .where.not(id: SiteSetting.uncategorized_category_id)
-            .order(post_count: :desc)
-            .limit(5)
-
-        next [] if top_categories.empty?
-
-        # Batch-load member counts (watchers) for the selected tribes in one query.
-        member_counts =
-          CategoryUser
-            .where(category_id: top_categories.map(&:id))
-            .where("notification_level >= ?", CategoryUser.notification_levels[:watching])
-            .group(:category_id)
-            .count
-
-        top_categories.map do |cat|
-          {
-            id: cat.id,
-            name: cat.name,
-            slug: cat.slug,
-            color: cat.color,
-            logo_url: cat.uploaded_logo&.url,
-            member_count: member_counts[cat.id].to_i,
-            post_count: cat.post_count,
-          }
-        end
-      end
-  rescue StandardError
-    []
-  end
-
-  add_to_serializer(:site, :include_trending_tribes?) { SiteSetting.fantribe_theme_enabled }
 
   # Expose user's post count directly on user_card (already in UserSerializer
   # via staff_attributes :post_count, but we need it publicly available).

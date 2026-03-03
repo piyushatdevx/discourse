@@ -1,16 +1,29 @@
 import Component from "@glimmer/component";
+import { tracked } from "@glimmer/tracking";
 import { fn } from "@ember/helper";
 import { on } from "@ember/modifier";
 import { action } from "@ember/object";
 import { service } from "@ember/service";
+import { ajax } from "discourse/lib/ajax";
 import ftIcon from "../helpers/ft-icon";
 
 export default class FantribeTrendingPanel extends Component {
   @service router;
-  @service site;
 
-  get tribes() {
-    return this.site.trending_tribes || [];
+  @tracked tribes = [];
+
+  constructor(owner, args) {
+    super(owner, args);
+    this.loadTribes();
+  }
+
+  async loadTribes() {
+    try {
+      const data = await ajax("/fantribe/trending_tribes.json");
+      this.tribes = data.trending_tribes || [];
+    } catch {
+      // fail silently — panel shows "No active tribes yet"
+    }
   }
 
   formatMemberCount(count) {
