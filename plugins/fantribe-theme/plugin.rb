@@ -569,14 +569,17 @@ after_initialize do
   # Expose the number of categories (Tribes) a user is actively watching.
   # Using notification_level >= watching means only categories the user
   # deliberately joined — not ones they were auto-added to.
-  # Cached at the HTTP layer; cheap single-table lookup with an index on
-  # (user_id, category_id, notification_level).
+  # Cached per-user for 10 minutes to avoid a COUNT query on every user card render.
   add_to_serializer(:user_card, :ft_tribe_count) do
     return 0 unless SiteSetting.fantribe_theme_enabled
-    CategoryUser
-      .where(user_id: object.id)
-      .where("notification_level >= ?", CategoryUser.notification_levels[:watching])
-      .count
+    Rails
+      .cache
+      .fetch("ft_tribe_count_#{object.id}", expires_in: 10.minutes) do
+        CategoryUser
+          .where(user_id: object.id)
+          .where("notification_level >= ?", CategoryUser.notification_levels[:watching])
+          .count
+      end
   rescue StandardError
     0
   end
