@@ -1,0 +1,60 @@
+en:
+  js:
+    music_tribe_insights:
+      user_nav:
+        title: "Community Insights"
+      dashboard:
+        title: "Community Insights"
+        description: "Recurring themes and report types from community posts (e.g. product issues, common questions)."
+      report_type: "Report type"
+      count: "Topics"
+      count_posts: "Posts"
+      summary: "Summary"
+      generated_at: "Generated"
+      no_insights: "No insights yet. Go to Admin → Community Insights to run analysis."
+      no_recurring_themes: "No recurring themes met the threshold in recent topics."
+      data_source: "Based on %{count} topics from the last %{days} days (settings: up to %{max} topics). Only opening posts are analyzed; replies are ignored."
+      error_loading: "Failed to load insights."
+      refreshing: "Refreshing..."
+      refresh: "Refresh insights"
+      analysis_running: "Analysis running. This may take a minute; the page will update when complete."
+      job:
+        enqueued: "Community insights refresh has been queued. The page will update in a minute or two, or refresh manually."
+      view_posts: "View %{count} posts"
+      related_posts: "Related posts"
+      related_topics: "Related topics"
+      pie_slice_tooltip: "%{label}: %{percent}%"
+      hide_posts: "Hide posts"
+  admin_js:
+    admin:
+      site_settings:
+        categories:
+          music_tribe_insights: "Music Tribe Insights"
+    music_tribe_insights:
+      job:
+        enqueued: "Community insights refresh has been queued. The page will update in a minute or two, or refresh manually."
+      dashboard:
+        title: "Community Insights"
+        description: "Recurring themes and report types from community posts (e.g. product issues, common questions)."
+      setup:
+        title: "How to enable Community Insights"
+        step1: "Enable the plugin in Admin → Plugins (find \"music-tribe-insights\" and turn it on)."
+        step2: "Turn on the setting: check \"Music tribe insights enabled\" in Site Settings."
+        step2_link: "Turn on the setting now"
+        step3: "If using Ember dev server (localhost:4200), start the Rails backend (e.g. bin/rails s) so API requests work."
+        step4: "Configure AWS (see README): set AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, and optionally AWS_REGION in .env. Then click \"Refresh insights\"."
+        url_label: "This page URL:"
+      report_type: "Report type"
+      count: "Topics"
+      summary: "Summary"
+      generated_at: "Generated"
+      refresh: "Refresh insights"
+      refreshing: "Refreshing..."
+      no_insights: "No insights yet. Click \"Refresh insights\" to analyze recent posts."
+      no_recurring_themes: "Analysis complete. No recurring themes met the threshold in recent posts. Try adjusting days/max posts in Settings, or run again later."
+      analysis_running: "Analysis running. This may take a minute; the page will update when complete."
+      data_source: "Based on %{count} posts from the last %{days} days (settings: up to %{max} posts). Data: public, non-deleted regular posts in default topics from your Discourse database."
+      data_source_ai_note: "Theme labels and \"Posts\" counts are from AI analysis; the number is how many of those posts the AI grouped into each theme (only post IDs that were in the analyzed set are counted)."
+      error_loading: "Failed to load insights."
+      error_loading_hint: "When using the Ember dev server (localhost:4200), the Rails server must be running so API requests are proxied. Run both with 'pnpm dev' or start Rails in another terminal (e.g. bin/rails s). Ensure the plugin is enabled in Admin → Plugins."
+      min_posts: "min posts"

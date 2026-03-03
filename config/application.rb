@@ -1,6 +1,15 @@
 # frozen_string_literal: true
 
 require File.expand_path("../boot", __FILE__)
+
+if %w[development test].include?(ENV["RAILS_ENV"].to_s)
+  begin
+    require "dotenv/load"
+  rescue LoadError
+    # dotenv-rails not installed (e.g. production bundle)
+  end
+end
+
 require "active_record/railtie"
 require "action_controller/railtie"
 require "action_view/railtie"

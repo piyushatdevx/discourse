@@ -80,6 +80,7 @@
 !/plugins/explore-tribes
 !/plugins/fantribe-social
 /plugins/*/auto_generated
+!/plugins/music-tribe-insights
 
 /spec/fixtures/plugins/my_plugin/auto_generated
 

@@ -159,7 +159,9 @@ module Discourse
         if timeout
           # will send a TERM after timeout
           # will send a KILL after timeout * 2
-          command = ["timeout", "-k", "#{timeout.to_f * 2}", timeout.to_s] + command
+          # macOS does not ship with GNU timeout; Homebrew coreutils provides gtimeout
+          timeout_cmd = (RUBY_PLATFORM.include?("darwin") ? "gtimeout" : "timeout")
+          command = [timeout_cmd, "-k", "#{timeout.to_f * 2}", timeout.to_s] + command
         end
 
         args = command
