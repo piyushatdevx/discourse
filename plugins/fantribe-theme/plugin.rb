@@ -440,15 +440,16 @@ after_initialize do
     return [] unless SiteSetting.fantribe_theme_enabled
     return [] if object.posts_count <= 1
 
-    # Get first 3 replies (posts after OP, sorted by creation)
+    # Filter the preloaded in-memory collection — avoids one SQL query per topic.
+    # posts + users are preloaded via register_topic_preloader_associations({ posts: :user })
+    # above. Chaining .where() on a CollectionProxy bypasses the cache and re-queries;
+    # Ruby-level filtering uses the loaded records directly.
     replies =
       object
         .posts
-        .where("post_number > 1")
-        .where(deleted_at: nil)
-        .order(:created_at)
-        .limit(3)
-        .includes(:user)
+        .reject { |p| p.post_number <= 1 || p.deleted_at.present? }
+        .sort_by(&:created_at)
+        .first(3)
 
     replies.map do |post|
       user = post.user
