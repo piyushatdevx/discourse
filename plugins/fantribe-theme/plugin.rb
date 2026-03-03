@@ -367,12 +367,16 @@ after_initialize do
 
   reloadable_patch { Guardian.prepend(FantribeTheme::GuardianTopicCloseExtension) }
 
-  # Enable topic excerpts for feed cards
+  # Enable topic excerpts for feed and discovery contexts.
+  # Scoped away from admin routes — admin topic lists return to core behaviour
+  # (include excerpt only when object.excerpt.present?), preventing unnecessary
+  # payload on pages that never render feed cards.
   module ::FantribeTheme
     module ListableTopicSerializerExtension
       def include_excerpt?
-        return true if SiteSetting.fantribe_theme_enabled
-        super
+        return super unless SiteSetting.fantribe_theme_enabled
+        return super if scope.request&.path&.start_with?("/admin")
+        true
       end
     end
   end
