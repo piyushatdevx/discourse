@@ -579,6 +579,31 @@ body.fantribe-theme:not(.admin-interface) {
     gap: 16px;
   }
 
+  .ft-user-posts__load-more {
+    display: flex;
+    justify-content: center;
+    padding: 24px 0 8px;
+  }
+
+  .ft-user-posts__load-more-btn {
+    padding: 10px 28px;
+    border: 1px solid var(--ft-border-color, var(--primary-low));
+    border-radius: 8px;
+    background: transparent;
+    color: var(--primary);
+    font-size: 0.9rem;
+    cursor: pointer;
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    &:hover:not(:disabled) {
+      background: var(--primary-low);
+    }
+  }
+
   .ft-user-posts__empty {
     display: flex;
     flex-direction: column;
