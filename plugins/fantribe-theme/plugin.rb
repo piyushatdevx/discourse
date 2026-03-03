@@ -368,9 +368,12 @@ after_initialize do
   # Add first onebox HTML to topic list serializer for link preview in feed cards
   add_to_serializer(:topic_list_item, :first_onebox_html) do
     next nil unless SiteSetting.fantribe_theme_enabled
-    next nil if object.first_post&.cooked.blank?
+    cooked = object.first_post&.cooked
+    next nil if cooked.blank?
+    # Fast-path: skip Nokogiri parse for posts with no onebox markup (~50% of posts)
+    next nil if cooked.exclude?("onebox") && cooked.exclude?("lazy-video")
 
-    doc = Nokogiri::HTML5.fragment(object.first_post.cooked)
+    doc = Nokogiri::HTML5.fragment(cooked)
     # Match standard oneboxes, YouTube embeds, and other video oneboxes
     onebox = doc.at_css("aside.onebox, div.youtube-onebox, div.onebox, div.lazy-video-container")
 
@@ -398,9 +401,11 @@ after_initialize do
 
   add_to_serializer(:search_topic_list_item, :first_onebox_html) do
     next nil unless SiteSetting.fantribe_theme_enabled
-    next nil if object.first_post&.cooked.blank?
+    cooked = object.first_post&.cooked
+    next nil if cooked.blank?
+    next nil if cooked.exclude?("onebox") && cooked.exclude?("lazy-video")
 
-    doc = Nokogiri::HTML5.fragment(object.first_post.cooked)
+    doc = Nokogiri::HTML5.fragment(cooked)
     onebox = doc.at_css("aside.onebox, div.youtube-onebox, div.onebox, div.lazy-video-container")
     next nil unless onebox
     onebox.to_html
@@ -539,6 +544,7 @@ after_initialize do
     add_to_serializer(serializer_name, :first_onebox_html) do
       next nil unless SiteSetting.fantribe_theme_enabled
       next nil if cooked.blank?
+      next nil if cooked.exclude?("onebox") && cooked.exclude?("lazy-video")
 
       doc = Nokogiri::HTML5.fragment(cooked)
       onebox = doc.at_css("aside.onebox, div.youtube-onebox, div.onebox, div.lazy-video-container")
