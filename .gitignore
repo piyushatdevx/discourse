@@ -81,6 +81,7 @@
 !/plugins/fantribe-social
 !/plugins/fantribe-otp-activation
 /plugins/*/auto_generated
+!/plugins/music-tribe-insights
 
 /spec/fixtures/plugins/my_plugin/auto_generated
 

@@ -1,0 +1,8 @@
+en:
+  music_tribe_insights:
+    post_fallback: "Post %{id}"
+    job:
+      enqueued: "Community insights refresh has been queued."
+    errors:
+      bedrock_disabled: "AWS Bedrock is not configured. Set AWS credentials and region."
+      bedrock_failed: "Insights generation failed: %{message}"

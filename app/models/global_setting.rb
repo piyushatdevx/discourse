@@ -228,6 +228,9 @@ class GlobalSetting
         c[:db] = 1 if Rails.env.test?
         c[:id] = nil if redis_skip_client_commands
         c[:ssl] = true if redis_use_ssl
+        if respond_to?(:redis_timeout) && redis_timeout.present? && redis_timeout.to_i.positive?
+          c[:timeout] = redis_timeout.to_i
+        end
 
         c.freeze
       end

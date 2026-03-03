@@ -64,6 +64,7 @@ gem "fastimage"
 gem "aws-sdk-s3", require: false
 gem "aws-sdk-sns", require: false
 gem "aws-sdk-mediaconvert", require: false
+gem "aws-sdk-bedrockruntime", require: false
 gem "excon"
 gem "unf", require: false
 
@@ -157,6 +158,7 @@ group :test, :development do
 end
 
 group :development do
+  gem "dotenv-rails"
   gem "ruby-prof", require: false, platform: :mri
   gem "bullet", require: !!ENV["BULLET"]
   gem "better_errors", platform: :mri, require: !!ENV["BETTER_ERRORS"]

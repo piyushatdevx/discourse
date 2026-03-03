@@ -93,6 +93,10 @@ export default {
     "route:gamification-leaderboard.index",
   "controller:admin-dashboard-sentiment":
     "controller:admin.dashboard-sentiment",
+  "controller:admin-dashboard-community-insights":
+    "controller:admin.dashboard-community-insights",
+  "route:admin-dashboard-community-insights":
+    "route:admin.dashboard-community-insights",
   "controller:admin-groups-settings": "controller:admin-groups.settings",
   "route:admin-groups-settings": "route:admin-groups.settings",
   "controller:admin-groups-index": "controller:admin-groups.index",

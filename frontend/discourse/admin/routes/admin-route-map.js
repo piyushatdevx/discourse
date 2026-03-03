@@ -14,6 +14,10 @@ export default function () {
         path: "/dashboard/reports",
         resetNamespace: true,
       });
+      this.route("admin.dashboardCommunityInsights", {
+        path: "/dashboard/community_insights",
+        resetNamespace: true,
+      });
     });
 
     this.route(

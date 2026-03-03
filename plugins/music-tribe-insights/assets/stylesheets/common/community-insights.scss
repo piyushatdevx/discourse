@@ -1,0 +1,413 @@
+.community-insights.section {
+  .community-insights-setup {
+    margin: 1em 0;
+
+    ol {
+      margin: 0.5em 0 0 1.2em;
+    }
+
+    .setup-link {
+      font-weight: 600;
+      margin-left: 0.25em;
+    }
+  }
+
+  .community-insights-url {
+    margin-top: 0.75em;
+
+    code {
+      font-size: 0.9em;
+    }
+  }
+
+  .section-description {
+    color: var(--primary-medium);
+    margin-bottom: 1em;
+  }
+
+  .section-actions {
+    margin-bottom: 1.5em;
+  }
+
+  .insights-loading {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+    padding: 1em 0;
+  }
+
+  .insights-generated {
+    font-size: 0.9em;
+    color: var(--primary-medium);
+    margin-bottom: 0.5em;
+  }
+
+  .insights-data-source {
+    font-size: 0.85em;
+    color: var(--primary-medium);
+    margin-bottom: 0.25em;
+    max-width: 42em;
+  }
+
+  .insights-data-source-ai-note {
+    margin-bottom: 1em;
+    font-style: italic;
+  }
+
+  .report-types-table {
+    .report-type-label {
+      font-weight: 500;
+    }
+
+    .report-type-count {
+      white-space: nowrap;
+    }
+
+    .report-type-summary {
+      max-width: 40em;
+    }
+  }
+
+  .insights-empty {
+    padding: 2em;
+    text-align: center;
+    color: var(--primary-medium);
+  }
+
+  .community-insights-error-detail {
+    margin-top: 0.5em;
+    font-weight: 500;
+  }
+
+  .community-insights-error-hint {
+    margin-top: 0.5em;
+    font-size: 0.9em;
+    opacity: 0.9;
+  }
+}
+
+// ── User profile nav tab (admin only) ─────────────────────────────────────
+// Uses .ft-user-nav__tab from fantribe-theme for same look as Posts/Bookmarks
+// (color, hover, font, active state). No extra styles needed here.
+
+// ── User activity Community Insights page (red theme + chart) ───────────────
+// Uses .fantribe-feed-card > .fantribe-feed-card__content only (same width as Posts/Bookmarks).
+// No extra inner wrapper; card styling and width from fantribe-theme.
+.user-content:has(> .fantribe-feed-card.music-tribe-insights-card) {
+  padding: 0;
+  margin: 0;
+  background: transparent;
+  border: none;
+  max-width: none;
+}
+
+.music-tribe-insights-card .fantribe-feed-card__content {
+  --mti-primary: var(--primary, #c0392b);
+  --mti-primary-low: var(--primary-low, #f3e8e8);
+  --mti-primary-medium: var(--primary-medium, #b03022);
+  display: flex;
+  flex-direction: column;
+  gap: var(--ft-feed-card-content-gap, 12px);
+  padding: 24px;
+}
+
+.music-tribe-insights-card {
+  margin: 32px 0;
+}
+
+.music-tribe-insights-page__header {
+  margin: 0;
+  padding: 0 0 0.25em 0;
+}
+
+.music-tribe-insights-page__actions {
+  display: none; // TODO: Remove this once we have a way to show the actions
+  margin-top: 1em;
+  margin-bottom: 0.25em;
+}
+
+// Keep primary buttons in this card on theme red (no blue hover)
+.music-tribe-insights-card .btn-primary,
+.music-tribe-insights-card .music-tribe-insights-page__view-posts-btn {
+  background: var(--ft-primary);
+  color: var(--ft-white);
+  border-radius: var(--ft-radius-pill) !important;
+  font-weight: 400 !important;
+  font-family: var(--ft-font-family) !important;
+
+  &:hover:not(:disabled),
+  &:focus:not(:disabled) {
+    background: var(--ft-vibrant-red-hover, var(--primary-hover, #e6143d));
+    color: var(--ft-white);
+    cursor: pointer !important;
+  }
+
+  &:active:not(:disabled) {
+    background: var(--ft-primary-active, var(--primary-active, #cc1236));
+    border-color: var(--ft-primary-active, var(--primary-active, #cc1236));
+    color: var(--ft-white);
+  }
+}
+
+.music-tribe-insights-page__error-detail {
+  display: block;
+  margin-top: 0.35em;
+  font-weight: 500;
+}
+
+.music-tribe-insights-page__title {
+  font-size: 1.4rem;
+  font-weight: 500;
+  margin: 0 0 0.25em 0;
+}
+
+.music-tribe-insights-page__description {
+  font-size: 0.95rem;
+  color: var(--primary-medium, #666);
+  margin: 0;
+}
+
+.music-tribe-insights-page__meta,
+.music-tribe-insights-page__data-source {
+  font-size: 0.9em;
+  color: var(--primary-medium, #666);
+  margin: 0;
+  padding: 0 0.25em 0 0;
+}
+
+.music-tribe-insights-page__error {
+  margin: 1em 0;
+  padding: 0.5em 1em;
+}
+
+.music-tribe-insights-page__loading {
+  display: flex;
+  align-items: center;
+  gap: 0.75em;
+  padding: 2em 0.5em;
+  color: var(--primary-medium, #666);
+}
+
+.music-tribe-insights-page__empty {
+  padding: 2em;
+  text-align: center;
+  color: var(--primary-medium, #666);
+  background: var(--primary-low, var(--ft-soft-stone, #f5f3f0));
+  border-radius: 8px;
+}
+
+.music-tribe-insights-page__chart {
+  margin: 0.5em 0 0 0;
+  padding: 1.5em;
+}
+
+.music-tribe-insights-page__chart-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--primary-high, #2c2c2c);
+  margin: 0 0 1em 0;
+}
+
+// Charts row: pie + vertical bars
+.music-tribe-insights-page__charts-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  align-items: flex-start;
+  margin-bottom: 1.5rem;
+}
+
+.music-tribe-insights-page__pie-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.music-tribe-insights-page__pie-container {
+  position: relative;
+  display: inline-block;
+}
+
+.music-tribe-insights-page__pie-tooltip {
+  position: fixed;
+  padding: 0.35rem 0.6rem;
+  background: var(--secondary, #333);
+  color: var(--primary-very-high, #fff);
+  border-radius: 6px;
+  font-size: 0.8rem;
+  white-space: nowrap;
+  pointer-events: none;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.15rem;
+  box-shadow: 0 2px 8px rgb(0 0 0 / 0.2);
+  transform: translate(0, 0);
+}
+
+.music-tribe-insights-page__pie-tooltip-label {
+  font-weight: 600;
+  max-width: 160px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.music-tribe-insights-page__pie-tooltip-percent {
+  font-weight: 700;
+  opacity: 0.95;
+}
+
+.music-tribe-insights-page__pie {
+  width: 180px;
+  height: 180px;
+  flex-shrink: 0;
+  display: block;
+}
+
+.music-tribe-insights-page__pie-legend {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-size: 0.8rem;
+  color: var(--primary-medium, #666);
+  max-width: 200px;
+}
+
+.music-tribe-insights-page__pie-legend-item {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.music-tribe-insights-page__vertical-bars {
+  display: flex;
+  align-items: flex-end;
+  gap: 0.75rem;
+  min-height: 160px;
+  flex: 1;
+  min-width: 200px;
+}
+
+.music-tribe-insights-page__vertical-bar-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+  flex: 1;
+  min-width: 0;
+}
+
+.music-tribe-insights-page__vertical-bar-wrap {
+  height: 120px;
+  width: 100%;
+  max-width: 48px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.music-tribe-insights-page__vertical-bar {
+  width: 100%;
+  max-width: 48px;
+  min-height: 8px;
+  background: #ff1744 !important;
+  background-color: #ff1744 !important;
+  border-radius: 6px 6px 0 0;
+  transition: height 0.4s ease;
+}
+
+.music-tribe-insights-page__vertical-bar-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--primary, var(--ft-primary, #ff1744));
+}
+
+.music-tribe-insights-page__vertical-bar-name {
+  font-size: 0.7rem;
+  color: var(--primary-medium, #666);
+  text-align: center;
+  line-height: 1.2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  line-clamp: 2;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+// Report list with view-posts
+.music-tribe-insights-page__report-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.music-tribe-insights-page__report-card {
+  padding: 1.2rem;
+  background: var(--ft-soft-stone);
+  border: 1px solid var(--ft-neutral-200);
+  border-radius: 10px;
+}
+
+.music-tribe-insights-page__report-card-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.music-tribe-insights-page__bar-name {
+  font-weight: 500;
+  color: var(--primary-high, #2c2c2c);
+}
+
+.music-tribe-insights-page__bar-count {
+  font-size: 0.9em;
+  color: var(--primary-medium, #666);
+  white-space: nowrap;
+}
+
+.music-tribe-insights-page__bar-summary {
+  font-size: 0.875em;
+  color: var(--primary-medium, #666);
+  margin: 0.35em 0 0.5em 0;
+  line-height: 1.4;
+}
+
+.music-tribe-insights-page__view-posts-btn {
+  margin-top: 0.5em;
+}
+
+.music-tribe-insights-page__related-posts {
+  margin-top: 0.75em;
+  padding-top: 0.75em;
+  border-top: 1px solid var(--primary-low-mid, var(--ft-neutral-200, #e8e6e3));
+}
+
+.music-tribe-insights-page__related-posts-label {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--primary-high, #2c2c2c);
+}
+
+.music-tribe-insights-page__post-links {
+  margin: 0.35em 0 0 0;
+  padding-left: 1.25rem;
+  font-size: 0.9rem;
+}
+
+.music-tribe-insights-page__post-links li {
+  margin: 0.2em 0;
+}
+
+.music-tribe-insights-page__post-link {
+  color: var(--primary, var(--ft-primary, #ff1744));
+  text-decoration: none;
+}
+
+.music-tribe-insights-page__post-link:hover {
+  text-decoration: underline;
+}
