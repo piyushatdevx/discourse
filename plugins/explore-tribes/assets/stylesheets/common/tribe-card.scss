@@ -33,9 +33,16 @@ body.fantribe-theme:not(.admin-interface) {
     height: 130px;
     overflow: hidden;
     background-color: var(--ft-gray-100);
-    background-size: cover;
-    background-position: center;
     border-radius: 12px 12px 0 0;
+  }
+
+  .ft-tribe-card__cover-img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
   }
 
   .ft-tribe-card__cover-overlay {

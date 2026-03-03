@@ -23,24 +23,23 @@ export default class FantribeTribeCard extends Component {
     return this.args.category;
   }
 
-  get coverStyle() {
+  get coverImageUrl() {
     const cat = this.category;
-    if (cat?.uploaded_background?.url) {
-      return htmlSafe(`background-image: url(${cat.uploaded_background.url})`);
+    return cat?.uploaded_background?.url || cat?.uploaded_logo?.url || null;
+  }
+
+  get coverStyle() {
+    if (this.coverImageUrl) {
+      return null;
     }
-    if (cat?.uploaded_logo?.url) {
-      return htmlSafe(`background-image: url(${cat.uploaded_logo.url})`);
-    }
+    const cat = this.category;
     return htmlSafe(
       `background: linear-gradient(135deg, #${cat?.color || "0088cc"} 0%, #${cat?.color || "0088cc"}99 100%)`
     );
   }
 
   get hasCoverImage() {
-    return !!(
-      this.category?.uploaded_background?.url ||
-      this.category?.uploaded_logo?.url
-    );
+    return !!this.coverImageUrl;
   }
 
   get memberCount() {
@@ -193,7 +192,13 @@ export default class FantribeTribeCard extends Component {
     <div class="ft-tribe-card" {{on "click" this.handleCardClick}}>
       {{! Cover Image }}
       <div class="ft-tribe-card__cover" style={{this.coverStyle}}>
-        {{#if this.hasCoverImage}}
+        {{#if this.coverImageUrl}}
+          <img
+            class="ft-tribe-card__cover-img"
+            src={{this.coverImageUrl}}
+            alt=""
+            loading="lazy"
+          />
           <div class="ft-tribe-card__cover-overlay"></div>
         {{/if}}
 
@@ -214,6 +219,7 @@ export default class FantribeTribeCard extends Component {
                 src={{@category.uploaded_logo.url}}
                 alt={{@category.name}}
                 class="ft-tribe-card__icon-img"
+                loading="lazy"
               />
             {{else if this.hasEmoji}}
               <span class="ft-tribe-card__icon-emoji">
@@ -270,6 +276,7 @@ export default class FantribeTribeCard extends Component {
                 class="ft-tribe-card__creator-avatar"
                 src={{this.creatorAvatarUrl}}
                 alt={{this.creatorName}}
+                loading="lazy"
               />
             {{else}}
               <div
