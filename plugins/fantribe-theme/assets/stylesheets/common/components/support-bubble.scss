@@ -1,0 +1,65 @@
+.ft-support-bubble {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--ft-primary);
+  color: var(--ft-white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgb(0 0 0 / 0.15);
+  transition: all 0.2s ease-in-out;
+  z-index: 1000;
+  animation: support-bubble-entrance 0.5s
+    cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+
+  .ft-icon {
+    width: 28px;
+    height: 28px;
+    color: var(--ft-white);
+  }
+
+  &:hover,
+  &:focus {
+    box-shadow: 0 6px 16px rgb(0 0 0 / 0.2);
+
+    /* Adding subtle scale for interactivity */
+    transform: translateY(-4px) scale(1.05);
+  }
+
+  &:active {
+    transform: translateY(0) scale(0.95);
+    box-shadow: 0 2px 8px rgb(0 0 0 / 0.15);
+  }
+}
+
+@keyframes support-bubble-entrance {
+  0% {
+    opacity: 0;
+    transform: translateY(20px) scale(0.8);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Mobile adjustments */
+@media (width <= 767px) {
+  .ft-support-bubble {
+    /* Ensure it sits above mobile bottom nav */
+    bottom: 80px;
+    right: 16px;
+    width: 48px;
+    height: 48px;
+
+    .ft-icon {
+      width: 24px;
+      height: 24px;
+    }
+  }
+}
