@@ -1,4 +1,4 @@
-import ftIcon from "../helpers/ft-icon";
+import getURL from "discourse/lib/get-url";
 
 <template>
   <a
@@ -9,6 +9,10 @@ import ftIcon from "../helpers/ft-icon";
     aria-label="Support"
     title="Support"
   >
-    {{ftIcon "question"}}
+    <img
+      class="ft-support-bubble__gif"
+      src={{getURL "/plugins/fantribe-theme/images/uli-greetings.gif"}}
+      alt="Support"
+    />
   </a>
 </template>
