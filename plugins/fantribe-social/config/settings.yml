@@ -1,4 +1,0 @@
-plugins:
-  fantribe_social_enabled:
-    default: true
-    client: true
