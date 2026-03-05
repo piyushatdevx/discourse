@@ -1087,6 +1087,11 @@ class UsersController < ApplicationController
       end
     end
 
+    if session[SessionController::ACTIVATE_USER_KEY].blank? &&
+         server_session["user_created_message"].blank?
+      return redirect_to(path("/"))
+    end
+
     @custom_body_class = "static-account-created"
     @message = server_session["user_created_message"] || I18n.t("activation.missing_session")
     @account_created = { message: @message, show_controls: false }
