@@ -330,9 +330,6 @@ export default class FantribeTribesPanel extends Component {
                 @{{this.currentUser.username}}
               </span>
             </span>
-            <span class="fantribe-sidebar-nav__user-menu">
-              {{ftIcon "more-vertical" size=20}}
-            </span>
           </span>
         </button>
       {{/if}}

@@ -496,19 +496,6 @@
       font-size: 14px;
     }
   }
-
-  // Figma 444-12268: vertical ellipsis (three dots) — far right, dark grey, vertically centered with avatar
-  &__user-menu {
-    flex-shrink: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--ft-gray-500);
-
-    .ft-icon {
-      color: currentcolor;
-    }
-  }
 }
 
 // Collapsed sidebar — Figma 448-16286: "ct" in place of logo; icon-only; selected = light pink bg + red icon
@@ -604,10 +591,6 @@
     &__user-avatar {
       width: 36px;
       height: 36px;
-    }
-
-    &__user-menu {
-      display: flex;
     }
   }
 }

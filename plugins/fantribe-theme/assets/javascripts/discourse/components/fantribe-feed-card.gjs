@@ -559,14 +559,20 @@ export default class FantribeFeedCard extends Component {
               <div class="fantribe-feed-card__comments-list">
                 {{#each this.firstComments as |comment|}}
                   <div class="fantribe-feed-card__comment">
-                    <div
-                      class="fantribe-feed-card__comment-avatar
-                        {{comment.gradientClass}}"
-                    >
-                      <span
-                        class="fantribe-feed-card__comment-initials"
-                      >{{comment.initials}}</span>
-                    </div>
+                    {{#if comment.user.avatar_template}}
+                      <div class="fantribe-feed-card__comment-avatar">
+                        {{avatar comment.user}}
+                      </div>
+                    {{else}}
+                      <div
+                        class="fantribe-feed-card__comment-avatar
+                          {{comment.gradientClass}}"
+                      >
+                        <span
+                          class="fantribe-feed-card__comment-initials"
+                        >{{comment.initials}}</span>
+                      </div>
+                    {{/if}}
                     <div class="fantribe-feed-card__comment-content">
                       <div class="fantribe-feed-card__comment-meta">
                         <span
