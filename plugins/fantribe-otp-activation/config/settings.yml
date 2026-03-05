@@ -1,0 +1,4 @@
+plugins:
+  fantribe_signup_otp_enabled:
+    default: true
+    client: false

@@ -16,6 +16,7 @@ export default class FtAccountCreatedPage extends Component {
   @tracked otpCode = "";
   @tracked isSubmitting = false;
   @tracked resendSuccess = false;
+  @tracked errorMessage = "";
 
   get isVisible() {
     return (
@@ -101,28 +102,54 @@ export default class FtAccountCreatedPage extends Component {
   }
 
   @action
-  submitCode(event) {
+  async submitCode(event) {
     event?.preventDefault();
     if (this.isDisabled) {
       return;
     }
+
     this.isSubmitting = true;
-    window.location.href = getURL(`/u/activate-account/${this.otpCode}`);
+    this.errorMessage = "";
+
+    try {
+      const result = await ajax("/u/confirm-signup-otp", {
+        type: "POST",
+        data: { email: this.email, code: this.otpCode },
+      });
+
+      if (result.needs_approval) {
+        window.location.href = getURL("/u/account-created");
+      } else {
+        window.location.href = result.redirect_to || getURL("/");
+      }
+    } catch (e) {
+      this.errorMessage =
+        e.jqXHR?.responseJSON?.errors?.[0] ||
+        "Verification failed. Please try again.";
+    } finally {
+      this.isSubmitting = false;
+    }
   }
 
   @action
   async resendCode(event) {
     event?.preventDefault();
-    if (!this.username) {
+    if (!this.email) {
       return;
     }
+
+    this.errorMessage = "";
+
     try {
-      await ajax(`/u/${this.username}/send_activation_email`, {
+      await ajax("/u/resend-signup-otp", {
         type: "POST",
+        data: { email: this.email },
       });
       this.resendSuccess = true;
-    } catch {
-      // silently ignore
+    } catch (e) {
+      this.errorMessage =
+        e.jqXHR?.responseJSON?.errors?.[0] ||
+        "Could not resend code. Please try again.";
     }
   }
 
@@ -159,6 +186,12 @@ export default class FtAccountCreatedPage extends Component {
                   email</p>
               {{/if}}
             </div>
+
+            {{#if this.errorMessage}}
+              <div class="fantribe-login-error">
+                {{this.errorMessage}}
+              </div>
+            {{/if}}
 
             <div class="ft-otp-group ft-account-created-otp">
               <label class="ft-otp-label">Verification code</label>
