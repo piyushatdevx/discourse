@@ -259,7 +259,6 @@ export default class FantribeTribesPanel extends Component {
               }}</span>
             {{#if (this.isActive item)}}
               <span class="fantribe-sidebar-nav__item-chevron">
-                {{ftIcon "chevron-right"}}
               </span>
             {{/if}}
             {{#let (this.getBadgeCount item) as |count|}}
@@ -329,9 +328,6 @@ export default class FantribeTribesPanel extends Component {
               <span class="fantribe-sidebar-nav__user-username">
                 @{{this.currentUser.username}}
               </span>
-            </span>
-            <span class="fantribe-sidebar-nav__user-menu">
-              {{ftIcon "more-vertical" size=20}}
             </span>
           </span>
         </button>

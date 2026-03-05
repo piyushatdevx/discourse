@@ -142,16 +142,6 @@ export default class FantribeExplorePage extends Component {
               </button>
             </div>
           </div>
-          {{#if this.isAdmin}}
-            <button
-              type="button"
-              class="ft-explore-create-btn"
-              {{on "click" this.openCreateModal}}
-            >
-              {{ftIcon "plus"}}
-              <span>Create Tribe</span>
-            </button>
-          {{/if}}
         </div>
 
         {{! Cards Container }}
