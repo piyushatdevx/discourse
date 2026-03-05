@@ -42,6 +42,7 @@
 }
 
 .dialog-content {
+  border-radius: var(--ft-radius-card);
   margin: auto;
   z-index: z("modal", "content");
   position: relative;

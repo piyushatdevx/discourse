@@ -400,9 +400,13 @@ body.fantribe-theme:not(.admin-interface) {
 
   // Button resets
   .btn {
-    border-radius: 6px;
+    border-radius: var(--ft-radius-small);
     font-weight: 500;
     transition: all 0.1s ease;
+  }
+
+  .btn:hover {
+    background-color: var(--ft-primary-hover);
   }
 
   .btn-small {
