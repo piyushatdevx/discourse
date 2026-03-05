@@ -8,6 +8,7 @@
 
 enabled_site_setting :fantribe_signup_otp_enabled
 
+require_relative "lib/fantribe_otp/engine"
 require_relative "lib/fantribe_otp/otp_store"
 require_relative "lib/fantribe_otp/email_activator_patch"
 
