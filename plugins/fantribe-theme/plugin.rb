@@ -239,6 +239,20 @@ after_initialize do
     SiteSetting.max_bookmarks_per_day = 0 if SiteSetting.max_bookmarks_per_day.nonzero?
   end
 
+  # Allow video uploads — FanTribe is a content platform; creators need to share
+  # video. Discourse's default authorized_extensions excludes all video formats.
+  # We append the common video types without touching formats already present.
+  # Also raise the attachment size cap to 512 MB to accommodate video files.
+  if SiteSetting.fantribe_theme_enabled
+    video_extensions = %w[mp4 mov webm avi mkv m4v 3gp]
+    current = SiteSetting.authorized_extensions.to_s.split("|")
+    missing = video_extensions.reject { |ext| current.include?(ext) }
+    SiteSetting.authorized_extensions = (current + missing).join("|") if missing.any?
+
+    # 512 MB — generous for long-form video; admins can lower via the UI.
+    SiteSetting.max_attachment_size_kb = 524_288 if SiteSetting.max_attachment_size_kb < 524_288
+  end
+
   # Enable tagging so posts can have tags
   if SiteSetting.fantribe_theme_enabled
     SiteSetting.tagging_enabled = true unless SiteSetting.tagging_enabled
