@@ -146,6 +146,12 @@ body.fantribe-theme.signup-page {
       outline: none;
     }
   }
+
+  // Language selector: asymmetric padding (flag left, arrow right) + tighter gap
+  &__btn--lang {
+    padding: 0 12px 0 16px;
+    gap: 6px;
+  }
 }
 
 // ==============================================
@@ -1350,10 +1356,10 @@ body.fantribe-theme.signup-page {
   }
 
   // ==============================================
-  // PROGRESS BAR
+  // PROGRESS BAR — hidden, Figma design has no progress indicator
   // ==============================================
   .signup-progress-bar {
-    margin-bottom: 8px;
+    display: none;
 
     &__segment {
       &.--active,
