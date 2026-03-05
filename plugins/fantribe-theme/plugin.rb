@@ -232,6 +232,13 @@ after_initialize do
     SiteSetting.max_likes_per_day = 500 if SiteSetting.max_likes_per_day < 500
   end
 
+  # Remove the daily bookmark cap — FanTribe encourages saving content and the
+  # Discourse default of 20 bookmarks/day is too restrictive for a social platform.
+  # 0 = unlimited. Only set if not already unlimited.
+  if SiteSetting.fantribe_theme_enabled
+    SiteSetting.max_bookmarks_per_day = 0 if SiteSetting.max_bookmarks_per_day.nonzero?
+  end
+
   # Enable tagging so posts can have tags
   if SiteSetting.fantribe_theme_enabled
     SiteSetting.tagging_enabled = true unless SiteSetting.tagging_enabled
