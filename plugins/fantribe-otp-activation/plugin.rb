@@ -9,34 +9,46 @@
 enabled_site_setting :fantribe_signup_otp_enabled
 
 require_relative "lib/fantribe_otp/otp_store"
+require_relative "lib/fantribe_otp/email_activator_patch"
 
 after_initialize do
-  # Patch EmailActivator#activate to intercept the signup flow.
+  # Why not add_to_class:
+  # add_to_class uses String#constantize → Object.const_get, which does NOT
+  # trigger Zeitwerk autoloading. EmailActivator lives in app/services/user_activator.rb
+  # which Zeitwerk hasn't lazy-loaded yet at after_initialize time in development,
+  # so constantize raises NameError.
   #
-  # When fantribe_signup_otp_enabled is ON:
-  #   - Creates the email_token record (still needed to confirm the account later)
-  #   - Stores the plaintext token in Redis alongside the OTP so we can call
-  #     EmailToken.confirm at verification time
-  #   - Enqueues SendSignupOtp instead of the default link email
+  # We use prepend instead:
+  # - require forces the file to load (no-op in production where eager-loading
+  #   has already done it)
+  # - prepend + super gives a clean fallback when the setting is disabled,
+  #   without duplicating the original activate code
+  # - In development, we re-apply the patch after each Zeitwerk reload so it
+  #   isn't lost when EmailActivator's class object is replaced
   #
-  # When OFF: falls back to the default Discourse activation link email.
-  #
-  # Failure mode: if Discourse renames EmailActivator in a future version this
-  # add_to_class call is silently ignored and the default link email is sent.
-  add_to_class("EmailActivator", "activate") do
-    email_token = user.email_tokens.create!(email: user.email, scope: EmailToken.scopes[:signup])
+  # Failure mode: if Discourse renames EmailActivator in a future version,
+  # the require raises LoadError and is rescued — the default link email is
+  # sent and no exception is raised.
+  service_file = Rails.root.join("app/services/user_activator.rb")
 
-    if SiteSetting.fantribe_signup_otp_enabled
-      Jobs.enqueue(
-        :send_signup_otp,
-        user_id: user.id,
-        email: user.email,
-        email_token: email_token.token,
-      )
-    else
-      EmailToken.enqueue_signup_email(email_token)
+  begin
+    require service_file.to_s
+  rescue LoadError
+    # user_activator.rb was renamed/moved in a future Discourse version.
+    # Fall back to the default activation link email silently.
+    next
+  end
+
+  EmailActivator.prepend(FantribeOtp::EmailActivatorPatch)
+
+  # In development, Zeitwerk destroys and recreates EmailActivator on each
+  # code reload. Re-apply the patch after each reload so it isn't lost.
+  if Rails.env.development?
+    ActiveSupport::Reloader.to_prepare do
+      require service_file.to_s
+      if EmailActivator.ancestors.exclude?(FantribeOtp::EmailActivatorPatch)
+        EmailActivator.prepend(FantribeOtp::EmailActivatorPatch)
+      end
     end
-
-    success_message
   end
 end
