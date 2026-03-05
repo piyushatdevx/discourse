@@ -90,7 +90,7 @@ body.fantribe-theme.signup-page {
   align-items: center;
   padding: 24px;
   z-index: 1000;
-  background: var(--ft-figma-page-bg);
+  background: transparent;
 
   &__logo {
     display: block;
@@ -112,23 +112,25 @@ body.fantribe-theme.signup-page {
     justify-content: center;
     gap: 8px;
     height: 40px;
-    min-width: 88px;
     padding: 0 16px;
     background: var(--ft-figma-input-bg);
     border: 1px solid var(--ft-figma-header-btn-border);
-    border-radius: var(--ft-figma-card-radius);
+    border-radius: 9999px;
     font-family: var(--ft-font-family);
-    font-size: 12px;
+    font-size: 14px;
     font-weight: 500;
-    line-height: 16px;
+    line-height: 1;
     color: var(--ft-figma-text-primary);
+    text-decoration: none;
     cursor: pointer;
+    position: relative;
     transition: all var(--ft-transition-fast);
 
     .d-icon {
-      width: 16px;
-      height: 16px;
-      color: var(--ft-figma-text-primary);
+      width: 15px;
+      height: 15px;
+      color: var(--ft-gray-500);
+      flex-shrink: 0;
     }
 
     &:hover {
@@ -140,17 +142,138 @@ body.fantribe-theme.signup-page {
       background: #eae8e5;
     }
 
-    &:focus,
+    &:focus-within,
     &:focus-visible {
       box-shadow: 0 0 0 3px rgb(255 26 71 / 0.3);
       outline: none;
     }
   }
 
-  // Language selector: asymmetric padding (flag left, arrow right) + tighter gap
+  // Language selector modifier — let the FtLangDropdown button inherit __btn
+  // (width is controlled by min-width on __btn, no override needed)
   &__btn--lang {
-    padding: 0 12px 0 16px;
     gap: 6px;
+  }
+}
+
+// ==============================================
+// FT LANGUAGE DROPDOWN (tribe-selector style)
+// ==============================================
+.ft-lang-dropdown {
+  position: relative;
+
+  // The trigger button inherits .fantribe-login-header__btn styles
+  // Additional overrides just for the lang trigger
+  .fantribe-login-header__btn--lang {
+    gap: 6px;
+    justify-content: flex-start;
+  }
+
+  &__flag {
+    font-size: 18px;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+
+  &__label {
+    flex: 1;
+    text-align: left;
+  }
+
+  &__chevron {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    transition: transform 0.2s ease;
+
+    .d-icon {
+      width: 14px;
+      height: 14px;
+      color: var(--ft-gray-500);
+    }
+
+    &--open {
+      transform: rotate(180deg);
+    }
+  }
+
+  // Dropdown panel — same card style as tribe selector
+  &__menu {
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 0;
+    min-width: 160px;
+    background: #fff;
+    border: 1px solid #e7e6e4;
+    border-radius: 12px;
+    box-shadow:
+      0 8px 24px rgb(0 0 0 / 0.1),
+      0 2px 8px rgb(0 0 0 / 0.06);
+    overflow: hidden;
+    z-index: 1100;
+    animation: ft-dropdown-in 0.15s ease-out forwards;
+  }
+
+  // Each language option row
+  &__option {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 10px 14px;
+    background: transparent;
+    border: none;
+    font-family: var(--ft-font-family);
+    font-size: 14px;
+    font-weight: 400;
+    color: #1a1a1a;
+    cursor: pointer;
+    text-align: left;
+    transition: background 0.15s ease;
+
+    &:hover {
+      background: #f5f3f0;
+    }
+
+    &--active {
+      background: rgb(255 26 71 / 0.06);
+      font-weight: 500;
+      color: var(--ft-primary);
+    }
+  }
+
+  &__option-flag {
+    font-size: 18px;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+
+  &__option-name {
+    flex: 1;
+  }
+
+  &__option-check {
+    display: flex;
+    align-items: center;
+    margin-left: auto;
+
+    .d-icon {
+      width: 14px;
+      height: 14px;
+      color: var(--ft-primary);
+    }
+  }
+}
+
+@keyframes ft-dropdown-in {
+  from {
+    opacity: 0;
+    transform: translateY(-6px) scale(0.97);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
   }
 }
 

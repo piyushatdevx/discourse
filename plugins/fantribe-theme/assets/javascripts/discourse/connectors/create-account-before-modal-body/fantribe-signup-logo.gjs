@@ -2,6 +2,7 @@ import Component from "@glimmer/component";
 import { service } from "@ember/service";
 import icon from "discourse/helpers/d-icon";
 import getURL from "discourse/lib/get-url";
+import FtLangDropdown from "../../components/ft-lang-dropdown";
 
 export default class FantribeSignupLogo extends Component {
   @service siteSettings;
@@ -19,7 +20,7 @@ export default class FantribeSignupLogo extends Component {
   }
 
   get helpUrl() {
-    return getURL("/faq");
+    return "https://support.empowertribe.com";
   }
 
   <template>
@@ -29,15 +30,13 @@ export default class FantribeSignupLogo extends Component {
           <img src={{this.logoUrl}} alt="FanTribe" />
         </a>
         <div class="fantribe-login-header__actions">
-          <button
-            type="button"
-            class="fantribe-login-header__btn fantribe-login-header__btn--lang"
+          <FtLangDropdown />
+          <a
+            href={{this.helpUrl}}
+            class="fantribe-login-header__btn"
+            target="_blank"
+            rel="noopener noreferrer"
           >
-            {{icon "globe"}}
-            <span>EN</span>
-            {{icon "caret-down"}}
-          </button>
-          <a href={{this.helpUrl}} class="fantribe-login-header__btn">
             {{icon "headset"}}
             <span>Help</span>
           </a>
