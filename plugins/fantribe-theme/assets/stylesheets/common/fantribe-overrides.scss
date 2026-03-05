@@ -414,7 +414,7 @@ body.fantribe-theme:not(.admin-interface) {
   input[type="text"],
   input[type="search"],
   select {
-    border-radius: 20px;
+    border-radius: var(--ft-radius-medium);
     background: rgb(221, 221, 221, 0.2);
     font-size: 14px;
 

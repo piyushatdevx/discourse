@@ -107,7 +107,7 @@ body.fantribe-theme:not(.admin-interface) {
       gap: 10px;
       width: 100%;
       padding: 12px 14px;
-      border-radius: 12px;
+      border-radius: var(--ft-radius-medium);
       border: 1.5px solid var(--ft-slate-200, #e2e8f0);
       background: var(--ft-slate-50, #f8fafc);
       color: var(--ft-slate-700, #374151);
@@ -345,7 +345,7 @@ body.fantribe-theme:not(.admin-interface) {
       padding: 16px;
       background: var(--ft-slate-50);
       border: 1px solid var(--ft-slate-200);
-      border-radius: 16px;
+      border-radius: var(--ft-radius-medium);
       font-family: var(--ft-font-family);
       font-size: var(--ft-font-base);
       line-height: var(--ft-line-height);
@@ -725,7 +725,7 @@ body.fantribe-theme:not(.admin-interface) {
     width: 100%;
     padding: 0 12px;
     border: 1.5px solid var(--ft-slate-200);
-    border-radius: 12px;
+    border-radius: var(--ft-radius-medium);
     background: var(--ft-slate-50);
     cursor: text;
     box-sizing: border-box;
