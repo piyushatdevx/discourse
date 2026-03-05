@@ -177,6 +177,7 @@ body.fantribe-theme.signup-page {
   font-size: 32px;
   font-weight: 600;
   line-height: 48px;
+  letter-spacing: -0.4492px;
   color: #1a1a1a;
   text-align: center;
   margin: 0;
@@ -456,7 +457,7 @@ body.fantribe-theme.signup-page {
     font-size: 14px;
     font-weight: 400;
     line-height: 21px;
-    color: #666;
+    color: #4a4a4a;
   }
 
   a {
@@ -843,12 +844,13 @@ body.fantribe-theme.signup-page {
 
   // Add title to signup form
   #login-form::before {
-    content: "Create Account";
+    content: "Sign Up";
     display: block;
     font-family: var(--ft-font-family);
     font-size: 32px;
     font-weight: 600;
     line-height: 48px;
+    letter-spacing: -0.4492px;
     color: #1a1a1a;
     text-align: center;
     margin-bottom: 24px;
@@ -865,6 +867,30 @@ body.fantribe-theme.signup-page {
     max-width: 396px; // Match login's .fantribe-login-form
     margin-top: 0;
     padding: 0;
+  }
+
+  // ==============================================
+  // FIELD ORDERING — match Figma: Full name → Email → Username → Password
+  // #login-form is flex column so `order` controls visual sequence
+  // ==============================================
+  .input-group.create-account__fullname {
+    order: 1;
+  }
+
+  .input-group.create-account-email {
+    order: 2;
+  }
+
+  .input-group.create-account__username {
+    order: 3;
+  }
+
+  .input-group.create-account__password {
+    order: 4;
+  }
+
+  .user-fields {
+    order: 5;
   }
 
   // ==============================================
@@ -1072,7 +1098,8 @@ body.fantribe-theme.signup-page {
   .signup-page-cta {
     width: 100%;
     max-width: 396px; // Match login's button section
-    margin-top: 24px;
+    // 40px gap from form to button — matching Figma card gap between sections
+    margin-top: 40px;
 
     &__disclaimer {
       font-family: var(--ft-font-family);
@@ -1082,11 +1109,12 @@ body.fantribe-theme.signup-page {
       margin-bottom: 16px;
     }
 
+    // Block layout so the full-width button and the inline "already have account"
+    // text + link can live on separate lines without flex-column stacking the
+    // span and button siblings onto separate rows.
     &__buttons {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      align-items: center;
+      display: block;
+      text-align: center;
     }
 
     // Primary signup button
@@ -1097,6 +1125,9 @@ body.fantribe-theme.signup-page {
       justify-content: center;
       width: 100%;
       height: 48px;
+
+      // 40px gap between button and "Already have an account?" footer row
+      margin-bottom: 40px;
       padding: 0 24px;
       font-family: var(--ft-font-family);
       font-size: 16px !important;
@@ -1134,7 +1165,7 @@ body.fantribe-theme.signup-page {
       }
     }
 
-    // "Already have account? Log in" - inline text with link
+    // "Already have an account?" — inline text next to the login link
     &__existing-account {
       display: inline;
       vertical-align: baseline;
@@ -1142,15 +1173,16 @@ body.fantribe-theme.signup-page {
       font-size: 14px;
       font-weight: 400;
       line-height: 21px;
-      color: #666;
-      margin-top: 16px;
+
+      // Figma: #4a4a4a (slightly darker than the previous #666)
+      color: #4a4a4a;
 
       &::before {
         display: none; // Remove separator line
       }
     }
 
-    // Login link (styled as inline link, not button)
+    // "Sign In" link — sits inline next to existing-account text
     &__login {
       display: inline !important;
       vertical-align: baseline;
@@ -1159,15 +1191,26 @@ body.fantribe-theme.signup-page {
       padding: 0 !important;
       margin-left: 6px;
       font-family: var(--ft-font-family);
-      font-size: 14px !important;
       font-weight: 600;
-      line-height: 21px;
+      line-height: 24px;
       color: var(--ft-figma-accent) !important;
       background: transparent !important;
       border: none !important;
       border-radius: 0 !important;
       cursor: pointer;
       text-decoration: none;
+
+      // Replace Discourse's "Log In" i18n text with "Sign In" to match Figma
+      .d-button-label {
+        font-size: 0;
+
+        &::after {
+          content: "Sign In";
+          font-size: 16px;
+          font-weight: 600;
+          line-height: 24px;
+        }
+      }
 
       &:hover {
         text-decoration: underline;
@@ -1389,6 +1432,7 @@ body.fantribe-theme.signup-page {
     #login-form::before {
       font-size: 24px;
       line-height: 32px;
+      letter-spacing: -0.4492px;
       margin-bottom: 16px;
     }
 
@@ -1409,11 +1453,12 @@ body.fantribe-theme.signup-page {
     }
 
     .signup-page-cta {
+      margin-top: 24px; // Tighter on mobile
+
       &__signup,
-      &__login,
-      .btn-primary,
-      .btn-flat {
+      .btn-primary {
         height: 44px;
+        margin-bottom: 24px; // Tighter gap on mobile
       }
     }
 
