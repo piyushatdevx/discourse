@@ -273,7 +273,8 @@ export default class FantribeLoginForm extends Component {
         {{! Sign up link — mirrors "Already have an account? Sign In" on signup page }}
         <div class="fantribe-signup-link">
           <span>Don't have an account?</span>
-          <a href={{this.signupUrl}}>Sign Up</a>
+          <a href={{this.signupUrl}} {{on "click" this.navigateToSignup}}>Sign
+            Up</a>
         </div>
       </div>
     </div>

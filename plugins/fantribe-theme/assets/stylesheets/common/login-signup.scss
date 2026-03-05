@@ -1538,6 +1538,203 @@ body.fantribe-theme.signup-page {
 }
 
 // ==============================================
+// ACCOUNT-CREATED / VERIFICATION CODE PAGE
+// ==============================================
+
+// Full-screen overlay that covers the default Discourse account-created content
+.ft-account-created-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+  background: var(--ft-figma-page-bg);
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+// Header within the overlay — same visual as .fantribe-login-header but flows in the layout
+.ft-account-created-header {
+  flex-shrink: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+// Center the card vertically in the remaining space
+.ft-account-created-center {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 24px 24px;
+  box-sizing: border-box;
+}
+
+// Card — same appearance as .fantribe-login-card
+.ft-account-created-card {
+  background: rgb(253 252 252 / 0.8);
+  border: 1px solid rgb(231 230 228 / 0.6);
+  border-radius: 10px;
+  box-shadow:
+    0 20px 25px rgb(0 0 0 / 0.1),
+    0 8px 10px rgb(0 0 0 / 0.1);
+  padding: 32px;
+  width: 100%;
+  max-width: 460px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  align-items: center;
+}
+
+// Title + subtitle
+.ft-account-created-heading {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: center;
+  text-align: center;
+  width: 100%;
+}
+
+.ft-account-created-title {
+  font-family: var(--ft-font-family);
+  font-size: 32px;
+  font-weight: 600;
+  line-height: normal;
+  letter-spacing: -0.4492px;
+  color: #1a1a1a;
+  margin: 0;
+}
+
+.ft-account-created-subtitle {
+  font-family: var(--ft-font-family);
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px;
+  color: #666;
+  margin: 0;
+}
+
+// OTP input group
+.ft-otp-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  max-width: 396px;
+}
+
+.ft-otp-label {
+  font-family: var(--ft-font-family);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 21px;
+  color: #1a1a1a;
+}
+
+// Row of 6 digit boxes
+.ft-otp-inputs {
+  display: flex;
+  gap: 8px;
+  width: 100%;
+}
+
+.ft-otp-input {
+  flex: 1;
+  min-width: 0;
+  height: 48px;
+  padding: 0 8px;
+  font-family: var(--ft-font-family);
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px;
+  color: #666;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  text-align: center;
+  outline: none;
+  box-sizing: border-box;
+  transition:
+    border-color var(--ft-transition-fast),
+    box-shadow var(--ft-transition-fast);
+
+  &:hover:not(:focus) {
+    border-color: #bbb;
+  }
+
+  &:focus {
+    border-color: var(--ft-figma-accent);
+    box-shadow: 0 0 0 2px rgb(255 23 68 / 0.15);
+  }
+}
+
+// Actions: Next button + resend link
+.ft-account-created-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: center;
+  width: 100%;
+  max-width: 396px;
+
+  .fantribe-btn-primary {
+    margin-top: 0; // Override the default 24px top margin
+  }
+}
+
+.ft-account-created-resend {
+  font-family: var(--ft-font-family);
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 24px;
+  color: #ff1744;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  text-align: center;
+  padding: 0;
+
+  &:hover {
+    text-decoration: underline;
+  }
+
+  &:focus,
+  &:focus-visible {
+    outline: none;
+  }
+}
+
+// Mobile
+@media (width <= 767px) {
+  .ft-account-created-header {
+    padding: 16px;
+  }
+
+  .ft-account-created-center {
+    padding: 0 16px 16px;
+  }
+
+  .ft-account-created-card {
+    padding: 24px;
+    gap: 24px;
+  }
+
+  .ft-account-created-title {
+    font-size: 24px;
+  }
+
+  .ft-otp-input {
+    height: 44px;
+  }
+}
+
+// ==============================================
 // SIGNUP PAGE MOBILE RESPONSIVE
 // ==============================================
 @media (width <= 767px) {
