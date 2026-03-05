@@ -47,13 +47,28 @@ function initializeFantribe(api) {
           url.startsWith("/u/") && url.includes("/activity/ft-settings");
         document.body.classList.toggle("ft-on-settings-hub", isSettingsHub);
 
+        // Discourse uses /u/ as a prefix for many non-profile paths.
+        // Exclude them so we don't treat them as usernames.
+        const DISCOURSE_RESERVED_U_PATHS = new Set([
+          "account-created",
+          "activate-account",
+          "password-reset",
+          "confirm-new-email",
+          "confirm-old-email",
+          "email-login",
+        ]);
+
+        const usernameSegment = url.match(/^\/u\/([^/]+)/)?.[1];
+        const isReservedPath = DISCOURSE_RESERVED_U_PATHS.has(usernameSegment);
+
         const isProfileDefault =
-          /^\/u\/[^/]+\/?$/.test(url) ||
-          /^\/u\/[^/]+\/summary\/?$/.test(url) ||
-          /^\/u\/[^/]+\/activity\/?$/.test(url);
+          !isReservedPath &&
+          (/^\/u\/[^/]+\/?$/.test(url) ||
+            /^\/u\/[^/]+\/summary\/?$/.test(url) ||
+            /^\/u\/[^/]+\/activity\/?$/.test(url));
 
         if (isProfileDefault) {
-          const username = url.match(/^\/u\/([^/]+)/)?.[1];
+          const username = usernameSegment;
           if (username) {
             DiscourseURL.routeTo(`/u/${username}/activity/ft-posts`);
           }
