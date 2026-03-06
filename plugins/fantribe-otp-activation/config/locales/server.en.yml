@@ -1,0 +1,23 @@
+en:
+  fantribe_otp_mailer:
+    signup_otp:
+      subject_template: "Verify your %{site_title} account"
+      text_body_template: |
+        Your verification code is:
+
+        **%{code}**
+
+        This code expires in 10 minutes. Do not share it with anyone.
+
+        If you didn't create an account on %{site_title}, you can safely ignore this email.
+
+  fantribe_otp:
+    errors:
+      invalid_code: "Invalid verification code. Please check and try again."
+      expired: "Your verification code has expired. Please request a new one."
+      locked: "Too many incorrect attempts. Please request a new code."
+      resend_limit: "Too many resend requests. Please wait a few minutes before trying again."
+      already_confirmed: "This account has already been verified."
+
+  site_settings:
+    fantribe_signup_otp_enabled: "Replace Discourse email activation link with a 6-digit OTP (FanTribe)"

@@ -7,12 +7,12 @@ import ForgotPassword from "discourse/components/modal/forgot-password";
 import icon from "discourse/helpers/d-icon";
 import { ajax } from "discourse/lib/ajax";
 import getURL from "discourse/lib/get-url";
+import DiscourseURL from "discourse/lib/url";
 import { findAll } from "discourse/models/login-method";
 
 export default class FantribeLoginForm extends Component {
   @service login;
   @service modal;
-  @service router;
 
   @tracked loginName = "";
   @tracked loginPassword = "";
@@ -28,7 +28,7 @@ export default class FantribeLoginForm extends Component {
   }
 
   get signupUrl() {
-    return getURL("/signup");
+    return "#";
   }
 
   @action
@@ -140,7 +140,7 @@ export default class FantribeLoginForm extends Component {
   @action
   navigateToSignup(event) {
     event?.preventDefault();
-    this.router.transitionTo("signup");
+    DiscourseURL.routeTo(getURL("/signup"));
   }
 
   <template>
@@ -270,6 +270,12 @@ export default class FantribeLoginForm extends Component {
           </button>
         {{/if}}
 
+        {{! Sign up link — mirrors "Already have an account? Sign In" on signup page }}
+        <div class="fantribe-signup-link">
+          <span>Don't have an account?</span>
+          <a href={{this.signupUrl}} {{on "click" this.navigateToSignup}}>Sign
+            Up</a>
+        </div>
       </div>
     </div>
   </template>

@@ -13,6 +13,7 @@ import { ajax } from "discourse/lib/ajax";
 import { extractError, popupAjaxError } from "discourse/lib/ajax-error";
 import { not, or } from "discourse/truth-helpers";
 import ftIcon from "../helpers/ft-icon";
+import FantribeMediaVideo from "./fantribe-media-video";
 import FantribePostMenu from "./fantribe-post-menu";
 import FantribePostMoreTopics from "./fantribe-post-more-topics";
 
@@ -168,6 +169,29 @@ export default class FantribePostFullPage extends Component {
     return !!this.firstOneboxHtml;
   }
 
+  get firstVideo() {
+    const cooked = this.firstPost?.cooked;
+    if (!cooked) {
+      return null;
+    }
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(cooked, "text/html");
+    const container = doc.querySelector(
+      "div.video-placeholder-container[data-video-src]"
+    );
+    if (!container) {
+      return null;
+    }
+    return {
+      video_url: container.getAttribute("data-video-src"),
+      thumbnail_url: container.getAttribute("data-thumbnail-src"),
+    };
+  }
+
+  get hasVideo() {
+    return !!this.firstVideo?.video_url;
+  }
+
   get currentImage() {
     return this.images[this.currentImageIndex] || null;
   }
@@ -229,6 +253,9 @@ export default class FantribePostFullPage extends Component {
     const doc = parser.parseFromString(cooked, "text/html");
     doc.querySelectorAll(".lightbox-wrapper").forEach((el) => el.remove());
     doc.querySelectorAll(ONEBOX_SELECTOR).forEach((el) => el.remove());
+    doc
+      .querySelectorAll("div.video-placeholder-container")
+      .forEach((el) => el.remove());
     doc
       .querySelectorAll("img:not(.emoji)")
       .forEach((img) => img.parentElement?.remove?.() || img.remove());
@@ -799,7 +826,12 @@ export default class FantribePostFullPage extends Component {
                 {{! LEFT COLUMN: Image + Gear + Reactions + Stats (or gear + reactions only when no image) }}
                 <div class="ft-full-post__left-col">
                   <div class="ft-full-post__left-top">
-                    {{#if this.hasOnebox}}
+                    {{#if this.hasVideo}}
+                      <FantribeMediaVideo
+                        @videoUrl={{this.firstVideo.video_url}}
+                        @thumbnailUrl={{this.firstVideo.thumbnail_url}}
+                      />
+                    {{else if this.hasOnebox}}
                       <div class="ft-full-post__onebox">
                         <DecoratedHtml @html={{this.firstOneboxHtml}} />
                       </div>
@@ -892,7 +924,7 @@ export default class FantribePostFullPage extends Component {
                 </div>
 
                 {{! RIGHT COLUMN: Comments (hidden when no media; comments move to no-image block below) }}
-                {{#if (or this.hasImages this.hasOnebox)}}
+                {{#if (or this.hasVideo this.hasImages this.hasOnebox)}}
                   <div class="ft-full-post__right-col">
                     <div class="ft-full-post__comments-inner">
                       <span class="ft-full-post__comments-label">Comments</span>
@@ -966,7 +998,7 @@ export default class FantribePostFullPage extends Component {
               </div>
 
               {{! NO MEDIA: comments section full width below (Figma node 785-3194) }}
-              {{#unless (or this.hasImages this.hasOnebox)}}
+              {{#unless (or this.hasVideo this.hasImages this.hasOnebox)}}
                 <div
                   class="ft-full-post__comments-block ft-full-post__comments-block--no-image"
                 >

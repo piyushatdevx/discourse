@@ -214,11 +214,11 @@ body.fantribe-theme:not(.admin-interface) {
 
       // Bookmark/Save hover: mint
       &--bookmark:hover {
-        color: var(--ft-mint);
+        color: var(--ft-vibrant-red);
       }
 
       &--bookmark.fantribe-engagement__action--active {
-        color: var(--ft-mint);
+        color: var(--ft-vibrant-red);
       }
 
       // Closed (comments turned off) — muted, no hover

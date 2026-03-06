@@ -232,6 +232,27 @@ after_initialize do
     SiteSetting.max_likes_per_day = 500 if SiteSetting.max_likes_per_day < 500
   end
 
+  # Remove the daily bookmark cap — FanTribe encourages saving content and the
+  # Discourse default of 20 bookmarks/day is too restrictive for a social platform.
+  # 0 = unlimited. Only set if not already unlimited.
+  if SiteSetting.fantribe_theme_enabled
+    SiteSetting.max_bookmarks_per_day = 0 if SiteSetting.max_bookmarks_per_day.nonzero?
+  end
+
+  # Allow video uploads — FanTribe is a content platform; creators need to share
+  # video. Discourse's default authorized_extensions excludes all video formats.
+  # We append the common video types without touching formats already present.
+  # Also raise the attachment size cap to 512 MB to accommodate video files.
+  if SiteSetting.fantribe_theme_enabled
+    video_extensions = %w[mp4 mov webm avi mkv m4v 3gp]
+    current = SiteSetting.authorized_extensions.to_s.split("|")
+    missing = video_extensions.reject { |ext| current.include?(ext) }
+    SiteSetting.authorized_extensions = (current + missing).join("|") if missing.any?
+
+    # 512 MB — generous for long-form video; admins can lower via the UI.
+    SiteSetting.max_attachment_size_kb = 524_288 if SiteSetting.max_attachment_size_kb < 524_288
+  end
+
   # Enable tagging so posts can have tags
   if SiteSetting.fantribe_theme_enabled
     SiteSetting.tagging_enabled = true unless SiteSetting.tagging_enabled
@@ -274,6 +295,21 @@ after_initialize do
     if ENV["FACEBOOK_APP_SECRET"].present?
       SiteSetting.facebook_app_secret = ENV["FACEBOOK_APP_SECRET"]
     end
+  end
+
+  # Enable video uploads when fantribe theme is enabled
+  if SiteSetting.fantribe_theme_enabled
+    video_extensions = %w[mp4 mov webm ogv m4v 3gp avi mpeg]
+    current_extensions = SiteSetting.authorized_extensions.to_s.split("|").map(&:strip)
+
+    missing_extensions = video_extensions - current_extensions
+    if missing_extensions.any?
+      new_extensions = (current_extensions + missing_extensions).uniq.join("|")
+      SiteSetting.authorized_extensions = new_extensions
+    end
+
+    # Enable video thumbnails if not already enabled
+    SiteSetting.video_thumbnails_enabled = true unless SiteSetting.video_thumbnails_enabled
   end
 
   # Remove the reaction undo time window so users can change/remove reactions
@@ -442,6 +478,22 @@ after_initialize do
     onebox.to_html
   end
 
+  # Add first video data to topic list serializer for video player in feed cards
+  add_to_serializer(:topic_list_item, :first_video) do
+    next nil unless SiteSetting.fantribe_theme_enabled
+    cooked = object.first_post&.cooked
+    next nil if cooked.blank?
+    next nil if cooked.exclude?("video-placeholder-container")
+
+    doc = Nokogiri::HTML5.fragment(cooked)
+    container = doc.at_css("div.video-placeholder-container[data-video-src]")
+    next nil unless container
+
+    { video_url: container["data-video-src"], thumbnail_url: container["data-thumbnail-src"] }
+  end
+
+  add_to_serializer(:topic_list_item, :include_first_video?) { SiteSetting.fantribe_theme_enabled }
+
   # Mirror image_urls onto search results so tribe page search shows images
   add_to_serializer(:search_topic_list_item, :image_urls) do
     next [] unless SiteSetting.fantribe_theme_enabled
@@ -472,6 +524,23 @@ after_initialize do
   end
 
   add_to_serializer(:search_topic_list_item, :include_first_onebox_html?) do
+    SiteSetting.fantribe_theme_enabled
+  end
+
+  add_to_serializer(:search_topic_list_item, :first_video) do
+    next nil unless SiteSetting.fantribe_theme_enabled
+    cooked = object.first_post&.cooked
+    next nil if cooked.blank?
+    next nil if cooked.exclude?("video-placeholder-container")
+
+    doc = Nokogiri::HTML5.fragment(cooked)
+    container = doc.at_css("div.video-placeholder-container[data-video-src]")
+    next nil unless container
+
+    { video_url: container["data-video-src"], thumbnail_url: container["data-thumbnail-src"] }
+  end
+
+  add_to_serializer(:search_topic_list_item, :include_first_video?) do
     SiteSetting.fantribe_theme_enabled
   end
 
