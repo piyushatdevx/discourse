@@ -127,4 +127,176 @@ body.fantribe-theme:not(.admin-interface) {
       object-fit: contain;
     }
   }
+
+  // ==========================================
+  // VIDEO PLAYER — Custom controls with thumbnail preview
+  // ==========================================
+  .fantribe-media-video {
+    position: relative;
+    border-radius: 16px;
+    overflow: hidden;
+    background: var(--ft-slate-100);
+    aspect-ratio: 16 / 9;
+    max-height: 500px;
+
+    &--fullscreen {
+      max-height: none;
+      border-radius: 0;
+    }
+  }
+
+  .fantribe-media-video__thumbnail-wrapper {
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
+
+  .fantribe-media-video__thumbnail {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .fantribe-media-video__placeholder {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      135deg,
+      var(--ft-slate-200) 0%,
+      var(--ft-slate-300) 100%
+    );
+  }
+
+  .fantribe-media-video__play-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgb(0, 0, 0, 0.3);
+    border: none;
+    cursor: pointer;
+    transition: background 150ms ease;
+
+    &:hover {
+      background: rgb(0, 0, 0, 0.4);
+
+      .fantribe-media-video__play-btn {
+        transform: scale(1.1);
+      }
+    }
+  }
+
+  .fantribe-media-video__play-btn {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: rgb(255, 255, 255, 0.9);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgb(0, 0, 0, 0.3);
+    transition:
+      transform 150ms ease,
+      background 150ms ease;
+
+    svg {
+      color: var(--ft-slate-900);
+      margin-left: 4px; // Optical centering for play icon
+    }
+
+    &:hover {
+      background: white;
+    }
+  }
+
+  // Video player state
+  .fantribe-media-video__player {
+    position: relative;
+    width: 100%;
+    height: 100%;
+
+    video {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      background: black;
+      cursor: pointer;
+    }
+  }
+
+  // Custom controls overlay
+  .fantribe-media-video__controls {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    background: linear-gradient(transparent, rgb(0, 0, 0, 0.7));
+    transition: opacity 150ms ease;
+
+    &--hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+  }
+
+  .fantribe-media-video__control-btn {
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.9;
+    transition: opacity 150ms ease;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+
+  .fantribe-media-video__progress {
+    flex: 1;
+    height: 4px;
+    background: rgb(255, 255, 255, 0.3);
+    border-radius: 2px;
+    cursor: pointer;
+    position: relative;
+    border: none;
+    padding: 0;
+
+    &:hover {
+      height: 6px;
+
+      .fantribe-media-video__progress-bar {
+        height: 6px;
+      }
+    }
+  }
+
+  .fantribe-media-video__progress-bar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 4px;
+    background: var(--ft-primary);
+    border-radius: 2px;
+    transition:
+      width 100ms linear,
+      height 100ms ease;
+  }
+
+  .fantribe-media-video__time {
+    color: white;
+    font-size: 12px;
+    font-weight: 500;
+    min-width: 90px;
+    text-align: center;
+  }
 }

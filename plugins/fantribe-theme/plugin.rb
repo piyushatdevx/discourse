@@ -276,6 +276,21 @@ after_initialize do
     end
   end
 
+  # Enable video uploads when fantribe theme is enabled
+  if SiteSetting.fantribe_theme_enabled
+    video_extensions = %w[mp4 mov webm ogv m4v 3gp avi mpeg]
+    current_extensions = SiteSetting.authorized_extensions.to_s.split("|").map(&:strip)
+
+    missing_extensions = video_extensions - current_extensions
+    if missing_extensions.any?
+      new_extensions = (current_extensions + missing_extensions).uniq.join("|")
+      SiteSetting.authorized_extensions = new_extensions
+    end
+
+    # Enable video thumbnails if not already enabled
+    SiteSetting.video_thumbnails_enabled = true unless SiteSetting.video_thumbnails_enabled
+  end
+
   # Remove the reaction undo time window so users can change/remove reactions
   # at any time. Discourse core enforces post_undo_action_window_mins (default
   # 10 min) on both custom emoji reactions (via ReactionUser#can_undo?) and
@@ -442,6 +457,22 @@ after_initialize do
     onebox.to_html
   end
 
+  # Add first video data to topic list serializer for video player in feed cards
+  add_to_serializer(:topic_list_item, :first_video) do
+    next nil unless SiteSetting.fantribe_theme_enabled
+    cooked = object.first_post&.cooked
+    next nil if cooked.blank?
+    next nil if cooked.exclude?("video-placeholder-container")
+
+    doc = Nokogiri::HTML5.fragment(cooked)
+    container = doc.at_css("div.video-placeholder-container[data-video-src]")
+    next nil unless container
+
+    { video_url: container["data-video-src"], thumbnail_url: container["data-thumbnail-src"] }
+  end
+
+  add_to_serializer(:topic_list_item, :include_first_video?) { SiteSetting.fantribe_theme_enabled }
+
   # Mirror image_urls onto search results so tribe page search shows images
   add_to_serializer(:search_topic_list_item, :image_urls) do
     next [] unless SiteSetting.fantribe_theme_enabled
@@ -472,6 +503,23 @@ after_initialize do
   end
 
   add_to_serializer(:search_topic_list_item, :include_first_onebox_html?) do
+    SiteSetting.fantribe_theme_enabled
+  end
+
+  add_to_serializer(:search_topic_list_item, :first_video) do
+    next nil unless SiteSetting.fantribe_theme_enabled
+    cooked = object.first_post&.cooked
+    next nil if cooked.blank?
+    next nil if cooked.exclude?("video-placeholder-container")
+
+    doc = Nokogiri::HTML5.fragment(cooked)
+    container = doc.at_css("div.video-placeholder-container[data-video-src]")
+    next nil unless container
+
+    { video_url: container["data-video-src"], thumbnail_url: container["data-thumbnail-src"] }
+  end
+
+  add_to_serializer(:search_topic_list_item, :include_first_video?) do
     SiteSetting.fantribe_theme_enabled
   end
 

@@ -15,6 +15,7 @@ import ftIcon from "../helpers/ft-icon";
 import FantribeEngagementBar from "./fantribe-engagement-bar";
 import FantribeMediaPhotoGrid from "./fantribe-media-photo-grid";
 import FantribeMediaSingleImage from "./fantribe-media-single-image";
+import FantribeMediaVideo from "./fantribe-media-video";
 import FantribePostMenu from "./fantribe-post-menu";
 
 export default class FantribeFeedCard extends Component {
@@ -112,6 +113,14 @@ export default class FantribeFeedCard extends Component {
 
   get imageUrl() {
     return this.topic?.image_url || this.topic?.thumbnails?.[0]?.url;
+  }
+
+  get firstVideo() {
+    return this.topic?.first_video || null;
+  }
+
+  get hasVideo() {
+    return !!this.firstVideo?.video_url;
   }
 
   get likeCount() {
@@ -383,12 +392,19 @@ export default class FantribeFeedCard extends Component {
   }
 
   hideAllLightboxesInExpanded(html) {
-    if (!html || !html.includes("lightbox-wrapper")) {
+    if (
+      !html ||
+      (!html.includes("lightbox-wrapper") &&
+        !html.includes("video-placeholder-container"))
+    ) {
       return html;
     }
     const parser = new DOMParser();
     const doc = parser.parseFromString(html, "text/html");
     doc.querySelectorAll(".lightbox-wrapper").forEach((el) => el.remove());
+    doc
+      .querySelectorAll("div.video-placeholder-container")
+      .forEach((el) => el.remove());
     return doc.body.innerHTML.trim() || html;
   }
 
@@ -511,12 +527,17 @@ export default class FantribeFeedCard extends Component {
               {{/if}}
             </div>
 
-            {{#if (or this.hasOnebox this.hasImages)}}
+            {{#if (or this.hasVideo this.hasOnebox this.hasImages)}}
               <div
                 class="fantribe-feed-card__media"
                 {{on "click" this.stopPropagation}}
               >
-                {{#if this.hasOnebox}}
+                {{#if this.hasVideo}}
+                  <FantribeMediaVideo
+                    @videoUrl={{this.firstVideo.video_url}}
+                    @thumbnailUrl={{this.firstVideo.thumbnail_url}}
+                  />
+                {{else if this.hasOnebox}}
                   <div
                     class="fantribe-feed-card__onebox fantribe-feed-card__onebox--in-media"
                   >
