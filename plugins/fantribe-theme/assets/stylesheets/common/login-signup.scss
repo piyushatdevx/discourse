@@ -1620,6 +1620,48 @@ body.fantribe-theme.signup-page {
   margin: 0;
 }
 
+@keyframes slideDownToast {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Error Toast
+.ft-account-created-toast {
+  position: absolute;
+  top: 110px;
+  right: 24px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 48px;
+  padding: 0 16px;
+  background: rgb(224, 37, 0 / 0.07);
+  border: 1px solid #e02500;
+  border-radius: 10px;
+  color: #e02500;
+  font-family: var(--ft-font-family);
+  font-size: 16px;
+  line-height: normal;
+  z-index: 1001;
+  box-shadow: 0 4px 12px rgb(224, 37, 0 / 0.05);
+  animation: slideDownToast 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+
+  .ft-toast-icon {
+    width: 24px;
+    height: 24px;
+    color: #e02500;
+    flex-shrink: 0;
+    stroke: #e02500;
+  }
+}
+
 // OTP input group
 .ft-otp-group {
   display: flex;
@@ -1648,30 +1690,64 @@ body.fantribe-theme.signup-page {
   flex: 1;
   min-width: 0;
   height: 48px;
-  padding: 0 8px;
+  padding: 0 16px;
   font-family: var(--ft-font-family);
   font-size: 16px;
   font-weight: 400;
   line-height: 24px;
   color: #666;
-  background: #fff;
-  border: 1px solid #ddd;
-  border-radius: 10px;
+  background: #fdfcfc !important;
+  border: 1px solid #ddd !important;
+  border-radius: 10px !important;
   text-align: center;
   outline: none;
   box-sizing: border-box;
+  overflow: clip;
   transition:
     border-color var(--ft-transition-fast),
-    box-shadow var(--ft-transition-fast);
+    box-shadow var(--ft-transition-fast),
+    transform 0.15s ease;
+
+  .has-error & {
+    border-color: #e02500 !important;
+    color: #666;
+  }
 
   &:hover:not(:focus) {
-    border-color: #bbb;
+    border-color: #bbb !important;
+
+    .has-error & {
+      border-color: #e02500 !important;
+    }
   }
 
   &:focus {
-    border-color: var(--ft-figma-accent);
+    border-color: var(--ft-figma-accent) !important;
     box-shadow: 0 0 0 2px rgb(255 23 68 / 0.15);
+
+    .has-error & {
+      border-color: #e02500 !important;
+      box-shadow: 0 0 0 2px rgb(224, 37, 0 / 0.15);
+    }
   }
+}
+
+@keyframes popIn {
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.1);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+.ft-otp-input.pop-animation {
+  animation: popIn 0.2s ease-out;
 }
 
 // Actions: Next button + resend link
@@ -1731,6 +1807,13 @@ body.fantribe-theme.signup-page {
 
   .ft-otp-input {
     height: 44px;
+  }
+
+  .ft-account-created-toast {
+    top: 80px;
+    right: 16px;
+    left: 16px;
+    justify-content: center;
   }
 }
 
