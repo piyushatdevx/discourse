@@ -105,7 +105,7 @@ body.fantribe-theme:not(.admin-interface) {
       display: flex;
       align-items: center;
       gap: 10px;
-      width: 100%;
+      width: 99%;
       padding: 12px 14px;
       border-radius: var(--ft-radius-medium);
       border: 1.5px solid var(--ft-slate-200, #e2e8f0);
@@ -201,9 +201,11 @@ body.fantribe-theme:not(.admin-interface) {
       left: 0;
       right: 0;
       z-index: 20;
+      max-height: min(280px, 40dvh);
+      overflow-y: auto;
+      overflow-x: hidden;
       border: 1.5px solid var(--ft-slate-200, #e2e8f0);
       border-radius: 12px;
-      overflow: hidden;
       background: var(--ft-white, #fff);
       box-shadow:
         0 8px 24px rgb(0 0 0 / 10%),

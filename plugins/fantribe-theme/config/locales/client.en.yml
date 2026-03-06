@@ -16,6 +16,9 @@ en:
         new: "No new posts at the moment. Check back soon for fresh content!"
         unread: "You're all caught up! No unread posts."
     fantribe:
+      header:
+        create_aria: "Create"
+        search_aria: "Search"
       # Terminology overrides (Categories -> Tribes, Topics -> Posts, etc.)
       # These will be expanded in Phase 3
       tribes: "Tribes"
@@ -36,6 +39,7 @@ en:
       for_you: "For You"
       log_out_confirm: "Are you sure you want to log out ?"
       create_menu:
+        close: "Close"
         suggested: "Suggested"
         create_post: "Create Post"
         create_post_desc: "Share your music, updates, and vibes"
