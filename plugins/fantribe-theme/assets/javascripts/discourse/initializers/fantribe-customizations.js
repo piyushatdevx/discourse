@@ -1,6 +1,21 @@
 import { withPluginApi } from "discourse/lib/plugin-api";
 import DiscourseURL from "discourse/lib/url";
 
+// Discourse user-profile routes that should redirect to the ft-posts tab.
+// Using route names (not URL regex) is inherently safe — these names can only
+// be reached via real user-profile URLs, so reserved /u/ paths like
+// /u/account-created, /u/activate-account, /u/password-reset, etc. are
+// never matched and need no explicit exclusion list.
+//
+//   user.summary     → /u/:username/summary
+//   userActivity     → /u/:username/activity  (parent route, no sub-route matched)
+//   userActivity.index → same path, when Ember resolves the auto-generated index
+const PROFILE_REDIRECT_ROUTES = new Set([
+  "user.summary",
+  "userActivity",
+  "userActivity.index",
+]);
+
 function initializeFantribe(api) {
   const siteSettings = api.container.lookup("service:site-settings");
   const currentUser = api.getCurrentUser();
@@ -31,29 +46,40 @@ function initializeFantribe(api) {
     const router = api.container.lookup("service:router");
     if (router) {
       router.on("routeDidChange", () => {
-        const url = router.currentURL;
-        if (!url) {
+        const routeName = router.currentRouteName;
+        if (!routeName) {
           return;
         }
 
-        // Redirect bare profile / summary / activity URLs to the Posts tab.
-        // Matches:  /u/:username
-        //           /u/:username/summary
-        //           /u/:username/activity   (no ft-posts sub-path yet)
-        const isPrefs = url.startsWith("/u/") && url.includes("/preferences");
-        document.body.classList.toggle("ft-on-preferences", isPrefs);
+        // Toggle body classes using route names — more reliable than URL checks
+        // because they reflect Ember's resolved route, not the raw URL string.
+        document.body.classList.toggle(
+          "ft-on-preferences",
+          routeName.startsWith("preferences")
+        );
 
-        const isSettingsHub =
-          url.startsWith("/u/") && url.includes("/activity/ft-settings");
-        document.body.classList.toggle("ft-on-settings-hub", isSettingsHub);
+        // ft-settings is a plugin-defined sub-route of userActivity; the URL
+        // is the simplest stable key since the route name includes the full path.
+        document.body.classList.toggle(
+          "ft-on-settings-hub",
+          Boolean(router.currentURL?.includes("/activity/ft-settings"))
+        );
 
-        const isProfileDefault =
-          /^\/u\/[^/]+\/?$/.test(url) ||
-          /^\/u\/[^/]+\/summary\/?$/.test(url) ||
-          /^\/u\/[^/]+\/activity\/?$/.test(url);
+        // Redirect bare profile / summary / activity routes to the Posts tab.
+        if (PROFILE_REDIRECT_ROUTES.has(routeName)) {
+          // Walk up the route hierarchy to find the `user` route that carries
+          // the :username param (userActivity uses resetNamespace so its own
+          // params are empty; the username lives on the parent `user` route).
+          let route = router.currentRoute;
+          let username;
+          while (route) {
+            if (route.params?.username) {
+              username = route.params.username;
+              break;
+            }
+            route = route.parent;
+          }
 
-        if (isProfileDefault) {
-          const username = url.match(/^\/u\/([^/]+)/)?.[1];
           if (username) {
             DiscourseURL.routeTo(`/u/${username}/activity/ft-posts`);
           }

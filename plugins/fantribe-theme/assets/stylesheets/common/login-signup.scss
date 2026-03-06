@@ -90,7 +90,7 @@ body.fantribe-theme.signup-page {
   align-items: center;
   padding: 24px;
   z-index: 1000;
-  background: var(--ft-figma-page-bg);
+  background: transparent;
 
   &__logo {
     display: block;
@@ -112,23 +112,25 @@ body.fantribe-theme.signup-page {
     justify-content: center;
     gap: 8px;
     height: 40px;
-    min-width: 88px;
     padding: 0 16px;
     background: var(--ft-figma-input-bg);
     border: 1px solid var(--ft-figma-header-btn-border);
-    border-radius: var(--ft-figma-card-radius);
+    border-radius: 9999px;
     font-family: var(--ft-font-family);
-    font-size: 12px;
+    font-size: 14px;
     font-weight: 500;
-    line-height: 16px;
+    line-height: 1;
     color: var(--ft-figma-text-primary);
+    text-decoration: none;
     cursor: pointer;
+    position: relative;
     transition: all var(--ft-transition-fast);
 
     .d-icon {
-      width: 16px;
-      height: 16px;
-      color: var(--ft-figma-text-primary);
+      width: 15px;
+      height: 15px;
+      color: var(--ft-gray-500);
+      flex-shrink: 0;
     }
 
     &:hover {
@@ -140,11 +142,138 @@ body.fantribe-theme.signup-page {
       background: #eae8e5;
     }
 
-    &:focus,
+    &:focus-within,
     &:focus-visible {
       box-shadow: 0 0 0 3px rgb(255 26 71 / 0.3);
       outline: none;
     }
+  }
+
+  // Language selector modifier — let the FtLangDropdown button inherit __btn
+  // (width is controlled by min-width on __btn, no override needed)
+  &__btn--lang {
+    gap: 6px;
+  }
+}
+
+// ==============================================
+// FT LANGUAGE DROPDOWN (tribe-selector style)
+// ==============================================
+.ft-lang-dropdown {
+  position: relative;
+
+  // The trigger button inherits .fantribe-login-header__btn styles
+  // Additional overrides just for the lang trigger
+  .fantribe-login-header__btn--lang {
+    gap: 6px;
+    justify-content: flex-start;
+  }
+
+  &__flag {
+    font-size: 18px;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+
+  &__label {
+    flex: 1;
+    text-align: left;
+  }
+
+  &__chevron {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    transition: transform 0.2s ease;
+
+    .d-icon {
+      width: 14px;
+      height: 14px;
+      color: var(--ft-gray-500);
+    }
+
+    &--open {
+      transform: rotate(180deg);
+    }
+  }
+
+  // Dropdown panel — same card style as tribe selector
+  &__menu {
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 0;
+    min-width: 160px;
+    background: #fff;
+    border: 1px solid #e7e6e4;
+    border-radius: 12px;
+    box-shadow:
+      0 8px 24px rgb(0 0 0 / 0.1),
+      0 2px 8px rgb(0 0 0 / 0.06);
+    overflow: hidden;
+    z-index: 1100;
+    animation: ft-dropdown-in 0.15s ease-out forwards;
+  }
+
+  // Each language option row
+  &__option {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 10px 14px;
+    background: transparent;
+    border: none;
+    font-family: var(--ft-font-family);
+    font-size: 14px;
+    font-weight: 400;
+    color: #1a1a1a;
+    cursor: pointer;
+    text-align: left;
+    transition: background 0.15s ease;
+
+    &:hover {
+      background: #f5f3f0;
+    }
+
+    &--active {
+      background: rgb(255 26 71 / 0.06);
+      font-weight: 500;
+      color: var(--ft-primary);
+    }
+  }
+
+  &__option-flag {
+    font-size: 18px;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+
+  &__option-name {
+    flex: 1;
+  }
+
+  &__option-check {
+    display: flex;
+    align-items: center;
+    margin-left: auto;
+
+    .d-icon {
+      width: 14px;
+      height: 14px;
+      color: var(--ft-primary);
+    }
+  }
+}
+
+@keyframes ft-dropdown-in {
+  from {
+    opacity: 0;
+    transform: translateY(-6px) scale(0.97);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
   }
 }
 
@@ -177,6 +306,7 @@ body.fantribe-theme.signup-page {
   font-size: 32px;
   font-weight: 600;
   line-height: 48px;
+  letter-spacing: -0.4492px;
   color: #1a1a1a;
   text-align: center;
   margin: 0;
@@ -456,7 +586,7 @@ body.fantribe-theme.signup-page {
     font-size: 14px;
     font-weight: 400;
     line-height: 21px;
-    color: #666;
+    color: #4a4a4a;
   }
 
   a {
@@ -843,12 +973,13 @@ body.fantribe-theme.signup-page {
 
   // Add title to signup form
   #login-form::before {
-    content: "Create Account";
+    content: "Sign Up";
     display: block;
     font-family: var(--ft-font-family);
     font-size: 32px;
     font-weight: 600;
     line-height: 48px;
+    letter-spacing: -0.4492px;
     color: #1a1a1a;
     text-align: center;
     margin-bottom: 24px;
@@ -865,6 +996,30 @@ body.fantribe-theme.signup-page {
     max-width: 396px; // Match login's .fantribe-login-form
     margin-top: 0;
     padding: 0;
+  }
+
+  // ==============================================
+  // FIELD ORDERING — match Figma: Full name → Email → Username → Password
+  // #login-form is flex column so `order` controls visual sequence
+  // ==============================================
+  .input-group.create-account__fullname {
+    order: 1;
+  }
+
+  .input-group.create-account-email {
+    order: 2;
+  }
+
+  .input-group.create-account__username {
+    order: 3;
+  }
+
+  .input-group.create-account__password {
+    order: 4;
+  }
+
+  .user-fields {
+    order: 5;
   }
 
   // ==============================================
@@ -1072,7 +1227,8 @@ body.fantribe-theme.signup-page {
   .signup-page-cta {
     width: 100%;
     max-width: 396px; // Match login's button section
-    margin-top: 24px;
+    // 40px gap from form to button — matching Figma card gap between sections
+    margin-top: 40px;
 
     &__disclaimer {
       font-family: var(--ft-font-family);
@@ -1082,11 +1238,12 @@ body.fantribe-theme.signup-page {
       margin-bottom: 16px;
     }
 
+    // Block layout so the full-width button and the inline "already have account"
+    // text + link can live on separate lines without flex-column stacking the
+    // span and button siblings onto separate rows.
     &__buttons {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      align-items: center;
+      display: block;
+      text-align: center;
     }
 
     // Primary signup button
@@ -1097,6 +1254,9 @@ body.fantribe-theme.signup-page {
       justify-content: center;
       width: 100%;
       height: 48px;
+
+      // 40px gap between button and "Already have an account?" footer row
+      margin-bottom: 40px;
       padding: 0 24px;
       font-family: var(--ft-font-family);
       font-size: 16px !important;
@@ -1134,7 +1294,7 @@ body.fantribe-theme.signup-page {
       }
     }
 
-    // "Already have account? Log in" - inline text with link
+    // "Already have an account?" — inline text next to the login link
     &__existing-account {
       display: inline;
       vertical-align: baseline;
@@ -1142,15 +1302,16 @@ body.fantribe-theme.signup-page {
       font-size: 14px;
       font-weight: 400;
       line-height: 21px;
-      color: #666;
-      margin-top: 16px;
+
+      // Figma: #4a4a4a (slightly darker than the previous #666)
+      color: #4a4a4a;
 
       &::before {
         display: none; // Remove separator line
       }
     }
 
-    // Login link (styled as inline link, not button)
+    // "Sign In" link — sits inline next to existing-account text
     &__login {
       display: inline !important;
       vertical-align: baseline;
@@ -1159,15 +1320,26 @@ body.fantribe-theme.signup-page {
       padding: 0 !important;
       margin-left: 6px;
       font-family: var(--ft-font-family);
-      font-size: 14px !important;
       font-weight: 600;
-      line-height: 21px;
+      line-height: 24px;
       color: var(--ft-figma-accent) !important;
       background: transparent !important;
       border: none !important;
       border-radius: 0 !important;
       cursor: pointer;
       text-decoration: none;
+
+      // Replace Discourse's "Log In" i18n text with "Sign In" to match Figma
+      .d-button-label {
+        font-size: 0;
+
+        &::after {
+          content: "Sign In";
+          font-size: 16px;
+          font-weight: 600;
+          line-height: 24px;
+        }
+      }
 
       &:hover {
         text-decoration: underline;
@@ -1307,10 +1479,10 @@ body.fantribe-theme.signup-page {
   }
 
   // ==============================================
-  // PROGRESS BAR
+  // PROGRESS BAR — hidden, Figma design has no progress indicator
   // ==============================================
   .signup-progress-bar {
-    margin-bottom: 8px;
+    display: none;
 
     &__segment {
       &.--active,
@@ -1366,6 +1538,203 @@ body.fantribe-theme.signup-page {
 }
 
 // ==============================================
+// ACCOUNT-CREATED / VERIFICATION CODE PAGE
+// ==============================================
+
+// Full-screen overlay that covers the default Discourse account-created content
+.ft-account-created-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+  background: var(--ft-figma-page-bg);
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+// Header within the overlay — same visual as .fantribe-login-header but flows in the layout
+.ft-account-created-header {
+  flex-shrink: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+// Center the card vertically in the remaining space
+.ft-account-created-center {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 24px 24px;
+  box-sizing: border-box;
+}
+
+// Card — same appearance as .fantribe-login-card
+.ft-account-created-card {
+  background: rgb(253 252 252 / 0.8);
+  border: 1px solid rgb(231 230 228 / 0.6);
+  border-radius: 10px;
+  box-shadow:
+    0 20px 25px rgb(0 0 0 / 0.1),
+    0 8px 10px rgb(0 0 0 / 0.1);
+  padding: 32px;
+  width: 100%;
+  max-width: 460px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  align-items: center;
+}
+
+// Title + subtitle
+.ft-account-created-heading {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: center;
+  text-align: center;
+  width: 100%;
+}
+
+.ft-account-created-title {
+  font-family: var(--ft-font-family);
+  font-size: 32px;
+  font-weight: 600;
+  line-height: normal;
+  letter-spacing: -0.4492px;
+  color: #1a1a1a;
+  margin: 0;
+}
+
+.ft-account-created-subtitle {
+  font-family: var(--ft-font-family);
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px;
+  color: #666;
+  margin: 0;
+}
+
+// OTP input group
+.ft-otp-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  max-width: 396px;
+}
+
+.ft-otp-label {
+  font-family: var(--ft-font-family);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 21px;
+  color: #1a1a1a;
+}
+
+// Row of 6 digit boxes
+.ft-otp-inputs {
+  display: flex;
+  gap: 8px;
+  width: 100%;
+}
+
+.ft-otp-input {
+  flex: 1;
+  min-width: 0;
+  height: 48px;
+  padding: 0 8px;
+  font-family: var(--ft-font-family);
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px;
+  color: #666;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  text-align: center;
+  outline: none;
+  box-sizing: border-box;
+  transition:
+    border-color var(--ft-transition-fast),
+    box-shadow var(--ft-transition-fast);
+
+  &:hover:not(:focus) {
+    border-color: #bbb;
+  }
+
+  &:focus {
+    border-color: var(--ft-figma-accent);
+    box-shadow: 0 0 0 2px rgb(255 23 68 / 0.15);
+  }
+}
+
+// Actions: Next button + resend link
+.ft-account-created-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: center;
+  width: 100%;
+  max-width: 396px;
+
+  .fantribe-btn-primary {
+    margin-top: 0; // Override the default 24px top margin
+  }
+}
+
+.ft-account-created-resend {
+  font-family: var(--ft-font-family);
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 24px;
+  color: #ff1744;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  text-align: center;
+  padding: 0;
+
+  &:hover {
+    text-decoration: underline;
+  }
+
+  &:focus,
+  &:focus-visible {
+    outline: none;
+  }
+}
+
+// Mobile
+@media (width <= 767px) {
+  .ft-account-created-header {
+    padding: 16px;
+  }
+
+  .ft-account-created-center {
+    padding: 0 16px 16px;
+  }
+
+  .ft-account-created-card {
+    padding: 24px;
+    gap: 24px;
+  }
+
+  .ft-account-created-title {
+    font-size: 24px;
+  }
+
+  .ft-otp-input {
+    height: 44px;
+  }
+}
+
+// ==============================================
 // SIGNUP PAGE MOBILE RESPONSIVE
 // ==============================================
 @media (width <= 767px) {
@@ -1389,6 +1758,7 @@ body.fantribe-theme.signup-page {
     #login-form::before {
       font-size: 24px;
       line-height: 32px;
+      letter-spacing: -0.4492px;
       margin-bottom: 16px;
     }
 
@@ -1409,11 +1779,12 @@ body.fantribe-theme.signup-page {
     }
 
     .signup-page-cta {
+      margin-top: 24px; // Tighter on mobile
+
       &__signup,
-      &__login,
-      .btn-primary,
-      .btn-flat {
+      .btn-primary {
         height: 44px;
+        margin-bottom: 24px; // Tighter gap on mobile
       }
     }
 

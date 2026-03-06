@@ -79,6 +79,7 @@
 !/plugins/fantribe-theme-admin
 !/plugins/explore-tribes
 !/plugins/fantribe-social
+!/plugins/fantribe-otp-activation
 /plugins/*/auto_generated
 
 /spec/fixtures/plugins/my_plugin/auto_generated
