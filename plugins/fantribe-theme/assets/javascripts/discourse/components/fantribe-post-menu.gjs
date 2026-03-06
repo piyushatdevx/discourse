@@ -295,6 +295,51 @@ export default class FantribePostMenu extends Component {
               >Delete</button>
             </div>
           </div>
+        {{else if @isOwnPost}}
+          {{! Menu for own posts }}
+          <div class="fantribe-post-menu__items">
+            <button
+              type="button"
+              class="fantribe-post-menu__item"
+              {{on "click" this.handleEdit}}
+            >
+              {{ftIcon "edit3"}}
+              <span>Edit Post</span>
+            </button>
+
+            <button
+              type="button"
+              class="fantribe-post-menu__item"
+              {{on "click" this.handleCopyLink}}
+            >
+              {{ftIcon "link2"}}
+              <span>Copy Link</span>
+            </button>
+
+            <button
+              type="button"
+              class="fantribe-post-menu__item"
+              {{on "click" this.handleTurnOffComments}}
+            >
+              {{ftIcon "message-square-off"}}
+              <span>{{if
+                  this.isClosed
+                  "Turn On Comments"
+                  "Turn Off Comments"
+                }}</span>
+            </button>
+
+            <div class="fantribe-post-menu__divider"></div>
+
+            <button
+              type="button"
+              class="fantribe-post-menu__item fantribe-post-menu__item--destructive"
+              {{on "click" this.confirmDelete}}
+            >
+              {{ftIcon "trash2"}}
+              <span>Delete Post</span>
+            </button>
+          </div>
         {{else}}
           {{! Menu for other people's posts }}
           <div class="fantribe-post-menu__items">
