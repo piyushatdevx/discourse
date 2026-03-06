@@ -95,6 +95,11 @@ export default class FantribeHeader extends Component {
   }
 
   @action
+  closeMobileCreateSheetFromButton() {
+    this.isMobileCreateSheetOpen = false;
+  }
+
+  @action
   closeMobileCreateSheetOnKey(event) {
     if (event.key === "Enter" || event.key === " ") {
       event.preventDefault();
@@ -312,7 +317,7 @@ export default class FantribeHeader extends Component {
               type="button"
               class="ft-mobile-create-sheet__close"
               aria-label={{i18n "fantribe.create_menu.close"}}
-              {{on "click" this.closeMobileCreateSheet}}
+              {{on "click" this.closeMobileCreateSheetFromButton}}
             >
               <svg
                 class="ft-mobile-create-sheet__close-icon"
