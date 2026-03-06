@@ -8,15 +8,31 @@
 body.fantribe-theme:not(.admin-interface) {
   background-color: #f0f0f2;
 
-  // Figma: no header — hide Discourse site header and fantribe header so content starts at top
-  .d-header-wrap,
-  .fantribe-header {
+  // Hide Discourse site header (FanTribe uses its own)
+  .d-header-wrap {
     display: none;
   }
 
-  // Remove space above #main (header is hidden)
-  #main {
-    padding-top: 0;
+  // FanTribe header is only shown on mobile widths (design spec)
+  @media (width >= 768px) {
+    .fantribe-header {
+      display: none;
+    }
+
+    #main {
+      padding-top: 0;
+    }
+  }
+
+  @media (width <= 767px) {
+    .fantribe-header {
+      display: block;
+    }
+
+    // Offset fixed header so the feed (incl. compose box) starts below it
+    #main {
+      padding-top: 46px;
+    }
   }
 
   // Hide Discourse's built-in sidebar so no white shows behind fantribe-left-sidebar

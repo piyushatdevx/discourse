@@ -2,13 +2,13 @@ import Component from "@glimmer/component";
 import { on } from "@ember/modifier";
 import { action } from "@ember/object";
 import { service } from "@ember/service";
+import avatar from "discourse/helpers/avatar";
 import icon from "discourse/helpers/d-icon";
 import ftIcon from "../helpers/ft-icon";
 
 export default class FantribeMobileNav extends Component {
   @service router;
   @service currentUser;
-  @service composer;
 
   get currentPath() {
     return this.router.currentRouteName;
@@ -24,7 +24,13 @@ export default class FantribeMobileNav extends Component {
   }
 
   get isSearchActive() {
-    return this.currentPath === "full-page-search";
+    const route = this.currentPath;
+    return route === "explore" || route?.startsWith("explore.");
+  }
+
+  get isChatActive() {
+    const route = this.currentPath;
+    return route?.startsWith("chat");
   }
 
   get isNotificationsActive() {
@@ -46,17 +52,12 @@ export default class FantribeMobileNav extends Component {
 
   @action
   goToSearch() {
-    this.router.transitionTo("full-page-search");
+    this.router.transitionTo("explore");
   }
 
   @action
-  createPost() {
-    if (this.composer) {
-      this.composer.open({
-        action: "createTopic",
-        draftKey: "new_topic",
-      });
-    }
+  goToChat() {
+    this.router.transitionTo("chat.index");
   }
 
   @action
@@ -85,8 +86,9 @@ export default class FantribeMobileNav extends Component {
           type="button"
           {{on "click" this.goToFeed}}
         >
-          {{ftIcon "home"}}
-          <span>Feed</span>
+          <span class="fantribe-mobile-nav__icon">
+            {{ftIcon "home" size=26}}
+          </span>
         </button>
 
         <button
@@ -94,16 +96,19 @@ export default class FantribeMobileNav extends Component {
           type="button"
           {{on "click" this.goToSearch}}
         >
-          {{ftIcon "search"}}
-          <span>Search</span>
+          <span class="fantribe-mobile-nav__icon">
+            {{ftIcon "compass" size=26}}
+          </span>
         </button>
 
         <button
-          class="fantribe-mobile-nav__item fantribe-mobile-nav__item--create"
+          class="fantribe-mobile-nav__item {{if this.isChatActive 'active'}}"
           type="button"
-          {{on "click" this.createPost}}
+          {{on "click" this.goToChat}}
         >
-          {{ftIcon "plus"}}
+          <span class="fantribe-mobile-nav__icon">
+            {{ftIcon "message-circle" size=26}}
+          </span>
         </button>
 
         <button
@@ -112,8 +117,9 @@ export default class FantribeMobileNav extends Component {
           type="button"
           {{on "click" this.goToNotifications}}
         >
-          {{ftIcon "bell"}}
-          <span>Alerts</span>
+          <span class="fantribe-mobile-nav__icon">
+            {{ftIcon "bell" size=26}}
+          </span>
         </button>
 
         <button
@@ -121,8 +127,13 @@ export default class FantribeMobileNav extends Component {
           type="button"
           {{on "click" this.goToProfile}}
         >
-          {{icon "user"}}
-          <span>Profile</span>
+          <span class="fantribe-mobile-nav__avatar">
+            {{#if this.currentUser}}
+              {{avatar this.currentUser imageSize="small"}}
+            {{else}}
+              {{icon "user"}}
+            {{/if}}
+          </span>
         </button>
       </nav>
     {{/if}}
