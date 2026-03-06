@@ -1352,6 +1352,7 @@ body.fantribe-theme:not(.admin-interface) {
       background: #f0f0f2;
       border-radius: 16px;
       position: relative;
+      overflow: hidden;
     }
 
     &__carousel-bg {
@@ -1363,18 +1364,19 @@ body.fantribe-theme:not(.admin-interface) {
       background-size: cover;
       background-position: center;
       filter: blur(12px);
-      opacity: 0.8;
+      opacity: 0; // hidden — image fills container fully with cover
       transform: scale(1.1); // Prevent blur bleeding
     }
 
     &__carousel-img {
-      position: relative;
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
       z-index: 1;
-      border-radius: 12px;
-      max-height: 100%;
-      width: auto;
-      margin: 0 auto;
-      box-shadow: 0 4px 12px rgb(0 0 0 / 15%);
+      border-radius: 0;
     }
 
     &__delete-img-btn {
