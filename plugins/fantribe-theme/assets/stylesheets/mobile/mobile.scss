@@ -24,6 +24,17 @@ body.fantribe-theme:not(.admin-interface) {
   .ft-modal-backdrop {
     align-items: flex-end;
     padding: 0;
+
+    // Search modal needs to be full screen on mobile, not a bottom sheet
+    &.ft-search-modal-backdrop {
+      align-items: flex-start;
+
+      .ft-modal {
+        border-radius: 0;
+        max-height: 100dvh;
+        height: 100vh;
+      }
+    }
   }
 
   .ft-modal {
