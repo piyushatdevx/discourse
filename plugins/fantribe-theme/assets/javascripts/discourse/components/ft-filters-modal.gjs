@@ -6,6 +6,7 @@ import { action } from "@ember/object";
 import { service } from "@ember/service";
 import { modifier } from "ember-modifier";
 import { ajax } from "discourse/lib/ajax";
+import { i18n } from "discourse-i18n";
 import ftIcon from "../helpers/ft-icon";
 
 const positionDropdown = modifier((element) => {
@@ -46,9 +47,18 @@ const positionDropdown = modifier((element) => {
 });
 
 const CONTENT_TYPE_OPTIONS = [
-  { id: "all", label: "All" },
-  { id: "topics_only", label: "Topics without replies" },
-  { id: "with_replies", label: "Topics with replies" },
+  {
+    id: "all",
+    labelKey: "fantribe.filters_modal.content_type_all",
+  },
+  {
+    id: "topics_only",
+    labelKey: "fantribe.filters_modal.content_type_topics_only",
+  },
+  {
+    id: "with_replies",
+    labelKey: "fantribe.filters_modal.content_type_with_replies",
+  },
 ];
 
 export default class FtFiltersModal extends Component {
@@ -112,7 +122,7 @@ export default class FtFiltersModal extends Component {
 
   get categoryTriggerLabel() {
     if (this.selectedCategoryIds.length === 0) {
-      return "All categories";
+      return i18n("fantribe.filters_modal.all_categories");
     }
     return this.selectedCategoryIds
       .map((id) => this.categories.find((c) => c.id === id)?.name)
@@ -148,7 +158,7 @@ export default class FtFiltersModal extends Component {
 
   get topicSearchTriggerLabel() {
     if (!this.hasTopicSearch) {
-      return "Search within feed";
+      return i18n("fantribe.filters_modal.search_within_feed");
     }
     return this.topicSearchQuery;
   }
@@ -169,7 +179,7 @@ export default class FtFiltersModal extends Component {
 
   get postedByTriggerLabel() {
     if (this.selectedUsernames.length === 0) {
-      return "Select a person";
+      return i18n("fantribe.filters_modal.select_person");
     }
     return this.selectedUsernames.map((u) => `@${u}`).join(", ");
   }
@@ -183,6 +193,7 @@ export default class FtFiltersModal extends Component {
   get contentTypeOptions() {
     return CONTENT_TYPE_OPTIONS.map((opt) => ({
       ...opt,
+      label: i18n(opt.labelKey),
       isSelected: this.contentTypeFilter === opt.id,
     }));
   }
@@ -191,7 +202,9 @@ export default class FtFiltersModal extends Component {
     const option = CONTENT_TYPE_OPTIONS.find(
       (o) => o.id === this.contentTypeFilter
     );
-    return option?.label || "All";
+    return option
+      ? i18n(option.labelKey)
+      : i18n("fantribe.filters_modal.content_type_all");
   }
 
   get hasContentTypeFilter() {
@@ -210,10 +223,11 @@ export default class FtFiltersModal extends Component {
 
   get dateTriggerLabel() {
     if (!this.dateFrom && !this.dateTo) {
-      return "Select dates";
+      return i18n("fantribe.filters_modal.select_dates");
     }
-    const from = this.dateFrom || "…";
-    const to = this.dateTo || "…";
+    const from =
+      this.dateFrom || i18n("fantribe.filters_modal.date_placeholder");
+    const to = this.dateTo || i18n("fantribe.filters_modal.date_placeholder");
     return `${from} – ${to}`;
   }
 
@@ -245,7 +259,7 @@ export default class FtFiltersModal extends Component {
       chips.push({
         type: "contentType",
         id: "contentType",
-        label: opt?.label,
+        label: opt ? i18n(opt.labelKey) : "",
         data: null,
       });
     }
@@ -482,7 +496,7 @@ export default class FtFiltersModal extends Component {
       class="ft-modal-backdrop"
       role="dialog"
       aria-modal="true"
-      aria-label="Filters"
+      aria-label={{i18n "fantribe.filters_modal.title"}}
       {{on "click" this.handleBackdropClick}}
       {{on "keydown" this.handleKeydown}}
     >
@@ -490,11 +504,13 @@ export default class FtFiltersModal extends Component {
 
         {{! Header }}
         <div class="ft-filters-modal__header">
-          <h2 class="ft-filters-modal__title">Filters</h2>
+          <h2 class="ft-filters-modal__title">{{i18n
+              "fantribe.filters_modal.title"
+            }}</h2>
           <button
             type="button"
             class="ft-filters-modal__close-btn"
-            aria-label="Close"
+            aria-label={{i18n "fantribe.filters_modal.close"}}
             {{on "click" @onClose}}
           >
             {{ftIcon "x" size=20}}
@@ -506,7 +522,9 @@ export default class FtFiltersModal extends Component {
 
           {{! ─── Categories ──────────────────────────────── }}
           <div class="ft-filters-modal__field">
-            <label class="ft-filters-modal__label">Categories</label>
+            <label class="ft-filters-modal__label">{{i18n
+                "fantribe.filters_modal.categories"
+              }}</label>
             <button
               type="button"
               class="ft-filters-modal__trigger
@@ -550,7 +568,9 @@ export default class FtFiltersModal extends Component {
                         'ft-filters-modal__checkbox--checked'
                       }}"
                   ></span>
-                  <span class="ft-filters-modal__dropdown-label">All categories</span>
+                  <span class="ft-filters-modal__dropdown-label">{{i18n
+                      "fantribe.filters_modal.all_categories"
+                    }}</span>
                 </button>
                 <div class="ft-filters-modal__divider"></div>
 
@@ -580,7 +600,9 @@ export default class FtFiltersModal extends Component {
 
           {{! ─── Topics (title search) ───────────────────── }}
           <div class="ft-filters-modal__field">
-            <label class="ft-filters-modal__label">Topics</label>
+            <label class="ft-filters-modal__label">{{i18n
+                "fantribe.filters_modal.topics"
+              }}</label>
             <div
               class="ft-filters-modal__input-wrap
                 {{if this.topicsOpen 'ft-filters-modal__input-wrap--open'}}"
@@ -591,7 +613,7 @@ export default class FtFiltersModal extends Component {
               <input
                 type="text"
                 class="ft-filters-modal__text-input"
-                placeholder="Search within feed…"
+                placeholder={{i18n "fantribe.filters_modal.search_within_feed"}}
                 value={{this.topicSearchQuery}}
                 {{on "input" this.onTopicSearchInput}}
                 {{on "focus" (fn this.toggleDropdown "topics")}}
@@ -601,7 +623,9 @@ export default class FtFiltersModal extends Component {
 
           {{! ─── Tags ────────────────────────────────────── }}
           <div class="ft-filters-modal__field">
-            <label class="ft-filters-modal__label">Tags</label>
+            <label class="ft-filters-modal__label">{{i18n
+                "fantribe.filters_modal.tags"
+              }}</label>
             <div
               class="ft-filters-modal__input-wrap
                 {{if this.tagsOpen 'ft-filters-modal__input-wrap--open'}}"
@@ -612,7 +636,7 @@ export default class FtFiltersModal extends Component {
               <input
                 type="text"
                 class="ft-filters-modal__text-input"
-                placeholder="Search tags…"
+                placeholder={{i18n "fantribe.filters_modal.search_tags"}}
                 value={{this.tagSearchQuery}}
                 {{on "input" this.onTagSearchInput}}
                 {{on "focus" (fn this.openDropdownFor "tags")}}
@@ -625,9 +649,9 @@ export default class FtFiltersModal extends Component {
                   class="ft-filters-modal__dropdown ft-filters-modal__dropdown--absolute ft-filters-modal__dropdown--loading"
                   {{positionDropdown}}
                 >
-                  <span
-                    class="ft-filters-modal__dropdown-label"
-                  >Searching…</span>
+                  <span class="ft-filters-modal__dropdown-label">{{i18n
+                      "fantribe.filters_modal.searching"
+                    }}</span>
                 </div>
               {{else if this.tagSearchResults.length}}
                 <div
@@ -660,7 +684,9 @@ export default class FtFiltersModal extends Component {
 
           {{! ─── Posted By ───────────────────────────────── }}
           <div class="ft-filters-modal__field">
-            <label class="ft-filters-modal__label">Posted by</label>
+            <label class="ft-filters-modal__label">{{i18n
+                "fantribe.filters_modal.posted_by"
+              }}</label>
             <div
               class="ft-filters-modal__input-wrap
                 {{if this.postedByOpen 'ft-filters-modal__input-wrap--open'}}"
@@ -671,7 +697,7 @@ export default class FtFiltersModal extends Component {
               <input
                 type="text"
                 class="ft-filters-modal__text-input"
-                placeholder="Search for a person…"
+                placeholder={{i18n "fantribe.filters_modal.search_person"}}
                 value={{this.userSearchQuery}}
                 {{on "input" this.onUserSearchInput}}
                 {{on "focus" (fn this.openDropdownFor "postedBy")}}
@@ -684,9 +710,9 @@ export default class FtFiltersModal extends Component {
                   class="ft-filters-modal__dropdown ft-filters-modal__dropdown--absolute ft-filters-modal__dropdown--loading"
                   {{positionDropdown}}
                 >
-                  <span
-                    class="ft-filters-modal__dropdown-label"
-                  >Searching…</span>
+                  <span class="ft-filters-modal__dropdown-label">{{i18n
+                      "fantribe.filters_modal.searching"
+                    }}</span>
                 </div>
               {{else if this.userSearchResults.length}}
                 <div
@@ -726,7 +752,9 @@ export default class FtFiltersModal extends Component {
 
           {{! ─── Only return topics/posts ────────────────── }}
           <div class="ft-filters-modal__field">
-            <label class="ft-filters-modal__label">Only return topics/posts…</label>
+            <label class="ft-filters-modal__label">{{i18n
+                "fantribe.filters_modal.only_return_topics_posts"
+              }}</label>
             <button
               type="button"
               class="ft-filters-modal__trigger
@@ -783,7 +811,9 @@ export default class FtFiltersModal extends Component {
 
           {{! ─── Custom date range ───────────────────────── }}
           <div class="ft-filters-modal__field">
-            <label class="ft-filters-modal__label">Custom date range</label>
+            <label class="ft-filters-modal__label">{{i18n
+                "fantribe.filters_modal.custom_date_range"
+              }}</label>
             <button
               type="button"
               class="ft-filters-modal__trigger
@@ -808,7 +838,9 @@ export default class FtFiltersModal extends Component {
                 {{positionDropdown}}
               >
                 <div class="ft-filters-modal__date-field">
-                  <label class="ft-filters-modal__date-label">From</label>
+                  <label class="ft-filters-modal__date-label">{{i18n
+                      "fantribe.filters_modal.from"
+                    }}</label>
                   <input
                     type="date"
                     class="ft-filters-modal__date-input"
@@ -817,7 +849,9 @@ export default class FtFiltersModal extends Component {
                   />
                 </div>
                 <div class="ft-filters-modal__date-field">
-                  <label class="ft-filters-modal__date-label">To</label>
+                  <label class="ft-filters-modal__date-label">{{i18n
+                      "fantribe.filters_modal.to"
+                    }}</label>
                   <input
                     type="date"
                     class="ft-filters-modal__date-input"
@@ -840,7 +874,10 @@ export default class FtFiltersModal extends Component {
                 <button
                   type="button"
                   class="ft-filters-modal__chip-remove"
-                  aria-label="Remove {{chip.label}}"
+                  aria-label={{i18n
+                    "fantribe.filters_modal.remove_filter"
+                    label=chip.label
+                  }}
                   {{on "click" (fn this.removeChip chip)}}
                 >
                   {{ftIcon "x" size=8}}
@@ -857,14 +894,14 @@ export default class FtFiltersModal extends Component {
             class="ft-filters-modal__cancel-btn"
             {{on "click" this.cancelFilters}}
           >
-            Cancel
+            {{i18n "fantribe.filters_modal.cancel"}}
           </button>
           <button
             type="button"
             class="ft-filters-modal__apply-btn"
             {{on "click" this.applyFilters}}
           >
-            Apply
+            {{i18n "fantribe.filters_modal.apply"}}
           </button>
         </div>
 

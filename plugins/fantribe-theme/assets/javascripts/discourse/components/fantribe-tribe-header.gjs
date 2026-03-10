@@ -7,6 +7,7 @@ import { htmlSafe } from "@ember/template";
 import icon from "discourse/helpers/d-icon";
 import { ajax } from "discourse/lib/ajax";
 import { popupAjaxError } from "discourse/lib/ajax-error";
+import { i18n } from "discourse-i18n";
 import ftIcon from "../helpers/ft-icon";
 import FtEditTribeModal from "./ft-edit-tribe-modal";
 
@@ -125,15 +126,18 @@ export default class FantribeTribeHeader extends Component {
             <div class="ft-tribe-header__meta">
               {{#if this.isPrivate}}
                 {{ftIcon "lock"}}
-                <span>Private</span>
+                <span>{{i18n "fantribe.common.private"}}</span>
               {{else}}
                 {{ftIcon "globe"}}
-                <span>Public</span>
+                <span>{{i18n "fantribe.common.public"}}</span>
               {{/if}}
               {{#if this.memberCount}}
                 <span class="ft-tribe-header__meta-sep">&bull;</span>
                 {{ftIcon "users"}}
-                <span>{{this.memberCount}} members</span>
+                <span>{{i18n
+                    "fantribe.tribe_page.members_count"
+                    count=this.memberCount
+                  }}</span>
               {{/if}}
             </div>
           </div>
@@ -146,7 +150,7 @@ export default class FantribeTribeHeader extends Component {
                 {{on "click" this.openEditModal}}
               >
                 {{icon "wrench"}}
-                <span>Edit Tribe</span>
+                <span>{{i18n "fantribe.common.edit_tribe"}}</span>
               </button>
             {{/if}}
             <button
@@ -161,10 +165,10 @@ export default class FantribeTribeHeader extends Component {
                 {{ftIcon "circle"}}
               {{else if this.isMember}}
                 {{ftIcon "check-circle"}}
-                <span>Joined</span>
+                <span>{{i18n "fantribe.common.joined"}}</span>
               {{else}}
                 {{icon "arrow-right-to-bracket"}}
-                <span>Join Tribe</span>
+                <span>{{i18n "fantribe.common.join_tribe"}}</span>
               {{/if}}
             </button>
           </div>

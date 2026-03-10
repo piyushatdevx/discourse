@@ -5,6 +5,7 @@ import { on } from "@ember/modifier";
 import { action } from "@ember/object";
 import { service } from "@ember/service";
 import { ajax } from "discourse/lib/ajax";
+import { i18n } from "discourse-i18n";
 import ftIcon from "../helpers/ft-icon";
 
 export default class FantribePostMoreTopics extends Component {
@@ -76,7 +77,9 @@ export default class FantribePostMoreTopics extends Component {
     <div class="ft-post-more-topics">
       <div class="ft-post-more-topics__header">
         {{ftIcon "trending-up" size=20}}
-        <span class="ft-post-more-topics__title">New &amp; Unread Topics</span>
+        <span class="ft-post-more-topics__title">{{i18n
+            "fantribe.post_more_topics.title"
+          }}</span>
       </div>
 
       <div class="ft-post-more-topics__content">
@@ -128,7 +131,7 @@ export default class FantribePostMoreTopics extends Component {
         class="ft-post-more-topics__view-all"
         {{on "click" this.viewAll}}
       >
-        View all
+        {{i18n "fantribe.right_sidebar.view_all"}}
       </button>
     </div>
   </template>

@@ -8,6 +8,7 @@ import avatar from "discourse/helpers/avatar";
 import icon from "discourse/helpers/d-icon";
 import { ajax } from "discourse/lib/ajax";
 import { popupAjaxError } from "discourse/lib/ajax-error";
+import { i18n } from "discourse-i18n";
 import ftIcon from "../helpers/ft-icon";
 
 export default class FtEditProfileModal extends Component {
@@ -115,7 +116,7 @@ export default class FtEditProfileModal extends Component {
         class="ft-modal-backdrop"
         role="dialog"
         aria-modal="true"
-        aria-label="Edit profile"
+        aria-label={{i18n "fantribe.edit_profile.title"}}
         {{on "click" this.handleBackdropClick}}
         {{on "keydown" this.handleKeydown}}
       >
@@ -123,11 +124,13 @@ export default class FtEditProfileModal extends Component {
 
           {{! Header }}
           <div class="ft-modal__title-bar">
-            <h2 class="ft-modal__title">Edit Profile</h2>
+            <h2 class="ft-modal__title">{{i18n
+                "fantribe.edit_profile.title"
+              }}</h2>
             <button
               type="button"
               class="ft-modal__close-btn"
-              aria-label="Close"
+              aria-label={{i18n "fantribe.common.close"}}
               {{on "click" @onClose}}
             >
               {{ftIcon "x"}}
@@ -141,7 +144,7 @@ export default class FtEditProfileModal extends Component {
             </div>
             <div class="ft-edit-modal__avatar-meta">
               <p class="ft-edit-modal__avatar-hint">
-                To change your profile photo, update it in account preferences.
+                {{i18n "fantribe.edit_profile.photo_hint"}}
               </p>
               <LinkTo
                 @route="preferences.account"
@@ -150,7 +153,7 @@ export default class FtEditProfileModal extends Component {
                 {{on "click" @onClose}}
               >
                 {{icon "pencil"}}
-                Change Photo
+                {{i18n "fantribe.edit_profile.change_photo"}}
               </LinkTo>
             </div>
           </div>
@@ -160,13 +163,15 @@ export default class FtEditProfileModal extends Component {
 
             <div class="ft-edit-modal__field">
               <label class="ft-edit-modal__label" for="ft-edit-name">
-                Display Name
+                {{i18n "fantribe.edit_profile.display_name"}}
               </label>
               <input
                 type="text"
                 id="ft-edit-name"
                 class="ft-edit-modal__input"
-                placeholder="Your full name"
+                placeholder={{i18n
+                  "fantribe.edit_profile.full_name_placeholder"
+                }}
                 value={{this.name}}
                 maxlength="255"
                 {{on "input" this.updateName}}
@@ -175,12 +180,12 @@ export default class FtEditProfileModal extends Component {
 
             <div class="ft-edit-modal__field">
               <label class="ft-edit-modal__label" for="ft-edit-bio">
-                Bio
+                {{i18n "fantribe.common.bio"}}
               </label>
               <textarea
                 id="ft-edit-bio"
                 class="ft-edit-modal__textarea"
-                placeholder="Tell the world about yourself..."
+                placeholder={{i18n "fantribe.edit_profile.bio_placeholder"}}
                 {{on "input" this.updateBio}}
               >{{this.bio}}</textarea>
             </div>
@@ -188,13 +193,15 @@ export default class FtEditProfileModal extends Component {
             <div class="ft-edit-modal__field">
               <label class="ft-edit-modal__label" for="ft-edit-location">
                 {{icon "location-dot"}}
-                Location
+                {{i18n "fantribe.common.location"}}
               </label>
               <input
                 type="text"
                 id="ft-edit-location"
                 class="ft-edit-modal__input"
-                placeholder="City, Country"
+                placeholder={{i18n
+                  "fantribe.edit_profile.location_placeholder"
+                }}
                 value={{this.location}}
                 maxlength="255"
                 {{on "input" this.updateLocation}}
@@ -204,13 +211,13 @@ export default class FtEditProfileModal extends Component {
             <div class="ft-edit-modal__field">
               <label class="ft-edit-modal__label" for="ft-edit-website">
                 {{ftIcon "link2" size=14}}
-                Website
+                {{i18n "fantribe.common.website"}}
               </label>
               <input
                 type="url"
                 id="ft-edit-website"
                 class="ft-edit-modal__input"
-                placeholder="https://yourwebsite.com"
+                placeholder={{i18n "fantribe.edit_profile.website_placeholder"}}
                 value={{this.website}}
                 maxlength="500"
                 {{on "input" this.updateWebsite}}
@@ -226,7 +233,7 @@ export default class FtEditProfileModal extends Component {
               class="ft-modal__cancel-btn"
               {{on "click" @onClose}}
             >
-              Cancel
+              {{i18n "fantribe.common.cancel"}}
             </button>
             <button
               type="button"
@@ -238,7 +245,7 @@ export default class FtEditProfileModal extends Component {
               {{#if this.isSaving}}
                 Saving…
               {{else}}
-                Save Changes
+                {{i18n "fantribe.common.save_changes"}}
               {{/if}}
             </button>
           </div>

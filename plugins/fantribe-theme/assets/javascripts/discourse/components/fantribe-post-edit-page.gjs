@@ -9,6 +9,7 @@ import avatar from "discourse/helpers/avatar";
 import formatDate from "discourse/helpers/format-date";
 import { ajax } from "discourse/lib/ajax";
 import { popupAjaxError } from "discourse/lib/ajax-error";
+import { i18n } from "discourse-i18n";
 import { getUploadMarkdown } from "discourse/lib/uploads";
 import { eq } from "discourse/truth-helpers";
 import ftIcon from "../helpers/ft-icon";
@@ -73,7 +74,11 @@ export default class FantribePostEditPage extends Component {
   }
 
   get displayName() {
-    return this.poster?.name || this.poster?.username || "Unknown";
+    return (
+      this.poster?.name ||
+      this.poster?.username ||
+      i18n("fantribe.common.unknown")
+    );
   }
 
   get posterUsername() {
@@ -391,7 +396,9 @@ export default class FantribePostEditPage extends Component {
       });
       this.fantribeCreate.closeCreatePostModal();
       this.router.refresh();
-      this.toasts.success({ data: { message: "Post updated successfully!" } });
+      this.toasts.success({
+        data: { message: i18n("fantribe.post_edit.updated_successfully") },
+      });
     } catch (error) {
       popupAjaxError(error);
     } finally {
@@ -474,7 +481,9 @@ export default class FantribePostEditPage extends Component {
                   type="text"
                   class="ft-post-edit__title-input"
                   value={{this.postTitle}}
-                  placeholder="Post title"
+                  placeholder={{i18n
+                    "fantribe.post_modal.post_title_placeholder"
+                  }}
                   {{on "input" this.updateTitle}}
                 />
               </div>
@@ -485,7 +494,7 @@ export default class FantribePostEditPage extends Component {
               >
                 <textarea
                   class="ft-post-edit__body-input"
-                  placeholder="What's on your mind?"
+                  placeholder={{i18n "fantribe.post_edit.body_placeholder"}}
                   {{on "input" this.updateText}}
                 >{{this.postText}}</textarea>
               </div>
@@ -503,7 +512,7 @@ export default class FantribePostEditPage extends Component {
                     ></div>
                     <img
                       src={{this.currentImage.url}}
-                      alt="Post image"
+                      alt={{i18n "fantribe.post_full.post_image_alt"}}
                       class="ft-full-post__carousel-img ft-post-edit__carousel-img"
                     />
 
@@ -553,7 +562,9 @@ export default class FantribePostEditPage extends Component {
 
                 {{! Tags section }}
                 <div class="ft-post-edit__tags-row">
-                  <span class="ft-post-edit__tags-label">Tags:</span>
+                  <span class="ft-post-edit__tags-label">{{i18n
+                      "fantribe.post_edit.tags_label"
+                    }}</span>
                   <div class="ft-post-edit__tags-chips">
                     {{#each this.selectedTags as |tag|}}
                       <span class="ft-post-edit__tag-chip">
@@ -573,8 +584,8 @@ export default class FantribePostEditPage extends Component {
                         value={{this.tagInput}}
                         placeholder={{if
                           this.selectedTags.length
-                          "Add tag..."
-                          "Add up to 3 tags..."
+                          (i18n "fantribe.post_modal.add_tag")
+                          (i18n "fantribe.post_modal.add_up_to_3_tags")
                         }}
                         {{on "input" this.updateTagInput}}
                         {{on "keydown" this.handleTagKeydown}}
@@ -689,7 +700,7 @@ export default class FantribePostEditPage extends Component {
                 class="ft-post-edit__cancel-btn"
                 {{on "click" this.cancel}}
               >
-                Cancel
+                {{i18n "fantribe.common.cancel"}}
               </button>
               <button
                 type="button"
@@ -697,7 +708,11 @@ export default class FantribePostEditPage extends Component {
                 disabled={{this.isSubmitting}}
                 {{on "click" this.save}}
               >
-                {{if this.isSubmitting "Saving..." "Save"}}
+                {{if
+                  this.isSubmitting
+                  (i18n "fantribe.common.saving")
+                  (i18n "fantribe.common.save")
+                }}
               </button>
             </div>
 

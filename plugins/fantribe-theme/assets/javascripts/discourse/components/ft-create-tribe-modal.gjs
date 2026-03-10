@@ -6,6 +6,7 @@ import { service } from "@ember/service";
 import { htmlSafe } from "@ember/template";
 import { ajax } from "discourse/lib/ajax";
 import { popupAjaxError } from "discourse/lib/ajax-error";
+import { i18n } from "discourse-i18n";
 import ftIcon from "../helpers/ft-icon";
 
 export default class FtCreateTribeModal extends Component {
@@ -186,7 +187,7 @@ export default class FtCreateTribeModal extends Component {
       class="ft-modal-backdrop"
       role="dialog"
       aria-modal="true"
-      aria-label="Create tribe"
+      aria-label={{i18n "fantribe.tribe_modal.create_tribe"}}
       {{on "click" this.handleBackdropClick}}
       {{on "keydown" this.handleKeydown}}
     >
@@ -194,11 +195,13 @@ export default class FtCreateTribeModal extends Component {
 
         {{! Header }}
         <div class="ft-modal__title-bar">
-          <h2 class="ft-modal__title">Create Tribe</h2>
+          <h2 class="ft-modal__title">{{i18n
+              "fantribe.tribe_modal.create_tribe"
+            }}</h2>
           <button
             type="button"
             class="ft-modal__close-btn"
-            aria-label="Close"
+            aria-label={{i18n "fantribe.common.close"}}
             {{on "click" @onClose}}
           >
             {{ftIcon "x"}}
@@ -210,7 +213,9 @@ export default class FtCreateTribeModal extends Component {
 
           {{! Cover Image }}
           <div class="ft-edit-modal__field">
-            <label class="ft-edit-modal__label">Cover Image</label>
+            <label class="ft-edit-modal__label">{{i18n
+                "fantribe.tribe_modal.cover_image"
+              }}</label>
             <div class="ft-edit-tribe-modal__cover-wrap">
               {{#if this.coverPreviewUrl}}
                 <div
@@ -236,8 +241,8 @@ export default class FtCreateTribeModal extends Component {
                   {{ftIcon "image"}}
                   <span>{{if
                       this.isUploadingCover
-                      "Uploading..."
-                      "Upload Cover Image"
+                      (i18n "fantribe.common.uploading")
+                      (i18n "fantribe.tribe_modal.upload_cover_image")
                     }}</span>
                 </button>
               {{/if}}
@@ -249,14 +254,15 @@ export default class FtCreateTribeModal extends Component {
               />
             </div>
             <p class="ft-edit-tribe-modal__cover-hint">
-              Recommended: 1200×400px or wider. Shown at the top of your tribe
-              page.
+              {{i18n "fantribe.tribe_modal.cover_hint"}}
             </p>
           </div>
 
           {{! Tribe Logo / Profile Image }}
           <div class="ft-edit-modal__field">
-            <label class="ft-edit-modal__label">Tribe Logo</label>
+            <label class="ft-edit-modal__label">{{i18n
+                "fantribe.tribe_modal.tribe_logo"
+              }}</label>
             <div class="ft-edit-tribe-modal__logo-wrap">
               {{#if this.logoPreviewUrl}}
                 <div class="ft-edit-tribe-modal__logo-preview">
@@ -280,8 +286,8 @@ export default class FtCreateTribeModal extends Component {
                   {{ftIcon "image"}}
                   <span>{{if
                       this.isUploadingLogo
-                      "Uploading..."
-                      "Upload Tribe Logo"
+                      (i18n "fantribe.common.uploading")
+                      (i18n "fantribe.tribe_modal.upload_tribe_logo")
                     }}</span>
                 </button>
               {{/if}}
@@ -293,20 +299,19 @@ export default class FtCreateTribeModal extends Component {
               />
             </div>
             <p class="ft-edit-tribe-modal__cover-hint">
-              Square image, min 100×100px. Shown as your tribe's profile
-              picture.
+              {{i18n "fantribe.tribe_modal.logo_hint"}}
             </p>
           </div>
 
           <div class="ft-edit-modal__field">
             <label class="ft-edit-modal__label" for="ft-tribe-create-name">
-              Tribe Name
+              {{i18n "fantribe.tribe_modal.tribe_name"}}
             </label>
             <input
               type="text"
               id="ft-tribe-create-name"
               class="ft-edit-modal__input"
-              placeholder="Tribe name"
+              placeholder={{i18n "fantribe.tribe_modal.tribe_name_placeholder"}}
               value={{this.name}}
               maxlength="50"
               {{on "input" this.updateName}}
@@ -318,18 +323,22 @@ export default class FtCreateTribeModal extends Component {
               class="ft-edit-modal__label"
               for="ft-tribe-create-description"
             >
-              Description
+              {{i18n "fantribe.common.description"}}
             </label>
             <textarea
               id="ft-tribe-create-description"
               class="ft-edit-modal__textarea"
-              placeholder="What is this tribe about?"
+              placeholder={{i18n
+                "fantribe.tribe_modal.description_placeholder"
+              }}
               {{on "input" this.updateDescription}}
             ></textarea>
           </div>
 
           <div class="ft-edit-modal__field">
-            <label class="ft-edit-modal__label">Visibility</label>
+            <label class="ft-edit-modal__label">{{i18n
+                "fantribe.common.visibility"
+              }}</label>
             <div class="ft-edit-tribe-modal__visibility-row">
               <button
                 type="button"
@@ -341,7 +350,7 @@ export default class FtCreateTribeModal extends Component {
                 {{on "click" this.setPublic}}
               >
                 {{ftIcon "globe"}}
-                <span>Public</span>
+                <span>{{i18n "fantribe.common.public"}}</span>
               </button>
               <button
                 type="button"
@@ -350,12 +359,12 @@ export default class FtCreateTribeModal extends Component {
                 {{on "click" this.setPrivate}}
               >
                 {{ftIcon "lock"}}
-                <span>Private</span>
+                <span>{{i18n "fantribe.common.private"}}</span>
               </button>
             </div>
             {{#if this.isPrivate}}
               <p class="ft-edit-tribe-modal__vis-hint">
-                Only staff will be able to access this tribe.
+                {{i18n "fantribe.tribe_modal.private_hint"}}
               </p>
             {{/if}}
           </div>
@@ -369,7 +378,7 @@ export default class FtCreateTribeModal extends Component {
             class="ft-modal__cancel-btn"
             {{on "click" @onClose}}
           >
-            Cancel
+            {{i18n "fantribe.common.cancel"}}
           </button>
           <button
             type="button"
@@ -378,7 +387,11 @@ export default class FtCreateTribeModal extends Component {
             disabled={{this.isDisabled}}
             {{on "click" this.createTribe}}
           >
-            {{if this.isSaving "Creating…" "Create Tribe"}}
+            {{if
+              this.isSaving
+              (i18n "fantribe.tribe_modal.creating")
+              (i18n "fantribe.tribe_modal.create_tribe")
+            }}
           </button>
         </div>
 

@@ -2,6 +2,7 @@ import Component from "@glimmer/component";
 import { tracked } from "@glimmer/tracking";
 import { on } from "@ember/modifier";
 import { action } from "@ember/object";
+import { i18n } from "discourse-i18n";
 import ftIcon from "../helpers/ft-icon";
 
 export default class FantribeGearPill extends Component {
@@ -63,15 +64,17 @@ export default class FantribeGearPill extends Component {
               {{/if}}
 
               <button type="button" class="fantribe-gear-pill__card-cta">
-                View Product
+                {{i18n "fantribe.gear_pill.view_product"}}
               </button>
             </div>
           </div>
 
           {{! Quick Stats }}
           <div class="fantribe-gear-pill__card-stats">
-            <span>Used by <strong>1,234</strong> creators</span>
-            <span class="fantribe-gear-pill__card-stock">In Stock</span>
+            <span>{{i18n "fantribe.gear_pill.used_by_creators"}}</span>
+            <span class="fantribe-gear-pill__card-stock">{{i18n
+                "fantribe.gear_pill.in_stock"
+              }}</span>
           </div>
         </div>
       {{/if}}

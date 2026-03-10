@@ -5,6 +5,7 @@ import { on } from "@ember/modifier";
 import { action } from "@ember/object";
 import { service } from "@ember/service";
 import { ajax } from "discourse/lib/ajax";
+import { i18n } from "discourse-i18n";
 import ftIcon from "../helpers/ft-icon";
 
 export default class FantribeTrendingPanel extends Component {
@@ -28,22 +29,26 @@ export default class FantribeTrendingPanel extends Component {
 
   formatMemberCount(count) {
     if (!count) {
-      return "0 members";
+      return i18n("fantribe.right_sidebar.members_count", { count: 0 });
     }
     if (count >= 1000) {
-      return (count / 1000).toFixed(1) + "K members";
+      return i18n("fantribe.right_sidebar.members_count_k", {
+        count: (count / 1000).toFixed(1),
+      });
     }
-    return `${count} members`;
+    return i18n("fantribe.right_sidebar.members_count", { count });
   }
 
   formatPostCount(count) {
     if (!count) {
-      return "0 posts";
+      return i18n("fantribe.right_sidebar.posts_count", { count: 0 });
     }
     if (count >= 1000) {
-      return (count / 1000).toFixed(1) + "K posts";
+      return i18n("fantribe.right_sidebar.posts_count_k", {
+        count: (count / 1000).toFixed(1),
+      });
     }
-    return `${count} posts`;
+    return i18n("fantribe.right_sidebar.posts_count", { count });
   }
 
   @action
@@ -62,7 +67,9 @@ export default class FantribeTrendingPanel extends Component {
       <div class="ft-trending-panel__header">
         <div class="ft-trending-panel__header-inner">
           {{ftIcon "trending-up" size=20}}
-          <h3 class="ft-trending-panel__title">Trending Tribes</h3>
+          <h3 class="ft-trending-panel__title">{{i18n
+              "fantribe.right_sidebar.trending_tribes"
+            }}</h3>
         </div>
       </div>
 
@@ -100,7 +107,7 @@ export default class FantribeTrendingPanel extends Component {
           {{/each}}
         {{else}}
           <div class="ft-trending-panel__empty">
-            <p>No active tribes yet</p>
+            <p>{{i18n "fantribe.right_sidebar.no_active_tribes"}}</p>
           </div>
         {{/if}}
       </div>
@@ -112,7 +119,7 @@ export default class FantribeTrendingPanel extends Component {
           class="ft-trending-panel__see-all"
           {{on "click" this.viewAll}}
         >
-          View all
+          {{i18n "fantribe.right_sidebar.view_all"}}
         </button>
       </div>
     </div>

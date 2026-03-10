@@ -3,6 +3,7 @@ import { on } from "@ember/modifier";
 import { action } from "@ember/object";
 import { service } from "@ember/service";
 import avatar from "discourse/helpers/avatar";
+import { i18n } from "discourse-i18n";
 import ftIcon from "../helpers/ft-icon";
 
 export default class FantribeComposeBox extends Component {
@@ -26,33 +27,33 @@ export default class FantribeComposeBox extends Component {
 
         <div class="fantribe-compose-box__content">
           <div class="fantribe-compose-box__input-placeholder">
-            Share your sound...
+            {{i18n "fantribe.compose.placeholder"}}
           </div>
 
           <div class="fantribe-compose-box__actions">
             <button
               type="button"
               class="fantribe-compose-box__media-btn fantribe-compose-box__media-btn--photo"
-              title="Photo"
+              title={{i18n "fantribe.compose.photo"}}
             >
               {{ftIcon "image"}}
-              <span>Photo</span>
+              <span>{{i18n "fantribe.compose.photo"}}</span>
             </button>
             <button
               type="button"
               class="fantribe-compose-box__media-btn fantribe-compose-box__media-btn--video"
-              title="Video"
+              title={{i18n "fantribe.compose.video"}}
             >
               {{ftIcon "video"}}
-              <span>Video</span>
+              <span>{{i18n "fantribe.compose.video"}}</span>
             </button>
             <button
               type="button"
               class="fantribe-compose-box__media-btn fantribe-compose-box__media-btn--audio"
-              title="Audio"
+              title={{i18n "fantribe.compose.audio"}}
             >
               {{ftIcon "headphones"}}
-              <span>Audio</span>
+              <span>{{i18n "fantribe.compose.audio"}}</span>
             </button>
           </div>
         </div>

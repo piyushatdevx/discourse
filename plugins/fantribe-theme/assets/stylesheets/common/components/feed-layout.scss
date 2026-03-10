@@ -2,6 +2,8 @@
 // Feed max-width: 1280px, Right Sidebar: 320px (xl only)
 body.fantribe-theme:not(.admin-interface) {
   .fantribe-feed-layout {
+    // Keep FanTribe layout fixed in LTR for all locales.
+    direction: ltr;
     display: flex;
     flex-direction: column; // stack tribe chips above feed on mobile/tablet
     min-height: 0;

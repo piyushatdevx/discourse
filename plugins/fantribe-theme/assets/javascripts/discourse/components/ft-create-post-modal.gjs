@@ -11,6 +11,7 @@ import { popupAjaxError } from "discourse/lib/ajax-error";
 import { getUploadMarkdown } from "discourse/lib/uploads";
 import closeOnClickOutside from "discourse/modifiers/close-on-click-outside";
 import { eq } from "discourse/truth-helpers";
+import { i18n } from "discourse-i18n";
 import ftIcon from "../helpers/ft-icon";
 
 const MAX_CHARS = 2000;
@@ -50,7 +51,9 @@ export default class FtCreatePostModal extends Component {
   }
 
   get modalTitle() {
-    return this.isEditMode ? "Edit Post" : "Create Post";
+    return this.isEditMode
+      ? i18n("fantribe.post_modal.edit_post")
+      : i18n("fantribe.post_modal.create_post");
   }
 
   get localCategory() {
@@ -89,7 +92,7 @@ export default class FtCreatePostModal extends Component {
   }
 
   get selectedTribeLabel() {
-    return this.localCategory?.name || "General";
+    return this.localCategory?.name || i18n("fantribe.common.general");
   }
 
   get selectedTribeLogo() {
@@ -400,7 +403,9 @@ export default class FtCreatePostModal extends Component {
         {{! Tribe selector — full-width inline expand (create mode only) }}
         {{#if this.hasTribeOptions}}
           <div class="ft-modal__tribe-section">
-            <label class="ft-modal__tribe-section-label">Posting to</label>
+            <label class="ft-modal__tribe-section-label">{{i18n
+                "fantribe.post_modal.posting_to"
+              }}</label>
             <div
               class="ft-modal__tribe-select-wrap"
               {{closeOnClickOutside this.closeTribeDropdown}}
@@ -455,9 +460,9 @@ export default class FtCreatePostModal extends Component {
                     <span class="ft-modal__tribe-select-option-icon">
                       {{ftIcon "globe"}}
                     </span>
-                    <span
-                      class="ft-modal__tribe-select-option-name"
-                    >General</span>
+                    <span class="ft-modal__tribe-select-option-name">{{i18n
+                        "fantribe.common.general"
+                      }}</span>
                     {{#unless this.localCategory}}
                       <span class="ft-modal__tribe-select-check">
                         {{ftIcon "check"}}
@@ -508,13 +513,13 @@ export default class FtCreatePostModal extends Component {
           <input
             type="text"
             class="ft-modal__title-input"
-            placeholder="Post title..."
+            placeholder={{i18n "fantribe.post_modal.post_title_placeholder"}}
             value={{this.postTitle}}
             {{on "input" this.updateTitle}}
           />
           <textarea
             class="ft-modal__textarea"
-            placeholder="What's on your mind? Share your music, updates, and vibes..."
+            placeholder={{i18n "fantribe.post_modal.body_placeholder"}}
             value={{this.postText}}
             {{on "input" this.updateText}}
           ></textarea>
@@ -529,7 +534,9 @@ export default class FtCreatePostModal extends Component {
           <div class="ft-modal__tags-section">
             <div class="ft-modal__tags-label-row">
               {{ftIcon "tag"}}
-              <span class="ft-modal__tags-label">Tags</span>
+              <span class="ft-modal__tags-label">{{i18n
+                  "fantribe.common.tags"
+                }}</span>
             </div>
             {{! template-lint-disable no-invalid-interactive }}
             <div
@@ -552,8 +559,8 @@ export default class FtCreatePostModal extends Component {
                   class="ft-modal__tag-input"
                   placeholder={{if
                     this.selectedTags.length
-                    "Add tag..."
-                    "Add up to 3 tags..."
+                    (i18n "fantribe.post_modal.add_tag")
+                    (i18n "fantribe.post_modal.add_up_to_3_tags")
                   }}
                   value={{this.tagInput}}
                   {{on "input" this.updateTagInput}}
@@ -565,7 +572,7 @@ export default class FtCreatePostModal extends Component {
             <span
               class="ft-modal__tags-hint"
             >{{this.selectedTags.length}}/{{MAX_TAGS}}
-              tags</span>
+              {{i18n "fantribe.common.tags_lower"}}</span>
           </div>
 
           {{! Hidden file inputs }}
@@ -600,7 +607,7 @@ export default class FtCreatePostModal extends Component {
               {{on "click" (fn this.triggerFileInput "image")}}
             >
               {{ftIcon "image"}}
-              <span>Photo</span>
+              <span>{{i18n "fantribe.common.photo"}}</span>
             </button>
             <button
               type="button"
@@ -609,7 +616,7 @@ export default class FtCreatePostModal extends Component {
               {{on "click" (fn this.triggerFileInput "video")}}
             >
               {{ftIcon "video"}}
-              <span>Video</span>
+              <span>{{i18n "fantribe.common.video"}}</span>
             </button>
             <button
               type="button"
@@ -618,13 +625,15 @@ export default class FtCreatePostModal extends Component {
               {{on "click" (fn this.triggerFileInput "audio")}}
             >
               {{ftIcon "music"}}
-              <span>Audio</span>
+              <span>{{i18n "fantribe.common.audio"}}</span>
             </button>
           </div>
 
           {{! Upload progress }}
           {{#if this.isUploading}}
-            <div class="ft-modal__upload-status">Uploading...</div>
+            <div class="ft-modal__upload-status">{{i18n
+                "fantribe.common.uploading"
+              }}</div>
           {{/if}}
 
           {{! Uploaded Media Previews }}
@@ -664,7 +673,7 @@ export default class FtCreatePostModal extends Component {
               type="button"
               class="ft-modal__cancel-btn"
               {{on "click" this.fantribeCreate.closeCreatePostModal}}
-            >Cancel</button>
+            >{{i18n "fantribe.common.cancel"}}</button>
             <button
               type="button"
               class="ft-modal__publish-btn
@@ -673,11 +682,11 @@ export default class FtCreatePostModal extends Component {
               {{on "click" this.submitPost}}
             >
               {{#if this.isSubmitting}}
-                Saving...
+                {{i18n "fantribe.common.saving"}}
               {{else if this.isEditMode}}
-                Save Changes
+                {{i18n "fantribe.common.save_changes"}}
               {{else}}
-                Publish Now
+                {{i18n "fantribe.post_modal.publish_now"}}
               {{/if}}
             </button>
           </div>

@@ -117,6 +117,8 @@ export default class FtUserProfileHeader extends Component {
     this.dialog.confirm({
       message: i18n("fantribe.log_out_confirm"),
       class: "logout-confirm",
+      confirmButtonLabel: "fantribe.common.log_out",
+      cancelButtonLabel: "fantribe.common.cancel",
       didConfirm: () => {
         getOwner(this).lookup("route:application").send("logout");
       },

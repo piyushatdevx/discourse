@@ -3,7 +3,12 @@ import { tracked } from "@glimmer/tracking";
 import { fn } from "@ember/helper";
 import { on } from "@ember/modifier";
 import { action } from "@ember/object";
+import { next } from "@ember/runloop";
+import { service } from "@ember/service";
 import icon from "discourse/helpers/d-icon";
+import { ajax } from "discourse/lib/ajax";
+import { popupAjaxError } from "discourse/lib/ajax-error";
+import cookie from "discourse/lib/cookie";
 import { eq } from "discourse/truth-helpers";
 
 export const LANGUAGES = [
@@ -17,24 +22,240 @@ export const LANGUAGES = [
 ];
 
 export default class FtLangDropdown extends Component {
+  @service currentUser;
+  @service siteSettings;
+
   @tracked isOpen = false;
-  @tracked selected = LANGUAGES[0];
+  @tracked isSubmitting = false;
+  @tracked
+  supportsSetLocaleEndpoint =
+    window.localStorage?.getItem("ft_locale_endpoint_supported") !== "false";
+  @tracked selectedCode = "en";
+
+  constructor() {
+    super(...arguments);
+    this.selectedCode = this.initialSelectedCode;
+    this.syncLocaleFromCookieAfterLogin();
+  }
+
+  get initialSelectedCode() {
+    const candidates = [
+      cookie("user_locale"),
+      cookie("locale"),
+      this.currentUser?.locale,
+      window.I18n?.currentLocale?.(),
+      window.I18n?.locale,
+      "en",
+    ].filter(Boolean);
+
+    const match = candidates
+      .map((locale) => this.languageForLocale(locale))
+      .find(Boolean);
+    return match?.code || "en";
+  }
+
+  get selected() {
+    return (
+      this.languages.find((lang) =>
+        this.sameLocale(lang.code, this.selectedCode)
+      ) ||
+      this.languages[0] ||
+      LANGUAGES[0]
+    );
+  }
+
+  get languages() {
+    const available = this.availableLocales;
+
+    return LANGUAGES.map((lang) => {
+      if (lang.code !== "hi") {
+        return lang;
+      }
+
+      // Prefer hi_IN when installed, fallback to hi.
+      if (available.has("hi_in")) {
+        return { ...lang, code: "hi_IN" };
+      }
+      if (available.has("hi")) {
+        return { ...lang, code: "hi" };
+      }
+      return lang;
+    });
+  }
+
+  get availableLocales() {
+    const raw = this.siteSettings?.available_locales;
+    const locales = Array.isArray(raw) ? raw : (raw || "").split("|");
+    return new Set(locales.filter(Boolean).map((l) => this.normalizeLocale(l)));
+  }
+
+  languageForLocale(locale) {
+    return this.languages.find((lang) => this.sameLocale(lang.code, locale));
+  }
+
+  normalizeLocale(locale) {
+    return (locale || "").toString().trim().toLowerCase().replace("-", "_");
+  }
+
+  sameLocale(a, b) {
+    const aNorm = this.normalizeLocale(a);
+    const bNorm = this.normalizeLocale(b);
+    if (aNorm === bNorm) {
+      return true;
+    }
+    const hindi = new Set(["hi", "hi_in"]);
+    return hindi.has(aNorm) && hindi.has(bNorm);
+  }
+
+  normalizeForPersistence(locale) {
+    const normalized = this.normalizeLocale(locale);
+    return normalized === "hi" ? "hi_IN" : locale;
+  }
+
+  persistLocaleCookies(locale) {
+    const persisted = this.normalizeForPersistence(locale);
+    cookie("user_locale", persisted, { expires: 365 });
+    cookie("locale", persisted, { expires: 365 });
+  }
+
+  async persistViaCurrentUser(locale) {
+    if (!this.currentUser) {
+      return this.normalizeForPersistence(locale);
+    }
+
+    const normalized = this.normalizeLocale(locale);
+    const candidates =
+      normalized === "hi" ? ["hi_IN", "hi", "hi_in"] : [locale];
+
+    for (const candidate of candidates) {
+      try {
+        this.currentUser.set("locale", candidate);
+        await this.currentUser.save(["locale"]);
+        return candidate;
+      } catch {
+        // Try next variant.
+      }
+    }
+
+    return this.normalizeForPersistence(locale);
+  }
 
   @action
   toggle() {
+    if (this.isSubmitting) {
+      return;
+    }
     this.isOpen = !this.isOpen;
   }
 
   @action
-  select(lang) {
-    this.selected = lang;
+  async select(lang) {
+    if (
+      !lang?.code ||
+      this.isSubmitting ||
+      this.sameLocale(lang.code, this.selectedCode)
+    ) {
+      return;
+    }
+
     this.isOpen = false;
+    this.isSubmitting = true;
+    this.persistLocaleCookies(lang.code);
+
+    try {
+      if (this.supportsSetLocaleEndpoint) {
+        await ajax("/user-language/set.json", {
+          type: "POST",
+          data: { locale: lang.code },
+        });
+        window.localStorage?.setItem("ft_locale_endpoint_supported", "true");
+        this.selectedCode = this.normalizeForPersistence(lang.code);
+      } else {
+        const persistedLocale = await this.persistViaCurrentUser(lang.code);
+        this.persistLocaleCookies(persistedLocale);
+        this.selectedCode = persistedLocale;
+      }
+    } catch (error) {
+      if (
+        error?.jqXHR?.status === 404 ||
+        error?.status === 404 ||
+        error?.jqXHR?.status === 422 ||
+        error?.status === 422
+      ) {
+        this.supportsSetLocaleEndpoint = false;
+        window.localStorage?.setItem("ft_locale_endpoint_supported", "false");
+        const persistedLocale = await this.persistViaCurrentUser(lang.code);
+        this.persistLocaleCookies(persistedLocale);
+        this.selectedCode = persistedLocale;
+      } else {
+        popupAjaxError(error);
+        return;
+      }
+    } finally {
+      this.isSubmitting = false;
+    }
+
+    // Ensure language updates everywhere immediately.
+    window.location.reload();
+  }
+
+  async syncLocaleFromCookieAfterLogin() {
+    if (!this.currentUser) {
+      return;
+    }
+
+    const cookieLocale = cookie("user_locale") || cookie("locale");
+    const userLocale = this.currentUser.locale;
+    const syncAttemptKey = "ft_locale_sync_attempted_for";
+
+    if (!cookieLocale || this.sameLocale(cookieLocale, userLocale)) {
+      window.sessionStorage?.removeItem(syncAttemptKey);
+      return;
+    }
+
+    if (window.sessionStorage?.getItem(syncAttemptKey) === cookieLocale) {
+      return;
+    }
+    window.sessionStorage?.setItem(syncAttemptKey, cookieLocale);
+
+    try {
+      this.persistLocaleCookies(cookieLocale);
+      if (this.supportsSetLocaleEndpoint) {
+        await ajax("/user-language/set.json", {
+          type: "POST",
+          data: { locale: cookieLocale },
+        });
+        window.localStorage?.setItem("ft_locale_endpoint_supported", "true");
+      } else {
+        const persistedLocale = await this.persistViaCurrentUser(cookieLocale);
+        this.persistLocaleCookies(persistedLocale);
+      }
+
+      this.selectedCode = this.normalizeForPersistence(cookieLocale);
+    } catch (error) {
+      if (
+        error?.jqXHR?.status === 404 ||
+        error?.status === 404 ||
+        error?.jqXHR?.status === 422 ||
+        error?.status === 422
+      ) {
+        this.supportsSetLocaleEndpoint = false;
+        window.localStorage?.setItem("ft_locale_endpoint_supported", "false");
+      }
+    }
   }
 
   @action
   handleOutsideClick(event) {
+    if (!this.isOpen) {
+      return;
+    }
+
     if (!event.currentTarget.contains(event.relatedTarget)) {
-      this.isOpen = false;
+      // Avoid mutating tracked state in the same render computation that consumed it.
+      next(this, () => {
+        this.isOpen = false;
+      });
     }
   }
 
@@ -65,7 +286,7 @@ export default class FtLangDropdown extends Component {
 
       {{#if this.isOpen}}
         <div class="ft-lang-dropdown__menu" role="listbox">
-          {{#each LANGUAGES as |lang|}}
+          {{#each this.languages as |lang|}}
             <button
               type="button"
               class="ft-lang-dropdown__option

@@ -1,6 +1,7 @@
 import Component from "@glimmer/component";
 import { fn } from "@ember/helper";
 import { on } from "@ember/modifier";
+import { i18n } from "discourse-i18n";
 
 export default class FantribeFilterDropdown extends Component {
   <template>
@@ -29,7 +30,8 @@ export default class FantribeFilterDropdown extends Component {
           <path d="M8 10v4" />
           <path d="M8 12H3" />
         </svg>
-        <span>Filter: {{@activeFilter}}</span>
+        <span>{{i18n "fantribe.filter_dropdown.filter"}}:
+          {{@activeFilter}}</span>
         {{! ChevronDown icon }}
         <svg
           class="ft-filter-dropdown__chevron
@@ -50,7 +52,7 @@ export default class FantribeFilterDropdown extends Component {
         <button
           class="ft-filter-dropdown__backdrop"
           type="button"
-          aria-label="Close filter"
+          aria-label={{i18n "fantribe.filter_dropdown.close_filter"}}
           {{on "click" @onClose}}
         ></button>
 

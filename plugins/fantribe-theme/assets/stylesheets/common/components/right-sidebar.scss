@@ -9,6 +9,7 @@
 // Live indicator: 8px red-500, ping 1s, border 2px white
 body.fantribe-theme:not(.admin-interface) {
   .fantribe-right-sidebar {
+    direction: ltr;
     display: none;
 
     @media (width >= 1280px) {
@@ -18,7 +19,7 @@ body.fantribe-theme:not(.admin-interface) {
       width: 320px;
       height: 100%;
       overflow-y: auto;
-      padding: 0 0 24px 0;
+      padding: 2px 0 24px 0;
 
       &::-webkit-scrollbar {
         display: none;
@@ -32,7 +33,7 @@ body.fantribe-theme:not(.admin-interface) {
       max-width: 282px;
       display: flex;
       align-items: center;
-      gap: 16px;
+      gap: 12px;
     }
 
     &__search-bar {
@@ -125,6 +126,23 @@ body.fantribe-theme:not(.admin-interface) {
         &:hover {
           background: var(--ft-vibrant-red-hover);
         }
+      }
+    }
+
+    &__lang-dropdown {
+      flex-shrink: 0;
+
+      .fantribe-login-header__btn--lang {
+        height: 48px;
+        min-width: 88px;
+        padding: 0 12px;
+        border-radius: 24px;
+        justify-content: flex-start;
+      }
+
+      .ft-lang-dropdown__menu {
+        right: 0;
+        left: auto;
       }
     }
 

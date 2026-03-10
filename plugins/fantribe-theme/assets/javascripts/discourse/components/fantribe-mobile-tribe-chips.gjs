@@ -4,6 +4,7 @@ import { on } from "@ember/modifier";
 import { action } from "@ember/object";
 import { service } from "@ember/service";
 import { htmlSafe } from "@ember/template";
+import { i18n } from "discourse-i18n";
 import ftIcon from "../helpers/ft-icon";
 
 export default class FantribeMobileTribeChips extends Component {
@@ -89,7 +90,7 @@ export default class FantribeMobileTribeChips extends Component {
           <path d="M5 10V3" />
           <path d="M5 21v-7" />
         </svg>
-        <span>My Tribes</span>
+        <span>{{i18n "fantribe.mobile_chips.my_tribes"}}</span>
       </h3>
       <div class="fantribe-mobile-chips__row">
         <button
@@ -98,7 +99,10 @@ export default class FantribeMobileTribeChips extends Component {
             {{if this.allCategoriesSelected 'fantribe-chip--active'}}"
           {{on "click" this.selectAll}}
         >
-          <span>All Tribes ({{this.totalTopicCount}})</span>
+          <span>{{i18n
+              "fantribe.mobile_chips.all_tribes"
+              count=this.totalTopicCount
+            }}</span>
         </button>
 
         {{#each this.categories as |category|}}

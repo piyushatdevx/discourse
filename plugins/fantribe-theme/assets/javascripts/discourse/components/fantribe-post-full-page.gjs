@@ -12,6 +12,7 @@ import formatDate from "discourse/helpers/format-date";
 import { ajax } from "discourse/lib/ajax";
 import { extractError, popupAjaxError } from "discourse/lib/ajax-error";
 import { not, or } from "discourse/truth-helpers";
+import { i18n } from "discourse-i18n";
 import ftIcon from "../helpers/ft-icon";
 import FantribeMediaVideo from "./fantribe-media-video";
 import FantribePostMenu from "./fantribe-post-menu";
@@ -89,7 +90,11 @@ export default class FantribePostFullPage extends Component {
   }
 
   get displayName() {
-    return this.poster?.name || this.poster?.username || "Unknown";
+    return (
+      this.poster?.name ||
+      this.poster?.username ||
+      i18n("fantribe.common.unknown")
+    );
   }
 
   get posterUsername() {
@@ -660,7 +665,9 @@ export default class FantribePostFullPage extends Component {
     event.stopPropagation();
     const url = window.location.href;
     navigator.clipboard?.writeText?.(url).catch(() => {});
-    this.toasts?.success?.({ data: { message: "Link copied!" } });
+    this.toasts?.success?.({
+      data: { message: i18n("fantribe.post_full.link_copied") },
+    });
   }
 
   @action
@@ -839,7 +846,7 @@ export default class FantribePostFullPage extends Component {
                       <div class="ft-full-post__carousel">
                         <img
                           src={{this.currentImage.url}}
-                          alt="Post image"
+                          alt={{i18n "fantribe.post_full.post_image_alt"}}
                           class="ft-full-post__carousel-img"
                           loading="lazy"
                         />
@@ -927,7 +934,9 @@ export default class FantribePostFullPage extends Component {
                 {{#if (or this.hasVideo this.hasImages this.hasOnebox)}}
                   <div class="ft-full-post__right-col">
                     <div class="ft-full-post__comments-inner">
-                      <span class="ft-full-post__comments-label">Comments</span>
+                      <span class="ft-full-post__comments-label">{{i18n
+                          "fantribe.common.comments"
+                        }}</span>
                       <div class="ft-full-post__comments-list">
                         {{#each this.comments as |comment|}}
                           <div class="ft-full-post__comment">
@@ -976,8 +985,8 @@ export default class FantribePostFullPage extends Component {
                           class="ft-full-post__comment-input"
                           placeholder={{if
                             this.topicClosed
-                            "Comments are turned off"
-                            "Join the conversation..."
+                            (i18n "fantribe.common.comments_turned_off")
+                            (i18n "fantribe.common.join_conversation")
                           }}
                           value={{this.commentText}}
                           disabled={{or
@@ -1002,7 +1011,9 @@ export default class FantribePostFullPage extends Component {
                 <div
                   class="ft-full-post__comments-block ft-full-post__comments-block--no-image"
                 >
-                  <span class="ft-full-post__comments-label">Comments</span>
+                  <span class="ft-full-post__comments-label">{{i18n
+                      "fantribe.common.comments"
+                    }}</span>
                   <div class="ft-full-post__comments-list">
                     {{#each this.comments as |comment|}}
                       <div class="ft-full-post__comment">
@@ -1047,8 +1058,8 @@ export default class FantribePostFullPage extends Component {
                         class="ft-full-post__comment-input"
                         placeholder={{if
                           this.topicClosed
-                          "Comments are turned off"
-                          "Join the conversation..."
+                          (i18n "fantribe.common.comments_turned_off")
+                          (i18n "fantribe.common.join_conversation")
                         }}
                         value={{this.commentText}}
                         disabled={{or

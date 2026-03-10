@@ -10,6 +10,7 @@ import { ajax } from "discourse/lib/ajax";
 import { popupAjaxError } from "discourse/lib/ajax-error";
 import discourseDebounce from "discourse/lib/debounce";
 import { searchForTerm } from "discourse/lib/search";
+import { i18n } from "discourse-i18n";
 import FtLeaveTribeConfirmModal from "discourse/plugins/explore-tribes/discourse/components/ft-leave-tribe-confirm-modal";
 import ftIcon from "../helpers/ft-icon";
 import FantribeFeedCard from "./fantribe-feed-card";
@@ -277,7 +278,7 @@ export default class FantribeTribePage extends Component {
         {{ftIcon "search"}}
         <input
           type="text"
-          placeholder="Search posts..."
+          placeholder={{i18n "fantribe.tribe_page.search_posts"}}
           value={{this.searchQuery}}
           {{on "input" this.handleSearchInput}}
         />
@@ -325,20 +326,26 @@ export default class FantribeTribePage extends Component {
                 <div class="ft-tribe-page__meta">
                   {{#if this.memberCount}}
                     {{ftIcon "users"}}
-                    <span>{{this.memberCount}} members</span>
+                    <span>{{i18n
+                        "fantribe.tribe_page.members_count"
+                        count=this.memberCount
+                      }}</span>
                     <span class="ft-tribe-page__meta-dot">·</span>
                   {{/if}}
                   {{#if this.isPrivate}}
                     {{ftIcon "lock"}}
-                    <span>Private</span>
+                    <span>{{i18n "fantribe.common.private"}}</span>
                   {{else}}
                     {{ftIcon "globe"}}
-                    <span>Public</span>
+                    <span>{{i18n "fantribe.common.public"}}</span>
                   {{/if}}
                   {{#if this.postCount}}
                     <span class="ft-tribe-page__meta-dot">·</span>
                     {{ftIcon "file-text"}}
-                    <span>{{this.postCount}} posts</span>
+                    <span>{{i18n
+                        "fantribe.tribe_page.posts_count"
+                        count=this.postCount
+                      }}</span>
                   {{/if}}
                 </div>
               </div>
@@ -351,7 +358,7 @@ export default class FantribeTribePage extends Component {
                     {{on "click" this.openEditModal}}
                   >
                     {{ftIcon "edit3"}}
-                    <span>Edit</span>
+                    <span>{{i18n "fantribe.common.edit"}}</span>
                   </button>
                 {{/if}}
                 {{#if this.currentUser}}
@@ -367,10 +374,10 @@ export default class FantribeTribePage extends Component {
                       {{ftIcon "loader"}}
                     {{else if this.isMember}}
                       {{ftIcon "log-out"}}
-                      <span>Leave</span>
+                      <span>{{i18n "fantribe.common.leave"}}</span>
                     {{else}}
                       {{ftIcon "user-plus"}}
-                      <span>Join Tribe</span>
+                      <span>{{i18n "fantribe.common.join_tribe"}}</span>
                     {{/if}}
                   </button>
                 {{/if}}
@@ -400,12 +407,12 @@ export default class FantribeTribePage extends Component {
                 {{/if}}
               </div>
               <div class="ft-tribe-page__compose-placeholder">
-                Write something in
+                {{i18n "fantribe.tribe_page.write_something_in"}}
                 <strong>{{@category.name}}</strong>...
               </div>
               <button type="button" class="ft-tribe-page__compose-btn">
                 {{ftIcon "send"}}
-                <span>Post</span>
+                <span>{{i18n "fantribe.common.post"}}</span>
               </button>
             </div>
           {{/if}}
@@ -420,18 +427,22 @@ export default class FantribeTribePage extends Component {
               <div class="ft-tribe-page__empty">
                 {{#if this.isSearchActive}}
                   <div class="ft-tribe-page__empty-icon">🔍</div>
-                  <h3 class="ft-tribe-page__empty-title">No results found</h3>
+                  <h3 class="ft-tribe-page__empty-title">{{i18n
+                      "fantribe.search_modal.no_results"
+                    }}</h3>
                   <p class="ft-tribe-page__empty-text">
-                    Try a different search term
+                    {{i18n "fantribe.tribe_page.try_different_search"}}
                   </p>
                 {{else}}
                   <div class="ft-tribe-page__empty-icon">🏕️</div>
-                  <h3 class="ft-tribe-page__empty-title">No posts yet</h3>
+                  <h3 class="ft-tribe-page__empty-title">{{i18n
+                      "fantribe.feed_layout.empty_title"
+                    }}</h3>
                   <p class="ft-tribe-page__empty-text">
                     {{#if this.isMember}}
-                      Be the first to share something in this tribe!
+                      {{i18n "fantribe.tribe_page.empty_member"}}
                     {{else}}
-                      Join this tribe to see and share posts.
+                      {{i18n "fantribe.tribe_page.empty_non_member"}}
                     {{/if}}
                   </p>
                 {{/if}}

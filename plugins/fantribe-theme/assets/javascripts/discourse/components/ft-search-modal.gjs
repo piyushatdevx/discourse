@@ -7,6 +7,7 @@ import { service } from "@ember/service";
 import { htmlSafe } from "@ember/template";
 import { modifier } from "ember-modifier";
 import { ajax } from "discourse/lib/ajax";
+import { i18n } from "discourse-i18n";
 import ftIcon from "../helpers/ft-icon";
 
 const autoFocus = modifier((element) => {
@@ -33,6 +34,7 @@ export default class FtSearchModal extends Component {
   get tabsWithActive() {
     return TABS.map((tab) => ({
       ...tab,
+      label: i18n(tab.labelKey),
       isActive: tab.id === this.activeTab,
     }));
   }
@@ -90,7 +92,8 @@ export default class FtSearchModal extends Component {
       (this.rawResults.posts || []).slice(0, feedLimit).forEach((p) => {
         const topic = topicsMap[p.topic_id];
         const title =
-          (topic && (topic.fancy_title || topic.title)) || "Untitled";
+          (topic && (topic.fancy_title || topic.title)) ||
+          i18n("fantribe.search_modal.untitled");
         out.push({
           type: "feed",
           item: { ...p, topic_slug: topic?.slug || p.topic_slug },
@@ -265,7 +268,7 @@ export default class FtSearchModal extends Component {
       class="ft-modal-backdrop ft-search-modal-backdrop"
       role="dialog"
       aria-modal="true"
-      aria-label="Search"
+      aria-label={{i18n "fantribe.search_modal.title"}}
       {{on "click" this.handleBackdropClick}}
       {{on "keydown" this.handleKeydown}}
     >
@@ -306,11 +309,13 @@ export default class FtSearchModal extends Component {
 
         {{! Desktop Header (hidden on mobile) }}
         <div class="ft-search-modal__header ft-search-modal__header--desktop">
-          <h2 class="ft-search-modal__title">Search</h2>
+          <h2 class="ft-search-modal__title">{{i18n
+              "fantribe.search_modal.title"
+            }}</h2>
           <button
             type="button"
             class="ft-search-modal__close-btn"
-            aria-label="Close"
+            aria-label={{i18n "fantribe.search_modal.close"}}
             {{on "click" @onClose}}
           >
             {{ftIcon "x" size=20}}
@@ -326,7 +331,7 @@ export default class FtSearchModal extends Component {
             <input
               type="text"
               class="ft-search-modal__search-input ft-search-modal__search-input--desktop"
-              placeholder="Search feed, people, tribes..."
+              placeholder={{i18n "fantribe.search_modal.search_placeholder"}}
               value={{this.query}}
               {{on "input" this.updateQuery}}
               {{on "keydown" this.handleKeydown}}
@@ -468,7 +473,7 @@ export default class FtSearchModal extends Component {
                       <span class="ft-search-modal__result-meta">
                         {{ftIcon "users" size=10}}
                         <span>{{this.formatCount result.item.topic_count}}
-                          posts</span>
+                          {{i18n "fantribe.search_modal.posts"}}</span>
                       </span>
                     </span>
                   </button>
@@ -477,14 +482,14 @@ export default class FtSearchModal extends Component {
             {{else}}
               <div class="ft-search-modal__state">
                 {{ftIcon "search" size=32}}
-                <p>No results found</p>
+                <p>{{i18n "fantribe.search_modal.no_results"}}</p>
               </div>
             {{/if}}
 
           {{else}}
             <div class="ft-search-modal__state">
               {{ftIcon "search" size=40}}
-              <p>Search anything</p>
+              <p>{{i18n "fantribe.search_modal.search_anything"}}</p>
             </div>
           {{/if}}
         </div>

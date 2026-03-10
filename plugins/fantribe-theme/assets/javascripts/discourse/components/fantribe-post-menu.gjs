@@ -10,6 +10,7 @@ import { popupAjaxError } from "discourse/lib/ajax-error";
 import PostFlag from "discourse/lib/flag-targets/post-flag";
 import { clipboardCopy } from "discourse/lib/utilities";
 import closeOnClickOutside from "discourse/modifiers/close-on-click-outside";
+import { i18n } from "discourse-i18n";
 import ftIcon from "../helpers/ft-icon";
 
 export default class FantribePostMenu extends Component {
@@ -62,7 +63,9 @@ export default class FantribePostMenu extends Component {
     }
     const url = `${window.location.origin}/t/${topic.slug}/${topic.id}`;
     clipboardCopy(url);
-    this.toasts.success({ data: { message: "Link copied to clipboard" } });
+    this.toasts.success({
+      data: { message: i18n("fantribe.post_menu.link_copied") },
+    });
   }
 
   @action
@@ -92,7 +95,9 @@ export default class FantribePostMenu extends Component {
     }
     try {
       await ajax(`/t/${topic.id}`, { type: "DELETE" });
-      this.toasts.success({ data: { message: "Post deleted" } });
+      this.toasts.success({
+        data: { message: i18n("fantribe.post_menu.post_deleted") },
+      });
       this.args.onClose?.();
       this.args.onDismiss?.();
     } catch (error) {
@@ -135,7 +140,9 @@ export default class FantribePostMenu extends Component {
         type: "POST",
         data: { notification_level: 0 },
       });
-      this.toasts.success({ data: { message: "Post hidden from your feed" } });
+      this.toasts.success({
+        data: { message: i18n("fantribe.post_menu.post_hidden") },
+      });
       this.args.onDismiss?.();
     } catch (error) {
       popupAjaxError(error);
@@ -156,7 +163,9 @@ export default class FantribePostMenu extends Component {
         data: { notification_level: "mute" },
       });
       this.toasts.success({
-        data: { message: `${username} muted — their posts are hidden` },
+        data: {
+          message: i18n("fantribe.post_menu.user_muted", { username }),
+        },
       });
       this.args.onDismiss?.();
     } catch (error) {
@@ -182,7 +191,11 @@ export default class FantribePostMenu extends Component {
           expiring_at: farFuture.toISOString(),
         },
       });
-      this.toasts.success({ data: { message: `${username} blocked` } });
+      this.toasts.success({
+        data: {
+          message: i18n("fantribe.post_menu.user_blocked", { username }),
+        },
+      });
       this.args.onDismiss?.();
     } catch (error) {
       popupAjaxError(error);
@@ -207,7 +220,9 @@ export default class FantribePostMenu extends Component {
       });
       this.toasts.success({
         data: {
-          message: willClose ? "Comments turned off" : "Comments turned on",
+          message: willClose
+            ? i18n("fantribe.post_menu.comments_turned_off")
+            : i18n("fantribe.post_menu.comments_turned_on"),
         },
       });
       this.args.onClosedChange?.(willClose);
@@ -237,7 +252,9 @@ export default class FantribePostMenu extends Component {
           await ajax(`/bookmarks/${bookmarkId}`, { type: "DELETE" });
         }
         this._bookmarkId = null;
-        this.toasts.success({ data: { message: "Bookmark removed" } });
+        this.toasts.success({
+          data: { message: i18n("fantribe.post_menu.bookmark_removed") },
+        });
       } else {
         const result = await ajax("/bookmarks", {
           type: "POST",
@@ -247,7 +264,9 @@ export default class FantribePostMenu extends Component {
           },
         });
         this._bookmarkId = result?.id ?? null;
-        this.toasts.success({ data: { message: "Post saved to bookmarks" } });
+        this.toasts.success({
+          data: { message: i18n("fantribe.post_menu.bookmark_saved") },
+        });
       }
     } catch (error) {
       this._isBookmarked = wasBookmarked;
@@ -279,20 +298,23 @@ export default class FantribePostMenu extends Component {
         {{#if this.showDeleteConfirm}}
           {{! Delete confirmation view }}
           <div class="fantribe-post-menu__confirm">
-            <p class="fantribe-post-menu__confirm-text">Delete this post?</p>
-            <p class="fantribe-post-menu__confirm-sub">This action cannot be
-              undone.</p>
+            <p class="fantribe-post-menu__confirm-text">{{i18n
+                "fantribe.post_menu.delete_this_post"
+              }}</p>
+            <p class="fantribe-post-menu__confirm-sub">{{i18n
+                "fantribe.post_menu.cannot_be_undone"
+              }}</p>
             <div class="fantribe-post-menu__confirm-actions">
               <button
                 type="button"
                 class="fantribe-post-menu__confirm-cancel"
                 {{on "click" this.cancelDelete}}
-              >Cancel</button>
+              >{{i18n "fantribe.common.cancel"}}</button>
               <button
                 type="button"
                 class="fantribe-post-menu__confirm-delete"
                 {{on "click" this.handleDelete}}
-              >Delete</button>
+              >{{i18n "fantribe.common.delete"}}</button>
             </div>
           </div>
         {{else if @isOwnPost}}
@@ -301,10 +323,19 @@ export default class FantribePostMenu extends Component {
             <button
               type="button"
               class="fantribe-post-menu__item"
+              {{on "click" this.handleEdit}}
+            >
+              {{ftIcon "edit3"}}
+              <span>{{i18n "fantribe.post_menu.edit_post"}}</span>
+            </button>
+
+            <button
+              type="button"
+              class="fantribe-post-menu__item"
               {{on "click" this.handleCopyLink}}
             >
               {{ftIcon "link2"}}
-              <span>Copy Link</span>
+              <span>{{i18n "fantribe.post_menu.copy_link"}}</span>
             </button>
 
             <button
@@ -315,8 +346,8 @@ export default class FantribePostMenu extends Component {
               {{ftIcon "message-square-off"}}
               <span>{{if
                   this.isClosed
-                  "Turn On Comments"
-                  "Turn Off Comments"
+                  (i18n "fantribe.post_menu.turn_on_comments")
+                  (i18n "fantribe.post_menu.turn_off_comments")
                 }}</span>
             </button>
 
@@ -328,7 +359,7 @@ export default class FantribePostMenu extends Component {
               {{on "click" this.confirmDelete}}
             >
               {{ftIcon "trash2"}}
-              <span>Delete Post</span>
+              <span>{{i18n "fantribe.post_menu.delete_post"}}</span>
             </button>
           </div>
         {{else}}
@@ -340,7 +371,7 @@ export default class FantribePostMenu extends Component {
               {{on "click" this.handleCopyLink}}
             >
               {{ftIcon "link2"}}
-              <span>Copy Link</span>
+              <span>{{i18n "fantribe.post_menu.copy_link"}}</span>
             </button>
 
             <button
@@ -350,8 +381,10 @@ export default class FantribePostMenu extends Component {
             >
               {{ftIcon "eye-off"}}
               <div class="fantribe-post-menu__item-text">
-                <span>Not interested in this</span>
-                <span class="fantribe-post-menu__item-subtext">Hide this post</span>
+                <span>{{i18n "fantribe.post_menu.not_interested"}}</span>
+                <span class="fantribe-post-menu__item-subtext">{{i18n
+                    "fantribe.post_menu.hide_this_post"
+                  }}</span>
               </div>
             </button>
 
@@ -362,9 +395,13 @@ export default class FantribePostMenu extends Component {
             >
               {{ftIcon "eye"}}
               <div class="fantribe-post-menu__item-text">
-                <span>Mute {{@userName}}</span>
-                <span class="fantribe-post-menu__item-subtext">Stop seeing their
-                  posts</span>
+                <span>{{i18n
+                    "fantribe.post_menu.mute_user"
+                    userName=@userName
+                  }}</span>
+                <span class="fantribe-post-menu__item-subtext">{{i18n
+                    "fantribe.post_menu.stop_seeing_posts"
+                  }}</span>
               </div>
             </button>
 
@@ -374,7 +411,7 @@ export default class FantribePostMenu extends Component {
               {{on "click" this.handleReport}}
             >
               {{ftIcon "flag"}}
-              <span>Report this post</span>
+              <span>{{i18n "fantribe.post_menu.report_post"}}</span>
             </button>
 
             <div class="fantribe-post-menu__divider"></div>
@@ -385,7 +422,10 @@ export default class FantribePostMenu extends Component {
               {{on "click" this.handleBlock}}
             >
               {{ftIcon "ban"}}
-              <span>Block {{@userName}}</span>
+              <span>{{i18n
+                  "fantribe.post_menu.block_user"
+                  userName=@userName
+                }}</span>
             </button>
           </div>
         {{/if}}

@@ -3,6 +3,7 @@ import { action } from "@ember/object";
 import { service } from "@ember/service";
 import { filterTypeForMode } from "discourse/lib/filter-mode";
 import PeriodChooser from "discourse/select-kit/components/period-chooser";
+import { i18n } from "discourse-i18n";
 import FantribeComposeBox from "./fantribe-compose-box";
 import FantribeFeedCard from "./fantribe-feed-card";
 import FantribeMobileTribeChips from "./fantribe-mobile-tribe-chips";
@@ -160,9 +161,12 @@ export default class FantribeFeedLayout extends Component {
             {{/each}}
           {{else}}
             <div class="fantribe-feed-layout__empty">
-              <p class="fantribe-feed-layout__empty-title">No posts yet</p>
-              <p class="fantribe-feed-layout__empty-text">Be the first to share
-                something</p>
+              <p class="fantribe-feed-layout__empty-title">{{i18n
+                  "fantribe.feed_layout.empty_title"
+                }}</p>
+              <p class="fantribe-feed-layout__empty-text">{{i18n
+                  "fantribe.feed_layout.empty_text"
+                }}</p>
             </div>
           {{/if}}
         </main>

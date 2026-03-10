@@ -6,6 +6,7 @@ import { action } from "@ember/object";
 import didInsert from "@ember/render-modifiers/modifiers/did-insert";
 import { service } from "@ember/service";
 import { eq } from "discourse/truth-helpers";
+import { i18n } from "discourse-i18n";
 import FtCreateTribeModal from "discourse/plugins/fantribe-theme/discourse/components/ft-create-tribe-modal";
 import ftIcon from "discourse/plugins/fantribe-theme/discourse/helpers/ft-icon";
 import FantribeTribeCard from "./fantribe-tribe-card";
@@ -107,7 +108,7 @@ export default class FantribeExplorePage extends Component {
           {{ftIcon "search"}}
           <input
             type="text"
-            placeholder="Search tribes..."
+            placeholder={{i18n "fantribe.explore.search_placeholder"}}
             value={{this.searchQuery}}
             {{on "input" this.handleSearchInput}}
           />
@@ -116,8 +117,9 @@ export default class FantribeExplorePage extends Component {
         {{! Header: subtitle + tabs }}
         <div class="ft-explore-header-row">
           <div class="ft-explore-header-left">
-            <p class="ft-explore-subtitle">Join communities of creators who
-              share your passion</p>
+            <p class="ft-explore-subtitle">{{i18n
+                "fantribe.explore.subtitle"
+              }}</p>
             <div class="ft-explore-tabs">
               <button
                 type="button"
@@ -126,7 +128,7 @@ export default class FantribeExplorePage extends Component {
                 {{on "click" (fn this.switchTab "explore")}}
               >
                 {{ftIcon "compass"}}
-                <span>Explore tribes</span>
+                <span>{{i18n "fantribe.explore.tabs.explore_tribes"}}</span>
               </button>
               <button
                 type="button"
@@ -138,7 +140,7 @@ export default class FantribeExplorePage extends Component {
                 {{on "click" (fn this.switchTab "my-tribes")}}
               >
                 {{ftIcon "users"}}
-                <span>My tribes</span>
+                <span>{{i18n "fantribe.explore.tabs.my_tribes"}}</span>
               </button>
             </div>
           </div>
@@ -157,13 +159,20 @@ export default class FantribeExplorePage extends Component {
           <div class="ft-explore-empty">
             {{#if this.searchQuery}}
               <div class="ft-explore-empty-icon">🔍</div>
-              <h3 class="ft-explore-empty-title">No tribes found</h3>
-              <p class="ft-explore-empty-text">Try adjusting your search</p>
+              <h3 class="ft-explore-empty-title">{{i18n
+                  "fantribe.explore.empty.no_tribes_found"
+                }}</h3>
+              <p class="ft-explore-empty-text">{{i18n
+                  "fantribe.explore.empty.try_adjusting_search"
+                }}</p>
             {{else if (eq this.activeTab "my-tribes")}}
               <div class="ft-explore-empty-icon">🏕️</div>
-              <h3 class="ft-explore-empty-title">No tribes yet</h3>
-              <p class="ft-explore-empty-text">Explore and join tribes to see
-                them here</p>
+              <h3 class="ft-explore-empty-title">{{i18n
+                  "fantribe.explore.empty.no_tribes_yet"
+                }}</h3>
+              <p class="ft-explore-empty-text">{{i18n
+                  "fantribe.explore.empty.explore_and_join"
+                }}</p>
               <button
                 type="button"
                 class="ft-explore-create-btn"
@@ -171,12 +180,18 @@ export default class FantribeExplorePage extends Component {
                 {{on "click" (fn this.switchTab "explore")}}
               >
                 {{ftIcon "compass"}}
-                <span>Explore Tribes</span>
+                <span>{{i18n
+                    "fantribe.explore.empty.explore_tribes_cta"
+                  }}</span>
               </button>
             {{else}}
               <div class="ft-explore-empty-icon">🔍</div>
-              <h3 class="ft-explore-empty-title">No tribes found</h3>
-              <p class="ft-explore-empty-text">Check back later for new tribes</p>
+              <h3 class="ft-explore-empty-title">{{i18n
+                  "fantribe.explore.empty.no_tribes_found"
+                }}</h3>
+              <p class="ft-explore-empty-text">{{i18n
+                  "fantribe.explore.empty.check_back_later"
+                }}</p>
             {{/if}}
           </div>
         {{/if}}

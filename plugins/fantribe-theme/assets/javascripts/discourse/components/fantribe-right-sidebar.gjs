@@ -5,7 +5,9 @@ import { on } from "@ember/modifier";
 import { action } from "@ember/object";
 import { service } from "@ember/service";
 import { ajax } from "discourse/lib/ajax";
+import { i18n } from "discourse-i18n";
 import ftIcon from "../helpers/ft-icon";
+import FtLangDropdown from "./ft-lang-dropdown";
 
 export default class FantribeRightSidebar extends Component {
   @service router;
@@ -87,22 +89,26 @@ export default class FantribeRightSidebar extends Component {
 
   formatMemberCount(count) {
     if (!count) {
-      return "0 members";
+      return i18n("fantribe.right_sidebar.members_count", { count: 0 });
     }
     if (count >= 1000) {
-      return (count / 1000).toFixed(1) + "K members";
+      return i18n("fantribe.right_sidebar.members_count_k", {
+        count: (count / 1000).toFixed(1),
+      });
     }
-    return `${count} members`;
+    return i18n("fantribe.right_sidebar.members_count", { count });
   }
 
   formatPostCount(count) {
     if (!count) {
-      return "0 posts";
+      return i18n("fantribe.right_sidebar.posts_count", { count: 0 });
     }
     if (count >= 1000) {
-      return (count / 1000).toFixed(1) + "K posts";
+      return i18n("fantribe.right_sidebar.posts_count_k", {
+        count: (count / 1000).toFixed(1),
+      });
     }
-    return `${count} posts`;
+    return i18n("fantribe.right_sidebar.posts_count", { count });
   }
 
   @action
@@ -123,12 +129,13 @@ export default class FantribeRightSidebar extends Component {
         <button
           type="button"
           class="fantribe-right-sidebar__search-bar"
-          aria-label="Open search"
+          aria-label={{i18n "fantribe.right_sidebar.open_search"}}
           {{on "click" this.fantribeFilter.openSearchModal}}
         >
           {{ftIcon "search" size=18}}
-          <span class="fantribe-right-sidebar__search-placeholder">Search
-            people, gear, tribes...</span>
+          <span class="fantribe-right-sidebar__search-placeholder">{{i18n
+              "fantribe.right_sidebar.search_placeholder"
+            }}</span>
         </button>
         <button
           type="button"
@@ -137,11 +144,14 @@ export default class FantribeRightSidebar extends Component {
               this.fantribeFilter.hasFilters
               'fantribe-right-sidebar__filter-btn--active'
             }}"
-          aria-label="Open filters"
+          aria-label={{i18n "fantribe.right_sidebar.open_filters"}}
           {{on "click" this.fantribeFilter.openFiltersModal}}
         >
           {{ftIcon "filter-lines" size=24}}
         </button>
+        <div class="fantribe-right-sidebar__lang-dropdown">
+          <FtLangDropdown />
+        </div>
       </div>
 
       {{#if this.fantribeFilter.hasFilters}}
@@ -163,7 +173,7 @@ export default class FantribeRightSidebar extends Component {
             class="fantribe-right-sidebar__clear-all-btn"
             {{on "click" this.fantribeFilter.clearFilters}}
           >
-            Clear all
+            {{i18n "fantribe.right_sidebar.clear_all"}}
           </button>
         </div>
       {{/if}}
@@ -172,7 +182,7 @@ export default class FantribeRightSidebar extends Component {
       <div class="fantribe-right-sidebar__widget">
         <div class="fantribe-right-sidebar__widget-header">
           {{ftIcon "trending-up"}}
-          <h3>Trending Tribes</h3>
+          <h3>{{i18n "fantribe.right_sidebar.trending_tribes"}}</h3>
         </div>
 
         <div class="fantribe-right-sidebar__widget-content">
@@ -202,7 +212,7 @@ export default class FantribeRightSidebar extends Component {
             {{/each}}
           {{else}}
             <div class="fantribe-right-sidebar__empty">
-              <p>No active tribes yet</p>
+              <p>{{i18n "fantribe.right_sidebar.no_active_tribes"}}</p>
             </div>
           {{/if}}
         </div>
@@ -213,7 +223,7 @@ export default class FantribeRightSidebar extends Component {
             class="fantribe-right-sidebar__footer-btn"
             {{on "click" this.viewAllTribes}}
           >
-            View all
+            {{i18n "fantribe.right_sidebar.view_all"}}
           </button>
         </div>
       </div>

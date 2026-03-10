@@ -85,6 +85,14 @@ export default class FantribeHeader extends Component {
   }
 
   @action
+  handleToggleSidebar(event) {
+    event?.preventDefault?.();
+    if (typeof this.args.onToggleSidebar === "function") {
+      this.args.onToggleSidebar(event);
+    }
+  }
+
+  @action
   toggleMobileCreateSheet() {
     this.isMobileCreateSheetOpen = !this.isMobileCreateSheetOpen;
   }
@@ -97,13 +105,14 @@ export default class FantribeHeader extends Component {
   }
 
   @action
-  closeMobileCreateSheetFromButton() {
+  closeMobileCreateSheetFromButton(event) {
+    event?.stopPropagation?.();
     this.isMobileCreateSheetOpen = false;
   }
 
   @action
   closeMobileCreateSheetOnKey(event) {
-    if (event.key === "Enter" || event.key === " ") {
+    if (event.key === "Escape" || event.key === "Enter" || event.key === " ") {
       event.preventDefault();
       this.isMobileCreateSheetOpen = false;
     }
@@ -111,13 +120,13 @@ export default class FantribeHeader extends Component {
 
   @action
   openMobileCreatePost() {
-    this.isMobileCreateSheetOpen = false;
+    this.closeMobileCreateSheet();
     this.fantribeCreate.openCreatePostModal();
   }
 
   @action
   openMobileCreateTribe() {
-    this.isMobileCreateSheetOpen = false;
+    this.closeMobileCreateSheet();
     this.fantribeCreate.openCreateTribeModal();
   }
 
@@ -150,7 +159,7 @@ export default class FantribeHeader extends Component {
             >
               <img
                 src={{this.logoUrl}}
-                alt="CreatorTribe"
+                alt={{i18n "fantribe.header.logo_alt"}}
                 class="fantribe-header__logo-img"
               />
             </button>
@@ -171,7 +180,7 @@ export default class FantribeHeader extends Component {
               <button
                 class="fantribe-header__sidebar-toggle"
                 type="button"
-                {{on "click" @onToggleSidebar}}
+                {{on "click" this.handleToggleSidebar}}
               >
                 {{ftIcon "menu"}}
               </button>
@@ -183,7 +192,7 @@ export default class FantribeHeader extends Component {
               >
                 <img
                   src={{this.logoUrl}}
-                  alt="CreatorTribe"
+                  alt={{i18n "fantribe.header.logo_alt"}}
                   class="fantribe-header__logo-img"
                 />
               </button>
@@ -198,7 +207,7 @@ export default class FantribeHeader extends Component {
                 type="text"
                 id="fantribe-header_search-input"
                 class="fantribe-header__search-input"
-                placeholder="Search people, gear, or tribes..."
+                placeholder={{i18n "fantribe.header.search_placeholder"}}
                 {{on "focus" this.handleSearchFocus}}
                 {{on "keydown" this.handleSearchKeydown}}
               />
@@ -229,7 +238,7 @@ export default class FantribeHeader extends Component {
                 {{on "click" this.fantribeCreate.toggleCreateMenu}}
               >
                 {{ftIcon "plus"}}
-                <span>Create</span>
+                <span>{{i18n "fantribe.header.create_cta"}}</span>
               </button>
 
               {{#if this.fantribeCreate.isCreateMenuOpen}}
@@ -246,7 +255,7 @@ export default class FantribeHeader extends Component {
               <button
                 class="fantribe-header__sidebar-toggle"
                 type="button"
-                {{on "click" @onToggleSidebar}}
+                {{on "click" this.handleToggleSidebar}}
               >
                 {{ftIcon "menu"}}
               </button>
@@ -258,7 +267,7 @@ export default class FantribeHeader extends Component {
               >
                 <img
                   src={{this.logoUrl}}
-                  alt="CreatorTribe"
+                  alt={{i18n "fantribe.header.logo_alt"}}
                   class="fantribe-header__logo-img"
                 />
               </button>
@@ -273,7 +282,7 @@ export default class FantribeHeader extends Component {
                 type="text"
                 id="fantribe-header_search-input"
                 class="fantribe-header__search-input"
-                placeholder="Search people, gear, or tribes..."
+                placeholder={{i18n "fantribe.header.search_placeholder"}}
                 {{on "focus" this.handleSearchFocus}}
                 {{on "keydown" this.handleSearchKeydown}}
               />
@@ -282,8 +291,12 @@ export default class FantribeHeader extends Component {
             {{! Right Side Actions }}
             <div class="fantribe-header__actions">
               {{! Desktop: show buttons }}
-              <a href="/login" class="fantribe-header__login-btn">Log In</a>
-              <a href="/signup" class="fantribe-header__signup-btn">Sign Up</a>
+              <a href="/login" class="fantribe-header__login-btn">{{i18n
+                  "fantribe.header.login"
+                }}</a>
+              <a href="/signup" class="fantribe-header__signup-btn">{{i18n
+                  "fantribe.header.signup"
+                }}</a>
 
               {{! Mobile: show hamburger menu }}
               <div class="fantribe-header__mobile-menu">
@@ -308,12 +321,12 @@ export default class FantribeHeader extends Component {
                         type="button"
                         class="fantribe-header__mobile-login"
                         {{on "click" this.goToLogin}}
-                      >Log In</button>
+                      >{{i18n "fantribe.header.login"}}</button>
                       <button
                         type="button"
                         class="fantribe-header__mobile-signup"
                         {{on "click" this.goToSignup}}
-                      >Sign Up</button>
+                      >{{i18n "fantribe.header.signup"}}</button>
                     </div>
                   </div>
                 {{/if}}
@@ -337,7 +350,9 @@ export default class FantribeHeader extends Component {
         <div class="ft-mobile-create-backdrop" aria-hidden="true"></div>
         <div class="ft-mobile-create-sheet">
           <div class="ft-mobile-create-sheet__header">
-            <span class="ft-mobile-create-sheet__title">Create</span>
+            <span class="ft-mobile-create-sheet__title">{{i18n
+                "fantribe.header.create_cta"
+              }}</span>
             <button
               type="button"
               class="ft-mobile-create-sheet__close"

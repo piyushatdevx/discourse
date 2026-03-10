@@ -4,6 +4,7 @@ import { on } from "@ember/modifier";
 import { action } from "@ember/object";
 import { htmlSafe } from "@ember/template";
 import avatar from "discourse/helpers/avatar";
+import { i18n } from "discourse-i18n";
 import ftIcon from "../helpers/ft-icon";
 
 export default class FtShareProfileModal extends Component {
@@ -38,7 +39,10 @@ export default class FtShareProfileModal extends Component {
   @action
   shareToTwitter() {
     const name = this.args.user?.name || this.args.user?.username;
-    const text = `Check out ${name}'s profile on FanTribe`;
+    const text = i18n("fantribe.share_profile.share_text", {
+      name,
+      url: this.profileUrl,
+    });
     const tweetUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(this.profileUrl)}`;
     window.open(tweetUrl, "_blank", "noopener,noreferrer,width=600,height=400");
   }
@@ -46,7 +50,10 @@ export default class FtShareProfileModal extends Component {
   @action
   shareToWhatsApp() {
     const name = this.args.user?.name || this.args.user?.username;
-    const text = `Check out ${name}'s profile on FanTribe: ${this.profileUrl}`;
+    const text = i18n("fantribe.share_profile.share_text", {
+      name,
+      url: this.profileUrl,
+    });
     const waUrl = `https://wa.me/?text=${encodeURIComponent(text)}`;
     window.open(waUrl, "_blank", "noopener,noreferrer");
   }
@@ -93,7 +100,7 @@ export default class FtShareProfileModal extends Component {
         class="ft-modal-backdrop"
         role="dialog"
         aria-modal="true"
-        aria-label="Share profile"
+        aria-label={{i18n "fantribe.share_profile.title"}}
         {{on "click" this.handleBackdropClick}}
         {{on "keydown" this.handleKeydown}}
       >
@@ -101,11 +108,13 @@ export default class FtShareProfileModal extends Component {
 
           {{! Header }}
           <div class="ft-modal__title-bar">
-            <h2 class="ft-modal__title">Share Profile</h2>
+            <h2 class="ft-modal__title">{{i18n
+                "fantribe.share_profile.title"
+              }}</h2>
             <button
               type="button"
               class="ft-modal__close-btn"
-              aria-label="Close"
+              aria-label={{i18n "fantribe.common.close"}}
               {{on "click" @onClose}}
             >
               {{ftIcon "x"}}
@@ -131,7 +140,9 @@ export default class FtShareProfileModal extends Component {
 
           {{! Copy link row }}
           <div class="ft-share-modal__section">
-            <p class="ft-share-modal__section-label">Profile link</p>
+            <p class="ft-share-modal__section-label">{{i18n
+                "fantribe.share_profile.profile_link"
+              }}</p>
             <div class="ft-share-modal__link-row">
               <div class="ft-share-modal__link-display">
                 {{ftIcon "link2" size=14}}
@@ -147,9 +158,9 @@ export default class FtShareProfileModal extends Component {
               >
                 {{#if this.copied}}
                   {{ftIcon "check" size=14}}
-                  Copied!
+                  {{i18n "fantribe.share_profile.copied"}}
                 {{else}}
-                  Copy Link
+                  {{i18n "fantribe.share_profile.copy_link"}}
                 {{/if}}
               </button>
             </div>
@@ -157,7 +168,9 @@ export default class FtShareProfileModal extends Component {
 
           {{! Social share }}
           <div class="ft-share-modal__section">
-            <p class="ft-share-modal__section-label">Share on social</p>
+            <p class="ft-share-modal__section-label">{{i18n
+                "fantribe.share_profile.share_on_social"
+              }}</p>
             <div class="ft-share-modal__socials-row">
               <button
                 type="button"
@@ -165,7 +178,7 @@ export default class FtShareProfileModal extends Component {
                 {{on "click" this.shareToTwitter}}
               >
                 {{this.twitterLogoHtml}}
-                <span>X (Twitter)</span>
+                <span>{{i18n "fantribe.share_profile.x_twitter"}}</span>
               </button>
               <button
                 type="button"
@@ -173,7 +186,7 @@ export default class FtShareProfileModal extends Component {
                 {{on "click" this.shareToWhatsApp}}
               >
                 {{this.whatsappLogoHtml}}
-                <span>WhatsApp</span>
+                <span>{{i18n "fantribe.share_profile.whatsapp"}}</span>
               </button>
             </div>
           </div>

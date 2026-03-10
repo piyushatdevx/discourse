@@ -8,6 +8,7 @@ import icon from "discourse/helpers/d-icon";
 import replaceEmoji from "discourse/helpers/replace-emoji";
 import { ajax } from "discourse/lib/ajax";
 import { popupAjaxError } from "discourse/lib/ajax-error";
+import { i18n } from "discourse-i18n";
 import ftIcon from "discourse/plugins/fantribe-theme/discourse/helpers/ft-icon";
 import FtLeaveTribeConfirmModal from "./ft-leave-tribe-confirm-modal";
 
@@ -245,16 +246,16 @@ export default class FantribeTribeCard extends Component {
               <span class="ft-tribe-card__meta-item">
                 {{ftIcon "users"}}
                 <span>{{if this.memberCount this.memberCount "–"}}
-                  members</span>
+                  {{i18n "fantribe.common.members"}}</span>
               </span>
               <span class="ft-tribe-card__meta-sep">·</span>
               <span class="ft-tribe-card__meta-item">
                 {{#if this.isPrivate}}
                   {{ftIcon "lock"}}
-                  <span>Private</span>
+                  <span>{{i18n "fantribe.common.private"}}</span>
                 {{else}}
                   {{ftIcon "globe"}}
-                  <span>Public</span>
+                  <span>{{i18n "fantribe.common.public"}}</span>
                 {{/if}}
               </span>
             </div>
@@ -302,10 +303,10 @@ export default class FantribeTribeCard extends Component {
             {{ftIcon "circle"}}
           {{else if this.isMember}}
             {{ftIcon "log-out"}}
-            <span>Leave</span>
+            <span>{{i18n "fantribe.common.leave"}}</span>
           {{else}}
             {{ftIcon "user-plus"}}
-            <span>Join Tribe</span>
+            <span>{{i18n "fantribe.common.join_tribe"}}</span>
           {{/if}}
         </button>
       </div>

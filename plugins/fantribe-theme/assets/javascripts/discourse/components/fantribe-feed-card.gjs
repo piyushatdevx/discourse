@@ -575,7 +575,9 @@ export default class FantribeFeedCard extends Component {
         >
           {{#if this.hasComments}}
             <div class="fantribe-feed-card__comments-inner">
-              <span class="fantribe-feed-card__comments-label">Comments</span>
+              <span class="fantribe-feed-card__comments-label">{{i18n
+                  "fantribe.common.comments"
+                }}</span>
 
               <div class="fantribe-feed-card__comments-list">
                 {{#each this.firstComments as |comment|}}
@@ -630,8 +632,8 @@ export default class FantribeFeedCard extends Component {
                   }}"
                 placeholder={{if
                   this.topicClosed
-                  "Comments are turned off"
-                  "Join the conversation..."
+                  (i18n "fantribe.common.comments_turned_off")
+                  (i18n "fantribe.common.join_conversation")
                 }}
                 value={{this.commentText}}
                 disabled={{or

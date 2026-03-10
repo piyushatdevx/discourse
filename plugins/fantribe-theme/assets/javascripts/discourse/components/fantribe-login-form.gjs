@@ -6,9 +6,11 @@ import { service } from "@ember/service";
 import ForgotPassword from "discourse/components/modal/forgot-password";
 import icon from "discourse/helpers/d-icon";
 import { ajax } from "discourse/lib/ajax";
+import cookie from "discourse/lib/cookie";
 import getURL from "discourse/lib/get-url";
 import DiscourseURL from "discourse/lib/url";
 import { findAll } from "discourse/models/login-method";
+import { i18n } from "discourse-i18n";
 
 export default class FantribeLoginForm extends Component {
   @service login;
@@ -66,12 +68,12 @@ export default class FantribeLoginForm extends Component {
     event?.preventDefault();
 
     if (!this.loginName.trim()) {
-      this.errorMessage = "Please enter your email or username";
+      this.errorMessage = i18n("fantribe.login.please_enter_email_username");
       return;
     }
 
     if (!this.loginPassword && !this.showSecondFactor) {
-      this.errorMessage = "Please enter your password";
+      this.errorMessage = i18n("fantribe.login.please_enter_password");
       return;
     }
 
@@ -100,13 +102,13 @@ export default class FantribeLoginForm extends Component {
           this.showSecondFactor = true;
           this.secondFactorMethod = result.totp_enabled ? 1 : 2;
           if (result.totp_enabled) {
-            this.errorMessage =
-              "Please enter your two-factor authentication code";
+            this.errorMessage = i18n("fantribe.login.please_enter_2fa");
           }
         } else {
           this.errorMessage = result.error;
         }
       } else {
+        await this.syncLocaleAfterLogin();
         // Success - redirect to home
         window.location.href = "/";
       }
@@ -114,7 +116,7 @@ export default class FantribeLoginForm extends Component {
       const errorMsg =
         e.jqXHR?.responseJSON?.error ||
         e.jqXHR?.responseJSON?.message ||
-        "Login failed. Please try again.";
+        i18n("fantribe.login.failed_try_again");
       this.errorMessage = errorMsg;
 
       // Check if 2FA is required from error response
@@ -126,6 +128,32 @@ export default class FantribeLoginForm extends Component {
       }
     } finally {
       this.isLoading = false;
+    }
+  }
+
+  async syncLocaleAfterLogin() {
+    const selectedLocale = cookie("user_locale") || cookie("locale");
+    if (!selectedLocale) {
+      return;
+    }
+
+    const supportsSetLocaleEndpoint =
+      window.localStorage?.getItem("ft_locale_endpoint_supported") !== "false";
+    if (!supportsSetLocaleEndpoint) {
+      return;
+    }
+
+    try {
+      await ajax("/user-language/set.json", {
+        type: "POST",
+        data: { locale: selectedLocale },
+      });
+      window.localStorage?.setItem("ft_locale_endpoint_supported", "true");
+    } catch (error) {
+      if (error?.jqXHR?.status === 404 || error?.status === 404) {
+        window.localStorage?.setItem("ft_locale_endpoint_supported", "false");
+      }
+      // Non-blocking: login should still proceed even if locale sync fails.
     }
   }
 
@@ -146,7 +174,7 @@ export default class FantribeLoginForm extends Component {
   <template>
     <div class="fantribe-login-card">
       {{! Title }}
-      <h1 class="fantribe-login-title">Sign In</h1>
+      <h1 class="fantribe-login-title">{{i18n "fantribe.header.login"}}</h1>
 
       {{! Error Message }}
       {{#if this.errorMessage}}
@@ -160,11 +188,13 @@ export default class FantribeLoginForm extends Component {
         {{#if this.showSecondFactor}}
           {{! Two-Factor Authentication }}
           <div class="fantribe-input-group">
-            <label for="fantribe-login-2fa">Authentication Code</label>
+            <label for="fantribe-login-2fa">{{i18n
+                "fantribe.login.auth_code"
+              }}</label>
             <input
               type="text"
               id="fantribe-login-2fa"
-              placeholder="Enter code"
+              placeholder={{i18n "fantribe.login.enter_code"}}
               value={{this.secondFactorToken}}
               autocomplete="one-time-code"
               inputmode="numeric"
@@ -174,11 +204,13 @@ export default class FantribeLoginForm extends Component {
         {{else}}
           {{! Email/Username Input }}
           <div class="fantribe-input-group">
-            <label for="fantribe-login-email">Email or Username</label>
+            <label for="fantribe-login-email">{{i18n
+                "fantribe.login.email_or_username"
+              }}</label>
             <input
               type="text"
               id="fantribe-login-email"
-              placeholder="Enter email or username"
+              placeholder={{i18n "fantribe.login.enter_email_or_username"}}
               value={{this.loginName}}
               autocomplete="username"
               autocorrect="off"
@@ -189,12 +221,14 @@ export default class FantribeLoginForm extends Component {
 
           {{! Password Input }}
           <div class="fantribe-input-group fantribe-input-password">
-            <label for="fantribe-login-password">Password</label>
+            <label for="fantribe-login-password">{{i18n
+                "fantribe.login.password"
+              }}</label>
             <div class="fantribe-password-wrapper">
               <input
                 type={{if this.maskPassword "password" "text"}}
                 id="fantribe-login-password"
-                placeholder="Enter password"
+                placeholder={{i18n "fantribe.login.enter_password"}}
                 value={{this.loginPassword}}
                 autocomplete="current-password"
                 maxlength="200"
@@ -214,7 +248,7 @@ export default class FantribeLoginForm extends Component {
             </div>
             <div class="fantribe-forgot-password">
               <a href {{on "click" this.handleForgotPassword}}>
-                Forgot password?
+                {{i18n "login.forgot_password"}}
               </a>
             </div>
           </div>
@@ -229,7 +263,7 @@ export default class FantribeLoginForm extends Component {
           {{#if this.isLoading}}
             <span class="fantribe-spinner"></span>
           {{else}}
-            Sign In
+            {{i18n "fantribe.header.login"}}
           {{/if}}
         </button>
       </form>
@@ -266,15 +300,16 @@ export default class FantribeLoginForm extends Component {
                 d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
               ></path>
             </svg>
-            <span>Continue with Google</span>
+            <span>{{i18n "fantribe.login.continue_with_google"}}</span>
           </button>
         {{/if}}
 
         {{! Sign up link — mirrors "Already have an account? Sign In" on signup page }}
         <div class="fantribe-signup-link">
-          <span>Don't have an account?</span>
-          <a href={{this.signupUrl}} {{on "click" this.navigateToSignup}}>Sign
-            Up</a>
+          <span>{{i18n "fantribe.login.dont_have_account"}}</span>
+          <a href={{this.signupUrl}} {{on "click" this.navigateToSignup}}>{{i18n
+              "fantribe.header.signup"
+            }}</a>
         </div>
       </div>
     </div>
