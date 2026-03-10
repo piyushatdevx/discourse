@@ -12,7 +12,7 @@ export default class FantribeMediaPhotoGrid extends Component {
   get maxDisplayCount() {
     const count = this.images.length;
     if (count <= 4) {
-      return 4;
+      return count; // Show exactly what exists — no phantom empty cells
     }
     if (count <= 9) {
       return 9;

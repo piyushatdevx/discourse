@@ -9,19 +9,18 @@ body.fantribe-theme:not(.admin-interface) {
     gap: 4px;
     border-radius: 16px;
     overflow: hidden;
+    max-height: 420px;
 
-    // 2 images: 2 columns
     &--2 {
       grid-template-columns: repeat(2, 1fr);
     }
 
-    // 3 images: 2 columns, first spans 2 rows
+    // 3 images: two side-by-side on top, one full-width on the bottom
     &--3 {
       grid-template-columns: repeat(2, 1fr);
-      grid-template-rows: repeat(2, 1fr);
 
-      .fantribe-media-grid__item:first-child {
-        grid-row: span 2;
+      .fantribe-media-grid__item:nth-child(3) {
+        grid-column: span 2;
       }
     }
 
@@ -45,7 +44,12 @@ body.fantribe-theme:not(.admin-interface) {
   // Grid item container
   .fantribe-media-grid__item {
     position: relative;
-    aspect-ratio: 1;
+
+    // Fill the grid cell height; the grid container's max-height controls
+    // overall size. Do NOT use aspect-ratio: 1 here — it fights the container
+    // height constraint and causes items to overflow/create giant rows.
+    height: 100%;
+    min-height: 0;
     overflow: hidden;
     background: var(--ft-slate-100);
     border: none;
