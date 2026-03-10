@@ -1,0 +1,3 @@
+hi_IN:
+  user_language_switcher:
+    invalid_locale: "'%{locale}' एक मान्य भाषा नहीं है।"

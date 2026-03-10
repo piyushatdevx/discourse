@@ -18,7 +18,6 @@ export const LANGUAGES = [
   { code: "de", flag: "🇩🇪", label: "DE", name: "Deutsch" },
   { code: "pt", flag: "🇧🇷", label: "PT", name: "Português" },
   { code: "hi", flag: "🇮🇳", label: "HI", name: "हिन्दी" },
-  { code: "ar", flag: "🇸🇦", label: "AR", name: "العربية" },
 ];
 
 export default class FtLangDropdown extends Component {

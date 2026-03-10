@@ -80,6 +80,7 @@
 !/plugins/explore-tribes
 !/plugins/fantribe-social
 !/plugins/fantribe-otp-activation
+!/plugins/user-language-switcher
 /plugins/*/auto_generated
 
 /spec/fixtures/plugins/my_plugin/auto_generated

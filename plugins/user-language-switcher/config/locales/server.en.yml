@@ -1,0 +1,3 @@
+en:
+  user_language_switcher:
+    invalid_locale: "'%{locale}' is not a valid locale."
