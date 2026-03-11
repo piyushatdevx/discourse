@@ -17,7 +17,6 @@ const TABS = [
   { id: "all", label: "All", icon: "layout-grid" },
   { id: "feed", label: "Feed", icon: "newspaper" },
   { id: "tribes", label: "Tribes", icon: "compass" },
-  { id: "chat", label: "Chat", icon: "message-circle" },
 ];
 
 export default class FtSearchModal extends Component {
@@ -70,10 +69,6 @@ export default class FtSearchModal extends Component {
         });
       });
       return out;
-    }
-
-    if (this.activeTab === "chat") {
-      return [];
     }
 
     if (!this.rawResults) {
@@ -148,10 +143,6 @@ export default class FtSearchModal extends Component {
 
   get showTrendingTribes() {
     return this.activeTab === "tribes" && !this.hasQuery;
-  }
-
-  get showChatStub() {
-    return this.activeTab === "chat";
   }
 
   @action
@@ -360,13 +351,7 @@ export default class FtSearchModal extends Component {
 
         {{! Results }}
         <div class="ft-search-modal__results">
-          {{#if this.showChatStub}}
-            <div class="ft-search-modal__state ft-search-modal__state--chat">
-              {{ftIcon "message-circle" size=40}}
-              <p>Chat search coming soon</p>
-            </div>
-
-          {{else if this.showTrendingTribes}}
+          {{#if this.showTrendingTribes}}
             {{! Tribes tab with no query — show trending }}
             <div class="ft-search-modal__trending">
               <span class="ft-search-modal__trending-title">Trending tribes</span>
