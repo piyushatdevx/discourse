@@ -64,7 +64,7 @@ export default class ChannelsList extends Component {
           }}
           {{on "click" (fn this.switchTab "channels")}}
         >
-          Channels
+          {{i18n "chat.chat_channels"}}
           {{#if this.channelsUnreadCount}}
             <span
               class="channels-list__tab-badge"
@@ -80,7 +80,7 @@ export default class ChannelsList extends Component {
             }}
             {{on "click" (fn this.switchTab "dms")}}
           >
-            Messages
+            {{i18n "chat.messages_tab"}}
             {{#if this.dmsUnreadCount}}
               <span
                 class="channels-list__tab-badge"
@@ -96,7 +96,7 @@ export default class ChannelsList extends Component {
           }}
           {{on "click" (fn this.switchTab "starred")}}
         >
-          Starred
+          {{i18n "chat.starred"}}
           {{#if this.starredUnreadCount}}
             <span
               class="channels-list__tab-badge"

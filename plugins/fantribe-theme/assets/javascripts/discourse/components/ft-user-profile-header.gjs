@@ -148,7 +148,7 @@ export default class FtUserProfileHeader extends Component {
                 type="button"
                 class="ft-profile__cover-btn"
                 {{on "click" this.openShareModal}}
-                aria-label="Share profile"
+                aria-label={{i18n "fantribe.share_profile.title"}}
               >
                 {{ftIcon "share2"}}
               </button>
@@ -157,7 +157,7 @@ export default class FtUserProfileHeader extends Component {
                   type="button"
                   class="ft-profile__cover-btn"
                   {{on "click" this.goToSettings}}
-                  aria-label="Settings"
+                  aria-label={{i18n "fantribe.settings_hub.title"}}
                 >
                   {{ftIcon "settings"}}
                 </button>
@@ -202,7 +202,7 @@ export default class FtUserProfileHeader extends Component {
                   {{/if}}
                   {{#if this.joinedDate}}
                     {{ftIcon "calendar"}}
-                    Joined
+                    {{i18n "fantribe.common.joined"}}
                     {{formatDate this.joinedDate leaveAgo=true}}
                     {{#if this.websiteName}}
                       <span class="ft-profile__meta-dot">·</span>
@@ -231,7 +231,7 @@ export default class FtUserProfileHeader extends Component {
                     {{on "click" this.openEditModal}}
                   >
                     {{ftIcon "edit3"}}
-                    Edit Profile
+                    {{i18n "fantribe.edit_profile.title"}}
                   </button>
                 {{/if}}
               </div>

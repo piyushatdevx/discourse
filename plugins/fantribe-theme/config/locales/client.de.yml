@@ -17,6 +17,7 @@ de:
         home_feed: "Home-Feed"
         explore_tribes: "Tribes entdecken"
         chat: "Chat"
+        notifications: "Benachrichtigungen"
     login:
       forgot_password: "Passwort vergessen?"
     fantribe:
@@ -146,6 +147,27 @@ de:
         bio_placeholder: "Erzahle der Welt etwas uber dich..."
         location_placeholder: "Stadt, Land"
         website_placeholder: "https://deinewebseite.com"
+      settings_hub:
+        title: "Einstellungen"
+        back: "Zurück zum Profil"
+        account:
+          label: "Konto und Sicherheit"
+          description: "E-Mail, Passwort und verknupfte Konten"
+        notifications:
+          label: "Benachrichtigungen"
+          description: "Steuern Sie, welche Benachrichtigungen Sie erhalten"
+        privacy:
+          label: "Datenschutz und Sicherheit"
+          description: "Blockierte Benutzer und Sichtbarkeit verwalten"
+        appearance:
+          label: "Erscheinungsbild"
+          description: "Theme, Schriftgrosse und Schnittstellenoptionen"
+        email:
+          label: "E-Mail-Einstellungen"
+          description: "Zusammenfassungs-E-Mails und Benachrichtigungsversand"
+        profile_settings:
+          label: "Profileinstellungen"
+          description: "Name, Bio und andere Profildetails aktualisieren"
       gear_pill:
         view_product: "Produkt ansehen"
         used_by_creators: "Von 1,234 Creatorn genutzt"
@@ -166,6 +188,12 @@ de:
           explore_and_join: "Entdecke und tritt Tribes bei, um sie hier zu sehen"
           explore_tribes_cta: "Tribes entdecken"
           check_back_later: "Schau spater fur neue Tribes nochmal vorbei"
+      notifications:
+        unread: "Ungelesen"
+        mark_all_read: "Alle als gelesen markieren"
+        empty_title: "Alles erledigt!"
+        empty_body: "Keine neuen Benachrichtigungen"
+        unread_empty_body: "Keine ungelesenen Benachrichtigungen"
       log_out_confirm: "Mochtest du dich wirklich abmelden?"
       header:
         create_aria: "Erstellen"
@@ -195,12 +223,17 @@ de:
       search_modal:
         title: "Suche"
         close: "Schliessen"
+        back: "Zuruck"
+        filter: "Filter"
         search_placeholder: "Feed, Personen, Tribes durchsuchen..."
         no_results: "Keine Ergebnisse gefunden"
         search_anything: "Suche nach allem"
         untitled: "Ohne Titel"
         posts: "Beitrage"
+        trending_tribes: "Trendende Tribes"
+        view_all: "Alle anzeigen"
         tabs:
+          all: "Alle"
           feed: "Feed"
           people: "Personen"
           tribes: "Tribes"

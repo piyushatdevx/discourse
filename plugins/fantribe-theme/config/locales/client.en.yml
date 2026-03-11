@@ -144,6 +144,27 @@ en:
         bio_placeholder: "Tell the world about yourself..."
         location_placeholder: "City, Country"
         website_placeholder: "https://yourwebsite.com"
+      settings_hub:
+        title: "Settings"
+        back: "Back to Profile"
+        account:
+          label: "Account & Security"
+          description: "Email, password, and linked accounts"
+        notifications:
+          label: "Notifications"
+          description: "Control what alerts you receive"
+        privacy:
+          label: "Privacy & Safety"
+          description: "Manage blocked users and visibility"
+        appearance:
+          label: "Appearance"
+          description: "Theme, font size, and interface options"
+        email:
+          label: "Email Preferences"
+          description: "Digest emails and notification delivery"
+        profile_settings:
+          label: "Profile Settings"
+          description: "Update name, bio, and other profile details"
       gear_pill:
         view_product: "View Product"
         used_by_creators: "Used by 1,234 creators"
@@ -192,12 +213,17 @@ en:
       search_modal:
         title: "Search"
         close: "Close"
+        back: "Back"
+        filter: "Filter"
         search_placeholder: "Search feed, people, tribes..."
         no_results: "No results found"
         search_anything: "Search anything"
         untitled: "Untitled"
         posts: "posts"
+        trending_tribes: "Trending tribes"
+        view_all: "View all"
         tabs:
+          all: "All"
           feed: "Feed"
           people: "People"
           tribes: "Tribes"

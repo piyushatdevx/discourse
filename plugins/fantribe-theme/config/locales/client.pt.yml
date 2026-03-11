@@ -17,6 +17,7 @@ pt:
         home_feed: "Feed inicial"
         explore_tribes: "Explorar tribos"
         chat: "Chat"
+        notifications: "Notificações"
     login:
       forgot_password: "Esqueceu a senha?"
     fantribe:
@@ -146,6 +147,27 @@ pt:
         bio_placeholder: "Conte ao mundo sobre voce..."
         location_placeholder: "Cidade, Pais"
         website_placeholder: "https://seusite.com"
+      settings_hub:
+        title: "Configuracoes"
+        back: "Voltar ao perfil"
+        account:
+          label: "Conta e Seguranca"
+          description: "Email, senha e contas vinculadas"
+        notifications:
+          label: "Notificacoes"
+          description: "Controle quais alertas voce recebe"
+        privacy:
+          label: "Privacidade e Seguranca"
+          description: "Gerencie usuarios bloqueados e visibilidade"
+        appearance:
+          label: "Aparencia"
+          description: "Tema, tamanho de fonte e opcoes de interface"
+        email:
+          label: "Preferencias de Email"
+          description: "Emails de resumo e entrega de notificacoes"
+        profile_settings:
+          label: "Configuracoes de Perfil"
+          description: "Atualize nome, bio e outros detalhes do perfil"
       gear_pill:
         view_product: "Ver produto"
         used_by_creators: "Usado por 1,234 criadores"
@@ -166,6 +188,12 @@ pt:
           explore_and_join: "Explore e entre em tribos para ve-las aqui"
           explore_tribes_cta: "Explorar tribos"
           check_back_later: "Volte mais tarde para novas tribos"
+      notifications:
+        unread: "Nao lidas"
+        mark_all_read: "Marcar tudo como lido"
+        empty_title: "Tudo em dia!"
+        empty_body: "Sem novas notificacoes"
+        unread_empty_body: "Sem notificacoes nao lidas"
       log_out_confirm: "Tem certeza de que deseja sair?"
       header:
         create_aria: "Criar"
@@ -195,12 +223,17 @@ pt:
       search_modal:
         title: "Buscar"
         close: "Fechar"
+        back: "Voltar"
+        filter: "Filtros"
         search_placeholder: "Buscar no feed, pessoas, tribos..."
         no_results: "Nenhum resultado encontrado"
         search_anything: "Busque qualquer coisa"
         untitled: "Sem titulo"
         posts: "posts"
+        trending_tribes: "Tribos em alta"
+        view_all: "Ver tudo"
         tabs:
+          all: "Tudo"
           feed: "Feed"
           people: "Pessoas"
           tribes: "Tribos"

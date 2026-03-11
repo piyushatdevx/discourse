@@ -15,9 +15,21 @@ const autoFocus = modifier((element) => {
 });
 
 const TABS = [
-  { id: "all", label: "All", icon: "layout-grid" },
-  { id: "feed", label: "Feed", icon: "newspaper" },
-  { id: "tribes", label: "Tribes", icon: "compass" },
+  {
+    id: "all",
+    labelKey: "fantribe.search_modal.tabs.all",
+    icon: "layout-grid",
+  },
+  {
+    id: "feed",
+    labelKey: "fantribe.search_modal.tabs.feed",
+    icon: "newspaper",
+  },
+  {
+    id: "tribes",
+    labelKey: "fantribe.search_modal.tabs.tribes",
+    icon: "compass",
+  },
 ];
 
 export default class FtSearchModal extends Component {
@@ -34,7 +46,7 @@ export default class FtSearchModal extends Component {
   get tabsWithActive() {
     return TABS.map((tab) => ({
       ...tab,
-      label: i18n(tab.labelKey),
+      label: tab.labelKey ? i18n(tab.labelKey) : tab.label,
       isActive: tab.id === this.activeTab,
     }));
   }
@@ -279,7 +291,7 @@ export default class FtSearchModal extends Component {
           <button
             type="button"
             class="ft-search-modal__back-btn"
-            aria-label="Back"
+            aria-label={{i18n "fantribe.search_modal.back"}}
             {{on "click" @onClose}}
           >
             {{ftIcon "arrow-left" size=20}}
@@ -290,7 +302,7 @@ export default class FtSearchModal extends Component {
             <input
               type="text"
               class="ft-search-modal__search-input"
-              placeholder="Search people, gear, tribes..."
+              placeholder={{i18n "fantribe.search_modal.search_placeholder"}}
               value={{this.query}}
               {{autoFocus}}
               {{on "input" this.updateQuery}}
@@ -301,7 +313,7 @@ export default class FtSearchModal extends Component {
           <button
             type="button"
             class="ft-search-modal__filter-btn"
-            aria-label="Filter"
+            aria-label={{i18n "fantribe.search_modal.filter"}}
           >
             {{ftIcon "sliders-horizontal" size=20}}
           </button>
@@ -359,7 +371,9 @@ export default class FtSearchModal extends Component {
           {{#if this.showTrendingTribes}}
             {{! Tribes tab with no query — show trending }}
             <div class="ft-search-modal__trending">
-              <span class="ft-search-modal__trending-title">Trending tribes</span>
+              <span class="ft-search-modal__trending-title">{{i18n
+                  "fantribe.search_modal.trending_tribes"
+                }}</span>
               {{#each this.trendingTribes as |category|}}
                 <button
                   type="button"
@@ -379,7 +393,7 @@ export default class FtSearchModal extends Component {
                 class="ft-search-modal__view-all"
                 {{on "click" this.viewAllTribes}}
               >
-                View all
+                {{i18n "fantribe.search_modal.view_all"}}
               </button>
             </div>
 

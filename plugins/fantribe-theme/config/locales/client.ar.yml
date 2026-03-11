@@ -17,6 +17,7 @@ ar:
         home_feed: "الخلاصة الرئيسية"
         explore_tribes: "استكشاف القبائل"
         chat: "الدردشة"
+        notifications: "الإشعارات"
     login:
       forgot_password: "هل نسيت كلمة المرور؟"
     fantribe:
@@ -146,6 +147,27 @@ ar:
         bio_placeholder: "اخبر العالم عن نفسك..."
         location_placeholder: "المدينة، الدولة"
         website_placeholder: "https://yourwebsite.com"
+      settings_hub:
+        title: "الإعدادات"
+        back: "العودة إلى الملف الشخصي"
+        account:
+          label: "الحساب والأمان"
+          description: "البريد الإلكتروني وكلمة المرور والحسابات المرتبطة"
+        notifications:
+          label: "الإشعارات"
+          description: "تحكم في التنبيهات التي تتلقاها"
+        privacy:
+          label: "الخصوصية والسلامة"
+          description: "إدارة المستخدمين المحجوبين والرؤية"
+        appearance:
+          label: "المظهر"
+          description: "السمة وحجم الخط وخيارات الواجهة"
+        email:
+          label: "تفضيلات البريد الإلكتروني"
+          description: "رسائل الملخص وتسليم الإشعارات"
+        profile_settings:
+          label: "إعدادات الملف الشخصي"
+          description: "تحديث الاسم والسيرة الذاتية وتفاصيل الملف الشخصي"
       gear_pill:
         view_product: "عرض المنتج"
         used_by_creators: "يستخدمه 1,234 من المبدعين"
@@ -166,6 +188,12 @@ ar:
           explore_and_join: "استكشف وانضم الى القبائل لتراها هنا"
           explore_tribes_cta: "استكشاف القبائل"
           check_back_later: "تحقق لاحقا من وجود قبائل جديدة"
+      notifications:
+        unread: "غير مقروء"
+        mark_all_read: "تعليم الكل كمقروء"
+        empty_title: "اطلعت على كل شيء!"
+        empty_body: "لا توجد إشعارات جديدة"
+        unread_empty_body: "لا توجد إشعارات غير مقروءة"
       log_out_confirm: "هل انت متاكد انك تريد تسجيل الخروج؟"
       header:
         create_aria: "انشاء"
@@ -195,12 +223,17 @@ ar:
       search_modal:
         title: "بحث"
         close: "اغلاق"
+        back: "عودة"
+        filter: "فلتر"
         search_placeholder: "ابحث في الخلاصة والاشخاص والقبائل..."
         no_results: "لم يتم العثور على نتائج"
         search_anything: "ابحث عن اي شيء"
         untitled: "بدون عنوان"
         posts: "منشورات"
+        trending_tribes: "القبائل الرائجة"
+        view_all: "عرض الكل"
         tabs:
+          all: "الكل"
           feed: "الخلاصة"
           people: "الاشخاص"
           tribes: "القبائل"

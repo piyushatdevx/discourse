@@ -6,13 +6,14 @@ import { service } from "@ember/service";
 import avatar from "discourse/helpers/avatar";
 import icon from "discourse/helpers/d-icon";
 import { eq } from "discourse/truth-helpers";
+import { i18n } from "discourse-i18n";
 import ftIcon from "discourse/plugins/fantribe-theme/discourse/helpers/ft-icon";
 
 const SETTINGS_SECTIONS = [
   {
     id: "account",
-    label: "Account & Security",
-    description: "Email, password, and linked accounts",
+    labelKey: "fantribe.settings_hub.account.label",
+    descriptionKey: "fantribe.settings_hub.account.description",
     route: "preferences.account",
     iconType: "d",
     iconName: "user",
@@ -20,8 +21,8 @@ const SETTINGS_SECTIONS = [
   },
   {
     id: "notifications",
-    label: "Notifications",
-    description: "Control what alerts you receive",
+    labelKey: "fantribe.settings_hub.notifications.label",
+    descriptionKey: "fantribe.settings_hub.notifications.description",
     route: "preferences.notifications",
     iconType: "ft",
     iconName: "bell",
@@ -29,8 +30,8 @@ const SETTINGS_SECTIONS = [
   },
   {
     id: "privacy",
-    label: "Privacy & Safety",
-    description: "Manage blocked users and visibility",
+    labelKey: "fantribe.settings_hub.privacy.label",
+    descriptionKey: "fantribe.settings_hub.privacy.description",
     route: "preferences.users",
     iconType: "ft",
     iconName: "lock",
@@ -38,8 +39,8 @@ const SETTINGS_SECTIONS = [
   },
   {
     id: "appearance",
-    label: "Appearance",
-    description: "Theme, font size, and interface options",
+    labelKey: "fantribe.settings_hub.appearance.label",
+    descriptionKey: "fantribe.settings_hub.appearance.description",
     route: "preferences.interface",
     iconType: "ft",
     iconName: "sliders-horizontal",
@@ -47,8 +48,8 @@ const SETTINGS_SECTIONS = [
   },
   {
     id: "email",
-    label: "Email Preferences",
-    description: "Digest emails and notification delivery",
+    labelKey: "fantribe.settings_hub.email.label",
+    descriptionKey: "fantribe.settings_hub.email.description",
     route: "preferences.email",
     iconType: "ft",
     iconName: "send",
@@ -56,8 +57,8 @@ const SETTINGS_SECTIONS = [
   },
   {
     id: "profile",
-    label: "Profile Settings",
-    description: "Update name, bio, and other profile details",
+    labelKey: "fantribe.settings_hub.profile_settings.label",
+    descriptionKey: "fantribe.settings_hub.profile_settings.description",
     route: "preferences.profile",
     iconType: "ft",
     iconName: "edit3",
@@ -89,14 +90,14 @@ export default class FtSettingsHub extends Component {
             type="button"
             class="ft-settings-hub__back-btn"
             {{on "click" this.goBack}}
-            aria-label="Back to profile"
+            aria-label={{i18n "fantribe.settings_hub.back"}}
           >
             {{ftIcon "chevron-left" size=18}}
-            <span>Back to Profile</span>
+            <span>{{i18n "fantribe.settings_hub.back"}}</span>
           </button>
           <span class="ft-settings-hub__topbar-title">
             {{ftIcon "settings" size=16}}
-            Settings
+            {{i18n "fantribe.settings_hub.title"}}
           </span>
         </div>
 
@@ -127,12 +128,12 @@ export default class FtSettingsHub extends Component {
                 {{/if}}
               </div>
               <div class="ft-settings-hub__section-text">
-                <span
-                  class="ft-settings-hub__section-label"
-                >{{section.label}}</span>
-                <span
-                  class="ft-settings-hub__section-desc"
-                >{{section.description}}</span>
+                <span class="ft-settings-hub__section-label">{{i18n
+                    section.labelKey
+                  }}</span>
+                <span class="ft-settings-hub__section-desc">{{i18n
+                    section.descriptionKey
+                  }}</span>
               </div>
               {{ftIcon "chevron-right" size=16}}
             </button>

@@ -7,6 +7,72 @@ hi:
         cancel: "रद्द करें"
         leave: "छोड़ें"
         close: "बंद करें"
+    chat:
+      chat_channels: "चैनल"
+      messages_tab: "संदेश"
+      starred: "स्टार किए गए"
+      starred_channels_empty: "आपने अभी तक कोई चैनल स्टार नहीं किया। यहाँ त्वरित पहुँच के लिए चैनल स्टार करें।"
+      no_direct_message_channels: "आप अभी तक किसी प्रत्यक्ष संदेश में शामिल नहीं हुए!"
+      no_direct_message_channels_cta: "बातचीत शुरू करें"
+      no_public_channels: "आप अभी तक किसी चैनल में शामिल नहीं हुए!"
+      no_public_channels_cta: "चैनल ब्राउज़ करें"
+      muted: "म्यूट किया गया"
+      empty_state:
+        title: "कोई चैनल नहीं मिला"
+        direct_message: "आप एक या अधिक उपयोगकर्ताओं के साथ व्यक्तिगत चैट भी शुरू कर सकते हैं।"
+        direct_message_cta: "व्यक्तिगत चैट शुरू करें"
+        my_threads: "आपके पास अभी तक कोई थ्रेड नहीं है। जिन थ्रेड में आप भाग लेते हैं वे यहाँ दिखेंगी।"
+      browse:
+        filter_all: सभी
+        filter_open: खुले
+        filter_closed: बंद
+        filter_archived: संग्रहीत
+        filter_input_placeholder: नाम से चैनल खोजें
+      channel:
+        memberships_count:
+          one: "%{count} सदस्य"
+          other: "%{count} सदस्य"
+      composer:
+        send: "भेजें"
+      my_threads:
+        title: मेरे थ्रेड
+      channel_settings:
+        leave_channel: "चैनल छोड़ें"
+        leave: "छोड़ें"
+        join_channel: "चैनल जॉइन करें"
+        join: "जॉइन करें"
+        star_channel: "चैनल स्टार करें"
+        unstar_channel: "चैनल अनस्टार करें"
+      channels_list_popup:
+        create: "नया चैनल"
+        browse: "चैनल ब्राउज़ करें"
+      new_message_modal:
+        new_group_chat: "नया ग्रुप चैट"
+      create_channel:
+        title: "नया चैनल"
+        name: "चैनल नाम"
+        slug: "चैनल स्लग (वैकल्पिक)"
+        description: "विवरण (वैकल्पिक)"
+        create: "चैनल बनाएं"
+        emoji:
+          label: "चैनल इमोजी (वैकल्पिक)"
+          reset: "इमोजी हटाएं"
+        choose_category:
+          label: "श्रेणी चुनें"
+          none: "एक चुनें..."
+        threading:
+          label: "थ्रेडिंग सक्षम करें"
+      channel_edit_name_slug_modal:
+        slug_description: "चैनल स्लग URL में चैनल नाम की जगह उपयोग होता है"
+      settings:
+        auto_join_users_label: "उपयोगकर्ताओं को स्वतः जोड़ें"
+        auto_join_users_info: "हर घंटे जांचें कि पिछले 3 महीनों में कौन से उपयोगकर्ता सक्रिय रहे हैं। %{category} श्रेणी तक पहुंच वाले उपयोगकर्ताओं को इस चैनल में जोड़ें।"
+        auto_join_users_info_no_category: "हर घंटे जांचें कि पिछले 3 महीनों में कौन से उपयोगकर्ता सक्रिय रहे हैं। चुनी गई श्रेणी तक पहुंच वाले उपयोगकर्ताओं को इस चैनल में जोड़ें।"
+        channel_threading_description: "थ्रेडिंग सक्षम होने पर, किसी चैट संदेश के उत्तर एक अलग बातचीत बनाएंगे, जो मुख्य चैनल के साथ-साथ दिखेगी।"
+      direct_messages:
+        title: "DMs"
+        new: "व्यक्तिगत चैट बनाएं"
+        cannot_create: "क्षमा करें, आप प्रत्यक्ष संदेश नहीं भेज सकते।"
     sidebar:
       logo_aria: "होम फीड पर जाएं"
       collapse_aria: "साइडबार छोटा करें"
@@ -17,8 +83,77 @@ hi:
         home_feed: "होम फीड"
         explore_tribes: "ट्राइब्स एक्सप्लोर करें"
         chat: "चैट"
+        notifications: "सूचनाएं"
     login:
       forgot_password: "पासवर्ड भूल गए?"
+    user:
+      summary:
+        title: "सारांश"
+      activity_stream: "गतिविधि"
+      notifications: "सूचनाएं"
+      private_messages: "संदेश"
+      read: "पढ़ा हुआ"
+      filters:
+        all: "सभी"
+      invited:
+        title: "आमंत्रण"
+      preferences:
+        title: "प्राथमिकताएं"
+      preferences_nav:
+        account: "खाता"
+        security: "सुरक्षा"
+        profile: "प्रोफाइल"
+        emails: "ईमेल"
+        notifications: "सूचनाएं"
+        tracking: "ट्रैकिंग"
+        users: "उपयोगकर्ता"
+        interface: "इंटरफ़ेस"
+        navigation_menu: "नेविगेशन मेन्यू"
+      username:
+        title: "यूज़रनेम"
+      avatar:
+        title: "प्रोफाइल चित्र"
+      email:
+        title: "ईमेल"
+        primary_label: "प्राथमिक"
+        unconfirmed_label: "अपुष्ट"
+      name:
+        title: "पूरा नाम"
+      password:
+        title: "पासवर्ड"
+      bio:
+        title: "बायो"
+      location:
+        title: "स्थान"
+      website:
+        title: "वेबसाइट"
+      change: "बदलाव सहेजें"
+      save: "बदलाव सहेजें"
+      saving: "सहेजा जा रहा है..."
+      saved: "सहेजा गया"
+      change_password:
+        action: "पासवर्ड बदलें"
+        success: "पासवर्ड सफलतापूर्वक बदला गया"
+      second_factor:
+        title: "दो-कारक प्रमाणीकरण"
+      log_out: "लॉग आउट"
+    user_action_groups:
+      "1": "पसंद"
+      "3": "बुकमार्क"
+      "4": "टॉपिक्स"
+      "5": "उत्तर"
+      "15": "ड्राफ्ट"
+    drafts:
+      label: "ड्राफ्ट"
+      label_with_count: "ड्राफ्ट (%{count})"
+    pending_posts:
+      label: "प्रतीक्षित"
+      label_with_count: "प्रतीक्षित (%{count})"
+    badges:
+      title: "बैज"
+    admin:
+      user:
+        manage_user: "उपयोगकर्ता प्रबंधित करें"
     fantribe:
       common:
         general: "सामान्य"
@@ -146,6 +281,27 @@ hi:
         bio_placeholder: "दुनिया को अपने बारे में बताएं..."
         location_placeholder: "शहर, देश"
         website_placeholder: "https://yourwebsite.com"
+      settings_hub:
+        title: "सेटिंग्स"
+        back: "प्रोफाइल पर वापस जाएं"
+        account:
+          label: "खाता और सुरक्षा"
+          description: "ईमेल, पासवर्ड और जुड़े हुए खाते"
+        notifications:
+          label: "सूचनाएं"
+          description: "नियंत्रित करें कि आप कौन सी अलर्ट प्राप्त करते हैं"
+        privacy:
+          label: "गोपनीयता और सुरक्षा"
+          description: "ब्लॉक किए गए उपयोगकर्ताओं और दृश्यता को प्रबंधित करें"
+        appearance:
+          label: "दिखावट"
+          description: "थीम, फ़ॉन्ट आकार और इंटरफ़ेस विकल्प"
+        email:
+          label: "ईमेल प्राथमिकताएं"
+          description: "डाइजेस्ट ईमेल और सूचना डिलीवरी"
+        profile_settings:
+          label: "प्रोफाइल सेटिंग्स"
+          description: "नाम, बायो और अन्य प्रोफाइल विवरण अपडेट करें"
       gear_pill:
         view_product: "प्रोडक्ट देखें"
         used_by_creators: "1,234 क्रिएटर्स द्वारा उपयोग"
@@ -166,6 +322,12 @@ hi:
           explore_and_join: "ट्राइब्स एक्सप्लोर करें और जुड़ें, फिर वे यहां दिखेंगी"
           explore_tribes_cta: "ट्राइब्स एक्सप्लोर करें"
           check_back_later: "नई ट्राइब्स के लिए बाद में फिर देखें"
+      notifications:
+        unread: "अपठित"
+        mark_all_read: "सभी को पढ़ा हुआ चिह्नित करें"
+        empty_title: "सब देख लिया!"
+        empty_body: "कोई नई सूचना नहीं है"
+        unread_empty_body: "कोई अपठित सूचना नहीं है"
       log_out_confirm: "क्या आप वाकई लॉग आउट करना चाहते हैं?"
       header:
         create_aria: "बनाएं"
@@ -195,12 +357,17 @@ hi:
       search_modal:
         title: "खोज"
         close: "बंद करें"
+        back: "वापस"
+        filter: "फिल्टर"
         search_placeholder: "फीड, लोग, ट्राइब्स खोजें..."
         no_results: "कोई परिणाम नहीं मिला"
         search_anything: "कुछ भी खोजें"
         untitled: "बिना शीर्षक"
         posts: "पोस्ट"
+        trending_tribes: "ट्रेंडिंग ट्राइब्स"
+        view_all: "सभी देखें"
         tabs:
+          all: "सभी"
           feed: "फीड"
           people: "लोग"
           tribes: "ट्राइब्स"

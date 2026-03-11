@@ -1,0 +1,1312 @@
+# WARNING: Never edit this file.
+# It will be overwritten when translations are pulled from Crowdin.
+#
+# To work with us on translations, join this project:
+# https://translate.discourse.org/
+
+hi:
+  js:
+    number:
+      format:
+        separator: "."
+        delimiter: ","
+      human:
+        storage_units:
+          format: "%n %u"
+          units:
+            byte:
+              one: "बाइट"
+              other: "बाइट"
+            gb: "GB"
+            kb: "KB"
+            mb: "MB"
+            tb: "TB"
+      percent: "%{count}%"
+      short:
+        thousands: "%{number}K"
+        millions: "%{number}M"
+    dates:
+      time: "h:mm a"
+      time_short: "h:mm"
+      time_with_zone: "h:mm a (z)"
+      time_short_day: "ddd h:mm a"
+      timeline_date: "MMM YYYY"
+      long_no_year: "D MMM, h:mm a"
+      long_no_year_no_time: "D MMM"
+      full_no_year_no_time: "Do MMMM"
+      long_with_year: "DD MMM YYYY h:mm a"
+      long_with_year_no_time: "DD MMM YYYY"
+      full_with_year_no_time: "D MMMM YYYY"
+      long_date_with_year: "DD MMM YYYY, h:mm a"
+      long_date_without_year: "D MMM, LT"
+      long_date_with_year_without_time: "DD MMM YYYY"
+      long_date_without_year_with_linebreak: "D MMM <br/>LT"
+      long_date_with_year_with_linebreak: "DD MMM YYYY <br/>h:mm a"
+      wrap_ago: "%{date} पहले"
+      wrap_on: "%{date} को"
+      tiny:
+        half_a_minute: "< 1 मिनट"
+        less_than_x_seconds:
+          one: "< %{count} सेकंड"
+          other: "< %{count} सेकंड"
+        x_seconds:
+          one: "%{count} सेकंड"
+          other: "%{count} सेकंड"
+        less_than_x_minutes:
+          one: "< %{count} मिनट"
+          other: "< %{count} मिनट"
+        x_minutes:
+          one: "%{count} मिनट"
+          other: "%{count} मिनट"
+        about_x_hours:
+          one: "%{count} घंटा"
+          other: "%{count} घंटे"
+        x_days:
+          one: "%{count} दिन"
+          other: "%{count} दिन"
+        x_months:
+          one: "%{count} महीना"
+          other: "%{count} महीने"
+        about_x_years:
+          one: "%{count} वर्ष"
+          other: "%{count} वर्ष"
+        over_x_years:
+          one: "> %{count} वर्ष"
+          other: "> %{count} वर्ष"
+        almost_x_years:
+          one: "%{count} वर्ष"
+          other: "%{count} वर्ष"
+        date_month: "D MMM"
+        date_year: "MMM YYYY"
+      medium:
+        less_than_x_minutes:
+          one: "%{count} मिनट से कम"
+          other: "%{count} मिनट से कम"
+        x_minutes:
+          one: "%{count} मिनट"
+          other: "%{count} मिनट"
+        x_hours:
+          one: "%{count} घंटा"
+          other: "%{count} घंटे"
+        about_x_hours:
+          one: "लगभग %{count} घंटा"
+          other: "लगभग %{count} घंटे"
+        x_days:
+          one: "%{count} दिन"
+          other: "%{count} दिन"
+        x_months:
+          one: "%{count} महीना"
+          other: "%{count} महीने"
+        about_x_years:
+          one: "लगभग %{count} वर्ष"
+          other: "लगभग %{count} वर्ष"
+        over_x_years:
+          one: "%{count} वर्ष से अधिक"
+          other: "%{count} वर्ष से अधिक"
+        almost_x_years:
+          one: "लगभग %{count} वर्ष"
+          other: "लगभग %{count} वर्ष"
+        date_year: "DD MMM YYYY"
+      medium_with_ago:
+        x_minutes:
+          one: "%{count} मिनट पहले"
+          other: "%{count} मिनट पहले"
+        x_hours:
+          one: "%{count} घंटे पहले"
+          other: "%{count} घंटे पहले"
+        x_days:
+          one: "%{count} दिन पहले"
+          other: "%{count} दिन पहले"
+        x_months:
+          one: "%{count} महीने पहले"
+          other: "%{count} महीने पहले"
+        x_years:
+          one: "%{count} वर्ष पहले"
+          other: "%{count} वर्ष पहले"
+      later:
+        x_days:
+          one: "%{count} दिन बाद"
+          other: "%{count} दिन बाद"
+        x_months:
+          one: "%{count} महीने बाद"
+          other: "%{count} महीने बाद"
+        x_years:
+          one: "%{count} वर्ष बाद"
+          other: "%{count} वर्ष बाद"
+      previous_month: "पिछला महीना"
+      next_month: "अगला महीना"
+      placeholder: "तारीख"
+      from_placeholder: "शुरुआत तारीख"
+      to_placeholder: "अंतिम तारीख"
+    share:
+      topic_html: 'विषय: <span class="topic-title">%{topicTitle}</span>'
+      post: "@%{username} की पोस्ट #%{postNumber}"
+      close: "बंद करें"
+      twitter: "X पर साझा करें"
+      facebook: "Facebook पर साझा करें"
+      email: "ईमेल से भेजें"
+      url: "URL कॉपी करें"
+    word_connector:
+      comma: ", "
+      last_item: "और"
+    action_codes:
+      public_topic: "यह विषय सार्वजनिक किया (%{when})"
+      open_topic: "इसे विषय में बदला (%{when})"
+      private_topic: "यह विषय सीधे संदेश में बदला (%{when})"
+      split_topic: "यह विषय विभाजित किया (%{when})"
+      invited_user: "%{who} को आमंत्रित किया (%{when})"
+      invited_group: "%{who} को आमंत्रित किया (%{when})"
+      user_left: "%{who} ने यह वार्तालाप छोड़ा %{when}"
+      removed_user: "%{who} को हटाया (%{when})"
+      removed_group: "%{who} को हटाया (%{when})"
+      autobumped: "स्वचालित रूप से ऊपर लाया गया (%{when})"
+      tags_changed: "टैग बदले गए %{when}"
+      category_changed: "श्रेणी बदली गई %{when}"
+      autoclosed:
+        enabled: "यह विषय बंद किया (%{when})"
+        disabled: "यह विषय खोला (%{when})"
+      closed:
+        enabled: "यह विषय बंद किया (%{when})"
+        disabled: "यह विषय खोला (%{when})"
+      archived:
+        enabled: "यह विषय संग्रहित किया (%{when})"
+        disabled: "यह विषय संग्रह से बाहर किया (%{when})"
+      pinned:
+        enabled: "यह विषय पिन किया (%{when})"
+        disabled: "यह विषय अनपिन किया (%{when})"
+      pinned_globally:
+        enabled: "यह विषय वैश्विक रूप से पिन किया (%{when})"
+        disabled: "यह विषय अनपिन किया (%{when})"
+      visible:
+        enabled: "यह विषय सूचीबद्ध किया (%{when})"
+        disabled: "यह विषय असूचीबद्ध किया (%{when})"
+      banner:
+        enabled: "यह विषय बैनर बनाया (%{when})"
+        disabled: "यह विषय बैनर से हटाया (%{when})"
+      forwarded: "ऊपर दिया गया ईमेल अग्रेषित किया"
+    topic_admin_menu: "विषय क्रियाएं"
+    skip_to_main_content: "मुख्य सामग्री पर जाएं"
+    skip_links_label: "नेविगेशन लिंक छोड़ें"
+    skip_user_nav: "प्रोफाइल सामग्री पर जाएं"
+    emails_are_disabled: "एक व्यवस्थापक ने आउटगोइंग ईमेल अक्षम कर दिया है। कोई ईमेल सूचना नहीं भेजी जाएगी।"
+    software_update_prompt:
+      message: "हमने इस साइट को अपडेट किया है, कृपया सब कुछ सही से काम करे इसके लिए <span>रिफ्रेश करें</span>।"
+      dismiss: "खारिज करें"
+    back_button: "वापस"
+    themes:
+      default_description: "डिफ़ॉल्ट"
+      broken_theme_alert: "आपकी साइट काम नहीं कर सकती क्योंकि एक थीम या कंपोनेंट में त्रुटियां हैं।"
+    clear_input: "इनपुट साफ़ करें"
+    edit: "संपादित करें"
+    expand: "विस्तार करें"
+    not_implemented: "यह सुविधा अभी उपलब्ध नहीं है।"
+    no_value: "नहीं"
+    yes_value: "हाँ"
+    ok_value: "ठीक है"
+    cancel_value: "रद्द करें"
+    submit: "जमा करें"
+    delete: "हटाएं"
+    generic_error: "क्षमा करें, एक त्रुटि हुई।"
+    generic_error_with_reason: "एक त्रुटि हुई: %{error}"
+    sign_up: "साइन अप करें"
+    log_in: "लॉग इन करें"
+    age: "आयु"
+    joined: "शामिल हुए"
+    admin_title: "व्यवस्थापन"
+    show_more: "और दिखाएं"
+    show_help: "विकल्प"
+    links: "लिंक"
+    links_lowercase:
+      one: "लिंक"
+      other: "लिंक"
+    faq: "सामान्य प्रश्न"
+    guidelines: "दिशानिर्देश"
+    privacy_policy: "गोपनीयता नीति"
+    privacy: "गोपनीयता"
+    tos: "सेवा की शर्तें"
+    rules: "नियम"
+    conduct: "आचार संहिता"
+    mobile_view: "मोबाइल दृश्य"
+    desktop_view: "डेस्कटॉप दृश्य"
+    now: "अभी"
+    read_more: "और पढ़ें"
+    more: "अधिक"
+    more_options: "और विकल्प"
+    x_more:
+      one: "%{count} और"
+      other: "%{count} और"
+    never: "कभी नहीं"
+    every_30_minutes: "हर 30 मिनट"
+    every_hour: "हर घंटे"
+    daily: "प्रतिदिन"
+    weekly: "साप्ताहिक"
+    every_month: "हर महीने"
+    every_six_months: "हर छह महीने"
+    character_count:
+      one: "%{count} अक्षर"
+      other: "%{count} अक्षर"
+    related_messages:
+      title: "संबंधित संदेश"
+      see_all: '@%{username} के <a href="%{path}">सभी संदेश</a> देखें…'
+    suggested_topics:
+      title: "सुझाए गए विषय"
+      pm_title: "सुझाए गए संदेश"
+    about:
+      simple_title: "के बारे में"
+      title: "%{title} के बारे में"
+      stats: "साइट आंकड़े"
+      our_admins: "हमारे व्यवस्थापक"
+      our_moderators: "हमारे मॉडरेटर"
+      moderators: "मॉडरेटर"
+      stat:
+        all_time: "सर्वकालिक"
+        last_day: "पिछले 24 घंटे"
+        last_7_days: "पिछले 7 दिन"
+        last_30_days: "पिछले 30 दिन"
+      like_count: "पसंद"
+      topic_count: "विषय"
+      post_count: "पोस्ट"
+      user_count: "नए उपयोगकर्ता"
+      active_user_count: "सक्रिय उपयोगकर्ता"
+      contact: "हमसे संपर्क करें"
+      contact_info: "यदि इस साइट को प्रभावित करने वाला कोई गंभीर मुद्दा या तत्काल मामला हो तो कृपया %{contact_info} पर हमसे संपर्क करें।"
+    bookmarks:
+      created: "आपने इस पोस्ट को बुकमार्क किया है।"
+      created_with_reminder: "आपने %{date} को रिमाइंडर के साथ इस पोस्ट को बुकमार्क किया है।"
+      remove: "बुकमार्क हटाएं"
+      delete: "बुकमार्क हटाएं"
+      confirm_delete: "क्या आप वाकई इस बुकमार्क को हटाना चाहते हैं? रिमाइंडर भी हट जाएगा।"
+      confirm_clear: "क्या आप वाकई इस विषय के सभी बुकमार्क हटाना चाहते हैं?"
+      save: "सहेजें"
+      no_timezone: "आपने अभी तक टाइमज़ोन सेट नहीं किया है।"
+      invalid_custom_datetime: "आपके द्वारा दी गई तारीख और समय अमान्य है, कृपया पुनः प्रयास करें।"
+      list_permission_denied: "आपके पास इन बुकमार्क देखने की अनुमति नहीं है।"
+      no_user_bookmarks: "आपने अभी तक कोई पोस्ट बुकमार्क नहीं की है।"
+      auto_delete_preference:
+        label: "अपने आप हटाएं"
+        never: "कभी नहीं"
+        when_reminder_sent: "रिमाइंडर भेजने के बाद"
+        on_owner_reply: "इस विषय का उत्तर देने के बाद"
+    search:
+      sort_by: "क्रमबद्ध करें"
+      relevance: "प्रासंगिकता"
+      latest_post: "नवीनतम पोस्ट"
+      latest_topic: "नवीनतम विषय"
+      most_viewed: "सर्वाधिक देखे गए"
+      most_liked: "सर्वाधिक पसंद किए गए"
+      select_all: "सभी चुनें"
+      clear_all: "सभी हटाएं"
+      too_short: "आपके खोज शब्द बहुत छोटे हैं।"
+      result_count:
+        one: "<span>%{count} परिणाम</span><span class='term'>%{term}</span> के लिए"
+        other: "<span>%{count}+ परिणाम</span><span class='term'>%{term}</span> के लिए"
+      title: "विषय, पोस्ट, उपयोगकर्ता या श्रेणियां खोजें"
+      full_page_title: "विषय या पोस्ट खोजें"
+      no_results: "कोई परिणाम नहीं मिला।"
+      no_more_results: "और कोई परिणाम नहीं मिला।"
+      post_format: "#%{post_number} %{username} द्वारा"
+      results_page: "«%{term}» के लिए खोज परिणाम"
+      more_results: "और परिणाम हैं। कृपया अपनी खोज सीमित करें।"
+      cant_find: "जो खोज रहे हैं वो नहीं मिला?"
+      start_new_topic: "एक नया विषय शुरू करें?"
+      or_search_google: "या Google में खोजें:"
+      search_google: "Google में खोजें"
+      search_google_button: "Google"
+      search_button: "खोजें"
+      context:
+        user: "@%{username} की पोस्ट खोजें"
+        category: "'%{category}' में खोजें"
+        topic: "इस विषय में खोजें"
+        private_messages: "संदेशों में खोजें"
+    hamburger_menu: "हैम्बर्गर मेनू"
+    new_item: "नया"
+    go_back: "वापस जाएं"
+    not_logged_in: "इस क्रिया को करने के लिए आपको लॉग इन होना होगा।"
+    current_user: "आपकी प्रोफाइल पेज पर जाएं"
+    read_only_mode:
+      enabled: "यह साइट केवल-पढ़ने के मोड में है। जारी रखने के लिए, लेकिन उत्तर, पसंद और अन्य क्रियाएं अक्षम रहेंगी।"
+      login_disabled: "केवल-पढ़ने के मोड में लॉग इन अक्षम है।"
+      logout_disabled: "केवल-पढ़ने के मोड में लॉग आउट अक्षम है।"
+    logs_error_rate_notice:
+      reached: "<b>%{relativeAge}</b> – <a href='%{url}' target='_blank'>%{rate}</a> कॉन्फ़िगर सीमा %{siteSettingRate} तक पहुंच गई।"
+      exceeded: "<b>%{relativeAge}</b> – <a href='%{url}' target='_blank'>%{rate}</a> कॉन्फ़िगर सीमा %{siteSettingRate} से अधिक हो गई।"
+      rate:
+        one: "%{count} त्रुटि/मिनट"
+        other: "%{count} त्रुटियाँ/मिनट"
+    topics:
+      bulk:
+        select_all: "सभी चुनें"
+        clear_all: "सभी हटाएं"
+        unlist_topics: "विषय असूचीबद्ध करें"
+        relist_topics: "विषय पुनः सूचीबद्ध करें"
+        reset_read: "पढ़ा हुआ रीसेट करें"
+        delete: "विषय हटाएं"
+        dismiss: "खारिज करें"
+        dismiss_read: "सभी अपठित खारिज करें"
+        dismiss_button: "खारिज करें…"
+        dismiss_tooltip: "केवल नई पोस्ट खारिज करें या विषयों को ट्रैक करना बंद करें"
+        also_dismiss_topics: "इन विषयों को ट्रैक करना बंद करें ताकि ये मुझे अपठित के रूप में न दिखें"
+        dismiss_new: "नए खारिज करें"
+        toggle: "विषयों का बल्क चयन टॉगल करें"
+        actions: "बल्क क्रियाएं"
+        close_topics: "विषय बंद करें"
+        archive_topics: "विषय संग्रहित करें"
+        move_messages_to_inbox: "इनबॉक्स में ले जाएं"
+        choose_new_category: "नई श्रेणी चुनें"
+        selected:
+          one: "<b>%{count}</b> विषय चुना गया"
+          other: "<b>%{count}</b> विषय चुने गए"
+        change_tags: "टैग बदलें"
+        append_tags: "टैग जोड़ें"
+        choose_new_tags: "इन विषयों के लिए नए टैग चुनें:"
+        choose_append_tags: "इन विषयों के लिए नए टैग जोड़ें:"
+        changed_tags: "उन विषयों के टैग सफलतापूर्वक बदले गए।"
+        remove_tags: "सभी टैग हटाएं"
+        confirm_remove_tags:
+          one: "इस विषय के सभी टैग हटा दिए जाएंगे। क्या आप निश्चित हैं?"
+          other: "इन <b>%{count}</b> विषयों के सभी टैग हटा दिए जाएंगे। क्या आप निश्चित हैं?"
+        progress:
+          one: "प्रगति: <strong>%{count}</strong> विषय"
+          other: "प्रगति: <strong>%{count}</strong> विषय"
+    login:
+      subheader_title: "अपने खाते में लॉग इन करें"
+      title: "लॉग इन करें"
+      header_title: "लॉग इन करें"
+      forgot: "मुझे अपना खाता याद नहीं है"
+      google_oauth2: "Google के साथ"
+      email_placeholder: "ईमेल / यूज़रनेम"
+      password: "पासवर्ड"
+      second_factor_title: "दो-कारक प्रमाणीकरण"
+      second_factor_description: "कृपया अपने प्रमाणीकरण ऐप से प्रमाणीकरण कोड दर्ज करें:"
+      second_factor_label: "प्रमाणीकरण कोड"
+      second_factor_backup_label: "बैकअप कोड"
+      second_factor_backup_description: "कृपया अपना बैकअप कोड दर्ज करें:"
+      second_factor: "प्रमाणीकरण ऐप उपयोग करें"
+      second_factor_backup: "बैकअप कोड उपयोग करें"
+      not_approved: "आपका खाता अभी तक स्वीकृत नहीं हुआ है। नए खातों की स्वीकृति होने पर आपको ईमेल से सूचित किया जाएगा।"
+      not_allowed_from_ip_address: "आप इस IP पते से लॉग इन नहीं कर सकते।"
+      admin_not_allowed_from_ip_address: "आप इस IP पते से व्यवस्थापक के रूप में लॉग इन नहीं कर सकते।"
+      resend_activation_email: "एक्टिवेशन ईमेल दोबारा भेजें।"
+      resend_title: "एक्टिवेशन ईमेल दोबारा भेजें"
+      change_email: "ईमेल पता बदलें"
+      provide_new_email: "कृपया नया पता दें और हम आपका कन्फर्मेशन ईमेल दोबारा भेजेंगे।"
+      submit_new_email: "ईमेल अपडेट करें"
+      sent_activation_email_again: "<b>%{currentEmail}</b> पर एक एक्टिवेशन ईमेल भेजा गया। इसे आने में कुछ मिनट लग सकते हैं; स्पैम फ़ोल्डर भी जरूर जांचें।"
+      to_continue: "कृपया लॉग इन करें"
+      preferences: "प्राथमिकताएं बदलने के लिए आपको लॉग इन होना होगा।"
+      forgot_password_button: "पासवर्ड भूल गए?"
+      caps_lock_warning: "Caps Lock चालू है"
+      error: "अज्ञात त्रुटि"
+      cookies_error: "आपके ब्राउज़र में कुकीज़ अक्षम लगती हैं। लॉग इन करने से पहले उन्हें सक्षम करें।"
+      rate_limit: "लॉग इन करने से पहले कुछ देर प्रतीक्षा करें।"
+      blank_username: "कृपया अपना ईमेल या यूज़रनेम दर्ज करें।"
+      blank_password: "कृपया अपना पासवर्ड दर्ज करें।"
+      reset_password: "पासवर्ड रीसेट करें"
+      logging_in: "लॉग इन हो रहा है…"
+      or: "या"
+      authenticating: "प्रमाणित हो रहा है…"
+      awaiting_approval: "आपका खाता अभी तक किसी स्टाफ सदस्य द्वारा स्वीकृत नहीं किया गया है। स्वीकृति मिलने पर आपको ईमेल किया जाएगा।"
+      awaiting_activation: "आपका खाता अभी तक एक्टिव नहीं है। एक्टिवेशन ईमेल दोबारा भेजने के लिए पासवर्ड भूल गए लिंक पर क्लिक करें।"
+      already_logged_in: "आप पहले से लॉग इन हैं"
+      choose_new_email: "नया ईमेल चुनें"
+    invites:
+      accept_title: "आमंत्रण"
+      emoji: "लिफाफा इमोजी"
+      title: "आमंत्रण"
+      invited_by: "आपको आमंत्रित किया"
+      social_login_available: "आप उस ईमेल का उपयोग करके किसी भी सोशल लॉगिन से साइन इन कर सकते हैं।"
+      your_email: "आपका खाता ईमेल पता <b>%{email}</b> है।"
+      accept_invite: "आमंत्रण स्वीकार करें"
+      success: "आपका खाता बना दिया गया है और आप लॉग इन हैं।"
+      name_label: "नाम"
+      password_label: "पासवर्ड"
+      optional_description: "वैकल्पिक"
+    password_reset:
+      continue: "%{site_name} पर जारी रखें"
+    emoji_set:
+      apple_international: "Apple"
+      google: "Google"
+      twitter: "Twitter"
+      emoji_one: "JoyPixels (पहले Emoji One)"
+      win10: "Windows 10"
+      google_classic: "Google Classic"
+      facebook_messenger: "Facebook Messenger"
+    category_page_style:
+      categories_only: "केवल श्रेणियां"
+      categories_with_featured_topics: "श्रेणियां फ़ीचर्ड विषयों के साथ"
+      categories_and_latest_topics: "श्रेणियां और नवीनतम विषय"
+      categories_and_latest_topics_created_date: "श्रेणियां और नवीनतम विषय (निर्माण तारीख के अनुसार)"
+      categories_and_top_topics: "श्रेणियां और शीर्ष विषय"
+      subcategories_with_featured_topics: "उपश्रेणियां फ़ीचर्ड विषयों के साथ"
+    conditional_loading_section:
+      loading: "लोड हो रहा है…"
+    select_kit:
+      default_header_text: "चुनें…"
+      no_content: "कोई मिलान नहीं मिला।"
+      filter_placeholder: "खोजें…"
+      filter_placeholder_with_any: "खोजें या बनाएं…"
+      create: '"%{content}" बनाएं'
+      max_content_reached:
+        one: "आप केवल %{count} आइटम चुन सकते हैं।"
+        other: "आप केवल %{count} आइटम चुन सकते हैं।"
+      min_content_not_reached:
+        one: "कम से कम %{count} आइटम जोड़ें।"
+        other: "कम से कम %{count} आइटम जोड़ें।"
+    notifications:
+      tooltip:
+        regular:
+          one: "%{count} अपठित सूचना"
+          other: "%{count} अपठित सूचनाएं"
+        message:
+          one: "%{count} अपठित संदेश"
+          other: "%{count} अपठित संदेश"
+        high_priority:
+          one: "%{count} अपठित उच्च-प्राथमिकता सूचना"
+          other: "%{count} अपठित उच्च-प्राथमिकता सूचनाएं"
+      title: "@ उल्लेखों, उत्तरों, पसंदों आदि की सूचनाएं"
+      none: "अभी सूचनाएं लोड करने में असमर्थ।"
+      empty: "कोई सूचना नहीं मिली।"
+      mentioned: '<span>%{username}</span> %{description}'
+      group_mentioned: '<span>%{username}</span> %{description}'
+      quoted: '<span>%{username}</span> %{description}'
+      bookmark_reminder: '<span>%{username}</span> %{description}'
+      replied: '<span>%{username}</span> %{description}'
+      posted: '<span>%{username}</span> %{description}'
+      edited: '<span>%{username}</span> %{description}'
+      liked: '<span>%{username}</span> %{description}'
+      liked_2: '<span>%{username}, %{username2}</span> %{description}'
+      liked_many:
+        one: '<span>%{username}, %{username2} और %{count} अन्य</span> %{description}'
+        other: '<span>%{username}, %{username2} और %{count} अन्य</span> %{description}'
+      liked_consolidated: '<span>%{username}</span> %{description}'
+      liked_consolidated_description:
+        one: "आपकी %{count} पोस्ट पसंद की"
+        other: "आपकी %{count} पोस्ट पसंद की"
+      private_message: '<span>%{username}</span> %{description}'
+      invited_to_private_message: '<span>%{username}</span> %{description}'
+      invited_to_topic: '<span>%{username}</span> %{description}'
+      invitee_accepted: '<span>%{username}</span> ने आपका आमंत्रण स्वीकार किया'
+      moved_post: '<span>%{username}</span> ने <a href="%{link}">पोस्ट स्थानांतरित की</a>'
+      linked: '<span>%{username}</span> %{description}'
+      topic_reminder: '<span>%{username}</span> %{description}'
+      granted_badge: '<strong>%{description}</strong> अर्जित किया'
+      topic_voting_closed: "मतदान बंद: %{description}"
+      topic_voting_won: "मतदान जीते: %{description}"
+      topic_voting_lost: "मतदान हारे: %{description}"
+      watching_first_post: '<span>नया विषय</span> %{description}'
+      membership_request_accepted: 'समूह "%{group_name}" में सदस्यता स्वीकार की'
+      membership_request_consolidated:
+        one: '%{count} समूह सदस्यता अनुरोध "%{group_name}" के लिए'
+        other: '%{count} समूह सदस्यता अनुरोध "%{group_name}" के लिए'
+      reaction: '<span>%{username}</span> %{description}'
+      reaction_2: '<span>%{username}, %{username2}</span> %{description}'
+      group_message_summary:
+        one: "%{group_name} इनबॉक्स में %{count} संदेश"
+        other: "%{group_name} इनबॉक्स में %{count} संदेश"
+      popup:
+        mentioned: "%{username} ने \"%{topic}\" में आपका उल्लेख किया"
+        group_mentioned: "%{username} ने \"%{topic}\" में आपका उल्लेख किया"
+        quoted: "%{username} ने \"%{topic}\" में आपको उद्धृत किया"
+        replied: "%{username} ने \"%{topic}\" में उत्तर दिया"
+        posted: "%{username} ने \"%{topic}\" में पोस्ट किया"
+        private_message: "%{username} ने आपको \"%{topic}\" में एक सीधा संदेश भेजा"
+        linked: "%{username} ने \"%{topic}\" में आपकी पोस्ट से लिंक किया"
+        watching_first_post: "%{username} ने एक नया विषय \"%{topic}\" बनाया"
+        confirm_title: "सूचनाएं सक्षम – %{site_title}"
+        confirm_body: "सफलता! सूचनाएं सक्षम की गई हैं।"
+        custom: "%{username} से सूचना"
+      liked_html:
+        one: '%{username} और %{count} अन्य ने आपकी पोस्ट पसंद की'
+        other: '%{username} और %{count} अन्य ने आपकी पोस्ट पसंद की'
+      membership_accepted: 'आपको "%{group_name}" समूह में स्वीकार किया गया'
+      reviewable: "देखें %{description}"
+    upload_selector:
+      uploading: "अपलोड हो रहा है"
+      select_file: "फ़ाइल चुनें"
+      default_image_alt_text: "छवि"
+    search_result_topic:
+      title: "विषय"
+    search_result_category:
+      title: "श्रेणी"
+    search_result_user:
+      title: "उपयोगकर्ता"
+    search_result_tag:
+      title: "टैग"
+    topics:
+      new_messages_marker: "अंतिम यात्रा"
+      bulk:
+        selected:
+          one: "<b>%{count}</b> विषय चुना गया"
+          other: "<b>%{count}</b> विषय चुने गए"
+    new_topics_inserted: "%{count} नए विषय।"
+    show_new_topics: "क्लिक करें जोड़ने के लिए।"
+    preview: "पूर्वावलोकन"
+    cancel: "रद्द करें"
+    save: "बदलाव सहेजें"
+    saving: "सहेजा जा रहा है…"
+    saved: "सहेजा गया"
+    upload: "अपलोड करें"
+    uploading: "अपलोड हो रहा है…"
+    uploaded: "अपलोड हो गया"
+    uploading_filename: "अपलोड हो रहा है: %{filename}…"
+    clipboard: "क्लिपबोर्ड"
+    pasting: "पेस्ट हो रहा है…"
+    enable: "सक्षम करें"
+    disable: "अक्षम करें"
+    continue: "जारी रखें"
+    undo: "पूर्ववत करें"
+    revert: "वापस करें"
+    failed: "विफल"
+    category_breadcrumb_separator: "›"
+    switch_from_anon: "गुमनाम से बाहर निकलें"
+    banner:
+      close: "यह बैनर बंद करें।"
+      edit: "यह बैनर संपादित करें ›"
+    pwa:
+      install_banner_title: "इस डिवाइस पर %{title} इंस्टॉल करें।"
+      install_banner_content: "क्या आप इस डिवाइस पर %{title} इंस्टॉल करना चाहते हैं और तेज़ पहुंच चाहते हैं?"
+      install: "इंस्टॉल करें"
+      cancel: "रद्द करें"
+    choose_topic:
+      title:
+        none: "कोई विषय नहीं ढूंढा"
+        label: "विषय शीर्षक"
+    choose_message:
+      title:
+        none: "कोई संदेश नहीं ढूंढा"
+        label: "संदेश शीर्षक"
+    review:
+      over_limit: "कतार सीमा से अधिक है।"
+      grouping:
+        topic: "विषय"
+      ignore: "अनदेखा करें"
+      delete: "हटाएं"
+      settings:
+        saved: "सहेजा गया"
+        save_changes: "बदलाव सहेजें"
+        title: "सेटिंग्स"
+      moderation_history: "मॉडरेशन इतिहास"
+      view_all: "सभी देखें"
+      grouped_by_topic: "विषय के अनुसार समूहीकृत"
+      none: "समीक्षा के लिए कोई आइटम नहीं हैं।"
+      view_pending: "प्रतीक्षित देखें"
+      topic_has_pending:
+        one: "इस विषय में <b>%{count}</b> प्रतीक्षित पोस्ट है"
+        other: "इस विषय में <b>%{count}</b> प्रतीक्षित पोस्ट हैं"
+      title: "समीक्षा"
+      filtered_topic: "इस विषय में समीक्षा योग्य सामग्री:"
+      filtered_user: "उपयोगकर्ता"
+      filtered_reviewed_by: "द्वारा समीक्षित"
+      in_reply_to: "के जवाब में"
+      explain:
+        title: "यह समीक्षा योग्य क्यों है?"
+        is_decision: "%{score} स्कोर था"
+        total_score: "कुल स्कोर"
+      claim_help:
+        optional: "आप इस पोस्ट का दावा कर सकते हैं ताकि अन्य लोग इसकी समीक्षा न करें।"
+        required: "आपको इसकी समीक्षा करने से पहले इसका दावा करना होगा।"
+        claimed_by_you: "आपने इस पोस्ट का दावा किया है और इसकी समीक्षा कर सकते हैं।"
+        claimed_by_other: "यह पोस्ट केवल <b>%{username}</b> द्वारा समीक्षा की जा सकती है।"
+      claim: "दावा करें"
+      unclaim: "दावा छोड़ें"
+      awaiting_approval: "स्वीकृति की प्रतीक्षा"
+      delete_confirm: "क्या आप वाकई इस पोस्ट को हटाना चाहते हैं?"
+      delete_prompt: "इस उपयोगकर्ता की %{count} पोस्ट हटाएं"
+      action_buttons:
+        approve: "स्वीकृत करें"
+        approve_post: "पोस्ट स्वीकृत करें"
+        delete: "हटाएं"
+        delete_post: "पोस्ट हटाएं"
+        ignore: "अनदेखा करें"
+        delete_spammer: "स्पैमर हटाएं"
+        dequeue: "कतार से निकालें"
+        reject_post: "पोस्ट अस्वीकार करें"
+      reject_reason:
+        title: "अस्वीकृति का कारण"
+        send_email: "अस्वीकृति ईमेल भेजें"
+      statuses:
+        approved:
+          title: "स्वीकृत"
+        pending:
+          title: "प्रतीक्षित"
+        ignored:
+          title: "अनदेखा किया गया"
+        deleted:
+          title: "हटाया गया"
+        reviewed:
+          title: "समीक्षित"
+        all:
+          title: "सभी"
+      types:
+        reviewable_flagged_post:
+          title: "फ्लैग की गई पोस्ट"
+          flagged_by: "द्वारा फ्लैग किया गया"
+        reviewable_queued_topic:
+          title: "कतारबद्ध विषय"
+        reviewable_queued_post:
+          title: "कतारबद्ध पोस्ट"
+        reviewable_user:
+          title: "उपयोगकर्ता"
+        reviewable_post:
+          title: "पोस्ट"
+      scores:
+        about: "यह स्कोर पोस्ट के हाल की स्थिति और समुदाय के फ्लैग इतिहास पर आधारित है।"
+        score: "स्कोर"
+        date: "तारीख"
+        type: "प्रकार"
+        status: "स्थिति"
+        submitted_by: "द्वारा जमा किया गया"
+        reviewed_by: "द्वारा समीक्षित"
+      filters:
+        all_categories: "सभी श्रेणियां"
+        type:
+          title: "प्रकार"
+        minimum_score: "न्यूनतम स्कोर:"
+        refresh: "रिफ्रेश करें"
+        status: "स्थिति"
+        category: "श्रेणी"
+        topic: "विषय"
+        assigned_to: "को सौंपा गया"
+        priority:
+          title: "प्राथमिकता"
+          low: "कम"
+          medium: "मध्यम"
+          high: "उच्च"
+    relative_time_picker:
+      minutes:
+        one: "मिनट"
+        other: "मिनट"
+      hours:
+        one: "घंटा"
+        other: "घंटे"
+      days:
+        one: "दिन"
+        other: "दिन"
+      months:
+        one: "महीना"
+        other: "महीने"
+      years:
+        one: "वर्ष"
+        other: "वर्ष"
+      relative: "सापेक्ष"
+    user_action_groups:
+      "1": "पसंद"
+      "2": "प्राप्त पसंद"
+      "3": "बुकमार्क"
+      "4": "टॉपिक्स"
+      "5": "उत्तर"
+      "6": "उद्धरण"
+      "9": "पसंद"
+      "11": "संपादन"
+      "12": "हटाई गई आइटम"
+      "13": "प्रतीक्षित"
+      "14": "प्रतीक्षित"
+      "15": "ड्राफ्ट"
+    categories:
+      all: "सभी श्रेणियां"
+      all_subcategories: "सभी"
+      no_subcategory: "कोई नहीं"
+      category_list: "श्रेणी सूची"
+      reorder:
+        title: "श्रेणियां पुनर्व्यवस्थित करें"
+        title_long: "श्रेणी सूची पुनर्व्यवस्थित करें"
+        save: "क्रम सहेजें"
+        apply_all: "लागू करें"
+        position: "स्थान"
+      posts: "पोस्ट"
+      topics: "विषय"
+      latest: "नवीनतम"
+      subategory_list_locale: "के अनुसार"
+      toggle_ordering: "क्रमबद्ध करने का नियंत्रण टॉगल करें"
+      subcategories: "उपश्रेणियां"
+      muted: "म्यूट की गई श्रेणियां"
+      topic_sentence:
+        one: "%{count} विषय"
+        other: "%{count} विषय"
+      topic_stat:
+        last_day:
+          one: "आज %{count}"
+          other: "आज %{count}"
+        last_7_days:
+          one: "पिछले 7 दिनों में %{count}"
+          other: "पिछले 7 दिनों में %{count}"
+        last_30_days:
+          one: "पिछले 30 दिनों में %{count}"
+          other: "पिछले 30 दिनों में %{count}"
+      topic_stat_all_time:
+        one: "कुल %{count}"
+        other: "कुल %{count}"
+    ip_lookup:
+      title: "IP पते का लुकअप"
+      hostname: "होस्टनाम"
+      location: "स्थान"
+      location_not_found: "अज्ञात"
+      organisation: "संगठन"
+      phone: "फोन"
+      other_accounts: "इस IP पते से अन्य खाते:"
+      delete_other_accounts: "%{count} हटाएं"
+      username: "यूज़रनेम"
+      trust_level: "विश्वास स्तर"
+      read_time: "पढ़ने का समय"
+      topics_entered: "दर्ज किए गए विषय"
+      post_count: "पोस्ट गिनती"
+      confirm_delete_other_accounts: "क्या आप वाकई इन खातों को हटाना चाहते हैं?"
+      powered_by: 'IP लुकअप <a href="https://ipdata.co">ipdata.co</a> द्वारा'
+      copied: "कॉपी किया गया"
+    user_fields:
+      none: "(एक विकल्प चुनें)"
+      required: "कृपया \"%{name}\" के लिए मान दर्ज करें"
+    user:
+      said: "%{username}:"
+      profile: "प्रोफाइल"
+      profile_possessive: "%{username} की प्रोफाइल"
+      mute: "म्यूट करें"
+      edit: "प्राथमिकताएं संपादित करें"
+      new_private_message: "नया सीधा संदेश"
+      private_message: "सीधा संदेश"
+      private_messages: "संदेश"
+      user_notifications:
+        filters:
+          filter_by: "फ़िल्टर करें"
+          all: "सभी"
+          read: "पढ़ी गई"
+          unread: "अपठित"
+          unseen: "अनदेखी"
+        ignore_duration_title: "उपयोगकर्ता अनदेखा करें"
+        ignore_duration_username: "यूज़रनेम"
+        ignore_duration_when: "अवधि:"
+        ignore_duration_save: "अनदेखा करें"
+        ignore_duration_note: "कृपया ध्यान दें कि समय सीमा समाप्त होने पर उपयोगकर्ता अनदेखे नहीं रहेंगे।"
+        ignore_duration_time_frame_required: "कृपया एक समय सीमा चुनें"
+        ignore_no_users: "आप किसी भी उपयोगकर्ता को अनदेखा नहीं कर रहे हैं।"
+        ignore_option: "अनदेखा किया गया"
+        ignore_option_title: "आपको इस उपयोगकर्ता से संबंधित कोई सूचना नहीं मिलेगी और उनकी सभी सामग्री छिपाई जाएगी।"
+        add_ignored_user: "जोड़ें…"
+        mute_option: "म्यूट"
+        mute_option_title: "आपको इस उपयोगकर्ता से कोई सूचना, व्यक्तिगत संदेश या चैट नहीं मिलेगी।"
+        normal_option: "सामान्य"
+        normal_option_title: "यदि यह उपयोगकर्ता आपको उत्तर देता है, उद्धृत करता है या उल्लेख करता है तो आपको सूचित किया जाएगा।"
+      notification_schedule:
+        title: "सूचना अनुसूची"
+        label: "कस्टम सूचना अनुसूची सक्षम करें"
+        tip: "इन घंटों के बाहर, आपकी सूचनाएं स्नूज की जाएंगी।"
+        midnight: "आधी रात"
+        none: "कभी नहीं"
+        monday: "सोमवार"
+        tuesday: "मंगलवार"
+        wednesday: "बुधवार"
+        thursday: "गुरुवार"
+        friday: "शुक्रवार"
+        saturday: "शनिवार"
+        sunday: "रविवार"
+        to: "से"
+      activity_stream: "गतिविधि"
+      read: "पढ़ा हुआ"
+      read_help: "हाल ही में पढ़े गए विषय"
+      preferences:
+        title: "प्राथमिकताएं"
+        profile:
+          enforced_required_fields: "इस साइट का उपयोग जारी रखने से पहले आपको अतिरिक्त जानकारी प्रदान करनी होगी।"
+      profile_hidden: "इस उपयोगकर्ता की सार्वजनिक प्रोफाइल छिपी हुई है।"
+      login_to_view_profile: "उपयोगकर्ता प्रोफाइल देखने के लिए आपको लॉग इन करना होगा"
+      inactive_user: "यह उपयोगकर्ता अब सक्रिय नहीं है।"
+      expand_profile: "विस्तार करें"
+      collapse_profile: "संकुचित करें"
+      bookmarks: "बुकमार्क"
+      bio: "मेरे बारे में"
+      timezone: "टाइमज़ोन"
+      invited_by: "द्वारा आमंत्रित"
+      trust_level: "विश्वास स्तर"
+      notifications: "सूचनाएं"
+      statistics: "आंकड़े"
+      desktop_notifications:
+        label: "तत्काल सूचनाएं"
+        not_supported: "क्षमा करें, इस ब्राउज़र में सूचनाएं समर्थित नहीं हैं।"
+        perm_default: "सूचनाएं चालू करें"
+        perm_denied_btn: "अनुमति अस्वीकृत"
+        perm_denied_expl: "आपने सूचनाओं की अनुमति नहीं दी है। ब्राउज़र सेटिंग्स के माध्यम से सूचनाओं को अनुमति दें।"
+        disable: "सूचनाएं अक्षम करें"
+        enable: "सूचनाएं सक्षम करें"
+        each_browser_note: "नोट: आपको प्रत्येक ब्राउज़र पर यह सेटिंग बदलनी होगी। चाहे यह सेटिंग कुछ भी हो, उपयोगकर्ता मेनू से \"परेशान न करें\" में होने पर सभी सूचनाएं अक्षम हो जाएंगी।"
+        consent_prompt: "जब लोग आपके पोस्ट का जवाब देते हैं तो क्या आप रियल-टाइम सूचनाएं चाहते हैं?"
+      dismiss: "देख लिया"
+      dismiss_notifications: "सभी देख लिए"
+      dismiss_notifications_tooltip: "सभी अपठित सूचनाओं को पढ़ा हुआ चिह्नित करें"
+      no_notifications_page_title: "आपको अभी तक कोई सूचना नहीं मिली है"
+      theme_default_on_all_devices: "यह सभी मेरे डिवाइसों पर मेरी डिफ़ॉल्ट थीम बनाएं"
+      color_scheme_default_on_all_devices: "सभी मेरे डिवाइसों पर डिफ़ॉल्ट रंग योजना और मोड बनाएं"
+      color_scheme: "रंग योजना"
+      color_schemes:
+        default_description: "थीम रंग"
+        dark_instructions: "आप अपने डिवाइस का डार्क मोड सक्षम करके डार्क मोड रंग योजना का पूर्वावलोकन कर सकते हैं।"
+        undo: "रीसेट करें"
+        regular: "नियमित"
+        dark: "डार्क"
+        interface_mode: "मोड"
+        interface_modes:
+          auto: "ऑटो"
+          light: "लाइट"
+          dark: "डार्क"
+        picker:
+          active: "सक्रिय"
+      dark_mode: "डार्क मोड"
+      allow_private_messages: "अन्य उपयोगकर्ताओं को मुझे सीधे संदेश भेजने दें"
+      external_links_in_new_tab: "सभी बाहरी लिंक नए टैब में खोलें"
+      enable_quoting: "चयनित टेक्स्ट के उत्तर में उद्धरण सुझाएं"
+      enable_defer: "विषयों को अपठित के रूप में चिह्नित करने की सुविधा सक्षम करें"
+      change: "बदलें"
+      featured_topic: "फ़ीचर्ड विषय"
+      moderator: "%{user} मॉडरेटर है"
+      admin: "%{user} व्यवस्थापक है"
+      moderator_tooltip: "यह उपयोगकर्ता मॉडरेटर है"
+      admin_tooltip: "यह उपयोगकर्ता व्यवस्थापक है"
+      silenced_tooltip: "यह उपयोगकर्ता साइलेंस्ड है"
+      suspended_notice: "यह उपयोगकर्ता %{date} तक निलंबित है।"
+      suspended_permanently: "यह उपयोगकर्ता निलंबित है।"
+      suspended_reason: "कारण: "
+      silenced_notice: "यह उपयोगकर्ता %{date} तक साइलेंस्ड है।"
+      silenced_permanently: "यह उपयोगकर्ता साइलेंस्ड है।"
+      silenced_reason: "कारण: "
+      email_activity_summary: "गतिविधि सारांश"
+      mailing_list_mode:
+        label: "मेलिंग लिस्ट मोड"
+        enabled: "मेलिंग लिस्ट मोड सक्षम करें"
+        individual: "हर नई पोस्ट के लिए ईमेल भेजें"
+        individual_no_echo: "मेरी पोस्ट को छोड़कर हर नई पोस्ट के लिए ईमेल भेजें"
+        many_per_day: "हर नई पोस्ट के लिए मुझे ईमेल करें (प्रतिदिन लगभग %{dailyEmailEstimate})"
+        few_per_day: "हर नई पोस्ट के लिए मुझे ईमेल करें (प्रतिदिन लगभग 2)"
+        warning: "मेलिंग लिस्ट मोड सक्षम है। ईमेल सूचना सेटिंग्स ओवरराइड की गई हैं।"
+      tag_settings: "टैग"
+      watched_tags: "देखे जा रहे"
+      tracked_tags: "ट्रैक किए जा रहे"
+      muted_tags: "म्यूट किए गए"
+      watched_categories: "देखी जा रही"
+      tracked_categories: "ट्रैक की जा रही"
+      watched_first_post_categories: "नए विषय देखें"
+      watched_first_post_tags: "नए विषय देखें"
+      muted_categories: "म्यूट की गई"
+      regular_categories: "सामान्य"
+      delete_account: "मेरा खाता हटाएं"
+      delete_account_confirm: "क्या आप वाकई अपना खाता स्थायी रूप से हटाना चाहते हैं? यह क्रिया वापस नहीं की जा सकती!"
+      deleted_yourself: "आपका खाता सफलतापूर्वक हटाया जा चुका है।"
+      unread_message_count: "संदेश"
+      admin_delete: "हटाएं"
+      users: "उपयोगकर्ता"
+      muted_users: "म्यूट किए गए"
+      muted_users_instructions: "इन उपयोगकर्ताओं से सभी सूचनाएं और सीधे संदेश दबाएं।"
+      allowed_pm_users: "अनुमत"
+      allowed_pm_users_instructions: "केवल इन उपयोगकर्ताओं से सीधे संदेश अनुमत करें।"
+      ignored_users: "अनदेखे"
+      tracked_topics_link: "दिखाएं"
+      automatically_unpin_topics: "सूची के अंत तक पहुंचने पर विषयों को स्वचालित रूप से अनपिन करें"
+      apps: "एप्लिकेशन"
+      revoke_access: "पहुंच रद्द करें"
+      api_approved: "स्वीकृत:"
+      api_last_used_at: "अंतिम उपयोग:"
+      theme: "थीम"
+      home: "डिफ़ॉल्ट होम पेज"
+      staged: "स्टेज्ड"
+      staff_counters:
+        flags_given:
+          one: '<span class="%{className}">%{count}</span> उपयोगी फ्लैग'
+          other: '<span class="%{className}">%{count}</span> उपयोगी फ्लैग'
+        flagged_posts:
+          one: '<span class="%{className}">%{count}</span> फ्लैग की गई पोस्ट'
+          other: '<span class="%{className}">%{count}</span> फ्लैग की गई पोस्ट'
+        deleted_posts:
+          one: '<span class="%{className}">%{count}</span> हटाई गई पोस्ट'
+          other: '<span class="%{className}">%{count}</span> हटाई गई पोस्ट'
+        silencings:
+          one: '<span class="%{className}">%{count}</span> साइलेंसिंग'
+          other: '<span class="%{className}">%{count}</span> साइलेंसिंग'
+        suspensions:
+          one: '<span class="%{className}">%{count}</span> निलंबन'
+          other: '<span class="%{className}">%{count}</span> निलंबन'
+        warnings_received:
+          one: '<span class="%{className}">%{count}</span> चेतावनी'
+          other: '<span class="%{className}">%{count}</span> चेतावनी'
+        rejected_posts:
+          one: '<span class="%{className}">%{count}</span> अस्वीकृत पोस्ट'
+          other: '<span class="%{className}">%{count}</span> अस्वीकृत पोस्ट'
+      messages:
+        all: "सभी इनबॉक्स"
+        inbox: "इनबॉक्स"
+        personal: "व्यक्तिगत"
+        latest: "नवीनतम"
+        sent: "भेजे गए"
+        unread: "अपठित"
+        unread_with_count:
+          one: "अपठित (%{count})"
+          other: "अपठित (%{count})"
+        new: "नया"
+        new_with_count:
+          one: "नया (%{count})"
+          other: "नया (%{count})"
+        archive: "संग्रहित"
+        groups: "मेरे समूह"
+        move_to_inbox: "इनबॉक्स में ले जाएं"
+        move_to_archive: "संग्रहित करें"
+        failed_to_move: "चयनित संदेशों को ले जाने में विफल (क्या आपका इंटरनेट बंद है)"
+        tags: "टैग"
+        all_tags: "सभी टैग"
+        warnings: "आधिकारिक चेतावनियां"
+      preferences_nav:
+        account: "खाता"
+        security: "सुरक्षा"
+        profile: "प्रोफाइल"
+        emails: "ईमेल"
+        notifications: "सूचनाएं"
+        tracking: "ट्रैकिंग"
+        categories: "श्रेणियां"
+        users: "उपयोगकर्ता"
+        tags: "टैग"
+        interface: "इंटरफ़ेस"
+        apps: "एप्लिकेशन"
+        navigation_menu: "नेविगेशन मेनू"
+      change_password:
+        success: "(ईमेल भेजा गया)"
+        in_progress: "(ईमेल भेजा जा रहा है)"
+        error: "(त्रुटि)"
+        action: "पासवर्ड रीसेट ईमेल भेजें"
+        set_password: "पासवर्ड सेट करें"
+        choose_new: "नया पासवर्ड चुनें"
+        choose: "पासवर्ड चुनें"
+        title: "पासवर्ड रीसेट करें"
+      second_factor_backup:
+        title: "द्वि-कारक बैकअप कोड"
+        regenerate: "पुनः जनरेट करें"
+        disable: "अक्षम करें"
+        enable: "बैकअप कोड बनाएं"
+        not_enabled: "आपने अभी तक बैकअप कोड नहीं बनाए हैं।"
+        copy_to_clipboard: "क्लिपबोर्ड पर कॉपी करें"
+        copied_to_clipboard: "क्लिपबोर्ड पर कॉपी किया गया"
+        download_backup_codes: "बैकअप कोड डाउनलोड करें"
+        use: "बैकअप कोड उपयोग करें"
+        codes:
+          title: "बैकअप कोड जनरेट किए गए"
+          description: "इनमें से प्रत्येक बैकअप कोड केवल एक बार उपयोग किया जा सकता है। इन्हें किसी सुरक्षित लेकिन सुलभ जगह रखें।"
+      second_factor:
+        title: "द्वि-कारक प्रमाणीकरण"
+        enable: "द्वि-कारक प्रमाणीकरण प्रबंधित करें"
+        disable_all: "सभी अक्षम करें"
+        name: "नाम"
+        label: "कोड"
+        rate_limit: "कृपया दूसरा प्रमाणीकरण कोड आज़माने से पहले प्रतीक्षा करें।"
+        disable: "अक्षम करें"
+        disable_confirm: "क्या आप वाकई सभी द्वि-कारक प्रमाणीकरण अक्षम करना चाहते हैं?"
+        delete: "हटाएं"
+        delete_confirm: "क्या आप वाकई यह द्वि-कारक प्रमाणीकरण हटाना चाहते हैं?"
+        edit: "संपादित करें"
+        edit_confirm: "क्या आप वाकई यह द्वि-कारक प्रमाणीकरण पुनः नाम देना चाहते हैं?"
+        enable_security_key_description: "जब आपकी भौतिक सुरक्षा कुंजी तैयार हो, तो नीचे पंजीकरण बटन दबाएं।"
+        totp:
+          title: "टोकन-आधारित प्रमाणीकरण"
+          add: "प्रमाणीकरण ऐप जोड़ें"
+          default_name: "मेरा प्रमाणीकरण ऐप"
+        security_key:
+          register: "पंजीकरण करें"
+          title: "सुरक्षा कुंजियां"
+          add: "सुरक्षा कुंजी जोड़ें"
+          default_name: "मुख्य सुरक्षा कुंजी"
+          not_allowed_error: "सुरक्षा कुंजी पंजीकरण समयबाह्य हो गई या रद्द की गई।"
+          already_added_error: "यह सुरक्षा कुंजी पहले से पंजीकृत है।"
+      summary:
+        title: "सारांश"
+        stats: "आंकड़े"
+        top_replies: "शीर्ष उत्तर"
+        no_replies: "अभी तक कोई उत्तर नहीं।"
+        more_replies: "अधिक उत्तर"
+        top_topics: "शीर्ष विषय"
+        no_topics: "अभी तक कोई विषय नहीं।"
+        more_topics: "अधिक विषय"
+        top_badges: "शीर्ष बैज"
+        no_badges: "अभी तक कोई बैज नहीं।"
+        more_badges: "अधिक बैज"
+        top_links: "शीर्ष लिंक"
+        no_links: "अभी तक कोई लिंक नहीं।"
+        most_liked_by: "सर्वाधिक पसंद किया गया"
+        most_liked_users: "सर्वाधिक पसंद किया"
+        most_replied_to_users: "सर्वाधिक जवाब दिया"
+        no_likes: "अभी तक कोई पसंद नहीं।"
+        topic_link:
+          one: "%{count} उत्तर"
+          other: "%{count} उत्तर"
+        created:
+          one: "%{count} विषय बनाया"
+          other: "%{count} विषय बनाए"
+      invited:
+        sent: "भेजे गए"
+        pending_tab: "प्रतीक्षित"
+        pending_tab_with_count: "प्रतीक्षित (%{count})"
+        expired_tab: "समाप्त"
+        expired_tab_with_count: "समाप्त (%{count})"
+        redeemed_tab: "भुनाए गए"
+        redeemed_tab_with_count: "भुनाए गए (%{count})"
+        title: "आमंत्रण"
+        generate_link: "आमंत्रण लिंक उत्पन्न करें"
+        link_generated: "आमंत्रण लिंक सफलतापूर्वक उत्पन्न किया गया!"
+        valid_for: "%{expire_after} के लिए वैध"
+        no_invites: "कोई लंबित आमंत्रण नहीं।"
+        remove: "आमंत्रण हटाएं"
+        removed: "आमंत्रण हटाया गया"
+        email: "ईमेल"
+        username: "यूज़रनेम"
+        redeemed: "भुनाया गया"
+        expires_at: "समाप्ति"
+        trustlevel: "विश्वास स्तर"
+        send: "भेजें"
+        link: "आमंत्रण लिंक"
+        groups: "समूह"
+        restrict_email: "केवल इस ईमेल पते पर प्रतिबंधित करें"
+        max_redemptions_allowed: "अधिकतम उपयोग"
+        add_to_groups: "समूहों में जोड़ें"
+        invite_to_topic: "विषय पर आएं"
+        invite_via_email: "ईमेल से आमंत्रण भेजें"
+        custom_message: "वैकल्पिक व्यक्तिगत संदेश"
+        send_invite_email: "आमंत्रण ईमेल भेजें और लिंक कॉपी करें"
+        copy_link: "लिंक कॉपी करें"
+        reinvite: "आमंत्रण ईमेल दोबारा भेजें"
+        reinvited: "आमंत्रण ईमेल दोबारा भेजा गया"
+        bulk_invite:
+          none: "कोई आमंत्रण अभी तक नहीं दिखाया गया। आमंत्रण फ़ाइल अपलोड करें।"
+          text: "फ़ाइल से बल्क आमंत्रण"
+          confirmation_message: "आप '%{invitationsCount}' लोगों को ईमेल से आमंत्रण भेजने वाले हैं।"
+          success: "फ़ाइल सफलतापूर्वक अपलोड की गई! जब प्रक्रिया पूर्ण होगी तो आपको संदेश से सूचित किया जाएगा।"
+          error: "क्षमा करें, फ़ाइल CSV प्रारूप में होनी चाहिए।"
+          confirmation_message:
+            one: "'%{fileName}' से %{invitationsCount} व्यक्ति को ईमेल से आमंत्रित करने वाले हैं।"
+            other: "'%{fileName}' से %{invitationsCount} लोगों को ईमेल से आमंत्रित करने वाले हैं।"
+      username:
+        title: "यूज़रनेम"
+        edit: "यूज़रनेम संपादित करें"
+      avatar:
+        title: "प्रोफाइल चित्र"
+        edit: "प्रोफाइल चित्र संपादित करें"
+      title:
+        title: "शीर्षक"
+      flair:
+        title: "फ्लेयर"
+      primary_group:
+        title: "प्राथमिक समूह"
+        none: "कोई नहीं"
+      filters:
+        all: "सभी"
+        mention: "@उल्लेख"
+        likes: "पसंद"
+        top: "शीर्ष"
+      email:
+        title: "ईमेल"
+        primary_label: "प्राथमिक"
+        unconfirmed_label: "अपुष्ट"
+        resend_label: "एक्टिवेशन ईमेल दोबारा भेजें"
+        resending_label: "भेजा जा रहा है…"
+        resent_label: "ईमेल भेजा गया"
+        update_email: "ईमेल बदलें"
+        set_primary: "प्राथमिक ईमेल सेट करें"
+        destroy: "हटाएं"
+        add_email: "वैकल्पिक ईमेल जोड़ें"
+        auth_override_notice: "आपका ईमेल बाहरी प्रमाणीकरण प्रदाता द्वारा स्वचालित रूप से अपडेट किया जाएगा।"
+        no_secondary: "कोई द्वितीयक ईमेल नहीं"
+        instructions: "कभी सार्वजनिक नहीं दिखाया जाता"
+        ok: "पुष्टि के लिए हम आपको ईमेल करेंगे"
+        required: "कृपया एक ईमेल पता दर्ज करें"
+        invalid: "कृपया एक वैध ईमेल पता दर्ज करें"
+        authenticated: "%{provider} द्वारा आपका ईमेल प्रमाणित किया गया है"
+        frequency_immediately: "हम आपको तुरंत ईमेल करेंगे यदि आपने वह नहीं पढ़ा है जो हम आपको ईमेल कर रहे हैं।"
+        frequency:
+          one: "हम केवल तभी ईमेल करेंगे यदि हमने आपको पिछले %{count} मिनट में नहीं देखा है।"
+          other: "हम केवल तभी ईमेल करेंगे यदि हमने आपको पिछले %{count} मिनट में नहीं देखा है।"
+      associated_accounts:
+        title: "जुड़े हुए खाते"
+        connect: "(जोड़ें)"
+        revoke: "(रद्द करें)"
+        cancel: "रद्द करें"
+        not_connected: "जुड़ा नहीं है"
+        confirm_modal_title: "%{provider} खाता जोड़ें"
+        confirm_description:
+          account_specific: "आपका %{provider} खाता '%{account_description}' प्रमाणीकरण के लिए उपयोग किया जाएगा।"
+          generic: "आपका %{provider} खाता प्रमाणीकरण के लिए उपयोग किया जाएगा।"
+      name:
+        title: "पूरा नाम"
+        instructions: "आपका पूरा नाम (वैकल्पिक)"
+        too_short: "आपका नाम बहुत छोटा है"
+        ok: "आपका नाम अच्छा दिखता है"
+      username:
+        title: "यूज़रनेम"
+        instructions: "यूनीक, बिना स्पेस, छोटा"
+        short_instructions: "लोग आपका उल्लेख @%{username} से कर सकते हैं"
+        available: "आपका यूज़रनेम उपलब्ध है"
+        global_match: "ईमेल इस पंजीकृत यूज़रनेम से मेल खाता है"
+        not_available: "उपलब्ध नहीं है। %{suggestion} आज़माएं?"
+        not_available_no_suggestion: "उपलब्ध नहीं है"
+        too_long: "आपका यूज़रनेम बहुत लंबा है"
+        too_short: "आपका यूज़रनेम बहुत छोटा है"
+        checking: "यूज़रनेम उपलब्धता जांच रहे हैं…"
+        prefilled: "ईमेल इस पंजीकृत यूज़रनेम से मेल खाता है"
+        edit: "यूज़रनेम बदलें"
+      locale:
+        title: "इंटरफ़ेस भाषा"
+        instructions: "उपयोगकर्ता इंटरफ़ेस की भाषा। जब आप पेज रिफ्रेश करेंगे तब बदलेगी।"
+        default: "(डिफ़ॉल्ट)"
+        any: "कोई भी"
+      password:
+        title: "पासवर्ड"
+        too_short: "आपका पासवर्ड बहुत छोटा है।"
+        common: "वह पासवर्ड बहुत आम है।"
+        same_as_username: "आपका पासवर्ड आपके यूज़रनेम जैसा नहीं हो सकता।"
+        same_as_email: "आपका पासवर्ड आपके ईमेल जैसा नहीं हो सकता।"
+        ok: "आपका पासवर्ड अच्छा दिखता है।"
+        instructions: "कम से कम %{count} अक्षर"
+        reset_confirmation: "पासवर्ड रीसेट करने के लिए, पहले अपने खाते में साइन इन करें।"
+      new_user_tips:
+        title: "नए उपयोगकर्ता टिप्स"
+      summary:
+        title: "सारांश"
+      ip_address:
+        title: "अंतिम IP पता"
+      registration_ip_address:
+        title: "पंजीकरण IP पता"
+      edit_history:
+        title: "संपादन इतिहास"
+      featured_topic:
+        title: "फ़ीचर्ड विषय"
+        clear:
+          title: "साफ़ करें"
+          warning: "क्या आप वाकई अपना फ़ीचर्ड विषय हटाना चाहते हैं?"
+      bio:
+        title: "बायो"
+      location:
+        title: "स्थान"
+      website:
+        title: "वेबसाइट"
+      profile_background:
+        title: "प्रोफाइल पृष्ठभूमि"
+        upload: "अपलोड करें"
+        undo: "पूर्ववत करें"
+      save: "बदलाव सहेजें"
+      saving: "सहेजा जा रहा है…"
+      saved: "सहेजा गया"
+      change: "बदलें"
+      suspended_notice: "यह उपयोगकर्ता %{date} तक निलंबित है।"
+      suspended_permanently: "यह उपयोगकर्ता स्थायी रूप से निलंबित है।"
+      log_out: "लॉग आउट"
+      show_read: "पढ़ा हुआ"
+      show_drafts: "ड्राफ्ट"
+      show_bookmarks: "बुकमार्क"
+    drafts:
+      label: "ड्राफ्ट"
+      label_with_count: "ड्राफ्ट (%{count})"
+    pending_posts:
+      label: "प्रतीक्षित"
+      label_with_count: "प्रतीक्षित (%{count})"
+    trust_levels:
+      names:
+        newuser: "नया उपयोगकर्ता"
+        basic: "मूल उपयोगकर्ता"
+        member: "सदस्य"
+        regular: "नियमित"
+        leader: "नेता"
+      detailed_name: "%{level}: %{name}"
+    badges:
+      earned_n_times:
+        one: "यह बैज %{count} बार अर्जित किया"
+        other: "यह बैज %{count} बार अर्जित किया"
+      granted_on: "%{date} को प्रदान किया"
+      others_count: "इस बैज के साथ %{count} अन्य"
+      title: "बैज"
+      allow_title: "इस बैज को शीर्षक के रूप में उपयोग किया जा सकता है"
+      multiple_grant: "यह बैज कई बार अर्जित किया जा सकता है"
+      badge_count:
+        one: "%{count} बैज"
+        other: "%{count} बैज"
+      more_badges:
+        one: "+%{count} और"
+        other: "+%{count} और"
+      granted:
+        one: "%{count} प्रदान किया गया"
+        other: "%{count} प्रदान किए गए"
+      select_badge_for_title: "शीर्षक के रूप में उपयोग करने के लिए एक बैज चुनें"
+      none: "<कोई नहीं>"
+      successfully_granted: "%{username} को %{badge} सफलतापूर्वक प्रदान किया गया"
+    tagging:
+      all_tags: "सभी टैग"
+      other_tags: "अन्य टैग"
+      selector_all_tags: "सभी टैग"
+      selector_no_tags: "कोई टैग नहीं"
+      changed: "बदले गए टैग:"
+      tags: "टैग"
+      choose_for_topic: "वैकल्पिक टैग"
+      info: "जानकारी"
+      default_info: "इस टैग पर कोई प्रतिबंध नहीं है।"
+      category_restricted: "यह टैग उन श्रेणियों तक सीमित है जिन तक आपकी पहुंच नहीं है।"
+      synonyms: "समानार्थी"
+      synonyms_description: "जब निम्नलिखित टैग उपयोग किए जाते हैं, तो उन्हें <b>%{base_tag_name}</b> से बदल दिया जाएगा।"
+      tag_groups_info:
+        one: "यह टैग समूह \"%{tag_groups}\" से संबंधित है।"
+        other: "यह टैग इन समूहों से संबंधित है: %{tag_groups}।"
+      topic_tags_instructions: "किसी भी टैग टाइप करें"
+      filters:
+        without_category: "%{filter} %{tag} विषय"
+        with_category: "%{filter} %{tag} विषय %{category} में"
+        untagged_without_category: "अनटैग्ड %{filter} विषय"
+        untagged_with_category: "%{category} में अनटैग्ड %{filter} विषय"
+      notifications:
+        watching:
+          title: "देख रहे हैं"
+        watching_first_post:
+          title: "पहली पोस्ट देख रहे हैं"
+        tracking:
+          title: "ट्रैक कर रहे हैं"
+        muted:
+          title: "म्यूट किया गया"
+        regular:
+          title: "सामान्य"
+      groups:
+        title: "टैग समूह"
+        tags_label: "इस समूह के टैग"
+        parent_tag_label: "पैरेंट टैग"
+        one_per_topic_label: "प्रति विषय इस समूह से एक टैग सीमित करें"
+        new_name: "नया टैग समूह"
+        save: "सहेजें"
+        delete: "हटाएं"
+        confirm_delete: "क्या आप वाकई यह टैग समूह हटाना चाहते हैं?"
+        everyone_can_use: "हर कोई टैग उपयोग कर सकता है"
+        usable_only_by_groups: "टैग सभी को दिखाई देते हैं, लेकिन केवल निम्नलिखित इन्हें उपयोग कर सकते हैं"
+        visible_only_to_groups: "टैग केवल निम्नलिखित को दिखाई देते हैं"
+    admin:
+      settings:
+        title: "सेटिंग्स"
+      back: "व्यवस्थापन पर वापस जाएं"
+      dashboard:
+        title: "डैशबोर्ड"
+      users:
+        title: "उपयोगकर्ता"
+        create: "व्यवस्थापक उपयोगकर्ता बनाएं"
+        pending:
+          title: "प्रतीक्षित उपयोगकर्ता"
+      user:
+        title: "उपयोगकर्ता"
+        untitle: "शीर्षक हटाएं"
+        manage_user: "उपयोगकर्ता प्रबंधित करें"
+        show_admin_profile: "व्यवस्थापक प्रोफाइल"
+        trust_level_change_failed: "इस उपयोगकर्ता का विश्वास स्तर बदलने में समस्या आई।"
+        suspended_explanation: "निलंबित उपयोगकर्ता लॉग इन नहीं कर सकते।"
+        suspend_duration: "उपयोगकर्ता कितने समय के लिए निलंबित रहेगा?"
+        suspend_duration_units: "(दिन)"
+        suspend_reason_label: "आप क्यों निलंबित कर रहे हैं? <b>यह टेक्स्ट उपयोगकर्ता के प्रोफाइल पेज पर सार्वजनिक रूप से दिखाई देगा</b> और उपयोगकर्ता को लॉग इन करने की कोशिश करते समय दिखाई देगा। संक्षिप्त रखें।"
+        suspend_reason: "कारण"
+        suspend: "निलंबित करें"
+        unsuspend: "निलंबन हटाएं"
+        suspended_duration:
+          one: "%{count} दिन के लिए निलंबित"
+          other: "%{count} दिनों के लिए निलंबित"
+        not_suspended: "निलंबित नहीं"
+        deactivate_explanation: "निष्क्रिय उपयोगकर्ता अपना ईमेल दोबारा सत्यापित करना होगा।"
+        deactivate_account: "खाता निष्क्रिय करें"
+        trust_level_2_users: "विश्वास स्तर 2 उपयोगकर्ता"
+        trust_level_3_requirements: "विश्वास स्तर 3 आवश्यकताएं"
+      groups:
+        title: "समूह"
+        name: "नाम"
+      logs:
+        title: "लॉग"

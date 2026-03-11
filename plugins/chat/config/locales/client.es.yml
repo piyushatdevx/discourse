@@ -58,6 +58,8 @@ es:
       cancel: "Cancelar"
       cancel_reply: "Cancelar respuesta"
       chat_channels: "Canales"
+      messages_tab: "Mensajes"
+      starred: "Destacados"
       browse_all_channels: "Examinar todos los canales"
       see_in: "Ver en"
       move_to_channel:

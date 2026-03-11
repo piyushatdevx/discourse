@@ -17,6 +17,7 @@ es:
         home_feed: "Feed de inicio"
         explore_tribes: "Explorar tribus"
         chat: "Chat"
+        notifications: "Notificaciones"
     login:
       forgot_password: "Olvidaste tu contrasena?"
     fantribe:
@@ -146,6 +147,27 @@ es:
         bio_placeholder: "Cuentale al mundo sobre ti..."
         location_placeholder: "Ciudad, Pais"
         website_placeholder: "https://tuweb.com"
+      settings_hub:
+        title: "Configuracion"
+        back: "Volver al perfil"
+        account:
+          label: "Cuenta y Seguridad"
+          description: "Correo electronico, contrasena y cuentas vinculadas"
+        notifications:
+          label: "Notificaciones"
+          description: "Controla que alertas recibes"
+        privacy:
+          label: "Privacidad y Seguridad"
+          description: "Gestiona usuarios bloqueados y visibilidad"
+        appearance:
+          label: "Apariencia"
+          description: "Tema, tamano de fuente y opciones de interfaz"
+        email:
+          label: "Preferencias de Email"
+          description: "Correos de resumen y entrega de notificaciones"
+        profile_settings:
+          label: "Configuracion de Perfil"
+          description: "Actualiza tu nombre, bio y otros detalles del perfil"
       gear_pill:
         view_product: "Ver producto"
         used_by_creators: "Usado por 1,234 creadores"
@@ -166,6 +188,12 @@ es:
           explore_and_join: "Explora y unete a tribus para verlas aqui"
           explore_tribes_cta: "Explorar tribus"
           check_back_later: "Vuelve mas tarde para nuevas tribus"
+      notifications:
+        unread: "No leidas"
+        mark_all_read: "Marcar todo como leido"
+        empty_title: "Todo al dia!"
+        empty_body: "No hay notificaciones nuevas"
+        unread_empty_body: "No hay notificaciones sin leer"
       log_out_confirm: "Seguro que quieres cerrar sesion?"
       header:
         create_aria: "Crear"
@@ -195,12 +223,17 @@ es:
       search_modal:
         title: "Buscar"
         close: "Cerrar"
+        back: "Volver"
+        filter: "Filtros"
         search_placeholder: "Buscar en feed, personas, tribus..."
         no_results: "No se encontraron resultados"
         search_anything: "Busca cualquier cosa"
         untitled: "Sin titulo"
         posts: "publicaciones"
+        trending_tribes: "Tribus en tendencia"
+        view_all: "Ver todo"
         tabs:
+          all: "Todo"
           feed: "Feed"
           people: "Personas"
           tribes: "Tribus"

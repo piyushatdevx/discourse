@@ -62,6 +62,8 @@ ar:
       cancel: "إلغاء"
       cancel_reply: "إلغاء الرد"
       chat_channels: "القنوات"
+      messages_tab: "الرسائل"
+      starred: "المميزة بنجمة"
       browse_all_channels: "استعراض كل القنوات"
       see_in: "رؤيتها في"
       move_to_channel:

@@ -53,6 +53,7 @@ en:
       cancel: "Cancel"
       cancel_reply: "Cancel reply"
       chat_channels: "Channels"
+      messages_tab: "Messages"
       starred: "Starred"
       starred_channels: "Starred channels"
       starred_channels_empty: "You haven't starred any channels yet. Star channels to see them here for quick access."
