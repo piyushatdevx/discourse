@@ -65,6 +65,11 @@ function initializeFantribe(api) {
           Boolean(router.currentURL?.includes("/activity/ft-settings"))
         );
 
+        document.body.classList.toggle(
+          "ft-on-notifications",
+          routeName.startsWith("userNotifications")
+        );
+
         // Redirect bare profile / summary / activity routes to the Posts tab.
         if (PROFILE_REDIRECT_ROUTES.has(routeName)) {
           // Walk up the route hierarchy to find the `user` route that carries

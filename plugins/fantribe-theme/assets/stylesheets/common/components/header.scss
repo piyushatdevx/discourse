@@ -40,7 +40,7 @@ body.admin-interface {
   // border-bottom: 1px solid #d4d2cf;
 
   @media (width >= 768px) {
-    height: 80px;
+    height: 46px;
   }
 
   @media (width <= 767px) {
@@ -80,7 +80,7 @@ body.admin-interface {
     display: none;
   }
 
-  @media (width <= 767px) {
+  @media (width <= 1023px) {
     &__desktop-layout {
       display: none;
     }
@@ -161,7 +161,7 @@ body.admin-interface {
     }
   }
 
-  @media (width <= 767px) {
+  @media (width <= 1023px) {
     .fantribe-header__logo {
       padding: 0;
     }
@@ -225,7 +225,7 @@ body.admin-interface {
     }
   }
 
-  @media (width <= 767px) {
+  @media (width <= 1023px) {
     .fantribe-header__mobile-layout {
       .ft-create-menu {
         left: 0;
@@ -307,6 +307,55 @@ body.admin-interface {
     gap: 8px;
     flex-shrink: 0;
     position: relative;
+  }
+
+  // Chat and Notifications icon buttons (desktop, below/after chat per Figma)
+  &__icon-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    border: none;
+    border-radius: 12px;
+    background: transparent;
+    color: #1a1916;
+    cursor: pointer;
+    text-decoration: none;
+    transition:
+      background-color 200ms ease,
+      color 200ms ease;
+    position: relative;
+
+    .ft-icon {
+      width: 22px;
+      height: 22px;
+      color: currentcolor;
+    }
+
+    &:hover {
+      background: #f0f0f2;
+      color: #ff1744;
+    }
+  }
+
+  &__notification-badge {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    min-width: 16px;
+    height: 16px;
+    padding: 0 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #ff1744;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 600;
+    line-height: 1;
+    border-radius: 8px;
   }
 
   // + Create button (logged in)
@@ -485,7 +534,7 @@ body.admin-interface {
   }
 }
 
-@media (width <= 767px) {
+@media (width <= 1023px) {
   .ft-mobile-create-backdrop-wrapper {
     position: fixed;
     inset: 0;
@@ -512,7 +561,8 @@ body.admin-interface {
     position: relative;
     z-index: 1;
     width: 100%;
-    max-width: 440px;
+
+    // max-width: 440px;
     background: var(--ft-white);
     border-radius: 12px 12px 0 0;
     box-shadow: 0 -1px 50px rgb(0 0 0 / 0.08);

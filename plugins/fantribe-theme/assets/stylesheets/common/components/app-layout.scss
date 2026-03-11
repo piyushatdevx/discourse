@@ -13,8 +13,8 @@ body.fantribe-theme:not(.admin-interface) {
     display: none;
   }
 
-  // FanTribe header is only shown on mobile widths (design spec)
-  @media (width >= 768px) {
+  // FanTribe header is only shown below 1024px (no left sidebar)
+  @media (width >= 1024px) {
     .fantribe-header {
       display: none;
     }
@@ -24,6 +24,18 @@ body.fantribe-theme:not(.admin-interface) {
     }
   }
 
+  // Tablet (768–1023px): show header, 80px tall
+  @media (768px <= width <= 1023px) {
+    .fantribe-header {
+      display: block;
+    }
+
+    #main {
+      padding-top: 80px;
+    }
+  }
+
+  // Mobile (≤767px): show compact header, 46px tall
   @media (width <= 767px) {
     .fantribe-header {
       display: block;

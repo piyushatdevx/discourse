@@ -4,12 +4,14 @@ import { hash } from "@ember/helper";
 import { on } from "@ember/modifier";
 import { action } from "@ember/object";
 import { service } from "@ember/service";
+import getURL from "discourse/lib/get-url";
 import closeOnClickOutside from "discourse/modifiers/close-on-click-outside";
 import { i18n } from "discourse-i18n";
 import ftIcon from "../helpers/ft-icon";
 import FtCreateMenu from "./ft-create-menu";
 import FtCreatePostModal from "./ft-create-post-modal";
 import FtCreateTribeModal from "./ft-create-tribe-modal";
+import FtSearchModal from "./ft-search-modal";
 
 export default class FantribeHeader extends Component {
   @service router;
@@ -119,6 +121,12 @@ export default class FantribeHeader extends Component {
     this.fantribeCreate.openCreateTribeModal();
   }
 
+  get notificationsPath() {
+    return this.currentUser
+      ? getURL(`${this.currentUser.path}/notifications`)
+      : getURL("/login");
+  }
+
   <template>
     <header class="fantribe-header">
       <div class="fantribe-header__container">
@@ -198,6 +206,23 @@ export default class FantribeHeader extends Component {
 
             {{! Right Side Actions }}
             <div class="fantribe-header__actions">
+              <a
+                href={{this.notificationsPath}}
+                class="fantribe-header__icon-btn fantribe-header__icon-btn--notifications"
+                title={{i18n "user.notifications"}}
+                aria-label={{i18n "user.notifications"}}
+              >
+                {{ftIcon "bell" size=22}}
+                {{#if this.currentUser.all_unread_notifications_count}}
+                  <span
+                    class="fantribe-header__notification-badge"
+                    aria-hidden="true"
+                  >
+                    {{this.currentUser.all_unread_notifications_count}}
+                  </span>
+                {{/if}}
+              </a>
+
               <button
                 type="button"
                 class="fantribe-header__create-btn"
@@ -390,6 +415,10 @@ export default class FantribeHeader extends Component {
           </div>
         </div>
       </div>
+    {{/if}}
+
+    {{#if this.fantribeFilter.isSearchModalOpen}}
+      <FtSearchModal @onClose={{this.fantribeFilter.closeSearchModal}} />
     {{/if}}
 
     {{#if this.fantribeCreate.isCreatePostModalOpen}}
