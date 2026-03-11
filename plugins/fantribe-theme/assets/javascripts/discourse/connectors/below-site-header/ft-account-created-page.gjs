@@ -216,13 +216,6 @@ export default class FtAccountCreatedPage extends Component {
               class="ft-otp-group ft-account-created-otp
                 {{if this.errorMessage 'has-error'}}"
             >
-            {{#if this.errorMessage}}
-              <div class="fantribe-login-error">
-                {{this.errorMessage}}
-              </div>
-            {{/if}}
-
-            <div class="ft-otp-group ft-account-created-otp">
               <label class="ft-otp-label">Verification code</label>
               <div class="ft-otp-inputs">
                 <input
