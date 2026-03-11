@@ -1,13 +1,7 @@
-import ConditionalLoadingSpinner from "discourse/components/conditional-loading-spinner";
-import DButton from "discourse/components/d-button";
-import DNavigationItem from "discourse/components/d-navigation-item";
-import HorizontalOverflowNav from "discourse/components/horizontal-overflow-nav";
+import { on } from "@ember/modifier";
 import LoadMore from "discourse/components/load-more";
-import PluginOutlet from "discourse/components/plugin-outlet";
 import bodyClass from "discourse/helpers/body-class";
-import icon from "discourse/helpers/d-icon";
 import hideApplicationFooter from "discourse/helpers/hide-application-footer";
-import lazyHash from "discourse/helpers/lazy-hash";
 import { i18n } from "discourse-i18n";
 
 export default <template>
@@ -17,93 +11,86 @@ export default <template>
 
   {{bodyClass "user-notifications-page"}}
 
-  <div class="user-navigation user-navigation-secondary">
-    <HorizontalOverflowNav @ariaLabel="User secondary - notifications">
-      <DNavigationItem
-        @route="userNotifications.index"
-        @ariaCurrentContext="subNav"
-        class="user-nav__notifications-all"
-      >
-        {{icon "bell"}}
-        <span>{{i18n "user.filters.all"}}</span>
-      </DNavigationItem>
-
-      <DNavigationItem
-        @route="userNotifications.responses"
-        @ariaCurrentContext="subNav"
-        class="user-nav__notifications-responses"
-      >
-        {{icon "reply"}}
-        <span>{{i18n "user_action_groups.5"}}</span>
-      </DNavigationItem>
-
-      <DNavigationItem
-        @route="userNotifications.likesReceived"
-        @ariaCurrentContext="subNav"
-        class="user-nav__notifications-likes"
-      >
-        {{icon "heart"}}
-        <span>{{i18n "user_action_groups.2"}}</span>
-      </DNavigationItem>
-
-      {{#if @controller.siteSettings.enable_mentions}}
-        <DNavigationItem
-          @route="userNotifications.mentions"
-          @ariaCurrentContext="subNav"
-          class="user-nav__notifications-mentions"
-        >
-          {{icon "at"}}
-          <span>{{i18n "user_action_groups.7"}}</span>
-        </DNavigationItem>
-      {{/if}}
-
-      <DNavigationItem
-        @route="userNotifications.edits"
-        @ariaCurrentContext="subNav"
-        class="user-nav__notifications-edits"
-      >
-        {{icon "pencil"}}
-        <span>{{i18n "user_action_groups.11"}}</span>
-      </DNavigationItem>
-
-      <DNavigationItem
-        @route="userNotifications.links"
-        @ariaCurrentContext="subNav"
-        class="user-nav__notifications-links"
-      >
-        {{icon "link"}}
-        <span>{{i18n "user_action_groups.17"}}</span>
-      </DNavigationItem>
-
-      <PluginOutlet
-        @name="user-notifications-bottom"
-        @connectorTagName="li"
-        @outletArgs={{lazyHash model=@controller.model}}
-      />
-
-    </HorizontalOverflowNav>
-
-    {{#if @controller.model.content}}
-      <div class="navigation-controls">
-        <DButton
-          @title="user.dismiss_notifications_tooltip"
-          @action={{@controller.resetNew}}
-          @label="user.dismiss_notifications"
-          @icon="check"
-          @disabled={{@controller.allNotificationsRead}}
-          class="btn-default dismiss-notifications"
-        />
+  <div
+    class="ft-notifications-page
+      {{if @controller.showUnreadOnly 'ft-notif--show-unread'}}"
+  >
+    {{! Combined header + filter card }}
+    <div class="ft-notifications-page__header-card">
+      <div class="ft-notifications-page__header">
+        <h1 class="ft-notifications-page__title">
+          {{i18n "user.notifications"}}
+        </h1>
+        {{#unless @controller.allNotificationsRead}}
+          <button
+            type="button"
+            class="ft-notifications-page__mark-all-read"
+            {{on "click" @controller.resetNew}}
+          >
+            {{i18n "fantribe.notifications.mark_all_read"}}
+          </button>
+        {{/unless}}
       </div>
-    {{/if}}
-  </div>
 
-  <section class="user-content" id="user-content">
-    <LoadMore
-      @action={{@controller.loadMore}}
-      class="notification-history user-stream"
+      <div class="ft-notifications-page__filters">
+        <button
+          type="button"
+          class="ft-notif-filter ft-notif-filter--all"
+          {{on "click" @controller.showAll}}
+        >
+          {{i18n "user.filters.all"}}
+        </button>
+        <button
+          type="button"
+          class="ft-notif-filter ft-notif-filter--unread"
+          {{on "click" @controller.showUnread}}
+        >
+          {{i18n "fantribe.notifications.unread"}}
+        </button>
+      </div>
+    </div>
+
+    {{! Notifications list card }}
+    <section
+      class="ft-notifications-page__content user-content"
+      id="user-content"
     >
-      {{outlet}}
-      <ConditionalLoadingSpinner @condition={{@controller.model.loadingMore}} />
-    </LoadMore>
-  </section>
+      {{#if @controller.showUnreadEmptyState}}
+        <div class="ft-notifications-empty">
+          <div class="ft-notifications-empty__icon-wrap">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="32"
+              height="32"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M10.268 21a2 2 0 0 0 3.464 0" />
+              <path
+                d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326"
+              />
+            </svg>
+          </div>
+          <h2 class="ft-notifications-empty__title">
+            {{i18n "fantribe.notifications.empty_title"}}
+          </h2>
+          <p class="ft-notifications-empty__body">
+            {{i18n "fantribe.notifications.unread_empty_body"}}
+          </p>
+        </div>
+      {{else}}
+        <LoadMore
+          @action={{@controller.loadMore}}
+          class="notification-history user-stream"
+        >
+          {{outlet}}
+        </LoadMore>
+      {{/if}}
+    </section>
+  </div>
 </template>

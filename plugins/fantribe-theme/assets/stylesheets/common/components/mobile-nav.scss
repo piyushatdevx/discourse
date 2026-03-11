@@ -15,7 +15,7 @@
   padding: 7.5px 0 12px 0;
   padding-bottom: calc(12px + env(safe-area-inset-bottom, 0));
 
-  @media (width <= 767px) {
+  @media (width <= 1023px) {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -72,8 +72,8 @@
   }
 }
 
-// Add padding to body on mobile to account for bottom nav
-@media (width <= 767px) {
+// Add padding to body to account for bottom nav (visible below 1024px)
+@media (width <= 1023px) {
   body.fantribe-theme {
     padding-bottom: calc(56px + env(safe-area-inset-bottom, 0));
   }

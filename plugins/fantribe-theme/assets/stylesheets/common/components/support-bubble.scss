@@ -100,8 +100,8 @@
   }
 }
 
-/* Mobile: hide support bubble entirely */
-@media (width <= 767px) {
+/* Hide support bubble below 1024px */
+@media (width <= 1023px) {
   .ft-support-bubble {
     display: none;
   }

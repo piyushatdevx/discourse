@@ -1,4 +1,5 @@
 import Component from "@glimmer/component";
+import { tracked } from "@glimmer/tracking";
 import { fn } from "@ember/helper";
 import { on } from "@ember/modifier";
 import { action } from "@ember/object";
@@ -86,11 +87,19 @@ const NAV_ITEMS = [
     icon: "message-circle",
     route: "chat.index",
   },
+  {
+    id: "notifications",
+    label: "sidebar.nav.notifications",
+    icon: "bell",
+    route: "userNotifications",
+    routeModel: "currentUser",
+  },
 ];
 
 export default class FantribeTribesPanel extends Component {
   @service router;
   @service currentUser;
+  @service appEvents;
   @service chatTrackingStateManager;
   @service fantribeCreate;
   @service fantribeSidebarState;
@@ -123,11 +132,20 @@ export default class FantribeTribesPanel extends Component {
     if (item.route === "chat.index") {
       return route.startsWith("chat");
     }
+    if (item.route === "userNotifications") {
+      return route.startsWith("userNotifications");
+    }
     return route === item.route;
   };
 
   hasNotification = (item) => {
-    return item.id === "chat" && this.hasUnreadChat;
+    if (item.id === "chat") {
+      return this.hasUnreadChat;
+    }
+    if (item.id === "notifications") {
+      return this._unreadNotificationsCount > 0;
+    }
+    return false;
   };
 
   getBadgeCount = (item) => {
@@ -137,10 +155,35 @@ export default class FantribeTribesPanel extends Component {
         (this.chatTrackingStateManager.publicChannelUnreadCount || 0);
       return n > 0 ? Math.min(n, 99) : 0;
     }
+    if (item.id === "notifications") {
+      return this._unreadNotificationsCount > 0
+        ? Math.min(this._unreadNotificationsCount, 99)
+        : 0;
+    }
     return 0;
   };
 
+  @tracked
+  _unreadNotificationsCount =
+    this.currentUser?.all_unread_notifications_count || 0;
+
   _sidebarCreateMenuCloseTimeout = null;
+
+  constructor(owner, args) {
+    super(owner, args);
+    this.appEvents.on("notifications:changed", this, this._syncNotifCount);
+  }
+
+  willDestroy() {
+    super.willDestroy();
+    this.appEvents.off("notifications:changed", this, this._syncNotifCount);
+  }
+
+  @action
+  _syncNotifCount() {
+    this._unreadNotificationsCount =
+      this.currentUser?.all_unread_notifications_count || 0;
+  }
 
   get isCollapsed() {
     return this.fantribeSidebarState.isCollapsed;
@@ -175,9 +218,18 @@ export default class FantribeTribesPanel extends Component {
     }
 
     try {
-      const transition = this.router.transitionTo(item.route);
+      const transition =
+        item.routeModel === "currentUser"
+          ? this.router.transitionTo(item.route, this.currentUser?.username)
+          : this.router.transitionTo(item.route);
       await transition;
     } catch (error) {
+      // A TransitionAborted rejection generally means another transition
+      // superseded this one (e.g. double navigation). It's not actionable.
+      if (error?.name === "TransitionAborted") {
+        return;
+      }
+
       // eslint-disable-next-line no-console
       console.error("[FantribeNav] Navigation failed:", item.route, error);
     }

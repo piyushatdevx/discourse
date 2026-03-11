@@ -16,6 +16,12 @@ en:
         new: "No new posts at the moment. Check back soon for fresh content!"
         unread: "You're all caught up! No unread posts."
     fantribe:
+      notifications:
+        unread: "Unread"
+        mark_all_read: "Mark all read"
+        empty_title: "All caught up!"
+        empty_body: "No new notifications"
+        unread_empty_body: "No unread notifications"
       header:
         create_aria: "Create"
         search_aria: "Search"
@@ -63,3 +69,4 @@ en:
         home_feed: "Home Feed"
         explore_tribes: "Explore Tribes"
         chat: "Chat"
+        notifications: "Notifications"
