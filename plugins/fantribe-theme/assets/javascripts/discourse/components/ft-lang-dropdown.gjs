@@ -17,7 +17,6 @@ export const LANGUAGES = [
   { code: "fr", flag: "🇫🇷", label: "FR", name: "Français" },
   { code: "de", flag: "🇩🇪", label: "DE", name: "Deutsch" },
   { code: "pt", flag: "🇧🇷", label: "PT", name: "Português" },
-  { code: "hi", flag: "🇮🇳", label: "HI", name: "हिन्दी" },
 ];
 
 export default class FtLangDropdown extends Component {
@@ -64,22 +63,7 @@ export default class FtLangDropdown extends Component {
   }
 
   get languages() {
-    const available = this.availableLocales;
-
-    return LANGUAGES.map((lang) => {
-      if (lang.code !== "hi") {
-        return lang;
-      }
-
-      // Prefer hi_IN when installed, fallback to hi.
-      if (available.has("hi_in")) {
-        return { ...lang, code: "hi_IN" };
-      }
-      if (available.has("hi")) {
-        return { ...lang, code: "hi" };
-      }
-      return lang;
-    });
+    return LANGUAGES;
   }
 
   get availableLocales() {
@@ -99,16 +83,11 @@ export default class FtLangDropdown extends Component {
   sameLocale(a, b) {
     const aNorm = this.normalizeLocale(a);
     const bNorm = this.normalizeLocale(b);
-    if (aNorm === bNorm) {
-      return true;
-    }
-    const hindi = new Set(["hi", "hi_in"]);
-    return hindi.has(aNorm) && hindi.has(bNorm);
+    return aNorm === bNorm;
   }
 
   normalizeForPersistence(locale) {
-    const normalized = this.normalizeLocale(locale);
-    return normalized === "hi" ? "hi_IN" : locale;
+    return locale;
   }
 
   persistLocaleCookies(locale) {
@@ -122,9 +101,7 @@ export default class FtLangDropdown extends Component {
       return this.normalizeForPersistence(locale);
     }
 
-    const normalized = this.normalizeLocale(locale);
-    const candidates =
-      normalized === "hi" ? ["hi_IN", "hi", "hi_in"] : [locale];
+    const candidates = [locale];
 
     for (const candidate of candidates) {
       try {

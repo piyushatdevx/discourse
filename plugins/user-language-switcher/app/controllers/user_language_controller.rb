@@ -3,12 +3,8 @@
 class UserLanguageController < ApplicationController
   requires_plugin "user-language-switcher"
 
-  EXTRA_LOCALES = %w[hi hi_in].freeze
-
   def set
     locale = params[:locale].to_s.strip
-    normalized = locale.downcase
-    locale = "hi_IN" if %w[hi hi_in].include?(normalized)
 
     unless valid_locale?(locale)
       return(
@@ -40,7 +36,6 @@ class UserLanguageController < ApplicationController
   private
 
   def valid_locale?(locale)
-    normalized = locale.to_s.downcase
-    LocaleSiteSetting.valid_value?(locale) || EXTRA_LOCALES.include?(normalized)
+    LocaleSiteSetting.valid_value?(locale)
   end
 end
