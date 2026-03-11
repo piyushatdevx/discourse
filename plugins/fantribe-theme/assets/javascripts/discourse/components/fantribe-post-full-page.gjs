@@ -20,6 +20,9 @@ import FantribePostMoreTopics from "./fantribe-post-more-topics";
 const ONEBOX_SELECTOR =
   "aside.onebox, div.youtube-onebox, div.onebox, div.lazy-video-container";
 
+const MOBILE_BREAKPOINT = 768;
+const MOBILE_PAGE_SIZE = 10;
+
 const REACTIONS = [
   { emoji: "🎵", key: "musical_note" },
   { emoji: "🔥", key: "fire" },
@@ -40,6 +43,7 @@ export default class FantribePostFullPage extends Component {
   @tracked reactionsLoaded = false;
   @tracked isBookmarkLoading = false;
   @tracked isReactionLoading = false;
+
   watchTopic = modifier((el, [topicId]) => {
     if (!topicId) {
       return;
@@ -53,9 +57,138 @@ export default class FantribePostFullPage extends Component {
     this._viewCount = null;
     this.reactionsLoaded = false;
     this.commentText = "";
+    this._displayedCommentCount = MOBILE_PAGE_SIZE;
     this.loadReactions();
     this.loadComments();
     this.recordView();
+  });
+
+  setupMobileDetection = modifier(() => {
+    const INLINE_STYLE_TARGETS = [
+      "html",
+      "body",
+      "#main",
+      "#main-outlet-wrapper",
+      "#main-outlet",
+      "#main-outlet .ember-view",
+      "#main-outlet .row",
+      "#main-outlet .container",
+      "#main-outlet .container.posts",
+      "#main-outlet .posts-wrapper",
+      ".topic-area",
+      "section#topic",
+    ];
+
+    const unlockAll = () => {
+      document.documentElement.style.setProperty("height", "auto", "important");
+      document.body.style.setProperty("overflow-y", "auto", "important");
+      document.body.style.setProperty("height", "auto", "important");
+      for (const sel of INLINE_STYLE_TARGETS.slice(2)) {
+        for (const el of document.querySelectorAll(sel)) {
+          el.style.setProperty("height", "auto", "important");
+          el.style.setProperty("max-height", "none", "important");
+          el.style.setProperty("overflow-y", "visible", "important");
+        }
+      }
+    };
+
+    const restoreAll = () => {
+      document.documentElement.style.removeProperty("height");
+      document.body.style.removeProperty("overflow-y");
+      document.body.style.removeProperty("height");
+      for (const sel of INLINE_STYLE_TARGETS.slice(2)) {
+        for (const el of document.querySelectorAll(sel)) {
+          el.style.removeProperty("height");
+          el.style.removeProperty("max-height");
+          el.style.removeProperty("overflow-y");
+        }
+      }
+    };
+
+    // Safe MutationObserver to prevent Discourse re-applying inline styles without looping
+    let observer = null;
+    const startObserver = () => {
+      if (observer) {
+        observer.disconnect();
+      }
+
+      observer = new MutationObserver(() => {
+        // Pausing observer to avoid infinite loop when we change styles
+        observer.disconnect();
+        unlockAll();
+        // Resume observing
+        observeTargets();
+      });
+      observeTargets();
+    };
+
+    const observeTargets = () => {
+      for (const sel of INLINE_STYLE_TARGETS) {
+        for (const el of document.querySelectorAll(sel)) {
+          observer.observe(el, {
+            attributes: true,
+            attributeFilter: ["style"],
+          });
+        }
+      }
+    };
+
+    const update = () => {
+      const isCurrentlyMobile = window.innerWidth <= MOBILE_BREAKPOINT;
+
+      if (isCurrentlyMobile !== this._isMobile) {
+        this._isMobile = isCurrentlyMobile;
+
+        if (this._isMobile) {
+          requestAnimationFrame(() => {
+            unlockAll();
+            startObserver();
+          });
+        } else {
+          observer?.disconnect();
+          observer = null;
+          restoreAll();
+        }
+      }
+    };
+
+    // Initial setup
+    this._isMobile = window.innerWidth <= MOBILE_BREAKPOINT;
+    if (this._isMobile) {
+      requestAnimationFrame(() => {
+        unlockAll();
+        startObserver();
+      });
+      // Discourse sometimes applies height late on mount, check again after 500ms
+      setTimeout(() => {
+        if (this._isMobile) {
+          observer?.disconnect();
+          unlockAll();
+          observeTargets();
+        }
+      }, 500);
+    }
+
+    window.addEventListener("resize", update, { passive: true });
+
+    return () => {
+      window.removeEventListener("resize", update);
+      observer?.disconnect();
+      restoreAll();
+    };
+  });
+
+  setupScrollSentinel = modifier((el) => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0]?.isIntersecting) {
+          this.loadMoreComments();
+        }
+      },
+      { rootMargin: "200px" }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
   });
 
   @tracked _localComments = null;
@@ -65,6 +198,8 @@ export default class FantribePostFullPage extends Component {
   @tracked _isBookmarked = null;
   @tracked _bookmarkId = null;
   @tracked _viewCount = null;
+  @tracked _displayedCommentCount = MOBILE_PAGE_SIZE;
+  @tracked _isMobile = false;
 
   constructor(owner, args) {
     super(owner, args);
@@ -299,6 +434,18 @@ export default class FantribePostFullPage extends Component {
     ];
   }
 
+  // On mobile, show a paged slice; on desktop show all.
+  get visibleComments() {
+    if (this._isMobile) {
+      return this.comments.slice(0, this._displayedCommentCount);
+    }
+    return this.comments;
+  }
+
+  get hasMoreComments() {
+    return this._isMobile && this._displayedCommentCount < this.comments.length;
+  }
+
   get replyCount() {
     const count =
       this.topic?.posts_count ??
@@ -449,6 +596,11 @@ export default class FantribePostFullPage extends Component {
     } catch {
       this._serverComments = [];
     }
+  }
+
+  @action
+  loadMoreComments() {
+    this._displayedCommentCount += MOBILE_PAGE_SIZE;
   }
 
   @action
@@ -665,6 +817,7 @@ export default class FantribePostFullPage extends Component {
       class="ft-full-post-layout
         {{unless this.hasMedia 'ft-full-post-layout--no-image'}}"
       {{this.watchTopic this.topicId}}
+      {{this.setupMobileDetection}}
     >
       <div class="ft-full-post-layout__content">
         <div class="ft-full-post">
@@ -871,7 +1024,7 @@ export default class FantribePostFullPage extends Component {
                     <div class="ft-full-post__comments-inner">
                       <span class="ft-full-post__comments-label">Comments</span>
                       <div class="ft-full-post__comments-list">
-                        {{#each this.comments as |comment|}}
+                        {{#each this.visibleComments as |comment|}}
                           <div class="ft-full-post__comment">
                             <div
                               class="ft-full-post__comment-avatar
@@ -903,6 +1056,12 @@ export default class FantribePostFullPage extends Component {
                             </div>
                           </div>
                         {{/each}}
+                        {{#if this.hasMoreComments}}
+                          <div
+                            class="ft-full-post__comments-sentinel"
+                            {{this.setupScrollSentinel}}
+                          ></div>
+                        {{/if}}
                       </div>
                     </div>
 
@@ -946,7 +1105,7 @@ export default class FantribePostFullPage extends Component {
                 >
                   <span class="ft-full-post__comments-label">Comments</span>
                   <div class="ft-full-post__comments-list">
-                    {{#each this.comments as |comment|}}
+                    {{#each this.visibleComments as |comment|}}
                       <div class="ft-full-post__comment">
                         <div
                           class="ft-full-post__comment-avatar
@@ -975,6 +1134,12 @@ export default class FantribePostFullPage extends Component {
                         </div>
                       </div>
                     {{/each}}
+                    {{#if this.hasMoreComments}}
+                      <div
+                        class="ft-full-post__comments-sentinel"
+                        {{this.setupScrollSentinel}}
+                      ></div>
+                    {{/if}}
                   </div>
 
                   <div class="ft-full-post__comment-input-row">

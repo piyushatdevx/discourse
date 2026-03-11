@@ -301,15 +301,6 @@ export default class FantribePostMenu extends Component {
             <button
               type="button"
               class="fantribe-post-menu__item"
-              {{on "click" this.handleEdit}}
-            >
-              {{ftIcon "edit3"}}
-              <span>Edit Post</span>
-            </button>
-
-            <button
-              type="button"
-              class="fantribe-post-menu__item"
               {{on "click" this.handleCopyLink}}
             >
               {{ftIcon "link2"}}

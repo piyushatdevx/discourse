@@ -60,7 +60,17 @@ body.fantribe-theme:not(.admin-interface) {
     background: var(--ft-figma-page-bg);
     margin-left: 0;
     margin-right: 0;
-    padding-left: 14px;
+  }
+
+  // Desktop only: left padding (not on mobile so content is not pushed right)
+  @media (width >= 768px) {
+    #main-outlet,
+    .ember-application,
+    #main,
+    .container,
+    .wrap {
+      padding-left: 14px;
+    }
   }
 
   // Remove Discourse default backgrounds
@@ -419,7 +429,7 @@ body.fantribe-theme:not(.admin-interface) {
   input[type="search"],
   select {
     border-radius: var(--ft-radius-medium);
-    background: rgb(221, 221, 221, 0.2);
+    background: var(--ft-slate-50);
     font-size: 14px;
 
     &:focus {

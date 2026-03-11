@@ -14,8 +14,8 @@ const autoFocus = modifier((element) => {
 });
 
 const TABS = [
+  { id: "all", label: "All", icon: "layout-grid" },
   { id: "feed", label: "Feed", icon: "newspaper" },
-  { id: "people", label: "People", icon: "user" },
   { id: "tribes", label: "Tribes", icon: "compass" },
 ];
 
@@ -24,7 +24,7 @@ export default class FtSearchModal extends Component {
   @service site;
 
   @tracked query = "";
-  @tracked activeTab = "feed";
+  @tracked activeTab = "all";
   @tracked rawResults = null;
   @tracked isLoading = false;
 
@@ -41,8 +41,14 @@ export default class FtSearchModal extends Component {
     return this.query.trim().length > 0;
   }
 
+  get trendingTribes() {
+    const categories = this.site.categories || [];
+    return [...categories]
+      .sort((a, b) => (b.topic_count || 0) - (a.topic_count || 0))
+      .slice(0, 6);
+  }
+
   get visibleResults() {
-    const limit = this.activeTab === "feed" ? 4 : 10;
     const out = [];
 
     if (this.activeTab === "tribes") {
@@ -51,13 +57,14 @@ export default class FtSearchModal extends Component {
       if (q) {
         matches = matches.filter((c) => c.name.toLowerCase().includes(q));
       }
-      matches.slice(0, limit).forEach((c) => {
+      matches.slice(0, 10).forEach((c) => {
         out.push({
           type: "tribe",
           item: c,
           isFeed: false,
           isPeople: false,
           isTribe: true,
+          isTag: false,
           titleDisplay: htmlSafe(c.name),
         });
       });
@@ -73,8 +80,14 @@ export default class FtSearchModal extends Component {
       topicsMap[t.id] = t;
     });
 
-    if (this.activeTab === "feed") {
-      (this.rawResults.posts || []).slice(0, limit).forEach((p) => {
+    const isFeedTab = this.activeTab === "feed";
+    const isAllTab = this.activeTab === "all";
+    const feedLimit = isFeedTab ? 4 : isAllTab ? 3 : 0;
+    const tribesLimit = isAllTab ? 3 : 0;
+    const peopleLimit = isAllTab ? 3 : 0;
+
+    if (isFeedTab || isAllTab) {
+      (this.rawResults.posts || []).slice(0, feedLimit).forEach((p) => {
         const topic = topicsMap[p.topic_id];
         const title =
           (topic && (topic.fancy_title || topic.title)) || "Untitled";
@@ -84,19 +97,38 @@ export default class FtSearchModal extends Component {
           isFeed: true,
           isPeople: false,
           isTribe: false,
+          isTag: false,
           titleDisplay: htmlSafe(title),
         });
       });
     }
 
-    if (this.activeTab === "people") {
-      (this.rawResults.users || []).slice(0, limit).forEach((u) => {
+    if (isAllTab) {
+      const q = this.query.trim().toLowerCase();
+      const tribeMatches = (this.site.categories || [])
+        .filter((c) => !q || c.name.toLowerCase().includes(q))
+        .slice(0, tribesLimit);
+
+      tribeMatches.forEach((c) => {
+        out.push({
+          type: "tribe",
+          item: c,
+          isFeed: false,
+          isPeople: false,
+          isTribe: true,
+          isTag: false,
+          titleDisplay: htmlSafe(c.name),
+        });
+      });
+
+      (this.rawResults.users || []).slice(0, peopleLimit).forEach((u) => {
         out.push({
           type: "people",
           item: u,
           isFeed: false,
           isPeople: true,
           isTribe: false,
+          isTag: false,
           titleDisplay: htmlSafe(`@${u.username}`),
         });
       });
@@ -107,6 +139,10 @@ export default class FtSearchModal extends Component {
 
   get hasResults() {
     return this.visibleResults.length > 0;
+  }
+
+  get showTrendingTribes() {
+    return this.activeTab === "tribes" && !this.hasQuery;
   }
 
   @action
@@ -197,6 +233,12 @@ export default class FtSearchModal extends Component {
     this.args.onClose();
   }
 
+  @action
+  viewAllTribes() {
+    this.router.transitionTo("discovery.categories");
+    this.args.onClose();
+  }
+
   avatarUrl(template, size = 20) {
     if (!template) {
       return null;
@@ -220,7 +262,7 @@ export default class FtSearchModal extends Component {
   <template>
     {{! template-lint-disable no-invalid-interactive }}
     <div
-      class="ft-modal-backdrop"
+      class="ft-modal-backdrop ft-search-modal-backdrop"
       role="dialog"
       aria-modal="true"
       aria-label="Search"
@@ -229,8 +271,41 @@ export default class FtSearchModal extends Component {
     >
       <div class="ft-modal ft-search-modal">
 
-        {{! Header }}
-        <div class="ft-search-modal__header">
+        {{! Mobile Header: back + search bar + filter }}
+        <div class="ft-search-modal__mobile-header">
+          <button
+            type="button"
+            class="ft-search-modal__back-btn"
+            aria-label="Back"
+            {{on "click" @onClose}}
+          >
+            {{ftIcon "arrow-left" size=20}}
+          </button>
+
+          <label class="ft-search-modal__search-bar">
+            {{ftIcon "search" size=18}}
+            <input
+              type="text"
+              class="ft-search-modal__search-input"
+              placeholder="Search people, gear, tribes..."
+              value={{this.query}}
+              {{autoFocus}}
+              {{on "input" this.updateQuery}}
+              {{on "keydown" this.handleKeydown}}
+            />
+          </label>
+
+          <button
+            type="button"
+            class="ft-search-modal__filter-btn"
+            aria-label="Filter"
+          >
+            {{ftIcon "sliders-horizontal" size=20}}
+          </button>
+        </div>
+
+        {{! Desktop Header (hidden on mobile) }}
+        <div class="ft-search-modal__header ft-search-modal__header--desktop">
           <h2 class="ft-search-modal__title">Search</h2>
           <button
             type="button"
@@ -242,16 +317,17 @@ export default class FtSearchModal extends Component {
           </button>
         </div>
 
-        {{! Search input }}
-        <div class="ft-search-modal__search-wrap">
+        {{! Desktop Search input (hidden on mobile) }}
+        <div
+          class="ft-search-modal__search-wrap ft-search-modal__search-wrap--desktop"
+        >
           <label class="ft-search-modal__search-bar">
             {{ftIcon "search" size=18}}
             <input
               type="text"
-              class="ft-search-modal__search-input"
+              class="ft-search-modal__search-input ft-search-modal__search-input--desktop"
               placeholder="Search feed, people, tribes..."
               value={{this.query}}
-              {{autoFocus}}
               {{on "input" this.updateQuery}}
               {{on "keydown" this.handleKeydown}}
             />
@@ -275,7 +351,34 @@ export default class FtSearchModal extends Component {
 
         {{! Results }}
         <div class="ft-search-modal__results">
-          {{#if this.isLoading}}
+          {{#if this.showTrendingTribes}}
+            {{! Tribes tab with no query — show trending }}
+            <div class="ft-search-modal__trending">
+              <span class="ft-search-modal__trending-title">Trending tribes</span>
+              {{#each this.trendingTribes as |category|}}
+                <button
+                  type="button"
+                  class="ft-search-modal__trending-item"
+                  {{on "click" (fn this.navigateToTribe category)}}
+                >
+                  <span class="ft-search-modal__trending-tag">
+                    #{{category.name}}
+                  </span>
+                  <span class="ft-search-modal__trending-arrow">
+                    {{ftIcon "trending-up" size=16}}
+                  </span>
+                </button>
+              {{/each}}
+              <button
+                type="button"
+                class="ft-search-modal__view-all"
+                {{on "click" this.viewAllTribes}}
+              >
+                View all
+              </button>
+            </div>
+
+          {{else if this.isLoading}}
             <div class="ft-search-modal__state">
               <div class="ft-search-modal__spinner"></div>
             </div>

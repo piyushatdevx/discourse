@@ -66,6 +66,12 @@ export default class FtAccountCreatedPage extends Component {
     const val = event.target.value.replace(/\D/g, "").slice(-1);
     event.target.value = val;
     this.otpCode = inputs.map((inp) => inp.value).join("");
+
+    if (val) {
+      event.target.classList.add("pop-animation");
+      setTimeout(() => event.target.classList.remove("pop-animation"), 200);
+    }
+
     if (val && index < 5) {
       inputs[index + 1]?.focus();
     }
@@ -156,6 +162,25 @@ export default class FtAccountCreatedPage extends Component {
   <template>
     {{#if this.isVisible}}
       <div class="ft-account-created-overlay">
+        {{#if this.errorMessage}}
+          <div class="ft-account-created-toast">
+            <svg
+              class="ft-toast-icon"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="12" y1="8" x2="12" y2="12"></line>
+              <line x1="12" y1="16" x2="12.01" y2="16"></line>
+            </svg>
+            <span>{{this.errorMessage}}</span>
+          </div>
+        {{/if}}
         <header class="ft-account-created-header">
           <a href={{this.homeUrl}} class="fantribe-login-header__logo">
             <img src={{this.logoUrl}} alt="FanTribe" />
@@ -187,13 +212,10 @@ export default class FtAccountCreatedPage extends Component {
               {{/if}}
             </div>
 
-            {{#if this.errorMessage}}
-              <div class="fantribe-login-error">
-                {{this.errorMessage}}
-              </div>
-            {{/if}}
-
-            <div class="ft-otp-group ft-account-created-otp">
+            <div
+              class="ft-otp-group ft-account-created-otp
+                {{if this.errorMessage 'has-error'}}"
+            >
               <label class="ft-otp-label">Verification code</label>
               <div class="ft-otp-inputs">
                 <input

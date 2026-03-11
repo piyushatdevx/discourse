@@ -9,6 +9,7 @@ import avatar from "discourse/helpers/avatar";
 import { ajax } from "discourse/lib/ajax";
 import { popupAjaxError } from "discourse/lib/ajax-error";
 import { getUploadMarkdown } from "discourse/lib/uploads";
+import closeOnClickOutside from "discourse/modifiers/close-on-click-outside";
 import { eq } from "discourse/truth-helpers";
 import ftIcon from "../helpers/ft-icon";
 
@@ -406,7 +407,10 @@ export default class FtCreatePostModal extends Component {
         {{#if this.hasTribeOptions}}
           <div class="ft-modal__tribe-section">
             <label class="ft-modal__tribe-section-label">Posting to</label>
-            <div class="ft-modal__tribe-select-wrap">
+            <div
+              class="ft-modal__tribe-select-wrap"
+              {{closeOnClickOutside this.closeTribeDropdown}}
+            >
               <button
                 type="button"
                 class="ft-modal__tribe-select-trigger

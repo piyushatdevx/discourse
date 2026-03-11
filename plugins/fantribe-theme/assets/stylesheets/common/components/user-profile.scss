@@ -24,6 +24,21 @@ body.fantribe-theme:not(.admin-interface) {
     display: none;
   }
 
+  // On notifications (and PMs) we do not show the profile header or
+  // profile-style layout; only nav + content.
+  &.ft-on-notifications {
+    .ft-profile {
+      display: none !important;
+    }
+
+    // Notifications are rendered inside the core `user.gjs` shell, which
+    // includes the primary profile tabs (Posts/Bookmarks/etc). We’re replacing
+    // notifications with a dedicated UI, so hide the primary tab bar here.
+    .user-navigation.user-navigation-primary {
+      display: none !important;
+    }
+  }
+
   // ── Page layout resets ───────────────────────────────────────
   // Subtle gradient background so the tab card and content cards "float"
   // (matches Figma: from-slate-50 via-white to-indigo-50/20).
@@ -48,10 +63,14 @@ body.fantribe-theme:not(.admin-interface) {
 
   // Native activity stream items shown while routeDidChange redirect
   // is in-flight or when navigating via URL to a native subroute.
-  .user-main .user-stream,
-  .user-main .user-activity-list,
-  .user-main .activity-stream {
-    display: none !important;
+  // Excluded on ft-on-notifications because the notifications list renders
+  // inside a LoadMore with class "user-stream".
+  &:not(.ft-on-notifications) {
+    .user-main .user-stream,
+    .user-main .user-activity-list,
+    .user-main .activity-stream {
+      display: none !important;
+    }
   }
 
   // ── Tab bar — floating pill card (matches Figma) ─────────────

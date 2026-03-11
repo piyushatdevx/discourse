@@ -1,0 +1,31 @@
+import { i18n } from "discourse-i18n";
+
+export default <template>
+  <div class="ft-notifications-empty">
+    <div class="ft-notifications-empty__icon-wrap">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="32"
+        height="32"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+      >
+        <path d="M10.268 21a2 2 0 0 0 3.464 0" />
+        <path
+          d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326"
+        />
+      </svg>
+    </div>
+    <h2 class="ft-notifications-empty__title">
+      {{i18n "fantribe.notifications.empty_title"}}
+    </h2>
+    <p class="ft-notifications-empty__body">
+      {{i18n "fantribe.notifications.empty_body"}}
+    </p>
+  </div>
+</template>

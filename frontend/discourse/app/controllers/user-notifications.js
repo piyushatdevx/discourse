@@ -26,6 +26,7 @@ export default class UserNotificationsController extends Controller {
   @service siteSettings;
 
   @tracked filter = "all";
+  @tracked showUnreadOnly = false;
 
   queryParams = ["filter"];
 
@@ -57,6 +58,10 @@ export default class UserNotificationsController extends Controller {
     );
   }
 
+  get showUnreadEmptyState() {
+    return this.showUnreadOnly && this.allNotificationsRead;
+  }
+
   get doesNotHaveNotifications() {
     return (
       !this.model.loading && !this.isFiltered && this.model.content.length === 0
@@ -81,11 +86,24 @@ export default class UserNotificationsController extends Controller {
     this.model.content.forEach((notification) =>
       notification.set("read", true)
     );
+    this.currentUser.set("all_unread_notifications_count", 0);
+    this.currentUser.set("unread_high_priority_notifications", 0);
+    this.appEvents.trigger("notifications:changed");
   }
 
   @action
   updateFilter(value) {
     this.filter = value;
+  }
+
+  @action
+  showAll() {
+    this.showUnreadOnly = false;
+  }
+
+  @action
+  showUnread() {
+    this.showUnreadOnly = true;
   }
 
   @action

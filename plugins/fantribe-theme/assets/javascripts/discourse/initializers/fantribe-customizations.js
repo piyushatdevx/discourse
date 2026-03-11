@@ -20,6 +20,11 @@ function initializeFantribe(api) {
   const siteSettings = api.container.lookup("service:site-settings");
   const currentUser = api.getCurrentUser();
 
+  // Always show user avatars in notification rows (and user menu).
+  // The iconComponent in UserMenuBaseItem returns null when this is false,
+  // meaning no <img> is rendered at all — CSS alone cannot fix that.
+  siteSettings.show_user_menu_avatars = true;
+
   // Force class for FanTribe styling (both html and body for CSS selectors)
   document?.documentElement?.classList?.add("fantribe-theme");
   document?.body?.classList?.add("fantribe-theme");
@@ -63,6 +68,11 @@ function initializeFantribe(api) {
         document.body.classList.toggle(
           "ft-on-settings-hub",
           Boolean(router.currentURL?.includes("/activity/ft-settings"))
+        );
+
+        document.body.classList.toggle(
+          "ft-on-notifications",
+          routeName.startsWith("userNotifications")
         );
 
         // Redirect bare profile / summary / activity routes to the Posts tab.

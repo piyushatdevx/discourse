@@ -40,7 +40,12 @@ body.admin-interface {
   // border-bottom: 1px solid #d4d2cf;
 
   @media (width >= 768px) {
-    height: 80px;
+    height: 46px;
+  }
+
+  @media (width <= 767px) {
+    // Figma node 939-9589: compact header
+    height: 46px;
   }
 
   // Figma: h-full pl-4 pr-4 md:pl-6 md:pr-8 flex items-center justify-between
@@ -51,9 +56,45 @@ body.admin-interface {
     gap: 16px;
     height: 100%;
     padding: 0 16px;
+    box-sizing: border-box;
 
     @media (width >= 768px) {
       padding: 0 24px 0 18px;
+    }
+
+    @media (width <= 767px) {
+      padding: 10px 16px;
+      gap: 12px;
+    }
+  }
+
+  &__desktop-layout,
+  &__mobile-layout {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &__mobile-layout {
+    display: none;
+  }
+
+  @media (width <= 1023px) {
+    &__desktop-layout {
+      display: none;
+    }
+
+    &__mobile-layout {
+      display: grid;
+      grid-template-columns: 26px minmax(0, 1fr) 20px;
+      align-items: center;
+      justify-items: stretch;
+    }
+
+    // Anonymous header currently uses the desktop layout markup.
+    &__desktop-layout--anon {
+      display: flex;
     }
   }
 
@@ -117,6 +158,79 @@ body.admin-interface {
       height: 34px;
       width: auto;
       object-fit: contain;
+    }
+  }
+
+  @media (width <= 1023px) {
+    .fantribe-header__logo {
+      padding: 0;
+    }
+
+    .fantribe-header__logo-img {
+      height: 28px;
+      display: block;
+    }
+
+    .fantribe-header__logo--mobile {
+      justify-self: center;
+    }
+  }
+
+  &__mobile-create {
+    width: 24px;
+    height: 24px;
+    padding: 0;
+    border: none;
+    border-radius: 9999px;
+    cursor: pointer;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #ff1744 0%, #ff6b6b 100%);
+
+    .ft-icon,
+    .d-icon {
+      width: 16px !important;
+      height: 16px !important;
+      color: #fff;
+    }
+  }
+
+  &__mobile-create-area {
+    position: relative;
+    display: flex;
+    flex-shrink: 0;
+    width: 26px;
+    height: 26px;
+  }
+
+  &__mobile-search {
+    width: 20px;
+    height: 20px;
+    padding: 0;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ff1744;
+
+    .ft-icon,
+    .d-icon {
+      width: 20px;
+      height: 20px;
+    }
+  }
+
+  @media (width <= 1023px) {
+    .fantribe-header__mobile-layout {
+      .ft-create-menu {
+        left: 0;
+        right: auto;
+      }
     }
   }
 
@@ -193,6 +307,55 @@ body.admin-interface {
     gap: 8px;
     flex-shrink: 0;
     position: relative;
+  }
+
+  // Chat and Notifications icon buttons (desktop, below/after chat per Figma)
+  &__icon-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    border: none;
+    border-radius: 12px;
+    background: transparent;
+    color: #1a1916;
+    cursor: pointer;
+    text-decoration: none;
+    transition:
+      background-color 200ms ease,
+      color 200ms ease;
+    position: relative;
+
+    .ft-icon {
+      width: 22px;
+      height: 22px;
+      color: currentcolor;
+    }
+
+    &:hover {
+      background: #f0f0f2;
+      color: #ff1744;
+    }
+  }
+
+  &__notification-badge {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    min-width: 16px;
+    height: 16px;
+    padding: 0 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #ff1744;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 600;
+    line-height: 1;
+    border-radius: 8px;
   }
 
   // + Create button (logged in)
@@ -368,5 +531,148 @@ body.admin-interface {
       background: #e6143d;
       border-color: #e6143d;
     }
+  }
+}
+
+@media (width <= 1023px) {
+  .ft-mobile-create-backdrop-wrapper {
+    position: fixed;
+    inset: 0;
+    z-index: 120;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+  }
+
+  .ft-mobile-create-overlay {
+    position: absolute;
+    inset: 0;
+  }
+
+  .ft-mobile-create-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgb(15 23 42 / 0.6);
+    backdrop-filter: blur(4px);
+    pointer-events: none;
+  }
+
+  .ft-mobile-create-sheet {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+
+    // max-width: 440px;
+    background: var(--ft-white);
+    border-radius: 12px 12px 0 0;
+    box-shadow: 0 -1px 50px rgb(0 0 0 / 0.08);
+    overflow: hidden;
+  }
+
+  // Figma 939-10407: Create header — padding 16px, bg rgba(255,23,68,0.1), border-bottom 0.5px #ff1744
+  .ft-mobile-create-sheet__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px;
+    background: rgb(255 23 68 / 0.1);
+    border-bottom: 0.5px solid #ff1744;
+  }
+
+  .ft-mobile-create-sheet__title {
+    font-family: var(--ft-font-family);
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 24px;
+    color: #111827;
+  }
+
+  .ft-mobile-create-sheet__close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    padding: 0;
+    border: none;
+    background: none;
+    cursor: pointer;
+    flex-shrink: 0;
+
+    .ft-mobile-create-sheet__close-icon {
+      width: 20px;
+      height: 20px;
+      display: block;
+    }
+  }
+
+  .ft-mobile-create-sheet__items {
+    padding: 8px 4px 12px;
+  }
+
+  .ft-mobile-create-sheet__item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    padding: 10px 12px;
+    background: none;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    text-align: left;
+    transition: background 150ms ease;
+
+    &:hover {
+      background: var(--ft-light-mist);
+    }
+  }
+
+  .ft-mobile-create-sheet__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    flex-shrink: 0;
+
+    .ft-icon {
+      width: 20px;
+      height: 20px;
+    }
+
+    &--blue {
+      background: var(--ft-electric-blue-icon-bg);
+      color: var(--ft-electric-blue-icon);
+    }
+
+    &--darkRed {
+      background: var(--ft-amber-light);
+      color: var(--ft-amber);
+    }
+  }
+
+  .ft-mobile-create-sheet__item-content {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .ft-mobile-create-sheet__item-label {
+    font-family: var(--ft-font-family);
+    font-size: var(--ft-figma-14);
+    font-weight: var(--ft-font-weight-semibold);
+    line-height: var(--ft-figma-lh-21);
+    color: var(--ft-dark);
+  }
+
+  .ft-mobile-create-sheet__item-desc {
+    font-family: var(--ft-font-family);
+    font-size: var(--ft-figma-12);
+    font-weight: var(--ft-font-weight-normal);
+    line-height: var(--ft-figma-lh-16);
+    color: var(--ft-neutral-600);
   }
 }

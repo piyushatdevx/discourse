@@ -9,6 +9,8 @@ import avatar from "discourse/helpers/avatar";
 import formatDate from "discourse/helpers/format-date";
 import { ajax } from "discourse/lib/ajax";
 import { popupAjaxError } from "discourse/lib/ajax-error";
+import { getUploadMarkdown } from "discourse/lib/uploads";
+import { eq } from "discourse/truth-helpers";
 import ftIcon from "../helpers/ft-icon";
 import FantribePostMoreTopics from "./fantribe-post-more-topics";
 
@@ -29,6 +31,8 @@ export default class FantribePostEditPage extends Component {
   @tracked tagInput = "";
   @tracked currentImageIndex = 0;
   @tracked isSubmitting = false;
+  @tracked uploadedMedia = [];
+  @tracked isUploading = false;
   @tracked _removedImageIndices = [];
 
   constructor(owner, args) {
@@ -116,9 +120,18 @@ export default class FantribePostEditPage extends Component {
   }
 
   get images() {
-    return this.allImages.filter(
+    const original = this.allImages.filter(
       (img) => !this._removedImageIndices.includes(img.originalIndex)
     );
+    const newImages = this.uploadedMedia
+      .filter((m) => m.type === "image")
+      .map((m, i) => ({
+        url: m.url,
+        isNew: true,
+        newIndex: i,
+        uploadMarkdown: m.uploadMarkdown,
+      }));
+    return [...newImages, ...original];
   }
 
   get currentImage() {
@@ -159,6 +172,16 @@ export default class FantribePostEditPage extends Component {
     return this.selectedTags.length < MAX_TAGS;
   }
 
+  // ── Uploads ───────────────────────────────────────────────────────────────
+
+  get hasNonImageUploadedMedia() {
+    return this.uploadedMedia.some((m) => m.type !== "image");
+  }
+
+  get nonImageUploadedMedia() {
+    return this.uploadedMedia.filter((m) => m.type !== "image");
+  }
+
   // ── Actions ───────────────────────────────────────────────────────────────
 
   @action
@@ -181,10 +204,14 @@ export default class FantribePostEditPage extends Component {
     if (!current) {
       return;
     }
-    this._removedImageIndices = [
-      ...this._removedImageIndices,
-      current.originalIndex,
-    ];
+    if (current.isNew) {
+      this.removeMediaByMarkdown(current.uploadMarkdown);
+    } else {
+      this._removedImageIndices = [
+        ...this._removedImageIndices,
+        current.originalIndex,
+      ];
+    }
     if (this.currentImageIndex >= this.images.length) {
       this.currentImageIndex = Math.max(0, this.images.length - 1);
     }
@@ -233,6 +260,63 @@ export default class FantribePostEditPage extends Component {
   }
 
   @action
+  triggerFileInput(type) {
+    const input = document.querySelector(`.ft-post-edit__file-input--${type}`);
+    if (input) {
+      input.value = "";
+      input.click();
+    }
+  }
+
+  @action
+  async handleFileSelected(type, event) {
+    const files = event.target.files;
+    if (!files || files.length === 0) {
+      return;
+    }
+
+    this.isUploading = true;
+
+    try {
+      for (const file of files) {
+        const formData = new FormData();
+        formData.append("file", file);
+        formData.append("type", "composer");
+
+        const upload = await ajax("/uploads.json", {
+          type: "POST",
+          data: formData,
+          processData: false,
+          contentType: false,
+        });
+
+        const uploadMarkdown = getUploadMarkdown(upload);
+        this.uploadedMedia = [
+          ...this.uploadedMedia,
+          {
+            type,
+            name: file.name,
+            uploadMarkdown,
+            url: upload.url || upload.short_url,
+          },
+        ];
+      }
+    } catch (error) {
+      popupAjaxError(error);
+    } finally {
+      this.isUploading = false;
+      event.target.value = "";
+    }
+  }
+
+  @action
+  removeMediaByMarkdown(uploadMarkdown) {
+    this.uploadedMedia = this.uploadedMedia.filter(
+      (m) => m.uploadMarkdown !== uploadMarkdown
+    );
+  }
+
+  @action
   cancel() {
     this.fantribeCreate.closeCreatePostModal();
   }
@@ -253,26 +337,57 @@ export default class FantribePostEditPage extends Component {
       const remainingUploads = allUploads.filter(
         (_, i) => !this._removedImageIndices.includes(i)
       );
-      const rawToSave = remainingUploads.length
-        ? `${this.postText}\n\n${remainingUploads.join("\n")}`.trim()
+
+      const newMediaMarkdown = this.uploadedMedia.map((m) => m.uploadMarkdown);
+      const allUploadMarkdown = [...newMediaMarkdown, ...remainingUploads];
+
+      const rawToSave = allUploadMarkdown.length
+        ? `${this.postText}\n\n${allUploadMarkdown.join("\n")}`.trim()
         : this.postText;
 
-      await ajax(`/posts/${editingPost.id}.json`, {
+      const response = await ajax(`/posts/${editingPost.id}.json`, {
         type: "PUT",
-        data: { post: { raw: rawToSave }, title: this.postTitle },
+        data: {
+          post: { raw: rawToSave },
+          title: this.postTitle ? this.postTitle.trim() : "",
+        },
       });
-      // Use the dedicated tags endpoint — the generic /t/:id.json endpoint
-      // doesn't reliably update tags from form-encoded arrays. Discourse's own
-      // updateTags() model method uses /t/:id/tags and requires [""] for empty.
-      const tagsToSave =
-        this.selectedTags.length > 0 ? this.selectedTags : [""];
-      await ajax(`/t/${topicId}/tags`, {
+
+      if (response && response.post && this.firstPost) {
+        if (typeof this.firstPost.setProperties === "function") {
+          this.firstPost.setProperties({
+            raw: response.post.raw,
+            cooked: response.post.cooked,
+          });
+        } else {
+          try {
+            this.firstPost.raw = response.post.raw;
+            this.firstPost.cooked = response.post.cooked;
+          } catch {
+            // Ignored, might be a frozen object in some Ember strict modes
+          }
+        }
+      }
+
+      // Use the standard topic update endpoint for tags.
+      // Discourse expects an array of tags (or an empty array `[]` to clear them).
+      await ajax(`/t/${topicId}.json`, {
         type: "PUT",
-        data: { tags: tagsToSave },
+        data: { tags: this.selectedTags || [] },
       });
+
+      if (response?.post?.image_url && this.topic) {
+        if (typeof this.topic.setProperties === "function") {
+          this.topic.setProperties({
+            image_url: response.post.image_url,
+          });
+        }
+      }
+
       this.fantribeFeedState?.updateTopic?.(topicId, {
         title: this.postTitle,
         tags: this.selectedTags,
+        image_url: response?.post?.image_url,
       });
       this.fantribeCreate.closeCreatePostModal();
       this.router.refresh();
@@ -468,6 +583,101 @@ export default class FantribePostEditPage extends Component {
                     {{/if}}
                   </div>
                 </div>
+
+                {{! Add Media Section }}
+                <div class="ft-post-edit__add-media-row">
+                  <span class="ft-post-edit__add-media-label">Add media:</span>
+                  <div class="ft-post-edit__media-actions">
+                    <button
+                      type="button"
+                      class="ft-post-edit__media-btn"
+                      disabled={{this.isUploading}}
+                      {{on "click" (fn this.triggerFileInput "image")}}
+                    >
+                      {{ftIcon "image"}}
+                      <span>Photo</span>
+                    </button>
+                    <button
+                      type="button"
+                      class="ft-post-edit__media-btn"
+                      disabled={{this.isUploading}}
+                      {{on "click" (fn this.triggerFileInput "video")}}
+                    >
+                      {{ftIcon "video"}}
+                      <span>Video</span>
+                    </button>
+                    <button
+                      type="button"
+                      class="ft-post-edit__media-btn"
+                      disabled={{this.isUploading}}
+                      {{on "click" (fn this.triggerFileInput "audio")}}
+                    >
+                      {{ftIcon "music"}}
+                      <span>Audio</span>
+                    </button>
+                  </div>
+                </div>
+
+                {{! Hidden file inputs }}
+                <input
+                  type="file"
+                  class="ft-post-edit__file-input ft-post-edit__file-input--image"
+                  accept="image/*"
+                  multiple
+                  style="display: none;"
+                  {{on "change" (fn this.handleFileSelected "image")}}
+                />
+                <input
+                  type="file"
+                  class="ft-post-edit__file-input ft-post-edit__file-input--video"
+                  accept="video/*"
+                  multiple
+                  style="display: none;"
+                  {{on "change" (fn this.handleFileSelected "video")}}
+                />
+                <input
+                  type="file"
+                  class="ft-post-edit__file-input ft-post-edit__file-input--audio"
+                  accept="audio/*"
+                  multiple
+                  style="display: none;"
+                  {{on "change" (fn this.handleFileSelected "audio")}}
+                />
+
+                {{! Upload progress }}
+                {{#if this.isUploading}}
+                  <div class="ft-post-edit__upload-status">Uploading...</div>
+                {{/if}}
+
+                {{! Non-image uploaded media previews (video/audio) }}
+                {{#if this.hasNonImageUploadedMedia}}
+                  <div class="ft-post-edit__uploaded-media">
+                    {{#each this.nonImageUploadedMedia as |media|}}
+                      <div class="ft-post-edit__uploaded-item">
+                        <span class="ft-post-edit__uploaded-item-icon">
+                          {{#if (eq media.type "video")}}
+                            {{ftIcon "video"}}
+                          {{else}}
+                            {{ftIcon "music"}}
+                          {{/if}}
+                        </span>
+                        <span
+                          class="ft-post-edit__uploaded-item-name"
+                        >{{media.name}}</span>
+                        <button
+                          type="button"
+                          class="ft-post-edit__uploaded-item-remove"
+                          {{on
+                            "click"
+                            (fn this.removeMediaByMarkdown media.uploadMarkdown)
+                          }}
+                        >
+                          {{ftIcon "x"}}
+                        </button>
+                      </div>
+                    {{/each}}
+                  </div>
+                {{/if}}
 
               </div>
             </div>

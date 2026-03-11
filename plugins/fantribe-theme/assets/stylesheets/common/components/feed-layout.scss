@@ -18,6 +18,15 @@ body.fantribe-theme:not(.admin-interface) {
       display: none;
     }
 
+    // Mobile: inset entire feed from both sides (parent may have padding-right: 0)
+    @media (width <= 767px) {
+      margin-left: 16px;
+      margin-right: 16px;
+      width: calc(100% - 32px);
+      max-width: none;
+      box-sizing: border-box;
+    }
+
     // Main feed content area — scrollable
     &__content {
       flex: 1;
@@ -33,9 +42,11 @@ body.fantribe-theme:not(.admin-interface) {
 
       // Container with max-width and responsive padding (Spec §3.2)
       max-width: 1280px; // max-w-7xl
-      margin-left: auto;
-      margin-right: auto;
       padding: 12px 32px;
+
+      @media (width <= 767px) {
+        padding: 12px 0; // horizontal spacing from parent margin
+      }
 
       @media (width >= 768px) {
         padding: 0 16px 24px 0; // py-6 px-8 (desktop)

@@ -1,6 +1,6 @@
 // ============================================================
 // FanTribe Search Modal
-// Matches Figma nodes: 498:26594 (empty), 498:27604 (results)
+// Matches Figma nodes: 498:26594 (empty), 498:27604 (results), 939-11433 (Mobile Search Overlay)
 // ============================================================
 body.fantribe-theme:not(.admin-interface) {
   .ft-search-modal {
@@ -10,6 +10,7 @@ body.fantribe-theme:not(.admin-interface) {
     max-height: 90vh;
     display: flex;
     flex-direction: column;
+    background: #fff;
 
     // ── Header ───────────────────────────────────────────────
     &__header {
@@ -21,6 +22,7 @@ body.fantribe-theme:not(.admin-interface) {
       border-bottom: 0.5px solid #ff1744;
       border-radius: 20px 20px 0 0;
       flex-shrink: 0;
+      height: 64px;
     }
 
     &__title {
@@ -54,6 +56,11 @@ body.fantribe-theme:not(.admin-interface) {
         width: 20px;
         height: 20px;
       }
+    }
+
+    // ── Mobile Header ─────────────────────────────────────────
+    &__mobile-header {
+      display: none; // Hidden on desktop
     }
 
     // ── Search input ─────────────────────────────────────────
@@ -211,13 +218,73 @@ body.fantribe-theme:not(.admin-interface) {
       animation: ft-spin 0.6s linear infinite;
     }
 
+    // ── Trending Tribes Section ───────────────────────────────
+    &__trending {
+      display: flex;
+      flex-direction: column;
+      padding: 24px 16px 16px;
+    }
+
+    &__trending-title {
+      font-size: 14px;
+      font-weight: 700;
+      line-height: 21px;
+      color: #ff1744;
+      margin-bottom: 12px;
+    }
+
+    &__trending-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      padding: 12px 0;
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid #f0f0f2;
+      cursor: pointer;
+      text-align: left;
+
+      &:hover {
+        background: #fafafa;
+      }
+    }
+
+    &__trending-tag {
+      font-size: 14px;
+      font-weight: 500;
+      color: #1a1a1a;
+    }
+
+    &__trending-arrow {
+      color: #ff1744;
+      display: flex;
+      align-items: center;
+    }
+
+    &__view-all {
+      font-size: 12px;
+      font-weight: 500;
+      color: #ff1744;
+      background: none;
+      border: none;
+      padding: 16px 0;
+      margin-top: 4px;
+      text-align: left;
+      cursor: pointer;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+
     // ── Result item ──────────────────────────────────────────
     &__result-item {
       display: flex;
       align-items: flex-start;
-      gap: 10px;
+      gap: 12px;
       width: 100%;
-      padding: 16px 24px;
+      padding: 16px;
       border: none;
       background: transparent;
       cursor: pointer;
@@ -233,11 +300,12 @@ body.fantribe-theme:not(.admin-interface) {
     // ── Colored type icon box ─────────────────────────────────
     &__result-icon {
       display: flex;
-      align-items: flex-end;
+      align-items: center;
       justify-content: center;
       flex-shrink: 0;
-      padding: 7px;
-      border-radius: 2px;
+      width: 32px;
+      height: 32px;
+      border-radius: 6px;
 
       svg,
       .ft-icon {
@@ -280,15 +348,16 @@ body.fantribe-theme:not(.admin-interface) {
     &__result-body {
       display: flex;
       flex-direction: column;
-      gap: 4px;
+      gap: 2px;
       min-width: 0;
       flex: 1;
+      padding-top: 1px;
     }
 
     &__result-title {
-      font-size: 12px;
+      font-size: 14px;
       font-weight: 500;
-      line-height: 16px;
+      line-height: 20px;
       color: #111827;
       white-space: nowrap;
       overflow: hidden;
@@ -306,15 +375,15 @@ body.fantribe-theme:not(.admin-interface) {
       display: flex;
       align-items: center;
       gap: 4px;
-      font-size: 10px;
+      font-size: 12px;
       font-weight: 400;
-      line-height: 15px;
+      line-height: 16px;
       color: #6b7280;
 
       svg,
       .ft-icon {
-        width: 10px;
-        height: 10px;
+        width: 12px;
+        height: 12px;
         flex-shrink: 0;
         color: #9ca3af;
       }
@@ -326,6 +395,112 @@ body.fantribe-theme:not(.admin-interface) {
       border-radius: 50%;
       object-fit: cover;
       flex-shrink: 0;
+    }
+  }
+}
+
+// ============================================================
+// Mobile Overrides (Full Screen Overlay)
+// Matches Figma node: 939-11433
+// ============================================================
+@media (width <= 767px) {
+  body.fantribe-theme:not(.admin-interface) {
+    .ft-search-modal {
+      width: 100%;
+      height: 100vh;
+      max-height: 100dvh;
+      border-radius: 0;
+      margin: 0;
+      background: #fff;
+
+      // Hide desktop elements
+      &__header--desktop,
+      &__search-wrap--desktop {
+        display: none;
+      }
+
+      // Mobile customized header
+      &__mobile-header {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 12px 16px;
+        height: auto;
+        min-height: 46px;
+        background: #fff;
+        border-bottom: 0.5px solid transparent; // Figma doesn't show a strong border here
+        flex-shrink: 0;
+      }
+
+      &__back-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 24px;
+        height: 24px;
+        padding: 0;
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        color: #1a1a1a;
+        flex-shrink: 0;
+      }
+
+      &__filter-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 24px;
+        height: 24px;
+        padding: 0;
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        color: #ff1744;
+        flex-shrink: 0;
+      }
+
+      &__search-bar {
+        height: 36px;
+        padding: 0 12px;
+        background: #f0f0f2;
+        border: 1px solid transparent;
+        box-shadow: none;
+
+        &:focus-within {
+          background: #fff;
+          border-color: #ff1744;
+          box-shadow: 0 0 0 1px rgb(255 23 68 / 12%);
+        }
+
+        .ft-icon {
+          color: #666;
+        }
+      }
+
+      // Mobile customized tabs
+      &__tabs {
+        padding: 0;
+        margin-top: 0;
+        justify-content: space-between;
+      }
+
+      &__tab {
+        flex: 1;
+        justify-content: center;
+        padding: 14px 0;
+
+        &::after {
+          height: 1.5px; // Thicker border on mobile to match figma
+        }
+
+        &--active {
+          &::after {
+            background: #1a1a1a;
+            height: 2px;
+          }
+        }
+      }
     }
   }
 }

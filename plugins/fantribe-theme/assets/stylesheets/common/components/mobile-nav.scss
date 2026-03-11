@@ -8,81 +8,74 @@
   left: 0;
   right: 0;
   z-index: var(--ft-z-sticky);
-  height: 64px;
-  background: var(--ft-glass-card-bg);
-  backdrop-filter: blur(var(--ft-glass-card-blur)) saturate(180%);
-  border-top: var(--ft-glass-border-subtle);
-  padding-bottom: env(safe-area-inset-bottom, 0);
+  min-height: 46px;
+  background: #fff;
+  border-top: 0.5px solid #eaeaea;
+  box-shadow: 0 -1px 50px rgb(0, 0, 0, 0.04);
+  padding: 7.5px 0 12px 0;
+  padding-bottom: calc(12px + env(safe-area-inset-bottom, 0));
 
-  @media (width <= 767px) {
+  @media (width <= 1023px) {
     display: flex;
     align-items: center;
-    justify-content: space-around;
+    justify-content: space-between;
   }
 
   &__item {
+    flex: 1 0 0;
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 2px;
-    flex: 1;
-    height: 100%;
-    padding: var(--ft-space-1);
-    background: transparent;
+    padding: 8.5px 20px;
+    background: #fff;
     border: none;
-    color: var(--ft-gray-500);
-    font-size: 10px;
-    font-weight: var(--ft-font-weight-medium);
+    color: #1a1916;
     cursor: pointer;
     transition: color var(--ft-transition-fast);
 
+    .ft-icon,
     .d-icon {
-      font-size: 22px;
-    }
-
-    span {
-      margin-top: 2px;
+      width: 24px;
+      height: 24px;
+      stroke-width: 1.5;
     }
 
     &:hover,
     &.active {
-      color: var(--ft-primary);
+      color: #ff1744;
     }
+  }
 
-    // Special create button styling
-    &--create {
-      flex: 0 0 56px;
-      height: 44px;
-      width: 56px;
-      margin: 0 var(--ft-space-2);
-      background: var(--ft-primary);
-      color: var(--ft-white);
-      border-radius: var(--ft-radius-lg);
-      box-shadow: 0 4px 12px var(--ft-primary-medium);
-      transition: all var(--ft-transition-fast);
+  &__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
+    height: 26px;
+  }
 
-      .d-icon {
-        font-size: 24px;
-      }
+  &__avatar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 9999px;
+    overflow: hidden;
 
-      &:hover {
-        background: var(--ft-primary-hover);
-        transform: scale(1.05);
-        color: var(--ft-white);
-      }
-
-      &:active {
-        transform: scale(0.95);
-      }
+    .avatar {
+      width: 26px;
+      height: 26px;
+      border-radius: 9999px;
+      object-fit: cover;
     }
   }
 }
 
-// Add padding to body on mobile to account for bottom nav
-@media (width <= 767px) {
+// Add padding to body to account for bottom nav (visible below 1024px)
+@media (width <= 1023px) {
   body.fantribe-theme {
-    padding-bottom: calc(64px + env(safe-area-inset-bottom, 0));
+    padding-bottom: calc(56px + env(safe-area-inset-bottom, 0));
   }
 
   // Hide Discourse's native FAB when our mobile nav is visible

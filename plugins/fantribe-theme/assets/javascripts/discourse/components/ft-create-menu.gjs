@@ -1,9 +1,8 @@
 import Component from "@glimmer/component";
-import { fn, hash } from "@ember/helper";
+import { fn } from "@ember/helper";
 import { on } from "@ember/modifier";
 import { action } from "@ember/object";
 import { service } from "@ember/service";
-import closeOnClickOutside from "discourse/modifiers/close-on-click-outside";
 import { i18n } from "discourse-i18n";
 import ftIcon from "../helpers/ft-icon";
 
@@ -131,7 +130,11 @@ export default class FtCreateMenu extends Component {
   }
 
   @action
-  handleItemClick(item) {
+  handleItemClick(item, event) {
+    if (event) {
+      event.stopPropagation();
+      event.preventDefault();
+    }
     const handler = this[item.action];
     if (typeof handler === "function") {
       handler.call(this);
@@ -142,39 +145,46 @@ export default class FtCreateMenu extends Component {
     <div
       class="ft-create-menu
         {{if this.isSidebarVariant 'ft-create-menu--sidebar'}}"
-      {{closeOnClickOutside
-        this.closeCallback
-        (hash targetSelector=this.clickOutsideTargetSelector)
-      }}
       ...attributes
     >
       <div class="ft-create-menu__items">
-        {{#each this.menuItems as |item|}}
+        <button
+          type="button"
+          class="ft-create-menu__item"
+          {{on "click" this.handleCreatePost}}
+        >
+          <span class="ft-create-menu__icon ft-create-menu__icon--blue">
+            {{ftIcon "edit3"}}
+          </span>
+          <div class="ft-create-menu__item-content">
+            <span class="ft-create-menu__item-label">
+              {{i18n "fantribe.create_menu.create_post"}}
+            </span>
+            <span class="ft-create-menu__item-desc">
+              {{i18n "fantribe.create_menu.create_post_desc"}}
+            </span>
+          </div>
+        </button>
+
+        {{#if this.currentUser.admin}}
           <button
             type="button"
             class="ft-create-menu__item"
-            {{on "click" (this.fnHelper this.handleItemClick item)}}
+            {{on "click" this.handleCreateTribe}}
           >
-            <span
-              class="ft-create-menu__icon ft-create-menu__icon--{{item.iconMod}}"
-            >
-              {{ftIcon item.icon}}
+            <span class="ft-create-menu__icon ft-create-menu__icon--darkRed">
+              {{ftIcon "compass"}}
             </span>
             <div class="ft-create-menu__item-content">
-              <span class="ft-create-menu__item-label">{{i18n
-                  item.labelKey
-                }}</span>
-              <span class="ft-create-menu__item-desc">{{i18n
-                  item.descKey
-                }}</span>
+              <span class="ft-create-menu__item-label">
+                {{i18n "fantribe.create_menu.create_tribe"}}
+              </span>
+              <span class="ft-create-menu__item-desc">
+                {{i18n "fantribe.create_menu.create_tribe_desc"}}
+              </span>
             </div>
-            {{#if item.suggested}}
-              <span class="ft-create-menu__badge">{{i18n
-                  "fantribe.create_menu.suggested"
-                }}</span>
-            {{/if}}
           </button>
-        {{/each}}
+        {{/if}}
       </div>
     </div>
   </template>
