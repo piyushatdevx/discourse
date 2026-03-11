@@ -198,6 +198,8 @@ export const DEFAULT_LIST = [
   "div.excerpt",
   "div.video-container",
   "div.video-placeholder-container",
+  "div.audio-placeholder-container",
+  "div.audio-placeholder-container[data-audio-src]",
   "div.onebox-placeholder-container",
   "span.placeholder-icon video",
   "span.hashtag",

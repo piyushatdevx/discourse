@@ -13,7 +13,7 @@ import { ajax } from "discourse/lib/ajax";
 import { extractError, popupAjaxError } from "discourse/lib/ajax-error";
 import { not, or } from "discourse/truth-helpers";
 import ftIcon from "../helpers/ft-icon";
-import FantribeMediaVideo from "./fantribe-media-video";
+import FantribeMediaCarousel from "./fantribe-media-carousel";
 import FantribePostMenu from "./fantribe-post-menu";
 import FantribePostMoreTopics from "./fantribe-post-more-topics";
 
@@ -34,7 +34,6 @@ export default class FantribePostFullPage extends Component {
   @service site;
   @service toasts;
 
-  @tracked currentImageIndex = 0;
   @tracked menuOpen = false;
   @tracked commentText = "";
   @tracked isSubmittingComment = false;
@@ -53,7 +52,6 @@ export default class FantribePostFullPage extends Component {
     this._bookmarkId = null;
     this._viewCount = null;
     this.reactionsLoaded = false;
-    this.currentImageIndex = 0;
     this.commentText = "";
     this.loadReactions();
     this.loadComments();
@@ -111,43 +109,72 @@ export default class FantribePostFullPage extends Component {
     return (this.site.categories || []).find((c) => c.id === catId) || null;
   }
 
-  get images() {
+  get mediaItems() {
     const cooked = this.firstPost?.cooked;
-    if (cooked) {
-      const parser = new DOMParser();
-      const doc = parser.parseFromString(cooked, "text/html");
-
-      // Prefer lightbox anchor hrefs (full-size images)
-      const lightboxLinks = doc.querySelectorAll("a.lightbox");
-      if (lightboxLinks.length > 0) {
-        return Array.from(lightboxLinks)
-          .map((a) => ({ url: a.getAttribute("href") }))
-          .filter((img) => img.url && !img.url.includes("emoji"));
-      }
-
-      // Fallback: non-emoji, non-avatar img tags
-      const imgs = doc.querySelectorAll(
-        "img[src]:not(.emoji):not(.avatar):not(.site-icon)"
-      );
-      const urls = Array.from(imgs)
-        .map((img) => ({ url: img.getAttribute("src") }))
-        .filter((img) => img.url);
-      if (urls.length > 0) {
-        return urls;
-      }
+    // eslint-disable-next-line no-console
+    console.log("[Audio Debug] Cooked HTML:", cooked);
+    if (!cooked) {
+      return [];
     }
 
-    // Final fallback to topic image_url
-    const url = this.topic?.image_url;
-    return url ? [{ url }] : [];
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(cooked, "text/html");
+    const items = [];
+
+    // Videos
+    doc
+      .querySelectorAll("div.video-placeholder-container[data-video-src]")
+      .forEach((container) => {
+        items.push({
+          type: "video",
+          url: container.getAttribute("data-video-src"),
+          thumbnail_url: container.getAttribute("data-thumbnail-src"),
+        });
+      });
+
+    // Audio
+    doc
+      .querySelectorAll("div.audio-placeholder-container[data-audio-src]")
+      .forEach((container) => {
+        items.push({
+          type: "audio",
+          url: container.getAttribute("data-audio-src"),
+        });
+      });
+
+    // Images (prefer lightbox anchors for full-size)
+    const lightboxLinks = doc.querySelectorAll("a.lightbox");
+    if (lightboxLinks.length > 0) {
+      lightboxLinks.forEach((a) => {
+        const url = a.getAttribute("href");
+        if (url && !url.includes("emoji")) {
+          items.push({ type: "image", url });
+        }
+      });
+    } else {
+      // Fallback: non-emoji, non-avatar img tags
+      doc
+        .querySelectorAll("img[src]:not(.emoji):not(.avatar):not(.site-icon)")
+        .forEach((img) => {
+          const url = img.getAttribute("src");
+          if (url) {
+            items.push({ type: "image", url });
+          }
+        });
+    }
+
+    // Final fallback to topic image_url if no media found
+    if (items.length === 0 && this.topic?.image_url) {
+      items.push({ type: "image", url: this.topic.image_url });
+    }
+
+    // eslint-disable-next-line no-console
+    console.log("[Audio Debug] Extracted media items:", items);
+    return items;
   }
 
-  get hasImages() {
-    return this.images.length > 0;
-  }
-
-  get hasMultipleImages() {
-    return this.images.length > 1;
+  get hasMedia() {
+    return this.mediaItems.length > 0;
   }
 
   get firstOneboxHtml() {
@@ -167,45 +194,6 @@ export default class FantribePostFullPage extends Component {
 
   get hasOnebox() {
     return !!this.firstOneboxHtml;
-  }
-
-  get firstVideo() {
-    const cooked = this.firstPost?.cooked;
-    if (!cooked) {
-      return null;
-    }
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(cooked, "text/html");
-    const container = doc.querySelector(
-      "div.video-placeholder-container[data-video-src]"
-    );
-    if (!container) {
-      return null;
-    }
-    return {
-      video_url: container.getAttribute("data-video-src"),
-      thumbnail_url: container.getAttribute("data-thumbnail-src"),
-    };
-  }
-
-  get hasVideo() {
-    return !!this.firstVideo?.video_url;
-  }
-
-  get currentImage() {
-    return this.images[this.currentImageIndex] || null;
-  }
-
-  get imageIndicator() {
-    return `${this.currentImageIndex + 1}/${this.images.length}`;
-  }
-
-  get hasPrevImage() {
-    return this.currentImageIndex > 0;
-  }
-
-  get hasNextImage() {
-    return this.currentImageIndex < this.images.length - 1;
   }
 
   get reactions() {
@@ -255,6 +243,9 @@ export default class FantribePostFullPage extends Component {
     doc.querySelectorAll(ONEBOX_SELECTOR).forEach((el) => el.remove());
     doc
       .querySelectorAll("div.video-placeholder-container")
+      .forEach((el) => el.remove());
+    doc
+      .querySelectorAll("div.audio-placeholder-container")
       .forEach((el) => el.remove());
     doc
       .querySelectorAll("img:not(.emoji)")
@@ -466,20 +457,6 @@ export default class FantribePostFullPage extends Component {
   }
 
   @action
-  prevImage() {
-    if (this.currentImageIndex > 0) {
-      this.currentImageIndex--;
-    }
-  }
-
-  @action
-  nextImage() {
-    if (this.currentImageIndex < this.images.length - 1) {
-      this.currentImageIndex++;
-    }
-  }
-
-  @action
   toggleMenu(event) {
     event.stopPropagation();
     this.menuOpen = !this.menuOpen;
@@ -686,7 +663,7 @@ export default class FantribePostFullPage extends Component {
     {{! template-lint-disable no-invalid-interactive }}
     <div
       class="ft-full-post-layout
-        {{unless this.hasImages 'ft-full-post-layout--no-image'}}"
+        {{unless this.hasMedia 'ft-full-post-layout--no-image'}}"
       {{this.watchTopic this.topicId}}
     >
       <div class="ft-full-post-layout__content">
@@ -769,7 +746,7 @@ export default class FantribePostFullPage extends Component {
             {{! ===== CONTENT ===== }}
             <div
               class="ft-full-post__content
-                {{unless this.hasImages 'ft-full-post__content--no-image'}}"
+                {{unless this.hasMedia 'ft-full-post__content--no-image'}}"
             >
 
               {{! Title + Action Icons }}
@@ -826,46 +803,11 @@ export default class FantribePostFullPage extends Component {
                 {{! LEFT COLUMN: Image + Gear + Reactions + Stats (or gear + reactions only when no image) }}
                 <div class="ft-full-post__left-col">
                   <div class="ft-full-post__left-top">
-                    {{#if this.hasVideo}}
-                      <FantribeMediaVideo
-                        @videoUrl={{this.firstVideo.video_url}}
-                        @thumbnailUrl={{this.firstVideo.thumbnail_url}}
-                      />
+                    {{#if this.hasMedia}}
+                      <FantribeMediaCarousel @mediaItems={{this.mediaItems}} />
                     {{else if this.hasOnebox}}
                       <div class="ft-full-post__onebox">
                         <DecoratedHtml @html={{this.firstOneboxHtml}} />
-                      </div>
-                    {{else if this.hasImages}}
-                      <div class="ft-full-post__carousel">
-                        <img
-                          src={{this.currentImage.url}}
-                          alt="Post image"
-                          class="ft-full-post__carousel-img"
-                          loading="lazy"
-                        />
-                        {{#if this.hasMultipleImages}}
-                          <div class="ft-full-post__img-indicator">
-                            {{this.imageIndicator}}
-                          </div>
-                          {{#if this.hasPrevImage}}
-                            <button
-                              type="button"
-                              class="ft-full-post__carousel-nav ft-full-post__carousel-nav--prev"
-                              {{on "click" this.prevImage}}
-                            >
-                              {{ftIcon "chevron-left"}}
-                            </button>
-                          {{/if}}
-                          {{#if this.hasNextImage}}
-                            <button
-                              type="button"
-                              class="ft-full-post__carousel-nav ft-full-post__carousel-nav--next"
-                              {{on "click" this.nextImage}}
-                            >
-                              {{ftIcon "chevron-right"}}
-                            </button>
-                          {{/if}}
-                        {{/if}}
                       </div>
                     {{/if}}
 
@@ -924,7 +866,7 @@ export default class FantribePostFullPage extends Component {
                 </div>
 
                 {{! RIGHT COLUMN: Comments (hidden when no media; comments move to no-image block below) }}
-                {{#if (or this.hasVideo this.hasImages this.hasOnebox)}}
+                {{#if (or this.hasMedia this.hasOnebox)}}
                   <div class="ft-full-post__right-col">
                     <div class="ft-full-post__comments-inner">
                       <span class="ft-full-post__comments-label">Comments</span>
@@ -998,7 +940,7 @@ export default class FantribePostFullPage extends Component {
               </div>
 
               {{! NO MEDIA: comments section full width below (Figma node 785-3194) }}
-              {{#unless (or this.hasVideo this.hasImages this.hasOnebox)}}
+              {{#unless (or this.hasMedia this.hasOnebox)}}
                 <div
                   class="ft-full-post__comments-block ft-full-post__comments-block--no-image"
                 >

@@ -210,6 +210,10 @@ export default class FtCreatePostModal extends Component {
         });
 
         const uploadMarkdown = getUploadMarkdown(upload);
+        // eslint-disable-next-line no-console
+        console.log("[Audio Debug] Upload response:", upload);
+        // eslint-disable-next-line no-console
+        console.log("[Audio Debug] Generated markdown:", uploadMarkdown);
         this.uploadedMedia = [
           ...this.uploadedMedia,
           { type, name: file.name, uploadMarkdown },
@@ -285,6 +289,8 @@ export default class FtCreatePostModal extends Component {
       const mediaParts = this.uploadedMedia.map((m) => m.uploadMarkdown);
       const rawParts = [...mediaParts, this.postText];
       const raw = rawParts.join("\n\n");
+      // eslint-disable-next-line no-console
+      console.log("[Audio Debug] Submitting raw markdown:", raw);
 
       if (this.isEditMode) {
         const post = this.fantribeCreate.editingPost;

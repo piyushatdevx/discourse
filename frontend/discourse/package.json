@@ -74,7 +74,8 @@
     "prosemirror-state": "^1.4.4",
     "prosemirror-transform": "^1.10.5",
     "prosemirror-view": "^1.41.4",
-    "rrule": "^2.8.1"
+    "rrule": "^2.8.1",
+    "wavesurfer.js": "^7.12.1"
   },
   "devDependencies": {
     "@babel/core": "^7.28.5",

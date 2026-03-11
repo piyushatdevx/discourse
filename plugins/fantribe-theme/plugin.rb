@@ -8,6 +8,14 @@
 
 enabled_site_setting :fantribe_theme_enabled
 
+# Load WaveSurfer.js from CDN for audio waveform visualization
+register_html_builder("server:before-head-close") do |controller|
+  "<script src='https://unpkg.com/wavesurfer.js@7/dist/wavesurfer.min.js' nonce='#{controller.helpers.csp_nonce_placeholder}'></script>"
+end
+
+# Allow unpkg CDN in Content Security Policy
+extend_content_security_policy(script_src: %w[https://unpkg.com])
+
 # Register SVG icons that remain as Discourse d-icons (no ft-icon equivalent)
 register_svg_icon "user"
 register_svg_icon "arrow-right-to-bracket"
@@ -312,6 +320,19 @@ after_initialize do
     SiteSetting.video_thumbnails_enabled = true unless SiteSetting.video_thumbnails_enabled
   end
 
+  # Allow audio uploads — FanTribe creators need to share audio content.
+  # Add common audio formats to authorized_extensions.
+  if SiteSetting.fantribe_theme_enabled
+    audio_extensions = %w[mp3 aac wav m4a ogg oga opus flac]
+    current_extensions = SiteSetting.authorized_extensions.to_s.split("|").map(&:strip)
+
+    missing_extensions = audio_extensions - current_extensions
+    if missing_extensions.any?
+      new_extensions = (current_extensions + missing_extensions).uniq.join("|")
+      SiteSetting.authorized_extensions = new_extensions
+    end
+  end
+
   # Remove the reaction undo time window so users can change/remove reactions
   # at any time. Discourse core enforces post_undo_action_window_mins (default
   # 10 min) on both custom emoji reactions (via ReactionUser#can_undo?) and
@@ -494,6 +515,46 @@ after_initialize do
 
   add_to_serializer(:topic_list_item, :include_first_video?) { SiteSetting.fantribe_theme_enabled }
 
+  # Add media_items array for unified carousel (videos, audio, images)
+  add_to_serializer(:topic_list_item, :media_items) do
+    next [] unless SiteSetting.fantribe_theme_enabled
+    cooked = object.first_post&.cooked
+    next [] if cooked.blank?
+
+    items = []
+    doc = Nokogiri::HTML5.fragment(cooked)
+
+    # Videos
+    doc
+      .css("div.video-placeholder-container[data-video-src]")
+      .each do |container|
+        items << {
+          type: "video",
+          url: container["data-video-src"],
+          thumbnail_url: container["data-thumbnail-src"],
+        }
+      end
+
+    # Audio
+    doc
+      .css("div.audio-placeholder-container[data-audio-src]")
+      .each { |container| items << { type: "audio", url: container["data-audio-src"] } }
+
+    # Images (from lightbox anchors or uploads)
+    if object.first_post
+      object
+        .first_post
+        .uploads
+        .select { |u| FileHelper.is_supported_image?(u.original_filename) }
+        .reject { |u| u.extension&.downcase == "svg" }
+        .each { |u| items << { type: "image", url: u.url } }
+    end
+
+    items
+  end
+
+  add_to_serializer(:topic_list_item, :include_media_items?) { SiteSetting.fantribe_theme_enabled }
+
   # Mirror image_urls onto search results so tribe page search shows images
   add_to_serializer(:search_topic_list_item, :image_urls) do
     next [] unless SiteSetting.fantribe_theme_enabled
@@ -541,6 +602,48 @@ after_initialize do
   end
 
   add_to_serializer(:search_topic_list_item, :include_first_video?) do
+    SiteSetting.fantribe_theme_enabled
+  end
+
+  # Add media_items array for unified carousel in search results
+  add_to_serializer(:search_topic_list_item, :media_items) do
+    next [] unless SiteSetting.fantribe_theme_enabled
+    cooked = object.first_post&.cooked
+    next [] if cooked.blank?
+
+    items = []
+    doc = Nokogiri::HTML5.fragment(cooked)
+
+    # Videos
+    doc
+      .css("div.video-placeholder-container[data-video-src]")
+      .each do |container|
+        items << {
+          type: "video",
+          url: container["data-video-src"],
+          thumbnail_url: container["data-thumbnail-src"],
+        }
+      end
+
+    # Audio
+    doc
+      .css("div.audio-placeholder-container[data-audio-src]")
+      .each { |container| items << { type: "audio", url: container["data-audio-src"] } }
+
+    # Images (from uploads)
+    if object.first_post
+      object
+        .first_post
+        .uploads
+        .select { |u| FileHelper.is_supported_image?(u.original_filename) }
+        .reject { |u| u.extension&.downcase == "svg" }
+        .each { |u| items << { type: "image", url: u.url } }
+    end
+
+    items
+  end
+
+  add_to_serializer(:search_topic_list_item, :include_media_items?) do
     SiteSetting.fantribe_theme_enabled
   end
 

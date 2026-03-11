@@ -165,10 +165,8 @@ function audioHTML(token) {
   const src = token.attrGet("src");
   const origSrc = token.attrGet("data-orig-src");
   const dataOrigSrcAttr = origSrc !== null ? `data-orig-src="${origSrc}"` : "";
-  return `<audio preload="metadata" controls>
-    <source src="${src}" ${dataOrigSrcAttr}>
-    <a href="${src}">${src}</a>
-  </audio>`;
+  return `<div class="audio-placeholder-container" data-audio-src="${src}" ${dataOrigSrcAttr}>
+  </div>`;
 }
 
 const IMG_SIZE_REGEX =

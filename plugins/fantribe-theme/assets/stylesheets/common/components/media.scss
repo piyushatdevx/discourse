@@ -299,4 +299,201 @@ body.fantribe-theme:not(.admin-interface) {
     min-width: 90px;
     text-align: center;
   }
+
+  // ==========================================
+  // AUDIO PLAYER — Gradient card with waveform
+  // ==========================================
+  .fantribe-media-audio {
+    border-radius: 16px;
+    background: var(--ft-gradient-community);
+    padding: 16px;
+    overflow: hidden;
+    min-height: 130px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .fantribe-media-audio__header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+
+  .fantribe-media-audio__play-btn {
+    flex-shrink: 0;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: rgb(255, 255, 255, 0.2);
+    backdrop-filter: blur(8px);
+    color: white;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 150ms ease;
+
+    &:hover {
+      background: rgb(255, 255, 255, 0.3);
+    }
+
+    svg {
+      margin-left: 2px;
+    }
+  }
+
+  .fantribe-media-audio--playing .fantribe-media-audio__play-btn svg {
+    margin-left: 0;
+  }
+
+  .fantribe-media-audio__info {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .fantribe-media-audio__title {
+    color: white;
+    font-weight: 500;
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .fantribe-media-audio__duration {
+    color: rgb(255, 255, 255, 0.7);
+    font-size: 14px;
+    margin: 0;
+  }
+
+  .fantribe-media-audio__waveform {
+    width: 100%;
+    height: 64px;
+    position: relative;
+  }
+
+  .fantribe-media-audio__waveform-skeleton {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    transform: translateY(-50%);
+    height: 60%;
+    background: linear-gradient(
+      90deg,
+      rgb(255, 255, 255, 0.2) 0%,
+      rgb(255, 255, 255, 0.4) 50%,
+      rgb(255, 255, 255, 0.2) 100%
+    );
+    background-size: 200% 100%;
+    animation: ft-shimmer 1.5s ease-in-out infinite;
+    border-radius: 4px;
+  }
+
+  @keyframes ft-shimmer {
+    0% {
+      background-position: 200% 0;
+    }
+
+    100% {
+      background-position: -200% 0;
+    }
+  }
+
+  // ==========================================
+  // MEDIA CAROUSEL — Unified carousel with overlay navigation
+  // Matches existing full-post carousel design (full-post.scss)
+  // ==========================================
+  .fantribe-media-carousel {
+    position: relative;
+    width: 100%;
+    border-radius: 16px;
+    overflow: hidden;
+
+    &--single {
+      .fantribe-media-carousel__nav,
+      .fantribe-media-carousel__indicator {
+        display: none;
+      }
+    }
+  }
+
+  .fantribe-media-carousel__track {
+    display: flex;
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+
+  .fantribe-media-carousel__slide {
+    flex: 0 0 100%;
+    width: 100%;
+    scroll-snap-align: center;
+    scroll-snap-stop: always;
+  }
+
+  // Overlay indicator badge - matches ft-full-post__img-indicator
+  .fantribe-media-carousel__indicator {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: rgb(0, 0, 0, 0.35);
+    color: white;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 16px;
+    padding: 4px 10px;
+    border-radius: 6px;
+    pointer-events: none;
+    z-index: 10;
+  }
+
+  // Overlay nav buttons - matches ft-full-post__carousel-nav
+  .fantribe-media-carousel__nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgb(0, 0, 0, 0.28);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgb(255, 255, 255, 0.2);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 150ms;
+    z-index: 10;
+
+    &:hover {
+      background: rgb(0, 0, 0, 0.5);
+    }
+
+    .ft-icon {
+      width: 20px;
+      height: 20px;
+      color: #fff;
+      filter: drop-shadow(0 1px 2px rgb(0, 0, 0, 0.5));
+    }
+
+    &--prev {
+      left: 12px;
+    }
+
+    &--next {
+      right: 12px;
+    }
+  }
 }

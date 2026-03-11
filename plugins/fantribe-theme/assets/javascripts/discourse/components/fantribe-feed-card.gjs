@@ -13,9 +13,7 @@ import { not, or } from "discourse/truth-helpers";
 import { i18n } from "discourse-i18n";
 import ftIcon from "../helpers/ft-icon";
 import FantribeEngagementBar from "./fantribe-engagement-bar";
-import FantribeMediaPhotoGrid from "./fantribe-media-photo-grid";
-import FantribeMediaSingleImage from "./fantribe-media-single-image";
-import FantribeMediaVideo from "./fantribe-media-video";
+import FantribeMediaCarousel from "./fantribe-media-carousel";
 import FantribePostMenu from "./fantribe-post-menu";
 
 export default class FantribeFeedCard extends Component {
@@ -86,41 +84,46 @@ export default class FantribeFeedCard extends Component {
     return !!this.topic?.first_onebox_html;
   }
 
-  get images() {
-    const urls = this.topic?.image_urls || [];
-    if (urls.length > 0) {
-      return urls.map((url) => ({ url }));
+  get mediaItems() {
+    // eslint-disable-next-line no-console
+    console.log(
+      "[Audio Debug] Feed card - topic.media_items:",
+      this.topic?.media_items
+    );
+    // Prefer the unified media_items array from serializer
+    if (this.topic?.media_items?.length > 0) {
+      return this.topic.media_items;
     }
-    if (this.imageUrl) {
-      return [{ url: this.imageUrl }];
+
+    // Fallback: build from legacy data
+    const items = [];
+
+    // Video (legacy first_video)
+    if (this.topic?.first_video?.video_url) {
+      items.push({
+        type: "video",
+        url: this.topic.first_video.video_url,
+        thumbnail_url: this.topic.first_video.thumbnail_url,
+      });
     }
-    return [];
+
+    // Images (legacy image_urls or image_url)
+    const imageUrls = this.topic?.image_urls || [];
+    if (imageUrls.length > 0) {
+      imageUrls.forEach((url) => items.push({ type: "image", url }));
+    } else {
+      const singleImageUrl =
+        this.topic?.image_url || this.topic?.thumbnails?.[0]?.url;
+      if (singleImageUrl) {
+        items.push({ type: "image", url: singleImageUrl });
+      }
+    }
+
+    return items;
   }
 
-  get hasImages() {
-    return this.images.length > 0;
-  }
-
-  get hasMultipleImages() {
-    return this.images.length > 1;
-  }
-
-  // URL for the single-image case. Derives from the already-resolved `images`
-  // array so it covers image_urls, topic.image_url, and thumbnails uniformly.
-  get singleImageUrl() {
-    return this.images[0]?.url || null;
-  }
-
-  get imageUrl() {
-    return this.topic?.image_url || this.topic?.thumbnails?.[0]?.url;
-  }
-
-  get firstVideo() {
-    return this.topic?.first_video || null;
-  }
-
-  get hasVideo() {
-    return !!this.firstVideo?.video_url;
+  get hasMedia() {
+    return this.mediaItems.length > 0;
   }
 
   get likeCount() {
@@ -527,26 +530,19 @@ export default class FantribeFeedCard extends Component {
               {{/if}}
             </div>
 
-            {{#if (or this.hasVideo this.hasOnebox this.hasImages)}}
+            {{#if (or this.hasMedia this.hasOnebox)}}
               <div
                 class="fantribe-feed-card__media"
                 {{on "click" this.stopPropagation}}
               >
-                {{#if this.hasVideo}}
-                  <FantribeMediaVideo
-                    @videoUrl={{this.firstVideo.video_url}}
-                    @thumbnailUrl={{this.firstVideo.thumbnail_url}}
-                  />
+                {{#if this.hasMedia}}
+                  <FantribeMediaCarousel @mediaItems={{this.mediaItems}} />
                 {{else if this.hasOnebox}}
                   <div
                     class="fantribe-feed-card__onebox fantribe-feed-card__onebox--in-media"
                   >
                     <DecoratedHtml @html={{this.firstOneboxHtml}} />
                   </div>
-                {{else if this.hasMultipleImages}}
-                  <FantribeMediaPhotoGrid @images={{this.images}} />
-                {{else}}
-                  <FantribeMediaSingleImage @imageUrl={{this.singleImageUrl}} />
                 {{/if}}
               </div>
             {{/if}}
