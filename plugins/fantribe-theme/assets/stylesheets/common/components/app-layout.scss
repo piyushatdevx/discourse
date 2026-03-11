@@ -469,6 +469,51 @@ body.fantribe-theme:not(.admin-interface) {
   }
 }
 
+// Full-post page on mobile: release ALL height/overflow constraints so the page
+// itself scrolls rather than an inner 427px box. Scoped to .ft-full-post-layout
+// presence so other topic pages are unaffected.
+@media (width <= 767px) {
+  body.fantribe-theme:not(.admin-interface):has(.ft-full-post-layout) {
+    // Discourse JS sets height and overflow-y:auto on these via inline styles.
+    // We defeat them here AND via the JS MutationObserver in the component.
+    html,
+    body {
+      height: auto !important;
+      overflow-y: auto !important;
+    }
+
+    #main-outlet,
+    #main-outlet .ember-view,
+    #main-outlet .wrap,
+    #main-outlet .row,
+    #main-outlet .container,
+    #main-outlet .container.posts,
+    #main-outlet .posts-wrapper,
+    section#topic,
+    .topic-area {
+      height: auto !important;
+      max-height: none !important;
+      overflow: visible !important;
+      overflow-y: visible !important;
+      overflow-x: visible !important;
+    }
+
+    // The container.posts in app-layout.scss has margin/padding that adds up.
+    // Remove horizontal margins so ft-full-post can go full-bleed.
+    #main-outlet .container.posts {
+      margin-left: 0 !important;
+      margin-right: 0 !important;
+      padding-left: 0 !important;
+      padding-right: 0 !important;
+      width: 100% !important;
+      max-width: 100% !important;
+      background: transparent !important;
+      border: none !important;
+      box-shadow: none !important;
+    }
+  }
+}
+
 // Chat full-page: ensure proper height with fantribe's fixed header
 body.fantribe-theme.has-full-page-chat:not(.admin-interface) {
   .full-page-chat {

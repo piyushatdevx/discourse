@@ -2023,3 +2023,198 @@ body.fantribe-theme:not(.admin-interface) {
     }
   }
 }
+
+// ============================================================================
+// MOBILE OVERRIDES — max-width: 768px
+//
+// Transforms the fixed two-column desktop card into a full-width,
+// single-column, social-feed–style layout on phones/narrow viewports.
+// The desktop layout is completely unchanged (all rules are scoped inside
+// the media query).
+// ============================================================================
+@media (width <= 768px) {
+  // ---------------------------------------------------------------------------
+  // ROOT FIX: Discourse's native .topic-area and its parent containers
+  // (.row, .container.posts) all have overflow-y:auto + height:427px on mobile,
+  // trapping content in an inner scroll box instead of letting the page scroll.
+  // ---------------------------------------------------------------------------
+  body.fantribe-theme:not(.admin-interface):has(.ft-full-post-layout) {
+    section#topic.topic-area,
+    .topic-area,
+    #main-outlet > .row,
+    #main-outlet .container.posts,
+    #main-outlet .posts-wrapper {
+      overflow: visible !important;
+      overflow-y: visible !important;
+      height: auto !important;
+      max-height: none !important;
+      min-height: 0 !important;
+    }
+  }
+
+  body.fantribe-theme:not(.admin-interface) {
+    // -------------------------------------------------------------------------
+    // 1. Reset the fixed-width layout shell
+    // -------------------------------------------------------------------------
+    .ft-full-post-layout {
+      flex-direction: column;
+
+      // KEY FIX: desktop sets height:900px + overflow:hidden here — release both
+      &__content {
+        width: 100%;
+        height: auto;
+        overflow: visible;
+        padding-bottom: 0;
+      }
+
+      &__sidebar {
+        display: none;
+      }
+    }
+
+    // -------------------------------------------------------------------------
+    // 2. Full-bleed card — no rounded corners, no shadow on mobile
+    // -------------------------------------------------------------------------
+    .ft-full-post {
+      padding: 0;
+
+      &__card {
+        width: 100%;
+        border-radius: 0;
+        box-shadow: none;
+        height: auto;
+        overflow: visible;
+      }
+
+      // KEY FIX: desktop sets overflow:hidden + flex:1 + min-height:0 here —
+      // we need auto height and visible overflow so the carousel isn't clipped
+      &__content {
+        overflow: visible;
+        flex: 0 0 auto;
+        min-height: 0;
+        padding-bottom: 0;
+        gap: 0;
+      }
+
+      // -----------------------------------------------------------------------
+      // 3. Collapse side-by-side columns into a vertical stack:
+      //    header → title/body → media+reactions (left-col) → comments (right-col)
+      // -----------------------------------------------------------------------
+      &__columns {
+        display: block !important;
+        height: auto !important;
+        overflow: visible !important;
+      }
+
+      // KEY FIX: desktop sets overflow:hidden on left-col — release it
+      &__left-col {
+        display: block !important;
+        height: auto !important;
+        overflow: visible !important;
+        padding-bottom: 0;
+        border-right: none;
+      }
+
+      &__left-top {
+        padding: 0 16px;
+      }
+
+      &__left-bottom {
+        padding: 0 16px;
+        margin-top: 16px;
+      }
+
+      // -----------------------------------------------------------------------
+      // 4. Image carousel — full-width, natural height on mobile
+      //    (overflow:hidden stays — it's needed for the carousel itself)
+      // -----------------------------------------------------------------------
+      &__carousel {
+        height: 280px;
+        margin-bottom: 12px;
+      }
+
+      // -----------------------------------------------------------------------
+      // 5. Right column (comments) — full-width section below media.
+      //    Extra bottom padding makes room for sticky comment input bar.
+      // -----------------------------------------------------------------------
+      &__right-col {
+        display: block !important;
+        height: auto !important;
+        overflow: visible !important;
+        border-left: none;
+        border-top: 1px solid rgb(0, 0, 0, 0.06);
+        padding-bottom: calc(72px + env(safe-area-inset-bottom, 0px));
+        margin-top: 16px;
+      }
+
+      &__comments-inner {
+        overflow: visible;
+        height: auto;
+        padding: 12px 16px 16px;
+      }
+
+      &__comments-list {
+        // Natural flow — page itself scrolls, no inner scroll box
+        overflow: visible;
+        height: auto;
+      }
+
+      // No-image full-width comments block
+      &__comments-block {
+        &--no-image {
+          padding: 16px 16px 0;
+          margin-top: 0;
+          padding-bottom: calc(72px + env(safe-area-inset-bottom, 0px));
+
+          .ft-full-post__comments-list {
+            max-height: none;
+            overflow: visible;
+          }
+        }
+      }
+
+      // -----------------------------------------------------------------------
+      // 6. Sentinel — invisible spacer that triggers IntersectionObserver
+      // -----------------------------------------------------------------------
+      &__comments-sentinel {
+        height: 48px;
+        background: transparent;
+        pointer-events: none;
+      }
+
+      // -----------------------------------------------------------------------
+      // 7. Sticky comment input bar — pinned above the bottom mobile nav
+      // -----------------------------------------------------------------------
+      &__comment-input-row {
+        position: fixed;
+        bottom: calc(64px + env(safe-area-inset-bottom, 0px));
+        left: 0;
+        right: 0;
+        z-index: 200;
+        background: #fff;
+        border-top: 1px solid rgb(0, 0, 0, 0.08);
+        box-shadow: 0 -2px 8px rgb(0, 0, 0, 0.06);
+        padding: 8px 12px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin: 0;
+      }
+
+      // -----------------------------------------------------------------------
+      // 8. Smaller comment avatar on mobile
+      // -----------------------------------------------------------------------
+      &__comment-avatar {
+        width: 36px;
+        height: 36px;
+        min-width: 36px;
+
+        img,
+        .avatar {
+          width: 36px;
+          height: 36px;
+        }
+      }
+    }
+  }
+}
