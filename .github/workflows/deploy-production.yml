@@ -35,9 +35,35 @@ jobs:
           key: ${{ secrets.DEPLOY_SSH_KEY }}
           script_stop: true
           timeout: 25m
+          command_timeout: 25m
           script: |
             cd /var/discourse
-            sudo ./launcher rebuild app
+            echo "Starting rebuild at $(date)"
+
+            # Run rebuild in background with nohup
+            sudo nohup ./launcher rebuild app > /tmp/rebuild.log 2>&1 &
+            PID=$!
+            echo "Rebuild started with PID $PID"
+
+            # Poll every 30 seconds to keep connection alive and check status
+            while kill -0 $PID 2>/dev/null; do
+              echo "$(date): Rebuild still running..."
+              sleep 30
+            done
+
+            # Get exit status
+            wait $PID
+            EXIT_CODE=$?
+
+            echo "Rebuild finished at $(date) with exit code $EXIT_CODE"
+            if [ $EXIT_CODE -eq 0 ]; then
+              echo "✓ Rebuild completed successfully"
+            else
+              echo "✗ Rebuild failed"
+              echo "=== Last 100 lines of log ==="
+              tail -100 /tmp/rebuild.log
+              exit 1
+            fi
 
       - name: Health Check
         env:
