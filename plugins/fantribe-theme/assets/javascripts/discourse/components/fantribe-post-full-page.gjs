@@ -11,7 +11,7 @@ import avatar from "discourse/helpers/avatar";
 import formatDate from "discourse/helpers/format-date";
 import { ajax } from "discourse/lib/ajax";
 import { extractError, popupAjaxError } from "discourse/lib/ajax-error";
-import { not, or } from "discourse/truth-helpers";
+import { eq, not, or } from "discourse/truth-helpers";
 import ftIcon from "../helpers/ft-icon";
 import FantribeMediaCarousel from "./fantribe-media-carousel";
 import FantribePostMenu from "./fantribe-post-menu";
@@ -22,6 +22,26 @@ const ONEBOX_SELECTOR =
 
 const MOBILE_BREAKPOINT = 768;
 const MOBILE_PAGE_SIZE = 10;
+
+function _formatCompact(num) {
+  if (!num) {
+    return "";
+  }
+  if (num >= 1_000_000_000) {
+    return `${(num / 1_000_000_000).toFixed(1).replace(/\.0$/, "")}b`;
+  }
+  if (num >= 1_000_000) {
+    return `${(num / 1_000_000).toFixed(1).replace(/\.0$/, "")}m`;
+  }
+  if (num >= 1_000) {
+    return `${(num / 1_000).toFixed(1).replace(/\.0$/, "")}k`;
+  }
+  return `${num}`;
+}
+
+function formatCompactNumber(num) {
+  return _formatCompact(num);
+}
 
 const REACTIONS = [
   { emoji: "🎵", key: "musical_note" },
@@ -43,7 +63,7 @@ export default class FantribePostFullPage extends Component {
   @tracked reactionsLoaded = false;
   @tracked isBookmarkLoading = false;
   @tracked isReactionLoading = false;
-
+  @tracked replyingTo = null;
   watchTopic = modifier((el, [topicId]) => {
     if (!topicId) {
       return;
@@ -57,12 +77,14 @@ export default class FantribePostFullPage extends Component {
     this._viewCount = null;
     this.reactionsLoaded = false;
     this.commentText = "";
+    this.replyingTo = null;
+    this._likeLoadingIds = [];
+    this._expandedThreads = new Set();
     this._displayedCommentCount = MOBILE_PAGE_SIZE;
     this.loadReactions();
     this.loadComments();
     this.recordView();
   });
-
   setupMobileDetection = modifier(() => {
     const INLINE_STYLE_TARGETS = [
       "html",
@@ -177,7 +199,6 @@ export default class FantribePostFullPage extends Component {
       restoreAll();
     };
   });
-
   setupScrollSentinel = modifier((el) => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -190,6 +211,9 @@ export default class FantribePostFullPage extends Component {
     observer.observe(el);
     return () => observer.disconnect();
   });
+  @tracked _expandedThreads = new Set();
+
+  @tracked _likeLoadingIds = [];
 
   @tracked _localComments = null;
   @tracked _serverComments = null;
@@ -421,6 +445,14 @@ export default class FantribePostFullPage extends Component {
           created_at: post.createdAt || post.created_at,
           initials: this.getInitials(post.user?.name || post.user?.username),
           gradientClass: `ft-full-post__comment-avatar--gradient-${(index % 4) + 1}`,
+          like_count:
+            post.likeAction?.count ||
+            post.actions_summary?.find((a) => a.id === 2)?.count ||
+            0,
+          liked: post.likeAction?.acted || false,
+          post_number: post.post_number || post.postNumber,
+          reply_to_post_number: post.reply_to_post_number || null,
+          reply_to_user: post.reply_to_user || null,
         };
       });
 
@@ -434,16 +466,77 @@ export default class FantribePostFullPage extends Component {
     ];
   }
 
-  // On mobile, show a paged slice; on desktop show all.
-  get visibleComments() {
-    if (this._isMobile) {
-      return this.comments.slice(0, this._displayedCommentCount);
+  get threadedComments() {
+    const all = this.comments;
+    const byPostNumber = new Map();
+    for (const c of all) {
+      if (c.post_number) {
+        byPostNumber.set(c.post_number, c);
+      }
     }
-    return this.comments;
+
+    // Top-level = comments that don't reply to another comment, or reply to post #1 (OP)
+    const topLevel = [];
+    const repliesByParent = new Map();
+
+    for (const c of all) {
+      const parent = c.reply_to_post_number;
+      if (!parent || parent === 1 || !byPostNumber.has(parent)) {
+        topLevel.push(c);
+      } else {
+        if (!repliesByParent.has(parent)) {
+          repliesByParent.set(parent, []);
+        }
+        repliesByParent.get(parent).push(c);
+      }
+    }
+
+    const enrich = (c) => ({
+      ...c,
+      formattedLikeCount: formatCompactNumber(c.like_count),
+    });
+
+    // Build threads: each top-level comment + its nested replies (flattened)
+    const expandedThreads = this._expandedThreads;
+    return topLevel.map((comment) => {
+      const replies = this._collectReplies(
+        comment.post_number,
+        repliesByParent
+      );
+      return {
+        comment: enrich(comment),
+        replies: replies.map(enrich),
+        replyCount: replies.length,
+        isExpanded: expandedThreads.has(comment.post_number),
+      };
+    });
+  }
+
+  _collectReplies(postNumber, repliesByParent) {
+    const direct = repliesByParent.get(postNumber) || [];
+    const result = [];
+    for (const reply of direct) {
+      result.push(reply);
+      result.push(...this._collectReplies(reply.post_number, repliesByParent));
+    }
+    return result;
+  }
+
+  // On mobile, show a paged slice; on desktop show all.
+  get visibleThreadedComments() {
+    const threads = this.threadedComments;
+    if (this._isMobile) {
+      // Count top-level comments for pagination
+      return threads.slice(0, this._displayedCommentCount);
+    }
+    return threads;
   }
 
   get hasMoreComments() {
-    return this._isMobile && this._displayedCommentCount < this.comments.length;
+    return (
+      this._isMobile &&
+      this._displayedCommentCount < this.threadedComments.length
+    );
   }
 
   get replyCount() {
@@ -580,19 +673,27 @@ export default class FantribePostFullPage extends Component {
         const result = await ajax(`/t/${topicId}/posts.json?${params}`);
         allPosts.push(...(result?.post_stream?.posts || []));
       }
-      this._serverComments = allPosts.map((post, index) => ({
-        id: post.id,
-        user: {
-          id: post.user_id,
-          username: post.username,
-          name: post.name || post.username,
-          avatar_template: post.avatar_template,
-        },
-        raw: post.raw || this._getPlainText(post.cooked) || "",
-        created_at: post.created_at,
-        initials: this.getInitials(post.name || post.username),
-        gradientClass: `ft-full-post__comment-avatar--gradient-${(index % 4) + 1}`,
-      }));
+      this._serverComments = allPosts.map((post, index) => {
+        const likeAction = post.actions_summary?.find((a) => a.id === 2);
+        return {
+          id: post.id,
+          user: {
+            id: post.user_id,
+            username: post.username,
+            name: post.name || post.username,
+            avatar_template: post.avatar_template,
+          },
+          raw: post.raw || this._getPlainText(post.cooked) || "",
+          created_at: post.created_at,
+          initials: this.getInitials(post.name || post.username),
+          gradientClass: `ft-full-post__comment-avatar--gradient-${(index % 4) + 1}`,
+          like_count: likeAction?.count || 0,
+          liked: likeAction?.acted || false,
+          post_number: post.post_number,
+          reply_to_post_number: post.reply_to_post_number || null,
+          reply_to_user: post.reply_to_user || null,
+        };
+      });
     } catch {
       this._serverComments = [];
     }
@@ -649,15 +750,21 @@ export default class FantribePostFullPage extends Component {
     this.isSubmittingComment = true;
     const commentText = this.commentText.trim();
     try {
+      const replyTo = this.replyingTo;
+      const postData = {
+        raw: commentText,
+        topic_id: topicId,
+        draft_key: `topic_${topicId}`,
+      };
+      if (replyTo?.post_number) {
+        postData.reply_to_post_number = replyTo.post_number;
+      }
       const result = await ajax("/posts", {
         type: "POST",
-        data: {
-          raw: commentText,
-          topic_id: topicId,
-          draft_key: `topic_${topicId}`,
-        },
+        data: postData,
       });
       this.commentText = "";
+      this.replyingTo = null;
       if (result) {
         const newComment = {
           id: result.id,
@@ -669,6 +776,11 @@ export default class FantribePostFullPage extends Component {
             name: this.currentUser.name || this.currentUser.username,
             avatar_template: this.currentUser.avatar_template,
           },
+          like_count: 0,
+          liked: false,
+          post_number: result.post_number,
+          reply_to_post_number: replyTo?.post_number || null,
+          reply_to_user: replyTo ? { username: replyTo.username } : null,
         };
         this._localComments = [...(this._localComments || []), newComment];
       }
@@ -677,6 +789,88 @@ export default class FantribePostFullPage extends Component {
     } finally {
       this.isSubmittingComment = false;
     }
+  }
+
+  @action
+  async toggleCommentLike(comment) {
+    if (!this.currentUser || this._likeLoadingIds.includes(comment.id)) {
+      return;
+    }
+
+    const wasLiked = comment.liked;
+    const prevCount = comment.like_count;
+
+    // Optimistic update — replace comment in both arrays
+    const updatedComment = {
+      ...comment,
+      liked: !wasLiked,
+      like_count: wasLiked ? Math.max(0, prevCount - 1) : prevCount + 1,
+    };
+
+    this._updateComment(comment.id, updatedComment);
+    this._likeLoadingIds = [...this._likeLoadingIds, comment.id];
+
+    try {
+      if (wasLiked) {
+        await ajax(`/post_actions/${comment.id}`, {
+          type: "DELETE",
+          data: { post_action_type_id: 2 },
+        });
+      } else {
+        await ajax("/post_actions", {
+          type: "POST",
+          data: { id: comment.id, post_action_type_id: 2 },
+        });
+      }
+    } catch {
+      // Revert on failure
+      this._updateComment(comment.id, {
+        ...comment,
+        liked: wasLiked,
+        like_count: prevCount,
+      });
+    } finally {
+      this._likeLoadingIds = this._likeLoadingIds.filter(
+        (id) => id !== comment.id
+      );
+    }
+  }
+
+  _updateComment(commentId, updatedComment) {
+    if (this._serverComments) {
+      this._serverComments = this._serverComments.map((c) =>
+        c.id === commentId ? { ...c, ...updatedComment } : c
+      );
+    }
+    if (this._localComments) {
+      this._localComments = this._localComments.map((c) =>
+        c.id === commentId ? { ...c, ...updatedComment } : c
+      );
+    }
+  }
+
+  @action
+  startReply(comment) {
+    this.replyingTo = {
+      post_number: comment.post_number,
+      username: comment.user?.username || comment.user?.name,
+    };
+  }
+
+  @action
+  cancelReply() {
+    this.replyingTo = null;
+  }
+
+  @action
+  toggleThread(postNumber) {
+    const next = new Set(this._expandedThreads);
+    if (next.has(postNumber)) {
+      next.delete(postNumber);
+    } else {
+      next.add(postNumber);
+    }
+    this._expandedThreads = next;
   }
 
   @action
@@ -1024,36 +1218,220 @@ export default class FantribePostFullPage extends Component {
                     <div class="ft-full-post__comments-inner">
                       <span class="ft-full-post__comments-label">Comments</span>
                       <div class="ft-full-post__comments-list">
-                        {{#each this.visibleComments as |comment|}}
-                          <div class="ft-full-post__comment">
-                            <div
-                              class="ft-full-post__comment-avatar
-                                {{unless comment.user comment.gradientClass}}"
-                            >
-                              {{#if comment.user}}
-                                {{avatar comment.user imageSize="small"}}
-                              {{else}}
-                                <span
-                                  class="ft-full-post__comment-initials"
-                                >{{comment.initials}}</span>
-                              {{/if}}
-                            </div>
-                            <div class="ft-full-post__comment-body">
-                              <div class="ft-full-post__comment-header">
-                                <span
-                                  class="ft-full-post__comment-author"
-                                >{{comment.user.name}}</span>
-                                <span class="ft-full-post__comment-time">
-                                  {{formatDate
-                                    comment.created_at
-                                    format="tiny"
+                        {{#each this.visibleThreadedComments as |thread|}}
+                          <div class="ft-full-post__comment-thread">
+                            <div class="ft-full-post__comment">
+                              <div
+                                class="ft-full-post__comment-avatar
+                                  {{unless
+                                    thread.comment.user
+                                    thread.comment.gradientClass
+                                  }}"
+                              >
+                                {{#if thread.comment.user}}
+                                  {{avatar
+                                    thread.comment.user
+                                    imageSize="small"
                                   }}
-                                </span>
+                                {{else}}
+                                  <span
+                                    class="ft-full-post__comment-initials"
+                                  >{{thread.comment.initials}}</span>
+                                {{/if}}
                               </div>
-                              <p
-                                class="ft-full-post__comment-text"
-                              >{{comment.raw}}</p>
+                              <div class="ft-full-post__comment-body">
+                                <div class="ft-full-post__comment-header">
+                                  <span
+                                    class="ft-full-post__comment-author"
+                                  >{{thread.comment.user.name}}</span>
+                                  <span class="ft-full-post__comment-time">
+                                    {{formatDate
+                                      thread.comment.created_at
+                                      format="tiny"
+                                    }}
+                                  </span>
+                                </div>
+                                <p
+                                  class="ft-full-post__comment-text"
+                                >{{thread.comment.raw}}</p>
+                                <div class="ft-full-post__comment-actions">
+                                  {{#if thread.comment.like_count}}
+                                    <span
+                                      class="ft-full-post__comment-likes-text"
+                                    >{{thread.comment.formattedLikeCount}}
+                                      {{if
+                                        (eq thread.comment.like_count 1)
+                                        "like"
+                                        "likes"
+                                      }}</span>
+                                  {{/if}}
+                                  {{#if this.canComment}}
+                                    <button
+                                      type="button"
+                                      class="ft-full-post__comment-reply-btn"
+                                      {{on
+                                        "click"
+                                        (fn this.startReply thread.comment)
+                                      }}
+                                    >Reply</button>
+                                  {{/if}}
+                                </div>
+                              </div>
+                              <button
+                                type="button"
+                                class="ft-full-post__comment-like-btn
+                                  {{if
+                                    thread.comment.liked
+                                    'ft-full-post__comment-like-btn--liked'
+                                  }}"
+                                {{on
+                                  "click"
+                                  (fn this.toggleCommentLike thread.comment)
+                                }}
+                              >
+                                {{#if thread.comment.liked}}
+                                  {{ftIcon "heart" size=14 fill="currentColor"}}
+                                {{else}}
+                                  {{ftIcon "heart" size=14}}
+                                {{/if}}
+                              </button>
                             </div>
+
+                            {{! Thread replies }}
+                            {{#if thread.replyCount}}
+                              {{#unless thread.isExpanded}}
+                                <button
+                                  type="button"
+                                  class="ft-full-post__thread-toggle"
+                                  {{on
+                                    "click"
+                                    (fn
+                                      this.toggleThread
+                                      thread.comment.post_number
+                                    )
+                                  }}
+                                >
+                                  <span
+                                    class="ft-full-post__thread-toggle-line"
+                                  ></span>
+                                  View
+                                  {{thread.replyCount}}
+                                  {{if
+                                    (eq thread.replyCount 1)
+                                    "reply"
+                                    "replies"
+                                  }}
+                                </button>
+                              {{/unless}}
+                              {{#if thread.isExpanded}}
+                                <button
+                                  type="button"
+                                  class="ft-full-post__thread-toggle"
+                                  {{on
+                                    "click"
+                                    (fn
+                                      this.toggleThread
+                                      thread.comment.post_number
+                                    )
+                                  }}
+                                >
+                                  <span
+                                    class="ft-full-post__thread-toggle-line"
+                                  ></span>
+                                  Hide replies
+                                </button>
+                                <div class="ft-full-post__thread-replies">
+                                  {{#each thread.replies as |reply|}}
+                                    <div class="ft-full-post__comment">
+                                      <div
+                                        class="ft-full-post__comment-avatar
+                                          {{unless
+                                            reply.user
+                                            reply.gradientClass
+                                          }}"
+                                      >
+                                        {{#if reply.user}}
+                                          {{avatar
+                                            reply.user
+                                            imageSize="small"
+                                          }}
+                                        {{else}}
+                                          <span
+                                            class="ft-full-post__comment-initials"
+                                          >{{reply.initials}}</span>
+                                        {{/if}}
+                                      </div>
+                                      <div class="ft-full-post__comment-body">
+                                        <div
+                                          class="ft-full-post__comment-header"
+                                        >
+                                          <span
+                                            class="ft-full-post__comment-author"
+                                          >{{reply.user.name}}</span>
+                                          <span
+                                            class="ft-full-post__comment-time"
+                                          >
+                                            {{formatDate
+                                              reply.created_at
+                                              format="tiny"
+                                            }}
+                                          </span>
+                                        </div>
+                                        <p
+                                          class="ft-full-post__comment-text"
+                                        >{{reply.raw}}</p>
+                                        <div
+                                          class="ft-full-post__comment-actions"
+                                        >
+                                          {{#if reply.like_count}}
+                                            <span
+                                              class="ft-full-post__comment-likes-text"
+                                            >{{reply.formattedLikeCount}}
+                                              {{if
+                                                (eq reply.like_count 1)
+                                                "like"
+                                                "likes"
+                                              }}</span>
+                                          {{/if}}
+                                          {{#if this.canComment}}
+                                            <button
+                                              type="button"
+                                              class="ft-full-post__comment-reply-btn"
+                                              {{on
+                                                "click"
+                                                (fn this.startReply reply)
+                                              }}
+                                            >Reply</button>
+                                          {{/if}}
+                                        </div>
+                                      </div>
+                                      <button
+                                        type="button"
+                                        class="ft-full-post__comment-like-btn
+                                          {{if
+                                            reply.liked
+                                            'ft-full-post__comment-like-btn--liked'
+                                          }}"
+                                        {{on
+                                          "click"
+                                          (fn this.toggleCommentLike reply)
+                                        }}
+                                      >
+                                        {{#if reply.liked}}
+                                          {{ftIcon
+                                            "heart"
+                                            size=14
+                                            fill="currentColor"
+                                          }}
+                                        {{else}}
+                                          {{ftIcon "heart" size=14}}
+                                        {{/if}}
+                                      </button>
+                                    </div>
+                                  {{/each}}
+                                </div>
+                              {{/if}}
+                            {{/if}}
                           </div>
                         {{/each}}
                         {{#if this.hasMoreComments}}
@@ -1065,6 +1443,19 @@ export default class FantribePostFullPage extends Component {
                       </div>
                     </div>
 
+                    {{#if this.replyingTo}}
+                      <div class="ft-full-post__reply-indicator">
+                        <span>Replying to
+                          <strong>@{{this.replyingTo.username}}</strong></span>
+                        <button
+                          type="button"
+                          class="ft-full-post__reply-indicator-close"
+                          {{on "click" this.cancelReply}}
+                        >
+                          {{ftIcon "x" size=14}}
+                        </button>
+                      </div>
+                    {{/if}}
                     <div class="ft-full-post__comment-input-row">
                       <div class="ft-full-post__comment-input-avatar">
                         {{#if this.currentUser}}
@@ -1105,33 +1496,199 @@ export default class FantribePostFullPage extends Component {
                 >
                   <span class="ft-full-post__comments-label">Comments</span>
                   <div class="ft-full-post__comments-list">
-                    {{#each this.visibleComments as |comment|}}
-                      <div class="ft-full-post__comment">
-                        <div
-                          class="ft-full-post__comment-avatar
-                            {{unless comment.user comment.gradientClass}}"
-                        >
-                          {{#if comment.user}}
-                            {{avatar comment.user imageSize="small"}}
-                          {{else}}
-                            <span
-                              class="ft-full-post__comment-initials"
-                            >{{comment.initials}}</span>
-                          {{/if}}
-                        </div>
-                        <div class="ft-full-post__comment-body">
-                          <div class="ft-full-post__comment-header">
-                            <span
-                              class="ft-full-post__comment-author"
-                            >{{comment.user.name}}</span>
-                            <span class="ft-full-post__comment-time">
-                              {{formatDate comment.created_at format="tiny"}}
-                            </span>
+                    {{#each this.visibleThreadedComments as |thread|}}
+                      <div class="ft-full-post__comment-thread">
+                        <div class="ft-full-post__comment">
+                          <div
+                            class="ft-full-post__comment-avatar
+                              {{unless
+                                thread.comment.user
+                                thread.comment.gradientClass
+                              }}"
+                          >
+                            {{#if thread.comment.user}}
+                              {{avatar thread.comment.user imageSize="small"}}
+                            {{else}}
+                              <span
+                                class="ft-full-post__comment-initials"
+                              >{{thread.comment.initials}}</span>
+                            {{/if}}
                           </div>
-                          <p
-                            class="ft-full-post__comment-text"
-                          >{{comment.raw}}</p>
+                          <div class="ft-full-post__comment-body">
+                            <div class="ft-full-post__comment-header">
+                              <span
+                                class="ft-full-post__comment-author"
+                              >{{thread.comment.user.name}}</span>
+                              <span class="ft-full-post__comment-time">
+                                {{formatDate
+                                  thread.comment.created_at
+                                  format="tiny"
+                                }}
+                              </span>
+                            </div>
+                            <p
+                              class="ft-full-post__comment-text"
+                            >{{thread.comment.raw}}</p>
+                            <div class="ft-full-post__comment-actions">
+                              {{#if thread.comment.like_count}}
+                                <span
+                                  class="ft-full-post__comment-likes-text"
+                                >{{thread.comment.formattedLikeCount}}
+                                  {{if
+                                    (eq thread.comment.like_count 1)
+                                    "like"
+                                    "likes"
+                                  }}</span>
+                              {{/if}}
+                              {{#if this.canComment}}
+                                <button
+                                  type="button"
+                                  class="ft-full-post__comment-reply-btn"
+                                  {{on
+                                    "click"
+                                    (fn this.startReply thread.comment)
+                                  }}
+                                >Reply</button>
+                              {{/if}}
+                            </div>
+                          </div>
+                          <button
+                            type="button"
+                            class="ft-full-post__comment-like-btn
+                              {{if
+                                thread.comment.liked
+                                'ft-full-post__comment-like-btn--liked'
+                              }}"
+                            {{on
+                              "click"
+                              (fn this.toggleCommentLike thread.comment)
+                            }}
+                          >
+                            {{#if thread.comment.liked}}
+                              {{ftIcon "heart" size=14 fill="currentColor"}}
+                            {{else}}
+                              {{ftIcon "heart" size=14}}
+                            {{/if}}
+                          </button>
                         </div>
+
+                        {{! Thread replies }}
+                        {{#if thread.replyCount}}
+                          {{#unless thread.isExpanded}}
+                            <button
+                              type="button"
+                              class="ft-full-post__thread-toggle"
+                              {{on
+                                "click"
+                                (fn
+                                  this.toggleThread thread.comment.post_number
+                                )
+                              }}
+                            >
+                              <span
+                                class="ft-full-post__thread-toggle-line"
+                              ></span>
+                              View
+                              {{thread.replyCount}}
+                              {{if (eq thread.replyCount 1) "reply" "replies"}}
+                            </button>
+                          {{/unless}}
+                          {{#if thread.isExpanded}}
+                            <button
+                              type="button"
+                              class="ft-full-post__thread-toggle"
+                              {{on
+                                "click"
+                                (fn
+                                  this.toggleThread thread.comment.post_number
+                                )
+                              }}
+                            >
+                              <span
+                                class="ft-full-post__thread-toggle-line"
+                              ></span>
+                              Hide replies
+                            </button>
+                            <div class="ft-full-post__thread-replies">
+                              {{#each thread.replies as |reply|}}
+                                <div class="ft-full-post__comment">
+                                  <div
+                                    class="ft-full-post__comment-avatar
+                                      {{unless reply.user reply.gradientClass}}"
+                                  >
+                                    {{#if reply.user}}
+                                      {{avatar reply.user imageSize="small"}}
+                                    {{else}}
+                                      <span
+                                        class="ft-full-post__comment-initials"
+                                      >{{reply.initials}}</span>
+                                    {{/if}}
+                                  </div>
+                                  <div class="ft-full-post__comment-body">
+                                    <div class="ft-full-post__comment-header">
+                                      <span
+                                        class="ft-full-post__comment-author"
+                                      >{{reply.user.name}}</span>
+                                      <span class="ft-full-post__comment-time">
+                                        {{formatDate
+                                          reply.created_at
+                                          format="tiny"
+                                        }}
+                                      </span>
+                                    </div>
+                                    <p
+                                      class="ft-full-post__comment-text"
+                                    >{{reply.raw}}</p>
+                                    <div class="ft-full-post__comment-actions">
+                                      {{#if reply.like_count}}
+                                        <span
+                                          class="ft-full-post__comment-likes-text"
+                                        >{{reply.formattedLikeCount}}
+                                          {{if
+                                            (eq reply.like_count 1)
+                                            "like"
+                                            "likes"
+                                          }}</span>
+                                      {{/if}}
+                                      {{#if this.canComment}}
+                                        <button
+                                          type="button"
+                                          class="ft-full-post__comment-reply-btn"
+                                          {{on
+                                            "click"
+                                            (fn this.startReply reply)
+                                          }}
+                                        >Reply</button>
+                                      {{/if}}
+                                    </div>
+                                  </div>
+                                  <button
+                                    type="button"
+                                    class="ft-full-post__comment-like-btn
+                                      {{if
+                                        reply.liked
+                                        'ft-full-post__comment-like-btn--liked'
+                                      }}"
+                                    {{on
+                                      "click"
+                                      (fn this.toggleCommentLike reply)
+                                    }}
+                                  >
+                                    {{#if reply.liked}}
+                                      {{ftIcon
+                                        "heart"
+                                        size=14
+                                        fill="currentColor"
+                                      }}
+                                    {{else}}
+                                      {{ftIcon "heart" size=14}}
+                                    {{/if}}
+                                  </button>
+                                </div>
+                              {{/each}}
+                            </div>
+                          {{/if}}
+                        {{/if}}
                       </div>
                     {{/each}}
                     {{#if this.hasMoreComments}}
@@ -1142,6 +1699,19 @@ export default class FantribePostFullPage extends Component {
                     {{/if}}
                   </div>
 
+                  {{#if this.replyingTo}}
+                    <div class="ft-full-post__reply-indicator">
+                      <span>Replying to
+                        <strong>@{{this.replyingTo.username}}</strong></span>
+                      <button
+                        type="button"
+                        class="ft-full-post__reply-indicator-close"
+                        {{on "click" this.cancelReply}}
+                      >
+                        {{ftIcon "x" size=14}}
+                      </button>
+                    </div>
+                  {{/if}}
                   <div class="ft-full-post__comment-input-row">
                     <div class="ft-full-post__comment-input-avatar">
                       {{#if this.currentUser}}

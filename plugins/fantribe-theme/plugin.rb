@@ -695,6 +695,7 @@ after_initialize do
         id: post.id,
         raw: post.raw&.truncate(200),
         created_at: post.created_at,
+        like_count: post.like_count || 0,
         user: {
           id: user&.id,
           username: user&.username || "unknown",

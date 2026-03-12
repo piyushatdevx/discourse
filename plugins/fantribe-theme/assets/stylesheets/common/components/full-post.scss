@@ -889,14 +889,14 @@ body.fantribe-theme:not(.admin-interface) {
     &__comment {
       display: flex;
       align-items: flex-start;
-      gap: 10px;
+      gap: 12px;
       flex-shrink: 0;
     }
 
-    // Gradient circle avatar with initials or user avatar — 40px (matches Figma)
+    // Gradient circle avatar with initials or user avatar — 32px (matches Figma)
     &__comment-avatar {
-      width: 40px;
-      height: 40px;
+      width: 32px;
+      height: 32px;
       border-radius: 9999px;
       display: flex;
       align-items: center;
@@ -939,14 +939,17 @@ body.fantribe-theme:not(.admin-interface) {
     &__comment-body {
       flex: 1;
       min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
     }
 
     // Comment header: name + time on one row
     &__comment-header {
       display: flex;
       align-items: baseline;
-      gap: 6px;
-      margin-bottom: 3px;
+      gap: 8px;
+      margin-bottom: 0;
     }
 
     // Author name: 14px semibold, dark
@@ -963,18 +966,159 @@ body.fantribe-theme:not(.admin-interface) {
       font-size: 12px;
       font-weight: 400;
       line-height: 16px;
-      color: #888;
+      color: #5a584f;
       white-space: nowrap;
     }
 
     // Comment text
     &__comment-text {
-      font-size: 13px;
+      font-size: 14px;
       font-weight: 400;
       line-height: 20px;
-      color: #333;
+      color: #1a1a1a;
       margin: 0;
       overflow-wrap: break-word;
+    }
+
+    // Reply button on comment
+    &__comment-reply-btn {
+      background: none;
+      border: none;
+      padding: 0;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 600;
+      line-height: 16px;
+      color: #666;
+      align-self: flex-start;
+
+      &:hover {
+        color: #333;
+      }
+    }
+
+    // Like button — heart icon, top-right aligned
+    &__comment-like-btn {
+      background: none;
+      border: none;
+      padding: 0;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+      flex-shrink: 0;
+      color: #999;
+      align-self: flex-start;
+
+      &:hover {
+        color: #666;
+      }
+
+      &--liked {
+        color: #e74c3c;
+
+        &:hover {
+          color: #c0392b;
+        }
+      }
+
+      &:disabled {
+        opacity: 0.5;
+        cursor: default;
+      }
+
+      .ft-icon {
+        stroke-width: 1.5;
+      }
+    }
+
+    // Actions row (likes text + reply button)
+    &__comment-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    // "N likes" text in actions row
+    &__comment-likes-text {
+      font-size: 12px;
+      font-weight: 600;
+      line-height: 16px;
+      color: #666;
+    }
+
+    // Thread wrapper
+    &__comment-thread {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    // "View N replies" / "Hide replies" toggle
+    &__thread-toggle {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: none;
+      border: none;
+      padding: 4px 0 4px 44px;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 600;
+      line-height: 16px;
+      color: #888;
+
+      &:hover {
+        color: #555;
+      }
+    }
+
+    // Horizontal line before toggle text
+    &__thread-toggle-line {
+      width: 24px;
+      height: 1px;
+      background: #ccc;
+      flex-shrink: 0;
+    }
+
+    // Nested replies container — indented
+    &__thread-replies {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      padding-left: 44px;
+    }
+
+    // Reply indicator above input
+    &__reply-indicator {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 16px;
+      background: #f5f5f5;
+      font-size: 12px;
+      color: #666;
+      border-top: 1px solid rgb(0, 0, 0, 0.06);
+      flex-shrink: 0;
+
+      strong {
+        color: #1a1a1a;
+        font-weight: 600;
+      }
+    }
+
+    &__reply-indicator-close {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #999;
+      padding: 2px;
+      display: flex;
+
+      &:hover {
+        color: #333;
+      }
     }
 
     // -----------------------------------------------------------------------
@@ -2205,15 +2349,24 @@ body.fantribe-theme:not(.admin-interface) {
       // 8. Smaller comment avatar on mobile
       // -----------------------------------------------------------------------
       &__comment-avatar {
-        width: 36px;
-        height: 36px;
-        min-width: 36px;
+        width: 32px;
+        height: 32px;
+        min-width: 32px;
 
         img,
         .avatar {
-          width: 36px;
-          height: 36px;
+          width: 32px;
+          height: 32px;
         }
+      }
+
+      // Mobile: reply indicator above sticky input
+      &__reply-indicator {
+        position: fixed;
+        bottom: calc(64px + 56px + env(safe-area-inset-bottom, 0px));
+        left: 0;
+        right: 0;
+        z-index: 201;
       }
     }
   }
