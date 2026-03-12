@@ -1,0 +1,58 @@
+name: Deploy to Production
+
+on:
+  push:
+    branches:
+      - production
+
+concurrency:
+  group: production-deploy
+  cancel-in-progress: false # Never interrupt an ongoing rebuild
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30 # Rebuild can take 10-20 minutes
+
+    steps:
+      - name: Notify Deploy Started
+        run: |
+          curl -X POST "${{ secrets.SLACK_WEBHOOK }}" \
+            -H "Content-Type: application/json" \
+            -d '{"text":"🚀 Production deployment started..."}'
+
+      - name: Deploy to EC2
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.DEPLOY_HOST }}
+          username: ${{ secrets.DEPLOY_USER }}
+          key: ${{ secrets.DEPLOY_SSH_KEY }}
+          script_stop: true
+          timeout: 25m
+          script: |
+            cd /var/discourse
+            sudo ./launcher rebuild app
+
+      - name: Health Check
+        run: |
+          sleep 30
+          HTTP_CODE=$(curl -f -s -o /dev/null -w "%{http_code}" "https://${{ secrets.DEPLOY_HOST }}" || echo "000")
+          if [ "$HTTP_CODE" = "200" ]; then
+            echo "✓ Site is up and responding"
+          else
+            echo "⚠ Site returned HTTP $HTTP_CODE (may still be starting)"
+          fi
+
+      - name: Notify Success
+        if: success()
+        run: |
+          curl -X POST "${{ secrets.SLACK_WEBHOOK }}" \
+            -H "Content-Type: application/json" \
+            -d '{"text":"✅ Production deployment successful!"}'
+
+      - name: Notify Failure
+        if: failure()
+        run: |
+          curl -X POST "${{ secrets.SLACK_WEBHOOK }}" \
+            -H "Content-Type: application/json" \
+            -d '{"text":"❌ Production deployment failed! Check GitHub Actions for details."}'
