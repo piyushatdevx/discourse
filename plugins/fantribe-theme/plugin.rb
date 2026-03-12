@@ -359,6 +359,20 @@ after_initialize do
           super
         end
 
+        # Allow liking own posts (self-like) when FanTribe is enabled.
+        # Core blocks this in post_can_act? with:
+        #   not(action_key == :like && is_my_own?(post))
+        def post_can_act?(post, action_key, opts: {}, can_see_post: nil)
+          if SiteSetting.fantribe_theme_enabled && action_key == :like && post && authenticated? &&
+               is_my_own?(post) && !post.trashed? && !post.topic&.archived?
+            taken = opts[:taken_actions].try(:keys).to_a
+            post_action_type_view = opts[:post_action_type_view] || PostActionTypeView.new
+            already_taken = taken.include?(post_action_type_view.types[:like])
+            return !already_taken
+          end
+          super
+        end
+
         def can_delete_post_action?(post_action)
           return super unless SiteSetting.fantribe_theme_enabled
           # Same ownership / privacy / archive checks as core — just no time window.
