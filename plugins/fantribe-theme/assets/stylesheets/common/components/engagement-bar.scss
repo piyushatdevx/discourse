@@ -233,5 +233,49 @@ body.fantribe-theme:not(.admin-interface) {
         }
       }
     }
+
+    // ==========================================
+    // MOBILE OVERRIDES (Figma node 876:5278)
+    // ==========================================
+    @media (width <= 767px) {
+      // Two-row layout: reactions on top, comment count + actions below
+      &__reactions {
+        column-gap: 8px;
+        row-gap: 10px;
+        padding: 0 12px 0;
+        border-top: 1px solid var(--ft-border);
+        padding-top: 12px;
+
+        // Invisible flex break to force comment count to second row
+        &::before {
+          content: "";
+          width: 100%;
+          height: 0;
+          order: 5;
+        }
+      }
+
+      &__reaction {
+        height: 34px;
+        gap: 5px;
+        padding: 0 14px;
+      }
+
+      &__reaction-count {
+        font-size: 14px;
+        line-height: 21px;
+      }
+
+      &__comment-count {
+        order: 6;
+        margin-left: 0;
+      }
+
+      &__actions-right {
+        order: 7;
+        margin-left: auto;
+        gap: 20px;
+      }
+    }
   }
 }

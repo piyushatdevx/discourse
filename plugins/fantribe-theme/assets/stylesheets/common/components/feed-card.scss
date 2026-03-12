@@ -511,10 +511,6 @@ body.fantribe-theme:not(.admin-interface) {
       padding: 0 var(--ft-feed-comments-inner-padding)
         var(--ft-feed-comments-inner-padding)
         var(--ft-feed-comments-inner-padding);
-
-      @media (width <= 767px) {
-        display: none;
-      }
     }
 
     &__comments-label {
@@ -762,6 +758,81 @@ body.fantribe-theme:not(.admin-interface) {
       svg.ft-icon--loader,
       .d-icon-loader {
         animation: ft-spin 1s linear infinite;
+      }
+    }
+
+    // ==========================================
+    // MOBILE OVERRIDES (Figma node 876:5278)
+    // ==========================================
+    @media (width <= 767px) {
+      // Card container
+      border-radius: 12px;
+      box-shadow:
+        0 1px 3px rgb(0 0 0 / 0.1),
+        0 1px 2px rgb(0 0 0 / 0.1);
+      padding-bottom: 14px;
+
+      &:hover {
+        box-shadow:
+          0 1px 3px rgb(0 0 0 / 0.1),
+          0 1px 2px rgb(0 0 0 / 0.1);
+      }
+
+      // Header: 12px padding, 12px gap
+      .fantribe-feed-card__header {
+        padding: 12px 12px 0;
+        gap: 12px;
+      }
+
+      // Avatar: 42px, border-radius 20px
+      .fantribe-feed-card__avatar {
+        width: 42px;
+        height: 42px;
+        padding: 0;
+
+        img {
+          width: 42px;
+          height: 42px;
+          border-radius: 20px;
+        }
+      }
+
+      // Name: 14px/21px
+      .fantribe-feed-card__display-name {
+        font-size: 14px;
+        line-height: 21px;
+      }
+
+      // Handle + timestamp: 12px/18px
+      .fantribe-feed-card__username-handle,
+      .fantribe-feed-card__timestamp {
+        font-size: 12px;
+        line-height: 18px;
+      }
+
+      .fantribe-feed-card__meta-info-row {
+        gap: 6px;
+      }
+
+      // Body text: 14px/21px, 12px horizontal padding
+      .fantribe-feed-card__text {
+        padding: 0 12px 12px;
+        font-size: 14px;
+        line-height: 21px;
+      }
+
+      // Media: 12px padding
+      .fantribe-feed-card__media {
+        padding: 0 12px 12px;
+      }
+
+      // Hide divider and comments section on mobile
+      .fantribe-feed-card__divider {
+        display: none;
+      }
+
+      .fantribe-feed-card__comments-section {
+        display: none;
       }
     }
   }
