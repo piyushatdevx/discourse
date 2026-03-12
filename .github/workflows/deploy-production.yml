@@ -7,21 +7,24 @@ on:
 
 concurrency:
   group: production-deploy
-  cancel-in-progress: false # Never interrupt an ongoing rebuild
+  cancel-in-progress: false
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    timeout-minutes: 30 # Rebuild  can take 10-20 minutes
+    timeout-minutes: 30
 
     steps:
       - name: Notify Deploy Started
-        if: ${{ secrets.SLACK_WEBHOOK != '' }}
         continue-on-error: true
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
         run: |
-          curl -X POST "${{ secrets.SLACK_WEBHOOK }}" \
-            -H "Content-Type: application/json" \
-            -d '{"text":"🚀 Production deployment started..."}'
+          if [ -n "$SLACK_WEBHOOK" ]; then
+            curl -X POST "$SLACK_WEBHOOK" \
+              -H "Content-Type: application/json" \
+              -d '{"text":"🚀 Production deployment started..."}'
+          fi
 
       - name: Deploy to EC2
         uses: appleboy/ssh-action@v1.0.3
@@ -36,9 +39,11 @@ jobs:
             sudo ./launcher rebuild app
 
       - name: Health Check
+        env:
+          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
         run: |
           sleep 30
-          HTTP_CODE=$(curl -f -s -o /dev/null -w "%{http_code}" "https://${{ secrets.DEPLOY_HOST }}" || echo "000")
+          HTTP_CODE=$(curl -f -s -o /dev/null -w "%{http_code}" "https://$DEPLOY_HOST" || echo "000")
           if [ "$HTTP_CODE" = "200" ]; then
             echo "✓ Site is up and responding"
           else
@@ -46,17 +51,25 @@ jobs:
           fi
 
       - name: Notify Success
-        if: ${{ success() && secrets.SLACK_WEBHOOK != '' }}
+        if: success()
         continue-on-error: true
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
         run: |
-          curl -X POST "${{ secrets.SLACK_WEBHOOK }}" \
-            -H "Content-Type: application/json" \
-            -d '{"text":"✅ Production deployment successful!"}'
+          if [ -n "$SLACK_WEBHOOK" ]; then
+            curl -X POST "$SLACK_WEBHOOK" \
+              -H "Content-Type: application/json" \
+              -d '{"text":"✅ Production deployment successful!"}'
+          fi
 
       - name: Notify Failure
-        if: ${{ failure() && secrets.SLACK_WEBHOOK != '' }}
+        if: failure()
         continue-on-error: true
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
         run: |
-          curl -X POST "${{ secrets.SLACK_WEBHOOK }}" \
-            -H "Content-Type: application/json" \
-            -d '{"text":"❌ Production deployment failed!"}'
+          if [ -n "$SLACK_WEBHOOK" ]; then
+            curl -X POST "$SLACK_WEBHOOK" \
+              -H "Content-Type: application/json" \
+              -d '{"text":"❌ Production deployment failed!"}'
+          fi
