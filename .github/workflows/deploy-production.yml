@@ -16,6 +16,8 @@ jobs:
 
     steps:
       - name: Notify Deploy Started
+        if: ${{ secrets.SLACK_WEBHOOK != '' }}
+        continue-on-error: true
         run: |
           curl -X POST "${{ secrets.SLACK_WEBHOOK }}" \
             -H "Content-Type: application/json" \
@@ -44,15 +46,17 @@ jobs:
           fi
 
       - name: Notify Success
-        if: success()
+        if: ${{ success() && secrets.SLACK_WEBHOOK != '' }}
+        continue-on-error: true
         run: |
           curl -X POST "${{ secrets.SLACK_WEBHOOK }}" \
             -H "Content-Type: application/json" \
             -d '{"text":"✅ Production deployment successful!"}'
 
       - name: Notify Failure
-        if: failure()
+        if: ${{ failure() && secrets.SLACK_WEBHOOK != '' }}
+        continue-on-error: true
         run: |
           curl -X POST "${{ secrets.SLACK_WEBHOOK }}" \
             -H "Content-Type: application/json" \
-            -d '{"text":"❌ Production deployment failed! Check GitHub Actions for details."}'
+            -d '{"text":"❌ Production deployment failed!"}'
