@@ -3,7 +3,6 @@ import { tracked } from "@glimmer/tracking";
 import { on } from "@ember/modifier";
 import { action } from "@ember/object";
 import { LinkTo } from "@ember/routing";
-import { service } from "@ember/service";
 import avatar from "discourse/helpers/avatar";
 import icon from "discourse/helpers/d-icon";
 import { ajax } from "discourse/lib/ajax";
@@ -11,8 +10,6 @@ import { popupAjaxError } from "discourse/lib/ajax-error";
 import ftIcon from "../helpers/ft-icon";
 
 export default class FtEditProfileModal extends Component {
-  @service router;
-
   @tracked name = "";
   @tracked bio = "";
   @tracked location = "";
@@ -74,7 +71,7 @@ export default class FtEditProfileModal extends Component {
 
     try {
       const username = this.args.user?.username;
-      await ajax(`/u/${username}.json`, {
+      const result = await ajax(`/u/${username}.json`, {
         type: "PUT",
         data: {
           name: this.name,
@@ -84,9 +81,26 @@ export default class FtEditProfileModal extends Component {
         },
       });
 
-      this.args.onClose();
-      // Reload the current route so the updated profile info is displayed.
-      this.router.refresh();
+      const user = this.args.user;
+      user.setProperties({
+        name: this.name,
+        bio_raw: this.bio,
+        location: this.location,
+        website: this.website,
+        ...(result.user?.bio_excerpt && {
+          bio_excerpt: result.user.bio_excerpt,
+        }),
+        ...(result.user?.bio_cooked && { bio_cooked: result.user.bio_cooked }),
+        ...(result.user?.website_name !== undefined && {
+          website_name: result.user.website_name,
+        }),
+      });
+
+      if (this.args.onSave) {
+        this.args.onSave();
+      } else {
+        this.args.onClose();
+      }
     } catch (error) {
       popupAjaxError(error);
     } finally {

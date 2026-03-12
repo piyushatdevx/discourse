@@ -123,11 +123,7 @@ export default class FantribeTribesPanel extends Component {
       );
     }
     if (item.route === "explore") {
-      return (
-        route === "explore" ||
-        route.startsWith("topic") ||
-        route.startsWith("discovery.category")
-      );
+      return route === "explore" || route.startsWith("discovery.category");
     }
     if (item.route === "chat.index") {
       return route.startsWith("chat");

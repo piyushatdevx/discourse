@@ -30,6 +30,7 @@ export default class FtUserProfileHeader extends Component {
 
   @tracked showShareModal = false;
   @tracked showEditModal = false;
+  @tracked _profileVersion = 0;
 
   // ── Tier ──────────────────────────────────────────────────────
   get tier() {
@@ -66,23 +67,32 @@ export default class FtUserProfileHeader extends Component {
   }
 
   // ── Meta ───────────────────────────────────────────────────────
+  get displayName() {
+    this._profileVersion;
+    return this.args.user?.name;
+  }
+
   get joinedDate() {
     return this.args.user?.created_at;
   }
 
   get location() {
+    this._profileVersion;
     return this.args.user?.location;
   }
 
   get website() {
+    this._profileVersion;
     return this.args.user?.website;
   }
 
   get websiteName() {
+    this._profileVersion;
     return this.args.user?.website_name;
   }
 
   get bio() {
+    this._profileVersion;
     return this.args.user?.bio_cooked;
   }
 
@@ -104,6 +114,12 @@ export default class FtUserProfileHeader extends Component {
 
   @action
   closeEditModal() {
+    this.showEditModal = false;
+  }
+
+  @action
+  handleProfileSaved() {
+    this._profileVersion++;
     this.showEditModal = false;
   }
 
@@ -188,7 +204,7 @@ export default class FtUserProfileHeader extends Component {
           <div class="ft-profile__info">
             <div class="ft-profile__info-header">
               <div class="ft-profile__info-text">
-                <h1 class="ft-profile__name">{{@user.name}}</h1>
+                <h1 class="ft-profile__name">{{this.displayName}}</h1>
                 <p class="ft-profile__handle">@{{@user.username}}</p>
 
                 {{! Meta: location · joined · website }}
@@ -253,7 +269,11 @@ export default class FtUserProfileHeader extends Component {
       {{/if}}
 
       {{#if this.showEditModal}}
-        <FtEditProfileModal @user={{@user}} @onClose={{this.closeEditModal}} />
+        <FtEditProfileModal
+          @user={{@user}}
+          @onClose={{this.closeEditModal}}
+          @onSave={{this.handleProfileSaved}}
+        />
       {{/if}}
 
     {{/if}}
