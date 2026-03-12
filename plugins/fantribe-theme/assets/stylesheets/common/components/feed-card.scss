@@ -511,6 +511,10 @@ body.fantribe-theme:not(.admin-interface) {
       padding: 0 var(--ft-feed-comments-inner-padding)
         var(--ft-feed-comments-inner-padding)
         var(--ft-feed-comments-inner-padding);
+
+      @media (width <= 767px) {
+        display: none;
+      }
     }
 
     &__comments-label {
