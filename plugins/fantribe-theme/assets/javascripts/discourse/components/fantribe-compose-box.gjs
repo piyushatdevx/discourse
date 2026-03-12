@@ -23,39 +23,44 @@ export default class FantribeComposeBox extends Component {
             {{avatar this.currentUser imageSize="medium"}}
           {{/if}}
         </div>
-
-        <div class="fantribe-compose-box__content">
-          <div class="fantribe-compose-box__input-placeholder">
-            Share your sound...
-          </div>
-
-          <div class="fantribe-compose-box__actions">
-            <button
-              type="button"
-              class="fantribe-compose-box__media-btn fantribe-compose-box__media-btn--photo"
-              title="Photo"
-            >
-              {{ftIcon "image"}}
-              <span>Photo</span>
-            </button>
-            <button
-              type="button"
-              class="fantribe-compose-box__media-btn fantribe-compose-box__media-btn--video"
-              title="Video"
-            >
-              {{ftIcon "video"}}
-              <span>Video</span>
-            </button>
-            <button
-              type="button"
-              class="fantribe-compose-box__media-btn fantribe-compose-box__media-btn--audio"
-              title="Audio"
-            >
-              {{ftIcon "headphones"}}
-              <span>Audio</span>
-            </button>
-          </div>
+        <div class="fantribe-compose-box__input-placeholder">
+          Share your sound...
         </div>
+      </div>
+
+      <div class="fantribe-compose-box__actions">
+        <button
+          type="button"
+          class="fantribe-compose-box__media-btn fantribe-compose-box__media-btn--photo"
+          title="Photo"
+        >
+          {{ftIcon "image"}}
+          <span>Photo</span>
+        </button>
+        <button
+          type="button"
+          class="fantribe-compose-box__media-btn fantribe-compose-box__media-btn--video"
+          title="Video"
+        >
+          {{ftIcon "video"}}
+          <span>Video</span>
+        </button>
+        <button
+          type="button"
+          class="fantribe-compose-box__media-btn fantribe-compose-box__media-btn--audio"
+          title="Audio"
+        >
+          {{ftIcon "headphones"}}
+          <span>Audio</span>
+        </button>
+        <button
+          type="button"
+          class="fantribe-compose-box__media-btn fantribe-compose-box__media-btn--gear"
+          title="Tag Gear"
+        >
+          {{ftIcon "tag"}}
+          <span>Tag Gear</span>
+        </button>
       </div>
     </div>
   </template>

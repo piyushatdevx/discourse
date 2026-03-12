@@ -1,88 +1,104 @@
-// Compose Box — Exact from FeedPage_UI_Master_Spec.md §3.3
+// Compose Box — Values from Figma node 874:1994 (mobile) & desktop spec
 //
-// Container: bg white, radius 16→24px, border 1px #D4D2CF, shadow-sm, hover shadow-md
-// Avatar: 52x52px, gradient ring, hidden on mobile
-// Input: bg #F0F0F2, border 1px #D4D2CF, radius pill, py 10-12px, px 16-20px
-// Media buttons — each has unique color:
-//   Photo: bg-slate-50 hover:bg-purple-light, text-purple
-//   Video: bg-slate-50 hover:bg-vibrant-red-light, text-vibrant-red
-//   Audio: bg-slate-50 hover:bg-electric-blue-light, text-electric-blue
+// Two-row layout:
+// 1. Input row: avatar (42px gradient ring) + pill placeholder
+// 2. Button row: Photo, Video, Audio (neutral), Tag Gear (teal gradient)
 body.fantribe-theme:not(.admin-interface) {
   .fantribe-compose-box {
     background: white;
-    border-radius: 16px; // mobile
     border: 1px solid var(--ft-slate-200); // #D4D2CF
-    padding: 16px; // p-4 mobile
-    box-shadow: var(--ft-shadow-sm);
-    transition: box-shadow 200ms cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: 12px; // Figma mobile
+    padding: 16px;
+    box-shadow:
+      0 1px 3px rgb(0, 0, 0, 0.1),
+      0 1px 2px rgb(0, 0, 0, 0.1);
     cursor: pointer;
+    transition: box-shadow 200ms cubic-bezier(0.4, 0, 0.2, 1);
 
     &:hover {
       box-shadow: var(--ft-shadow-md);
     }
 
-    // Desktop: radius 24px, padding 24px
+    // Desktop overrides
     @media (width >= 768px) {
       border-radius: 24px;
       padding: 24px;
     }
 
-    // ---- Input Area (avatar + content) ----
+    // ---- Input Area (avatar + placeholder) ----
     &__input-area {
       display: flex;
-      align-items: flex-start;
-      gap: 16px; // gap-4
-    }
-
-    // ---- Avatar: 52x52px, hidden on mobile ----
-    &__avatar {
-      display: none;
-      flex-shrink: 0;
+      align-items: center;
+      gap: 10px; // Figma: gap-10
 
       @media (width >= 768px) {
-        display: block;
+        gap: 16px;
+      }
+    }
+
+    // ---- Avatar: 42px with gradient ring (mobile), 52px desktop ----
+    &__avatar {
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 42px; // Figma: 42px container
+      height: 42px;
+      border-radius: 9999px;
+      padding: 1px; // 1px ring
+      background: linear-gradient(135deg, #ff1744 0%, #ff6b6b 100%);
+
+      @media (width >= 768px) {
+        width: 52px;
+        height: 52px;
       }
 
       img,
       .avatar {
-        width: 52px;
-        height: 52px;
+        width: 100%;
+        height: 100%;
         border-radius: 9999px;
         object-fit: cover;
       }
     }
 
-    // ---- Content area ----
-    &__content {
-      flex: 1;
-      min-width: 0;
-    }
-
     // ---- Input placeholder pill ----
     &__input-placeholder {
-      background: var(--ft-slate-50); // #F0F0F2
-      border: 1px solid var(--ft-slate-200); // #D4D2CF
-      border-radius: 9999px; // rounded-full
-      padding: 10px 20px;
-      font-size: 0.875rem; // 14px mobile
-      color: var(--ft-slate-400);
+      flex: 1;
+      min-width: 0;
+      background: #f0f0f2; // Figma exact
+      border: 1px solid #ddd; // Figma: #ddd
+      border-radius: 9999px;
+      padding: 10px 20px; // Figma: py-10 px-20
+      font-size: 14px; // Figma: 14px
+      line-height: 21px; // Figma: 21px
+      color: #78766f; // Figma: #78766f
       pointer-events: none;
-      margin-bottom: 12px; // gap below input
 
       @media (width >= 768px) {
-        font-size: 1rem; // 16px desktop
+        font-size: 16px;
         padding: 12px 20px;
       }
     }
 
     // ---- Media buttons row ----
     &__actions {
-      display: none; // hidden on mobile
+      display: flex;
+      align-items: center;
+      gap: 6px; // Figma: gap-6
+      margin-top: 14px; // Figma: 14px gap between rows
+      overflow-x: auto;
+      overflow-y: clip;
+      scrollbar-width: none;
+
+      &::-webkit-scrollbar {
+        display: none;
+      }
 
       @media (width >= 768px) {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 8px; // gap-2
+        gap: 8px;
+        margin-top: 12px;
+        overflow: visible;
       }
     }
 
@@ -90,48 +106,92 @@ body.fantribe-theme:not(.admin-interface) {
     &__media-btn {
       display: inline-flex;
       align-items: center;
-      gap: 8px; // gap-2
-      padding: 8px 16px; // py-2 px-4
-      border-radius: 9999px; // rounded-full
+      gap: 8px; // Figma: gap-8
+      padding: 8px 14px; // Figma: py-8 px-14
+      border-radius: 9999px;
       border: none;
       cursor: pointer;
-      font-size: 0.875rem; // 14px
-      font-weight: 500;
+      font-size: 12px; // Figma: 12px
+      font-weight: 500; // Figma: Medium
+      line-height: 16px; // Figma: 16px
+      white-space: nowrap;
+      flex-shrink: 0;
       transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
 
       svg,
-      .d-icon {
-        width: 16px; // w-4
-        height: 16px; // h-4
+      .ft-icon {
+        width: 14px; // Figma: 14px
+        height: 14px;
+        flex-shrink: 0;
       }
 
-      // ---- Photo: purple ----
+      @media (width >= 768px) {
+        padding: 8px 16px;
+        font-size: 14px;
+        line-height: 20px;
+
+        svg,
+        .ft-icon {
+          width: 16px;
+          height: 16px;
+        }
+      }
+
+      // ---- Photo: neutral gray ----
       &--photo {
-        background: var(--ft-slate-50);
-        color: var(--ft-purple);
+        background: #f0f0f2;
+        color: #666;
 
-        &:hover {
-          background: var(--ft-purple-light);
+        @media (width >= 768px) {
+          background: var(--ft-slate-50);
+          color: var(--ft-purple);
+
+          &:hover {
+            background: var(--ft-purple-light);
+          }
         }
       }
 
-      // ---- Video: vibrant red ----
+      // ---- Video: neutral gray ----
       &--video {
-        background: var(--ft-slate-50);
-        color: var(--ft-vibrant-red);
+        background: #f0f0f2;
+        color: #666;
 
-        &:hover {
-          background: var(--ft-vibrant-red-light);
+        @media (width >= 768px) {
+          background: var(--ft-slate-50);
+          color: var(--ft-vibrant-red);
+
+          &:hover {
+            background: var(--ft-vibrant-red-light);
+          }
         }
       }
 
-      // ---- Audio: electric blue ----
+      // ---- Audio: neutral gray ----
       &--audio {
-        background: var(--ft-slate-50);
-        color: var(--ft-electric-blue);
+        background: #f0f0f2;
+        color: #666;
 
-        &:hover {
-          background: var(--ft-electric-blue-light);
+        @media (width >= 768px) {
+          background: var(--ft-slate-50);
+          color: var(--ft-electric-blue);
+
+          &:hover {
+            background: var(--ft-electric-blue-light);
+          }
+        }
+      }
+
+      // ---- Tag Gear: teal gradient with border ----
+      &--gear {
+        background: linear-gradient(90deg, #f0fdfa 0%, #eff6ff 100%);
+        border: 1px solid #96f7e4;
+        color: #00786f;
+
+        @media (width >= 768px) {
+          &:hover {
+            background: linear-gradient(90deg, #e6faf5 0%, #e5effc 100%);
+          }
         }
       }
     }
