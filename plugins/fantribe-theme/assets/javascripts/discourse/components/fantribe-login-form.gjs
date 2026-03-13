@@ -22,9 +22,25 @@ export default class FantribeLoginForm extends Component {
   @tracked secondFactorMethod = null;
   @tracked errorMessage = "";
   @tracked maskPassword = true;
+  _errorTimer = null;
+
+  showError(message) {
+    if (this._errorTimer) {
+      clearTimeout(this._errorTimer);
+    }
+    this.errorMessage = message;
+    this._errorTimer = setTimeout(() => {
+      this.errorMessage = "";
+      this._errorTimer = null;
+    }, 5000);
+  }
 
   get googleProvider() {
     return findAll().find((m) => m.name === "google_oauth2");
+  }
+
+  get facebookProvider() {
+    return findAll().find((m) => m.name === "facebook");
   }
 
   get signupUrl() {
@@ -66,12 +82,12 @@ export default class FantribeLoginForm extends Component {
     event?.preventDefault();
 
     if (!this.loginName.trim()) {
-      this.errorMessage = "Please enter your email or username";
+      this.showError("Please enter your email or username");
       return;
     }
 
     if (!this.loginPassword && !this.showSecondFactor) {
-      this.errorMessage = "Please enter your password";
+      this.showError("Please enter your password");
       return;
     }
 
@@ -100,11 +116,10 @@ export default class FantribeLoginForm extends Component {
           this.showSecondFactor = true;
           this.secondFactorMethod = result.totp_enabled ? 1 : 2;
           if (result.totp_enabled) {
-            this.errorMessage =
-              "Please enter your two-factor authentication code";
+            this.showError("Please enter your two-factor authentication code");
           }
         } else {
-          this.errorMessage = result.error;
+          this.showError(result.error);
         }
       } else {
         // Success - redirect to home
@@ -115,14 +130,14 @@ export default class FantribeLoginForm extends Component {
         e.jqXHR?.responseJSON?.error ||
         e.jqXHR?.responseJSON?.message ||
         "Login failed. Please try again.";
-      this.errorMessage = errorMsg;
 
       // Check if 2FA is required from error response
       const response = e.jqXHR?.responseJSON;
       if (response?.security_key_enabled || response?.totp_enabled) {
         this.showSecondFactor = true;
         this.secondFactorMethod = response.totp_enabled ? 1 : 2;
-        this.errorMessage = "";
+      } else {
+        this.showError(errorMsg);
       }
     } finally {
       this.isLoading = false;
@@ -138,144 +153,190 @@ export default class FantribeLoginForm extends Component {
   }
 
   @action
+  loginWithFacebook(event) {
+    event?.preventDefault();
+    if (this.facebookProvider) {
+      this.login.externalLogin(this.facebookProvider);
+    }
+  }
+
+  @action
   navigateToSignup(event) {
     event?.preventDefault();
     DiscourseURL.routeTo(getURL("/signup"));
   }
 
   <template>
+    {{#if this.errorMessage}}
+      <div class="fantribe-login-toast">
+        <svg
+          class="fantribe-login-toast__icon"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="12" y1="8" x2="12" y2="12"></line>
+          <line x1="12" y1="16" x2="12.01" y2="16"></line>
+        </svg>
+        <span>{{this.errorMessage}}</span>
+      </div>
+    {{/if}}
+
     <div class="fantribe-login-card">
       {{! Title }}
       <h1 class="fantribe-login-title">Sign In</h1>
 
-      {{! Error Message }}
-      {{#if this.errorMessage}}
-        <div class="fantribe-login-error">
-          {{this.errorMessage}}
-        </div>
-      {{/if}}
-
-      {{! Login Form }}
-      <form class="fantribe-login-form" {{on "submit" this.submitLogin}}>
-        {{#if this.showSecondFactor}}
-          {{! Two-Factor Authentication }}
-          <div class="fantribe-input-group">
-            <label for="fantribe-login-2fa">Authentication Code</label>
-            <input
-              type="text"
-              id="fantribe-login-2fa"
-              placeholder="Enter code"
-              value={{this.secondFactorToken}}
-              autocomplete="one-time-code"
-              inputmode="numeric"
-              {{on "input" this.updateSecondFactorToken}}
-            />
-          </div>
-        {{else}}
-          {{! Email/Username Input }}
-          <div class="fantribe-input-group">
-            <label for="fantribe-login-email">Email or Username</label>
-            <input
-              type="text"
-              id="fantribe-login-email"
-              placeholder="Enter email or username"
-              value={{this.loginName}}
-              autocomplete="username"
-              autocorrect="off"
-              autocapitalize="off"
-              {{on "input" this.updateLoginName}}
-            />
-          </div>
-
-          {{! Password Input }}
-          <div class="fantribe-input-group fantribe-input-password">
-            <label for="fantribe-login-password">Password</label>
-            <div class="fantribe-password-wrapper">
-              <input
-                type={{if this.maskPassword "password" "text"}}
-                id="fantribe-login-password"
-                placeholder="Enter password"
-                value={{this.loginPassword}}
-                autocomplete="current-password"
-                maxlength="200"
-                {{on "input" this.updateLoginPassword}}
-              />
-              <button
-                type="button"
-                class="fantribe-password-toggle"
-                {{on "click" this.togglePasswordMask}}
-              >
-                {{#if this.maskPassword}}
-                  {{icon "far-eye"}}
-                {{else}}
-                  {{icon "far-eye-slash"}}
-                {{/if}}
-              </button>
-            </div>
-            <div class="fantribe-forgot-password">
-              <a href {{on "click" this.handleForgotPassword}}>
-                Forgot password?
-              </a>
-            </div>
-          </div>
-        {{/if}}
-
-        {{! Submit Button }}
-        <button
-          type="submit"
-          class="fantribe-btn-primary {{if this.isLoading 'is-loading'}}"
-          disabled={{this.isLoading}}
-        >
-          {{#if this.isLoading}}
-            <span class="fantribe-spinner"></span>
-          {{else}}
-            Sign In
-          {{/if}}
-        </button>
-      </form>
-
-      {{! OAuth & Signup Section }}
-      <div class="fantribe-oauth-signup-section">
-        {{! Google OAuth }}
-        {{#if this.googleProvider}}
-          <button
-            type="button"
-            class="fantribe-btn-google"
-            {{on "click" this.loginWithGoogle}}
-          >
-            <svg
-              class="fantribe-google-icon"
-              viewBox="0 0 24 24"
-              width="24"
-              height="24"
+      {{! Main content wrapper }}
+      <div class="fantribe-login-content">
+        {{! Social Login Buttons }}
+        <div class="fantribe-social-buttons">
+          {{#if this.googleProvider}}
+            <button
+              type="button"
+              class="fantribe-btn-social"
+              {{on "click" this.loginWithGoogle}}
             >
-              <path
-                fill="#4285F4"
-                d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
-              ></path>
-              <path
-                fill="#34A853"
-                d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
-              ></path>
-              <path
-                fill="#FBBC05"
-                d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
-              ></path>
-              <path
-                fill="#EA4335"
-                d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
-              ></path>
-            </svg>
-            <span>Continue with Google</span>
-          </button>
-        {{/if}}
+              <svg
+                class="fantribe-social-icon"
+                viewBox="0 0 24 24"
+                width="20"
+                height="20"
+              >
+                <path
+                  fill="#4285F4"
+                  d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+                ></path>
+                <path
+                  fill="#34A853"
+                  d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+                ></path>
+                <path
+                  fill="#FBBC05"
+                  d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
+                ></path>
+                <path
+                  fill="#EA4335"
+                  d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
+                ></path>
+              </svg>
+              <span>Continue with Google</span>
+            </button>
+          {{/if}}
 
-        {{! Sign up link — mirrors "Already have an account? Sign In" on signup page }}
-        <div class="fantribe-signup-link">
-          <span>Don't have an account?</span>
-          <a href={{this.signupUrl}} {{on "click" this.navigateToSignup}}>Sign
-            Up</a>
+          {{#if this.facebookProvider}}
+            <button
+              type="button"
+              class="fantribe-btn-social"
+              {{on "click" this.loginWithFacebook}}
+            >
+              <svg
+                class="fantribe-social-icon"
+                viewBox="0 0 24 24"
+                width="20"
+                height="20"
+              >
+                <path
+                  fill="#1877F2"
+                  d="M24 12c0-6.627-5.373-12-12-12S0 5.373 0 12c0 5.99 4.388 10.954 10.125 11.854V15.47H7.078V12h3.047V9.356c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.875V12h3.328l-.532 3.47h-2.796v8.384C19.612 22.954 24 17.99 24 12z"
+                ></path>
+              </svg>
+              <span>Continue with Facebook</span>
+            </button>
+          {{/if}}
         </div>
+
+        {{! Or Separator }}
+        <span class="fantribe-or-separator">Or</span>
+
+        {{! Login Form }}
+        <form class="fantribe-login-form" {{on "submit" this.submitLogin}}>
+          {{#if this.showSecondFactor}}
+            {{! Two-Factor Authentication }}
+            <div class="fantribe-input-group">
+              <label for="fantribe-login-2fa">Authentication Code</label>
+              <input
+                type="text"
+                id="fantribe-login-2fa"
+                placeholder="Enter code"
+                value={{this.secondFactorToken}}
+                autocomplete="one-time-code"
+                inputmode="numeric"
+                {{on "input" this.updateSecondFactorToken}}
+              />
+            </div>
+          {{else}}
+            {{! Email/Username Input }}
+            <div class="fantribe-input-group">
+              <label for="fantribe-login-email">Email/Username</label>
+              <input
+                type="text"
+                id="fantribe-login-email"
+                placeholder="Enter your email or username"
+                value={{this.loginName}}
+                autocomplete="username"
+                autocorrect="off"
+                autocapitalize="off"
+                {{on "input" this.updateLoginName}}
+              />
+            </div>
+
+            {{! Password Input }}
+            <div class="fantribe-input-group fantribe-input-password">
+              <label for="fantribe-login-password">Password</label>
+              <div class="fantribe-password-wrapper">
+                <input
+                  type={{if this.maskPassword "password" "text"}}
+                  id="fantribe-login-password"
+                  placeholder="Enter your password"
+                  value={{this.loginPassword}}
+                  autocomplete="current-password"
+                  maxlength="200"
+                  {{on "input" this.updateLoginPassword}}
+                />
+                <button
+                  type="button"
+                  class="fantribe-password-toggle"
+                  {{on "click" this.togglePasswordMask}}
+                >
+                  {{#if this.maskPassword}}
+                    {{icon "far-eye"}}
+                  {{else}}
+                    {{icon "far-eye-slash"}}
+                  {{/if}}
+                </button>
+              </div>
+              <div class="fantribe-forgot-password">
+                <a href {{on "click" this.handleForgotPassword}}>
+                  Forgot password?
+                </a>
+              </div>
+            </div>
+          {{/if}}
+
+          {{! Submit Button }}
+          <button
+            type="submit"
+            class="fantribe-btn-primary {{if this.isLoading 'is-loading'}}"
+            disabled={{this.isLoading}}
+          >
+            {{#if this.isLoading}}
+              <span class="fantribe-spinner"></span>
+            {{else}}
+              Next
+            {{/if}}
+          </button>
+        </form>
+      </div>
+
+      {{! Sign up link }}
+      <div class="fantribe-signup-link">
+        <span>Don't have an account?</span>
+        <a href={{this.signupUrl}} {{on "click" this.navigateToSignup}}>Sign Up</a>
       </div>
     </div>
   </template>
