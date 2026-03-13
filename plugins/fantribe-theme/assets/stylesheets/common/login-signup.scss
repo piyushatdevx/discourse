@@ -657,8 +657,270 @@ body.fantribe-theme.signup-page {
 }
 
 // ==============================================
-// SIGNUP LINK SECTION
+// SIGNUP SELECTION PAGE (pre-signup step)
 // ==============================================
+
+// When selection is active, hide the default signup form and remove extra card styles
+body.fantribe-theme.signup-page.fantribe-signup-selection-active {
+  #main-outlet-wrapper {
+    padding: 0 !important;
+  }
+
+  #main-outlet,
+  .signup-fullpage {
+    height: 100vh !important;
+  }
+
+  .signup-body {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    max-width: 100% !important;
+    width: 100% !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+
+    .login-left-side,
+    .login-right-side,
+    .login-or-separator {
+      display: none !important;
+    }
+  }
+
+  .signup-progress-bar,
+  .login-welcome-header {
+    display: none !important;
+  }
+}
+
+// When form is entering after selection dismissal, animate it in
+body.fantribe-theme.signup-page.fantribe-signup-form-entering {
+  .signup-body .login-left-side {
+    animation: ft-signup-form-enter 0.45s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+}
+
+// Selection card — enter animation
+.fantribe-signup-selection {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 900;
+  overflow-y: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: ft-signup-selection-enter 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+
+  // Leave animation
+  &--leaving {
+    animation: ft-signup-selection-leave 0.35s cubic-bezier(0.4, 0, 0.2, 1) both;
+  }
+
+  &__card {
+    background: rgb(253 252 252 / 0.8);
+    border: 1px solid rgb(231 230 228 / 0.6);
+    border-radius: 10px;
+    box-shadow:
+      0 20px 25px rgb(0 0 0 / 0.1),
+      0 8px 10px rgb(0 0 0 / 0.1);
+    padding: 32px;
+    width: 100%;
+    max-width: 460px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    align-items: center;
+  }
+
+  &__title {
+    font-family: var(--ft-font-family);
+    font-size: 32px;
+    font-weight: 600;
+    line-height: 48px;
+    color: #1a1a1a;
+    text-align: center;
+    margin: 0;
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    align-items: center;
+    width: 100%;
+    max-width: 396px;
+  }
+
+  &__social-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+  }
+
+  &__social-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    height: 42px;
+    padding: 8px 34px;
+    font-family: var(--ft-font-family);
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 24px;
+    color: #666;
+    background: transparent;
+    border: 1px solid #d3d1cf;
+    border-radius: 9999px;
+    cursor: pointer;
+    transition:
+      background-color var(--ft-transition-fast),
+      border-color var(--ft-transition-fast);
+
+    &:hover {
+      background: #f5f3f0;
+      border-color: #c0beba;
+    }
+
+    &:active {
+      background: #eae8e5;
+    }
+
+    &:focus,
+    &:focus-visible {
+      outline: none;
+      box-shadow: 0 0 0 3px rgb(255 26 71 / 0.3);
+    }
+  }
+
+  &__social-icon {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+  }
+
+  &__or {
+    font-family: var(--ft-font-family);
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 21px;
+    color: #666;
+  }
+
+  &__create-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: 396px;
+    height: 48px;
+    padding: 12px 24px;
+    font-family: var(--ft-font-family);
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 24px;
+    color: #fff;
+    background: #ff1a47;
+    border: none;
+    border-radius: 9999px;
+    cursor: pointer;
+    transition:
+      background-color var(--ft-transition-fast),
+      transform var(--ft-transition-fast),
+      box-shadow var(--ft-transition-fast);
+
+    &:hover {
+      background: var(--ft-figma-btn-primary-hover);
+      box-shadow: var(--ft-shadow-md);
+    }
+
+    &:active {
+      background: var(--ft-figma-btn-primary-active);
+      transform: scale(0.98);
+    }
+
+    &:focus,
+    &:focus-visible {
+      outline: none;
+      box-shadow: 0 0 0 3px rgb(255 26 71 / 0.3);
+    }
+  }
+
+  &__signin {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    font-family: var(--ft-font-family);
+
+    span {
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 21px;
+      color: #4a4a4a;
+    }
+
+    a {
+      font-size: 16px;
+      font-weight: 600;
+      line-height: 24px;
+      color: #ff1744;
+      text-decoration: none;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}
+
+// Selection card enters: scale up + fade in
+@keyframes ft-signup-selection-enter {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+// Selection card leaves: scale down + fade out
+@keyframes ft-signup-selection-leave {
+  from {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+
+  to {
+    opacity: 0;
+    transform: scale(0.96) translateY(-10px);
+  }
+}
+
+// Signup form enters after selection is dismissed
+@keyframes ft-signup-form-enter {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 
 // ==============================================
 // FLASH MESSAGES

@@ -2,6 +2,7 @@ import Component from "@glimmer/component";
 import { service } from "@ember/service";
 import icon from "discourse/helpers/d-icon";
 import getURL from "discourse/lib/get-url";
+import FantribeSignupSelection from "../../components/fantribe-signup-selection";
 import FtLangDropdown from "../../components/ft-lang-dropdown";
 
 export default class FantribeSignupLogo extends Component {
@@ -42,6 +43,7 @@ export default class FantribeSignupLogo extends Component {
           </a>
         </div>
       </header>
+      <FantribeSignupSelection />
     {{/if}}
   </template>
 }
