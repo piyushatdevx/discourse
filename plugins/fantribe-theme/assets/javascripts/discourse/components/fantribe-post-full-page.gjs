@@ -1480,8 +1480,26 @@ export default class FantribePostFullPage extends Component {
                           {{on "input" this.updateCommentText}}
                           {{on "keydown" this.handleCommentKeydown}}
                         />
-                        <button type="button" class="ft-full-post__emoji-btn">
-                          {{ftIcon "smile"}}
+                        <button
+                          type="button"
+                          class="fantribe-feed-card__comment-input-send
+                            {{if
+                              this.commentText
+                              'fantribe-feed-card__comment-input-send--active'
+                            }}"
+                          disabled={{or
+                            this.isSubmittingComment
+                            (not this.commentText)
+                            this.topicClosed
+                            (not this.currentUser)
+                          }}
+                          {{on "click" this.submitComment}}
+                        >
+                          {{#if this.isSubmittingComment}}
+                            {{ftIcon "loader"}}
+                          {{else}}
+                            {{ftIcon "arrow-up"}}
+                          {{/if}}
                         </button>
                       </div>
                     </div>
@@ -1736,8 +1754,26 @@ export default class FantribePostFullPage extends Component {
                         {{on "input" this.updateCommentText}}
                         {{on "keydown" this.handleCommentKeydown}}
                       />
-                      <button type="button" class="ft-full-post__emoji-btn">
-                        {{ftIcon "smile"}}
+                      <button
+                        type="button"
+                        class="fantribe-feed-card__comment-input-send
+                          {{if
+                            this.commentText
+                            'fantribe-feed-card__comment-input-send--active'
+                          }}"
+                        disabled={{or
+                          this.isSubmittingComment
+                          (not this.commentText)
+                          this.topicClosed
+                          (not this.currentUser)
+                        }}
+                        {{on "click" this.submitComment}}
+                      >
+                        {{#if this.isSubmittingComment}}
+                          {{ftIcon "loader"}}
+                        {{else}}
+                          {{ftIcon "arrow-up"}}
+                        {{/if}}
                       </button>
                     </div>
                   </div>
