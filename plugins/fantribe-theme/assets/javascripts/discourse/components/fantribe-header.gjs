@@ -8,6 +8,7 @@ import getURL from "discourse/lib/get-url";
 import closeOnClickOutside from "discourse/modifiers/close-on-click-outside";
 import { i18n } from "discourse-i18n";
 import ftIcon from "../helpers/ft-icon";
+import FtCommentPanel from "./ft-comment-panel";
 import FtCreateMenu from "./ft-create-menu";
 import FtCreatePostModal from "./ft-create-post-modal";
 import FtCreateTribeModal from "./ft-create-tribe-modal";
@@ -18,6 +19,7 @@ export default class FantribeHeader extends Component {
   @service currentUser;
   @service siteSettings;
   @service fantribeCreate;
+  @service fantribeCommentPanel;
   @service fantribeFilter;
 
   @tracked mobileMenuOpen = false;
@@ -428,6 +430,14 @@ export default class FantribeHeader extends Component {
     {{#if this.fantribeCreate.isCreateTribeModalOpen}}
       <FtCreateTribeModal
         @onClose={{this.fantribeCreate.closeCreateTribeModal}}
+      />
+    {{/if}}
+
+    {{#if this.fantribeCommentPanel.isOpen}}
+      <FtCommentPanel
+        @topicId={{this.fantribeCommentPanel.topicId}}
+        @topic={{this.fantribeCommentPanel.topic}}
+        @onClose={{this.fantribeCommentPanel.close}}
       />
     {{/if}}
   </template>

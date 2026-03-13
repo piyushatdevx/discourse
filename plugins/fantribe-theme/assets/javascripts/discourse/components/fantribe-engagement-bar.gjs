@@ -19,10 +19,13 @@ const REACTIONS = [
   { emoji: "👏", key: "clap" },
 ];
 
+const MOBILE_BREAKPOINT = 768;
+
 export default class FantribeEngagementBar extends Component {
   @service currentUser;
   @service fantribeFeedState;
   @service modal;
+  @service fantribeCommentPanel;
 
   @tracked isLoading = false;
   @tracked isBookmarkLoading = false;
@@ -170,6 +173,14 @@ export default class FantribeEngagementBar extends Component {
   }
 
   @action
+  handleCommentClick(event) {
+    event.stopPropagation();
+    if (window.innerWidth < MOBILE_BREAKPOINT && this.args.topic) {
+      this.fantribeCommentPanel.open(this.args.topicId, this.args.topic);
+    }
+  }
+
+  @action
   handleShare(event) {
     event.stopPropagation();
 
@@ -256,11 +267,13 @@ export default class FantribeEngagementBar extends Component {
           </button>
         {{/each}}
 
-        {{! Comment count with icon (display-only) }}
-        <span
+        {{! Comment count with icon — opens comment panel on mobile }}
+        <button
+          type="button"
           class="fantribe-engagement__comment-count
             {{if this.isClosed 'fantribe-engagement__comment-count--closed'}}"
           title={{if this.isClosed "Comments are turned off"}}
+          {{on "click" this.handleCommentClick}}
         >
           {{#if this.isClosed}}
             {{ftIcon "message-square-off"}}
@@ -270,7 +283,7 @@ export default class FantribeEngagementBar extends Component {
           {{#if this.commentCount}}
             <span>{{this.commentCount}}</span>
           {{/if}}
-        </span>
+        </button>
 
         {{! Right-aligned actions (share, bookmark) }}
         <div class="fantribe-engagement__actions-right">

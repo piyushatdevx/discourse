@@ -1,0 +1,464 @@
+// Comment Panel — Instagram-style bottom sheet for mobile comment viewing
+body.fantribe-theme:not(.admin-interface) {
+  // ==========================================
+  // BACKDROP
+  // ==========================================
+  .ft-comment-panel-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgb(15 23 42 / 60%);
+    backdrop-filter: blur(4px);
+    z-index: 100;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+  }
+
+  // ==========================================
+  // PANEL
+  // ==========================================
+  .ft-comment-panel {
+    position: relative;
+    width: 100%;
+    max-height: 88vh;
+    background: white;
+    border-radius: 20px 20px 0 0;
+    z-index: 110;
+    display: flex;
+    flex-direction: column;
+    animation: ft-comment-panel-slide-up 300ms cubic-bezier(0.4, 0, 0.2, 1)
+      forwards;
+
+    // ==========================================
+    // DRAG HANDLE
+    // ==========================================
+    &__drag-handle {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px 0 4px;
+      cursor: grab;
+      touch-action: none;
+    }
+
+    &__drag-bar {
+      width: 36px;
+      height: 4px;
+      background: #ddd;
+      border-radius: 2px;
+    }
+
+    // ==========================================
+    // HEADER
+    // ==========================================
+    &__header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 4px 16px 12px;
+    }
+
+    &__title {
+      font-size: 12px;
+      font-weight: 400;
+      color: #5a584f;
+      line-height: 16px;
+    }
+
+    // ==========================================
+    // COMMENTS LIST
+    // ==========================================
+    &__comments-list {
+      flex: 1;
+      overflow-y: auto;
+      overflow-x: hidden;
+      padding: 0 12px 16px;
+      min-height: 0;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    &__loading {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 0;
+      color: #999;
+
+      .d-icon {
+        width: 24px;
+        height: 24px;
+        animation: ft-spin 1s linear infinite;
+      }
+    }
+
+    &__empty {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+      text-align: center;
+
+      p {
+        font-size: 14px;
+        color: #999;
+        margin: 0;
+      }
+    }
+
+    // ==========================================
+    // THREAD
+    // ==========================================
+    &__thread {
+      margin-bottom: 12px;
+    }
+
+    // ==========================================
+    // COMMENT
+    // ==========================================
+    &__comment {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+
+      &--reply {
+        padding-left: 44px;
+      }
+    }
+
+    &__comment-avatar {
+      flex-shrink: 0;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      overflow: hidden;
+
+      img {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        object-fit: cover;
+      }
+
+      &--reply {
+        width: 24px;
+        height: 24px;
+
+        img {
+          width: 24px;
+          height: 24px;
+        }
+      }
+
+      // Gradient fallbacks for initials avatars
+      &--gradient-1 {
+        background: linear-gradient(135deg, #00d492, #00bba7);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      &--gradient-2 {
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      &--gradient-3 {
+        background: linear-gradient(135deg, #f093fb, #f5576c);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      &--gradient-4 {
+        background: linear-gradient(135deg, #4facfe, #00f2fe);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+    }
+
+    &__comment-initials {
+      font-size: 12px;
+      font-weight: 500;
+      color: white;
+      line-height: 16px;
+    }
+
+    &__comment-body {
+      flex: 1;
+      min-width: 0;
+    }
+
+    &__comment-meta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    &__comment-author {
+      font-size: 12px;
+      font-weight: 600;
+      color: #1a1a1a;
+      line-height: 16px;
+    }
+
+    &__comment-time {
+      font-size: 10px;
+      font-weight: 400;
+      color: #5a584f;
+      line-height: 15px;
+    }
+
+    &__comment-text {
+      font-size: 14px;
+      font-weight: 400;
+      color: #1a1a1a;
+      line-height: 20px;
+      margin: 2px 0 0;
+      word-break: break-word;
+    }
+
+    &__comment-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 2px;
+    }
+
+    &__comment-likes {
+      font-size: 12px;
+      font-weight: 400;
+      color: #5a584f;
+    }
+
+    &__reply-btn {
+      background: none;
+      border: none;
+      padding: 0;
+      font-size: 12px;
+      font-weight: 600;
+      color: #666;
+      cursor: pointer;
+      line-height: 16px;
+    }
+
+    &__like-btn {
+      flex-shrink: 0;
+      background: none;
+      border: none;
+      padding: 4px;
+      cursor: pointer;
+      color: #999;
+      display: flex;
+      align-items: center;
+
+      .d-icon {
+        width: 14px;
+        height: 14px;
+      }
+
+      &--liked {
+        color: #ef4444;
+      }
+    }
+
+    // ==========================================
+    // THREAD TOGGLE
+    // ==========================================
+    &__thread-toggle {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 4px 0 4px 44px;
+      background: none;
+      border: none;
+      font-size: 12px;
+      font-weight: 600;
+      color: #5a584f;
+      cursor: pointer;
+    }
+
+    &__thread-toggle-line {
+      display: inline-block;
+      width: 20px;
+      height: 1px;
+      background: #ddd;
+    }
+
+    &__thread-replies {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 4px;
+    }
+
+    // ==========================================
+    // LOAD MORE
+    // ==========================================
+    &__load-more {
+      display: flex;
+      justify-content: center;
+      padding: 12px 0;
+    }
+
+    &__load-more-btn {
+      background: none;
+      border: none;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--ft-electric-blue, #0080ff);
+      cursor: pointer;
+      padding: 8px 16px;
+    }
+
+    // ==========================================
+    // INPUT AREA
+    // ==========================================
+    &__input-area {
+      border-top: 0.5px solid #ddd;
+      padding: 10px 16px calc(16px + env(safe-area-inset-bottom, 0));
+      background: white;
+      border-radius: 0 0 20px 20px;
+    }
+
+    &__reply-indicator {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 6px 0 8px;
+      font-size: 12px;
+      color: #5a584f;
+
+      span {
+        font-weight: 500;
+      }
+    }
+
+    &__reply-cancel {
+      background: none;
+      border: none;
+      padding: 2px;
+      cursor: pointer;
+      color: #999;
+      display: flex;
+      align-items: center;
+
+      .d-icon {
+        width: 14px;
+        height: 14px;
+      }
+    }
+
+    &__input-row {
+      display: flex;
+      gap: 12px;
+    }
+
+    &__input-avatar {
+      flex-shrink: 0;
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      overflow: hidden;
+
+      img {
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        object-fit: cover;
+      }
+    }
+
+    &__input-container {
+      flex: 1;
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    &__input {
+      width: 100%;
+      height: 38px;
+      padding: 8px 40px 8px 16px;
+      border-radius: 20px;
+      border: none;
+      background: rgb(221 221 221 / 20%);
+      font-size: 14px;
+      font-weight: 400;
+      color: #1a1a1a;
+      outline: none;
+      box-sizing: border-box;
+
+      &::placeholder {
+        color: #999;
+      }
+
+      &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+    }
+
+    &__send-btn {
+      position: absolute;
+      right: 6px;
+      top: 40%;
+      transform: translateY(-50%);
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: none;
+      background: #e0e0e0;
+      color: #999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 200ms ease;
+      padding: 0;
+
+      .d-icon {
+        width: 16px;
+        height: 16px;
+      }
+
+      &--active {
+        background: var(
+          --ft-gradient-action,
+          linear-gradient(135deg, #00d492, #00bba7)
+        );
+        color: white;
+      }
+
+      &:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+      }
+    }
+  }
+
+  // ==========================================
+  // ANIMATIONS
+  // ==========================================
+  @keyframes ft-comment-panel-slide-up {
+    from {
+      transform: translateY(100%);
+    }
+
+    to {
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes ft-spin {
+    from {
+      transform: rotate(0deg);
+    }
+
+    to {
+      transform: rotate(360deg);
+    }
+  }
+}
