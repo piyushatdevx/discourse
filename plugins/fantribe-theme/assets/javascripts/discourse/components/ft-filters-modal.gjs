@@ -21,27 +21,41 @@ const positionDropdown = modifier((element) => {
     return;
   }
 
-  const modal = element.closest(".ft-filters-modal");
-  const modalRect = modal ? modal.getBoundingClientRect() : { top: 0, left: 0 };
-
+  const fieldRect = field.getBoundingClientRect();
   const triggerRect = trigger.getBoundingClientRect();
+  const triggerTopInField = triggerRect.top - fieldRect.top;
+
+  const dropdownHeight = element.offsetHeight || 260; // Max height is 260px
   const viewportHeight = window.innerHeight;
   const spaceBelow = viewportHeight - triggerRect.bottom;
   const spaceAbove = triggerRect.top;
 
-  element.style.position = "fixed";
-  element.style.width = `${triggerRect.width}px`;
-  element.style.left = `${triggerRect.left - modalRect.left}px`;
+  element.style.position = "absolute";
+  element.style.left = "0";
+  element.style.right = "0";
   element.style.zIndex = "1100";
+  element.style.width = "";
+  element.style.top = "";
+  element.style.bottom = "";
+  element.style.marginTop = "";
+  element.style.marginBottom = "";
 
-  const dropdownHeight = element.offsetHeight;
+  const isDateRange = element.classList.contains(
+    "ft-filters-modal__date-range-panel"
+  );
 
-  if (spaceBelow >= dropdownHeight + 4 || spaceBelow >= spaceAbove) {
-    element.style.top = `${triggerRect.bottom - modalRect.top + 4}px`;
-    element.style.bottom = "auto";
-  } else {
-    element.style.bottom = `${viewportHeight - triggerRect.top + modalRect.top + 4}px`;
+  if (
+    isDateRange ||
+    (spaceBelow < dropdownHeight + 10 && spaceAbove > spaceBelow)
+  ) {
+    const bottomOffset = fieldRect.height - triggerTopInField;
+    element.style.bottom = `${bottomOffset}px`;
+    element.style.marginBottom = "4px";
     element.style.top = "auto";
+  } else {
+    element.style.top = "100%";
+    element.style.marginTop = "4px";
+    element.style.bottom = "auto";
   }
 });
 
@@ -429,12 +443,50 @@ export default class FtFiltersModal extends Component {
     }
   }
 
+  // ── Actions: Clear all ────────────────────────────────
+
+  @action
+  clearAllFilters() {
+    this.selectedCategoryIds = [];
+    this.selectedTagNames = [];
+    this.selectedUsernames = [];
+    this.topicSearchQuery = "";
+    this.contentTypeFilter = "all";
+    this.dateFrom = null;
+    this.dateTo = null;
+  }
+
   // ── Actions: Modal controls ────────────────────────────
 
   @action
   handleBackdropClick(event) {
     if (event.target === event.currentTarget) {
       this.args.onClose();
+    }
+  }
+
+  @action
+  handleModalClick(event) {
+    if (!this.openDropdown) {
+      return;
+    }
+
+    const path = event.composedPath();
+    const isTrigger = path.some(
+      (el) =>
+        el.classList &&
+        (el.classList.contains("ft-filters-modal__trigger") ||
+          el.classList.contains("ft-filters-modal__input-wrap"))
+    );
+    const isDropdown = path.some(
+      (el) =>
+        el.classList &&
+        (el.classList.contains("ft-filters-modal__dropdown") ||
+          el.classList.contains("ft-filters-modal__date-range-panel"))
+    );
+
+    if (!isTrigger && !isDropdown) {
+      this.openDropdown = null;
     }
   }
 
@@ -486,7 +538,10 @@ export default class FtFiltersModal extends Component {
       {{on "click" this.handleBackdropClick}}
       {{on "keydown" this.handleKeydown}}
     >
-      <div class="ft-modal ft-filters-modal">
+      <div
+        class="ft-modal ft-filters-modal"
+        {{on "click" this.handleModalClick}}
+      >
 
         {{! Header }}
         <div class="ft-filters-modal__header">
@@ -500,6 +555,36 @@ export default class FtFiltersModal extends Component {
             {{ftIcon "x" size=20}}
           </button>
         </div>
+
+        {{! Selected chips + Clear all }}
+        {{#if this.hasChips}}
+          <div class="ft-filters-modal__chips-row">
+            <div class="ft-filters-modal__chips">
+              {{#each this.allChips as |chip|}}
+                <div class="ft-filters-modal__chip">
+                  <span
+                    class="ft-filters-modal__chip-label"
+                  >{{chip.label}}</span>
+                  <button
+                    type="button"
+                    class="ft-filters-modal__chip-remove"
+                    aria-label="Remove {{chip.label}}"
+                    {{on "click" (fn this.removeChip chip)}}
+                  >
+                    {{ftIcon "x" size=8}}
+                  </button>
+                </div>
+              {{/each}}
+            </div>
+            <button
+              type="button"
+              class="ft-filters-modal__clear-all"
+              {{on "click" this.clearAllFilters}}
+            >
+              Clear all
+            </button>
+          </div>
+        {{/if}}
 
         {{! Body — fields }}
         <div class="ft-filters-modal__body">
@@ -535,7 +620,7 @@ export default class FtFiltersModal extends Component {
               <div
                 class="ft-filters-modal__dropdown ft-filters-modal__dropdown--absolute"
                 role="listbox"
-                {{positionDropdown}}
+                {{positionDropdown this.openDropdown this.categoryTriggerLabel}}
               >
                 <button
                   type="button"
@@ -623,7 +708,10 @@ export default class FtFiltersModal extends Component {
               {{#if this.isSearchingTags}}
                 <div
                   class="ft-filters-modal__dropdown ft-filters-modal__dropdown--absolute ft-filters-modal__dropdown--loading"
-                  {{positionDropdown}}
+                  {{positionDropdown
+                    this.openDropdown
+                    this.tagSearchResults.length
+                  }}
                 >
                   <span
                     class="ft-filters-modal__dropdown-label"
@@ -633,7 +721,10 @@ export default class FtFiltersModal extends Component {
                 <div
                   class="ft-filters-modal__dropdown ft-filters-modal__dropdown--absolute"
                   role="listbox"
-                  {{positionDropdown}}
+                  {{positionDropdown
+                    this.openDropdown
+                    this.tagSearchResults.length
+                  }}
                 >
                   {{#each this.tagSearchResults as |tag|}}
                     <button
@@ -682,7 +773,10 @@ export default class FtFiltersModal extends Component {
               {{#if this.isSearchingUsers}}
                 <div
                   class="ft-filters-modal__dropdown ft-filters-modal__dropdown--absolute ft-filters-modal__dropdown--loading"
-                  {{positionDropdown}}
+                  {{positionDropdown
+                    this.openDropdown
+                    this.userSearchResults.length
+                  }}
                 >
                   <span
                     class="ft-filters-modal__dropdown-label"
@@ -692,7 +786,10 @@ export default class FtFiltersModal extends Component {
                 <div
                   class="ft-filters-modal__dropdown ft-filters-modal__dropdown--absolute"
                   role="listbox"
-                  {{positionDropdown}}
+                  {{positionDropdown
+                    this.openDropdown
+                    this.userSearchResults.length
+                  }}
                 >
                   {{#each this.userSearchResults as |user|}}
                     <button
@@ -755,7 +852,10 @@ export default class FtFiltersModal extends Component {
               <div
                 class="ft-filters-modal__dropdown ft-filters-modal__dropdown--absolute"
                 role="listbox"
-                {{positionDropdown}}
+                {{positionDropdown
+                  this.openDropdown
+                  this.contentTypeTriggerLabel
+                }}
               >
                 {{#each this.contentTypeOptions as |opt|}}
                   <button
@@ -805,7 +905,7 @@ export default class FtFiltersModal extends Component {
             {{#if this.dateRangeOpen}}
               <div
                 class="ft-filters-modal__date-range-panel ft-filters-modal__date-range-panel--absolute"
-                {{positionDropdown}}
+                {{positionDropdown this.openDropdown this.dateTriggerLabel}}
               >
                 <div class="ft-filters-modal__date-field">
                   <label class="ft-filters-modal__date-label">From</label>
@@ -830,25 +930,6 @@ export default class FtFiltersModal extends Component {
           </div>
 
         </div>
-
-        {{! Selected chips }}
-        {{#if this.hasChips}}
-          <div class="ft-filters-modal__chips">
-            {{#each this.allChips as |chip|}}
-              <div class="ft-filters-modal__chip">
-                <span class="ft-filters-modal__chip-label">{{chip.label}}</span>
-                <button
-                  type="button"
-                  class="ft-filters-modal__chip-remove"
-                  aria-label="Remove {{chip.label}}"
-                  {{on "click" (fn this.removeChip chip)}}
-                >
-                  {{ftIcon "x" size=8}}
-                </button>
-              </div>
-            {{/each}}
-          </div>
-        {{/if}}
 
         {{! Footer }}
         <div class="ft-filters-modal__footer">

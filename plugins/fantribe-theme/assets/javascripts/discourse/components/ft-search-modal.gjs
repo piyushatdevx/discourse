@@ -20,6 +20,7 @@ const TABS = [
 ];
 
 export default class FtSearchModal extends Component {
+  @service fantribeFilter;
   @service router;
   @service site;
 
@@ -234,6 +235,12 @@ export default class FtSearchModal extends Component {
   }
 
   @action
+  openFilters() {
+    this.args.onClose();
+    this.fantribeFilter.openFiltersModal();
+  }
+
+  @action
   viewAllTribes() {
     this.router.transitionTo("discovery.categories");
     this.args.onClose();
@@ -299,6 +306,7 @@ export default class FtSearchModal extends Component {
             type="button"
             class="ft-search-modal__filter-btn"
             aria-label="Filter"
+            {{on "click" this.openFilters}}
           >
             {{ftIcon "sliders-horizontal" size=20}}
           </button>
