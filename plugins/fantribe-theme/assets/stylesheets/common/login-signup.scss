@@ -711,8 +711,7 @@ body.fantribe-theme .forgot-password-modal {
 
   .modal-inner-container,
   .d-modal__container {
-    background: rgb(255 255 255 / 0.95);
-    backdrop-filter: blur(12px);
+    background: #fdfcfc;
     border: 1px solid rgb(231 230 228 / 0.6);
     border-radius: 10px;
     box-shadow:
@@ -720,119 +719,184 @@ body.fantribe-theme .forgot-password-modal {
       0 8px 10px rgb(0 0 0 / 0.1);
     font-family: var(--ft-font-family);
     overflow: hidden;
+    max-width: 447px;
+    width: 100%;
   }
 
+  // Hide the default DModal header (title + close button)
   .modal-header,
   .d-modal__header {
-    border-bottom: 1px solid #e5e7eb;
-    padding: 16px 24px;
+    display: none;
+  }
 
-    .title h3,
-    .d-modal__title,
-    .d-modal__title-text {
-      font-family: var(--ft-font-family);
-      font-weight: 600;
-      font-size: 18px;
-      color: #1a1a1a;
-      margin: 0;
-    }
-
-    .modal-close,
-    .d-modal__dismiss {
-      color: #666;
-      background: transparent;
-      border: none;
-      border-radius: 8px;
-      transition:
-        color var(--ft-transition-fast),
-        background-color var(--ft-transition-fast);
-
-      &:hover {
-        color: var(--ft-figma-accent);
-        background-color: rgb(255 23 68 / 0.1);
-      }
-    }
+  // Hide the default DModal footer
+  .modal-footer,
+  .d-modal__footer {
+    display: none;
   }
 
   .modal-body,
   .d-modal__body {
-    padding: 24px;
+    padding: 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    align-items: center;
+  }
 
-    label {
-      font-family: var(--ft-font-family);
-      font-size: 14px;
-      font-weight: 500;
-      color: #1a1a1a;
-      margin-bottom: 8px;
-      display: block;
-    }
+  // ---- Header section (title + subtitle) ----
+  .forgot-password-modal__header {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    align-items: center;
+    width: 100%;
+  }
 
-    #username-or-email,
-    input[type="text"],
-    input[type="email"] {
-      width: 100%;
-      height: 48px;
-      padding: 0 16px;
-      font-family: var(--ft-font-family);
-      font-size: 16px;
-      color: #1a1a1a;
-      background: #fdfcfc;
-      border: 1px solid #ddd;
-      border-radius: 10px;
-      outline: none;
-      box-sizing: border-box;
-      transition:
-        border-color var(--ft-transition-fast),
-        box-shadow var(--ft-transition-fast);
+  .forgot-password-modal__title {
+    font-family: var(--ft-font-family);
+    font-weight: 600;
+    font-size: 32px;
+    line-height: 48px;
+    color: #1a1a1a;
+    text-align: center;
+    margin: 0;
+  }
 
-      &::placeholder {
-        color: #999;
-      }
+  .forgot-password-modal__subtitle {
+    font-family: var(--ft-font-family);
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 21px;
+    color: #666;
+    text-align: center;
+    margin: 0;
+  }
 
-      &:focus {
-        border-color: var(--ft-figma-accent);
-        box-shadow: 0 0 0 2px rgb(255 23 68 / 0.15);
-      }
-    }
+  // ---- Form section (field + button) ----
+  .forgot-password-modal__form {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    align-items: center;
+    width: 100%;
+  }
 
-    p {
-      font-family: var(--ft-font-family);
-      font-size: 14px;
+  .forgot-password-modal__field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+  }
+
+  .forgot-password-modal__label {
+    font-family: var(--ft-font-family);
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 21px;
+    color: #1a1a1a;
+    margin: 0;
+  }
+
+  .forgot-password-modal__input {
+    width: 100%;
+    height: 48px;
+    padding: 0 16px;
+    font-family: var(--ft-font-family);
+    font-size: 16px;
+    line-height: 24px;
+    color: #1a1a1a;
+    background: #fdfcfc;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    outline: none;
+    box-sizing: border-box;
+    transition:
+      border-color var(--ft-transition-fast),
+      box-shadow var(--ft-transition-fast);
+
+    &::placeholder {
       color: #666;
-      margin-bottom: 16px;
+    }
+
+    &:focus {
+      border-color: var(--ft-figma-accent);
+      box-shadow: 0 0 0 2px rgb(255 23 68 / 0.15);
     }
   }
 
-  .modal-footer,
-  .d-modal__footer {
-    padding: 16px 24px;
-    border-top: 1px solid #e5e7eb;
-    display: flex;
-    gap: 12px;
-    justify-content: flex-end;
+  .forgot-password-modal__submit {
+    width: 100%;
+    height: 48px;
+    background-color: #ff1a47;
+    color: #fff;
+    font-family: var(--ft-font-family);
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 24px;
+    text-align: center;
+    border: none;
+    border-radius: 9999px;
+    cursor: pointer;
+    transition:
+      background-color var(--ft-transition-fast),
+      box-shadow var(--ft-transition-fast);
 
-    .btn,
-    button {
-      font-family: var(--ft-font-family);
-      font-weight: 500;
-      border-radius: 9999px;
-      padding: 8px 16px;
-      transition:
-        background-color var(--ft-transition-fast),
-        color var(--ft-transition-fast),
-        box-shadow var(--ft-transition-fast);
-
-      &:focus,
-      &:focus-visible {
-        outline: none;
-      }
+    &:hover {
+      background-color: var(--ft-figma-btn-primary-hover);
+      box-shadow: var(--ft-shadow-md);
     }
 
-    .btn-primary,
-    .forgot-password-reset {
-      background-color: var(--ft-figma-btn-primary);
+    &:active {
+      background-color: var(--ft-figma-btn-primary-active);
+    }
+
+    &:focus {
+      outline: none;
+      box-shadow: 0 0 0 3px rgb(255 26 71 / 0.3);
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+
+  // ---- Help/success state ----
+  .forgot-password-modal__help-content {
+    font-family: var(--ft-font-family);
+    font-size: 14px;
+    line-height: 21px;
+    color: #666;
+    text-align: center;
+    width: 100%;
+  }
+
+  .forgot-password-modal__actions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+    align-items: center;
+  }
+
+  .forgot-password-modal__btn {
+    width: 100%;
+    height: 48px;
+    border-radius: 9999px;
+    font-family: var(--ft-font-family);
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 24px;
+    border: none;
+    cursor: pointer;
+    transition:
+      background-color var(--ft-transition-fast),
+      box-shadow var(--ft-transition-fast);
+
+    &.btn-primary {
+      background-color: #ff1a47;
       color: #fff;
-      border: none;
 
       &:hover {
         background-color: var(--ft-figma-btn-primary-hover);
@@ -844,18 +908,12 @@ body.fantribe-theme .forgot-password-modal {
       }
 
       &:focus {
+        outline: none;
         box-shadow: 0 0 0 3px rgb(255 26 71 / 0.3);
-      }
-
-      &:disabled {
-        opacity: 0.5;
-        cursor: not-allowed;
       }
     }
 
-    .btn:not(.btn-primary),
-    .btn-default,
-    .btn-flat {
+    &--secondary {
       background-color: transparent;
       color: #666;
       border: 1px solid #d1d5db;
@@ -867,11 +925,13 @@ body.fantribe-theme .forgot-password-modal {
       }
 
       &:focus {
+        outline: none;
         box-shadow: 0 0 0 3px rgb(255 26 71 / 0.3);
       }
     }
   }
 
+  // ---- Flash/alert messages ----
   .alert,
   .alert-error {
     background-color: var(--ft-error-light);
@@ -881,7 +941,7 @@ body.fantribe-theme .forgot-password-modal {
     padding: 12px;
     font-family: var(--ft-font-family);
     font-size: 14px;
-    margin-bottom: 16px;
+    margin-bottom: 0;
   }
 
   .alert-success {

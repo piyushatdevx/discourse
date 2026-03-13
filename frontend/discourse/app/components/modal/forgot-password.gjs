@@ -94,7 +94,6 @@ export default class ForgotPassword extends Component {
 
   <template>
     <DModal
-      @title={{i18n "forgot_password.title"}}
       @closeModal={{@closeModal}}
       @flash={{this.flash}}
       @flashType="error"
@@ -102,63 +101,62 @@ export default class ForgotPassword extends Component {
     >
       <:body>
         {{#if this.offerHelp}}
-          {{htmlSafe this.offerHelp}}
-        {{else if this.siteSettings.hide_email_address_taken}}
-          <label for="username-or-email">
-            {{i18n "forgot_password.invite_no_username"}}
-          </label>
-          <input
-            {{on "input" this.updateEmailOrUsername}}
-            value={{this.emailOrUsername}}
-            placeholder={{i18n "email"}}
-            type="text"
-            id="username-or-email"
-            autocorrect="off"
-            autocapitalize="off"
-          />
+          <div class="forgot-password-modal__header">
+            <h2 class="forgot-password-modal__title">Reset your password</h2>
+          </div>
+          <div class="forgot-password-modal__help-content">
+            {{htmlSafe this.offerHelp}}
+          </div>
+          <div class="forgot-password-modal__actions">
+            <DButton
+              @action={{@closeModal}}
+              @label="forgot_password.button_ok"
+              type="submit"
+              class="btn-primary forgot-password-modal__btn"
+            />
+            {{#unless this.helpSeen}}
+              <DButton
+                @action={{this.help}}
+                @label="forgot_password.button_help"
+                @icon="circle-question"
+                class="forgot-password-modal__btn forgot-password-modal__btn--secondary"
+              />
+            {{/unless}}
+          </div>
         {{else}}
-          <p>{{i18n "forgot_password.invite"}}</p>
-          <label for="username-or-email">
-            {{i18n "forgot_password.email-username"}}
-          </label>
-          <input
-            {{on "input" this.updateEmailOrUsername}}
-            value={{this.emailOrUsername}}
-            placeholder={{i18n "login.email_placeholder"}}
-            type="text"
-            id="username-or-email"
-            autocorrect="off"
-            autocapitalize="off"
-          />
+          <div class="forgot-password-modal__header">
+            <h2 class="forgot-password-modal__title">Reset your password</h2>
+            <p class="forgot-password-modal__subtitle">Verify your email
+              address, and we'll send you a password reset email.</p>
+          </div>
+          <div class="forgot-password-modal__form">
+            <div class="forgot-password-modal__field">
+              <label
+                for="username-or-email"
+                class="forgot-password-modal__label"
+              >Email</label>
+              <input
+                {{on "input" this.updateEmailOrUsername}}
+                value={{this.emailOrUsername}}
+                placeholder="your.email@example.com"
+                type="text"
+                id="username-or-email"
+                autocorrect="off"
+                autocapitalize="off"
+                class="forgot-password-modal__input"
+              />
+            </div>
+            <button
+              type="submit"
+              disabled={{this.submitDisabled}}
+              class="forgot-password-modal__submit"
+              {{on "click" this.resetPassword}}
+            >
+              Send link
+            </button>
+          </div>
         {{/if}}
       </:body>
-
-      <:footer>
-        {{#if this.offerHelp}}
-          <DButton
-            @action={{@closeModal}}
-            @label="forgot_password.button_ok"
-            type="submit"
-            class="btn-large btn-primary"
-          />
-          {{#unless this.helpSeen}}
-            <DButton
-              @action={{this.help}}
-              @label="forgot_password.button_help"
-              @icon="circle-question"
-              class="btn-large"
-            />
-          {{/unless}}
-        {{else}}
-          <DButton
-            @action={{this.resetPassword}}
-            @disabled={{this.submitDisabled}}
-            @label="forgot_password.reset"
-            type="submit"
-            class="btn-primary forgot-password-reset"
-          />
-        {{/if}}
-      </:footer>
     </DModal>
   </template>
 }
