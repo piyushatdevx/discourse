@@ -35,7 +35,6 @@ body.fantribe-theme.signup-page {
   .login-fullpage,
   .signup-fullpage,
   .login-body,
-  .signup-body,
   .login-left-side {
     display: flex;
     align-items: center;
@@ -45,6 +44,16 @@ body.fantribe-theme.signup-page {
     background: transparent;
     border: none;
     box-shadow: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .signup-body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: none !important;
     padding: 0;
     margin: 0;
   }
@@ -65,6 +74,11 @@ body.fantribe-theme.signup-page {
     padding-bottom: 24px; // Space for shadow
     box-sizing: border-box;
     overflow: hidden;
+    overflow-y: auto;
+  }
+
+  #main-outlet {
+    height: 100%;
   }
 
   .login-fullpage,
@@ -73,7 +87,11 @@ body.fantribe-theme.signup-page {
     min-height: auto;
     padding: 0 24px;
     box-sizing: border-box;
-    overflow: hidden;
+    overflow: visible;
+  }
+
+  .login-body {
+    height: 100%;
   }
 }
 
@@ -1303,6 +1321,24 @@ body.fantribe-theme.signup-page .signup-body:not(.has-alt-auth) {
   }
 }
 
+// Once the dedicated selection screen hands off to the main signup form, keep
+// the card focused on account creation instead of repeating social auth inside
+// the form itself.
+body.fantribe-theme.signup-page:not(.fantribe-signup-selection-active) {
+  .login-right-side,
+  .login-or-separator {
+    display: none !important;
+  }
+
+  .signup-body {
+    max-width: 460px !important;
+  }
+
+  .login-left-side {
+    width: 100%;
+  }
+}
+
 // Hide "Already have an account? Log In to link your Google account" after OAuth
 body.fantribe-theme.signup-page {
   .create-account-associate-link {
@@ -1333,13 +1369,6 @@ body.fantribe-theme.signup-page {
   // CARD CONTAINER FOR SIGNUP FORM
   // ==============================================
   .login-left-side {
-    background: rgb(253 252 252 / 0.8);
-    border: 1px solid rgb(231 230 228 / 0.6);
-    border-radius: 10px;
-    box-shadow:
-      0 20px 25px rgb(0 0 0 / 0.1),
-      0 8px 10px rgb(0 0 0 / 0.1);
-    padding: 32px;
     max-width: 460px;
     margin: 0 auto;
     flex-direction: column;
@@ -1354,7 +1383,6 @@ body.fantribe-theme.signup-page {
     font-size: 32px;
     font-weight: 600;
     line-height: 48px;
-    letter-spacing: -0.4492px;
     color: #1a1a1a;
     text-align: center;
     margin-bottom: 24px;
@@ -1603,7 +1631,8 @@ body.fantribe-theme.signup-page {
     width: 100%;
     max-width: 396px; // Match login's button section
     // 40px gap from form to button — matching Figma card gap between sections
-    margin-top: 40px;
+    // If it's inside #login-form which has 16px gap, 24px + 16px = 40px
+    margin-top: 24px;
 
     &__disclaimer {
       font-family: var(--ft-font-family);
@@ -1667,6 +1696,18 @@ body.fantribe-theme.signup-page {
         opacity: 0.6;
         cursor: not-allowed;
       }
+
+      // Replace "Create Account" with "Next" to match Figma
+      .d-button-label {
+        font-size: 0;
+
+        &::after {
+          content: "Next";
+          font-size: 16px;
+          font-weight: 600;
+          line-height: 24px;
+        }
+      }
     }
 
     // "Already have an account?" — inline text next to the login link
@@ -1697,7 +1738,7 @@ body.fantribe-theme.signup-page {
       font-family: var(--ft-font-family);
       font-weight: 600;
       line-height: 24px;
-      color: var(--ft-figma-accent) !important;
+      color: #ff1744 !important; // Match Figma color
       background: transparent !important;
       border: none !important;
       border-radius: 0 !important;
@@ -1734,16 +1775,17 @@ body.fantribe-theme.signup-page {
   // ==============================================
   .signup-body {
     flex-direction: column !important;
-    align-items: center;
+    align-items: center !important;
+    justify-content: center !important;
     max-width: 460px !important;
-    background: rgb(253 252 252 / 0.8);
-    border: 1px solid rgb(231 230 228 / 0.6);
+    background: rgb(253 252 252 / 0.8) !important;
+    border: 1px solid rgb(231 230 228 / 0.6) !important;
     border-radius: 10px;
     box-shadow:
       0 20px 25px rgb(0 0 0 / 0.1),
-      0 8px 10px rgb(0 0 0 / 0.1);
-    padding: 32px;
-    margin: 80px 0 40px 0;
+      0 8px 10px rgb(0 0 0 / 0.1) !important;
+    padding: 32px !important;
+    margin: 0 !important;
   }
 
   // Remove card styling from login-left-side (now on signup-body)
