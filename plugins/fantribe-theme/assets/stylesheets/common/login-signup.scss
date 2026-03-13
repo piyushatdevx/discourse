@@ -1987,3 +1987,296 @@ body.fantribe-theme.signup-page {
     }
   }
 }
+
+// ==============================================
+// PASSWORD RESET PAGE
+// ==============================================
+
+// Hide default Discourse content when FanTribe overlay is active
+body.fantribe-theme.password-reset-page {
+  background: var(--ft-figma-page-bg) !important;
+
+  .d-header {
+    display: none !important;
+  }
+
+  .password-reset {
+    display: none !important;
+  }
+
+  #main-outlet-wrapper {
+    padding: 0;
+  }
+
+  #main-outlet {
+    padding: 0;
+  }
+}
+
+// Overlay — covers entire viewport
+.ft-password-reset-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+  background: var(--ft-figma-page-bg);
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+// Header — same as login/signup header
+.ft-password-reset-header {
+  flex-shrink: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+// Center card vertically
+.ft-password-reset-center {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 24px 24px;
+  box-sizing: border-box;
+}
+
+// Card container
+.ft-password-reset-card {
+  background: rgb(253 252 252 / 0.8);
+  border: 1px solid rgb(231 230 228 / 0.6);
+  border-radius: 10px;
+  box-shadow:
+    0 20px 25px rgb(0 0 0 / 0.1),
+    0 8px 10px rgb(0 0 0 / 0.1);
+  padding: 32px;
+  width: 100%;
+  max-width: 460px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  align-items: center;
+}
+
+// Title
+.ft-password-reset-title {
+  font-family: var(--ft-font-family);
+  font-weight: 600 !important;
+  font-size: 32px !important;
+  line-height: 48px !important;
+  color: #1a1a1a !important;
+  text-align: center;
+  margin: 0 !important;
+}
+
+// Form section (fields + button)
+.ft-password-reset-form {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  width: 100%;
+  align-items: center;
+}
+
+// Fields wrapper
+.ft-password-reset-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+}
+
+// Individual field
+.ft-password-reset-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+
+// Label
+.ft-password-reset-label {
+  font-family: var(--ft-font-family);
+  font-weight: 400 !important;
+  font-size: 14px !important;
+  line-height: 21px;
+  color: #1a1a1a;
+  margin: 0 0 0 0 !important;
+  display: block;
+}
+
+// Input wrapper (input + eye button)
+.ft-password-reset-input-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+// Input field
+.ft-password-reset-input {
+  width: 100% !important;
+  height: 48px !important;
+  padding: 0 48px 0 16px !important;
+  font-family: var(--ft-font-family);
+  font-size: 16px !important;
+  line-height: 24px !important;
+  color: #1a1a1a !important;
+  background: #fdfcfc !important;
+  border: 1px solid #ddd !important;
+  border-radius: 10px !important;
+  outline: none;
+  box-sizing: border-box !important;
+  margin: 0 !important;
+  transition:
+    border-color var(--ft-transition-fast),
+    box-shadow var(--ft-transition-fast);
+
+  &::placeholder {
+    color: #999;
+    font-weight: 400 !important;
+  }
+
+  &:focus {
+    border-color: var(--ft-figma-accent);
+    box-shadow: 0 0 0 2px rgb(255 23 68 / 0.15);
+  }
+
+  &.has-error {
+    border-color: var(--ft-error, #dc3545);
+    box-shadow: 0 0 0 2px rgb(220 53 69 / 0.15);
+  }
+}
+
+// Eye toggle button
+.ft-password-reset-eye {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  padding: 4px;
+  cursor: pointer;
+  color: #999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color var(--ft-transition-fast);
+
+  .d-icon {
+    width: 20px;
+    height: 20px;
+  }
+
+  &:hover {
+    color: #666;
+  }
+}
+
+// Mismatch error text
+.ft-password-reset-error {
+  font-family: var(--ft-font-family);
+  font-size: 13px;
+  color: var(--ft-error, #dc3545);
+  margin: 0;
+}
+
+// Submit button
+.ft-password-reset-submit {
+  width: 100%;
+  height: 48px;
+  background-color: #ff1a47;
+  color: #fff;
+  font-family: var(--ft-font-family);
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 24px;
+  text-align: center;
+  border: none;
+  border-radius: 9999px;
+  cursor: pointer;
+  transition:
+    background-color var(--ft-transition-fast),
+    box-shadow var(--ft-transition-fast);
+
+  &:hover:not(:disabled) {
+    background-color: var(--ft-figma-btn-primary-hover);
+    box-shadow: var(--ft-shadow-md);
+  }
+
+  &:active:not(:disabled) {
+    background-color: var(--ft-figma-btn-primary-active);
+  }
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgb(255 26 71 / 0.3);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  &.is-loading {
+    pointer-events: none;
+    opacity: 0.7;
+  }
+}
+
+// Error toast
+.ft-password-reset-toast {
+  position: fixed;
+  top: 24px;
+  right: 24px;
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 20px;
+  background: #fff;
+  border: 1px solid rgb(220 53 69 / 0.3);
+  border-radius: 10px;
+  box-shadow:
+    0 8px 16px rgb(0 0 0 / 0.08),
+    0 2px 4px rgb(0 0 0 / 0.04);
+  font-family: var(--ft-font-family);
+  font-size: 14px;
+  color: var(--ft-error, #dc3545);
+  max-width: 400px;
+  animation: ft-toast-in 0.3s ease;
+
+  .ft-toast-icon {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+  }
+}
+
+// ---- Password Reset Mobile ----
+@media (width <= 767px) {
+  .ft-password-reset-card {
+    padding: 24px;
+    gap: 24px;
+  }
+
+  .ft-password-reset-title {
+    font-size: 24px;
+    line-height: 36px;
+  }
+
+  .ft-password-reset-form {
+    gap: 24px;
+  }
+
+  .ft-password-reset-toast {
+    top: 80px;
+    right: 16px;
+    left: 16px;
+    justify-content: center;
+  }
+}
